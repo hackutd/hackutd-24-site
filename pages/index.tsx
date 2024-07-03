@@ -49,8 +49,8 @@ export default function Home(props: {
   return (
     <>
       <Head>
-        <title>HackPortal</title> {/* !change */}
-        <meta name="description" content="A default HackPortal instance" /> {/* !change */}
+        <title>HackUTD 2024</title> {/* !change */}
+        <meta name="description" content="HackUTD 2024 Event Site" /> {/* !change */}
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <HomeHero />
@@ -71,50 +71,50 @@ export default function Home(props: {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const protocol = context.req.headers.referer?.split('://')[0] || 'http';
-  const { data: keynoteData } = await RequestHelper.get<KeynoteSpeaker[]>(
-    `${protocol}://${context.req.headers.host}/api/keynotespeakers`,
-    {},
-  );
-  const { data: challengeData } = await RequestHelper.get<Challenge[]>(
-    `${protocol}://${context.req.headers.host}/api/challenges/`,
-    {},
-  );
-  const { data: prizeData } = await RequestHelper.get<Array<{ rank: number; prizeName: string }>>(
-    `${protocol}://${context.req.headers.host}/api/prizes`,
-    {},
-  );
-  const { data: answeredQuestion } = await RequestHelper.get<AnsweredQuestion[]>(
-    `${protocol}://${context.req.headers.host}/api/questions/faq`,
-    {},
-  );
-  const { data: memberData } = await RequestHelper.get<TeamMember[]>(
-    `${protocol}://${context.req.headers.host}/api/members`,
-    {},
-  );
-  const { data: sponsorData } = await RequestHelper.get<Sponsor[]>(
-    `${protocol}://${context.req.headers.host}/api/sponsor`,
-    {},
-  );
-  const { data: scheduleData } = await RequestHelper.get<ScheduleEvent[]>(
-    `${protocol}://${context.req.headers.host}/api/schedule`,
-    {},
-  );
-  const { data: dateData } = await RequestHelper.get<ScheduleEvent[]>(
-    `${protocol}://${context.req.headers.host}/api/dates`,
-    {},
-  );
-  return {
-    props: {
-      keynoteSpeakers: keynoteData,
-      challenges: challengeData,
-      answeredQuestion: answeredQuestion,
-      fetchedMembers: memberData,
-      sponsorCard: sponsorData,
-      scheduleCard: scheduleData,
-      dateCard: dateData,
-      prizeData: prizeData,
-    },
-  };
-};
+// export const getServerSideProps: GetServerSideProps = async (context) => {
+//   const protocol = context.req.headers.referer?.split('://')[0] || 'http';
+//   const { data: keynoteData } = await RequestHelper.get<KeynoteSpeaker[]>(
+//     `${protocol}://${context.req.headers.host}/api/keynotespeakers`,
+//     {},
+//   );
+//   const { data: challengeData } = await RequestHelper.get<Challenge[]>(
+//     `${protocol}://${context.req.headers.host}/api/challenges/`,
+//     {},
+//   );
+//   const { data: prizeData } = await RequestHelper.get<Array<{ rank: number; prizeName: string }>>(
+//     `${protocol}://${context.req.headers.host}/api/prizes`,
+//     {},
+//   );
+//   const { data: answeredQuestion } = await RequestHelper.get<AnsweredQuestion[]>(
+//     `${protocol}://${context.req.headers.host}/api/questions/faq`,
+//     {},
+//   );
+//   const { data: memberData } = await RequestHelper.get<TeamMember[]>(
+//     `${protocol}://${context.req.headers.host}/api/members`,
+//     {},
+//   );
+//   const { data: sponsorData } = await RequestHelper.get<Sponsor[]>(
+//     `${protocol}://${context.req.headers.host}/api/sponsor`,
+//     {},
+//   );
+//   const { data: scheduleData } = await RequestHelper.get<ScheduleEvent[]>(
+//     `${protocol}://${context.req.headers.host}/api/schedule`,
+//     {},
+//   );
+//   const { data: dateData } = await RequestHelper.get<ScheduleEvent[]>(
+//     `${protocol}://${context.req.headers.host}/api/dates`,
+//     {},
+//   );
+//   return {
+//     props: {
+//       keynoteSpeakers: keynoteData,
+//       challenges: challengeData,
+//       answeredQuestion: answeredQuestion,
+//       fetchedMembers: memberData,
+//       sponsorCard: sponsorData,
+//       scheduleCard: scheduleData,
+//       dateCard: dateData,
+//       prizeData: prizeData,
+//     },
+//   };
+// };

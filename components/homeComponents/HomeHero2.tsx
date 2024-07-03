@@ -2,9 +2,28 @@ import Image from 'next/image';
 import MLH_Sticker from '../../public/assets/mlh-sticker.png';
 import HackTitle from './HackTitle';
 import { useState } from 'react';
+import { RequestHelper } from '../../lib/request-helper';
 
 export default function HomeHero() {
   const [userEmail, setUserEmail] = useState<string>('');
+  const handleSubmitEmail = async (userEmail: string) => {
+    const res = await RequestHelper.post<{ userEmail: string }, unknown>(
+      '/api/email',
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+      {
+        userEmail,
+      },
+    );
+    if (res.status === 200) {
+      alert('Email submitted successful');
+    } else {
+      alert('Something is wrong... please try again later');
+    }
+  };
   return (
     <section className="min-h-screen bg-cover bg-hero-pattern bg-no-repeat bg-center flex flex-col-reverse md:flex-col">
       <div className="flex h-screen w-full relative">
@@ -34,7 +53,14 @@ export default function HomeHero() {
                 value={userEmail}
                 onChange={(e) => setUserEmail(e.target.value)}
               />
-              <button className="rounded-lg bg-[#F7CE79] px-4 py-3 w-1/5 text-white">Submit</button>
+              <button
+                className="rounded-lg bg-[#F7CE79] px-4 py-3 w-1/5 text-white"
+                onClick={async () => {
+                  await handleSubmitEmail(userEmail);
+                }}
+              >
+                Submit
+              </button>
             </div>
           </div>
         </div>
