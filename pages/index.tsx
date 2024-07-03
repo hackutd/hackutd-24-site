@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import { useEffect, useState } from 'react';
 import { RequestHelper } from '../lib/request-helper';
-import HomeHero from '../components/homeComponents/HomeHero';
+import HomeHero from '../components/homeComponents/HomeHero2';
 import HomeNotif from '../components/homeComponents/HomeNotif';
 import HomeVideoStats from '../components/homeComponents/HomeVideoStats';
 import HomeAbout from '../components/homeComponents/HomeAbout';
@@ -53,7 +53,8 @@ export default function Home(props: {
         <meta name="description" content="A default HackPortal instance" /> {/* !change */}
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <HomeNotif />
+      <HomeHero />
+      {/* <HomeNotif />
       <HomeHero />
       <HomeVideoStats />
       <HackCountdown />
@@ -65,7 +66,7 @@ export default function Home(props: {
       <HomeTeam members={props.fetchedMembers} />
       <HomeFaq answeredQuestion={props.answeredQuestion} />
       <HomeSponsors sponsorCard={props.sponsorCard} />
-      <HomeFooter />
+      <HomeFooter /> */}
     </>
   );
 }
