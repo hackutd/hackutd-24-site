@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import MLH_Sticker from '../../public/assets/mlh-sticker.png';
+import MLH_Sticker from '../../public/assets/mlh-2025.png';
 import HackTitle from './HackTitle';
 import { useState } from 'react';
 import { RequestHelper } from '../../lib/request-helper';
@@ -34,7 +34,7 @@ export default function HomeHero() {
             <Image
               src={MLH_Sticker.src}
               height={MLH_Sticker.height}
-              width={MLH_Sticker.width}
+              width={MLH_Sticker.width / 7}
               alt="MLH sticker"
               className="w-full h-full object-cover"
             />
@@ -66,7 +66,7 @@ export default function HomeHero() {
           </div>
           <div className="absolute right-0 bottom-0 p-3">
             <Link target="_blank" href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf">
-              <h1 className="text-lg cursor-pointer">MLH Code of Conduct</h1>
+              <h1 className="font-poppins text-lg cursor-pointer">MLH Code of Conduct</h1>
             </Link>
           </div>
         </div>
