@@ -3,6 +3,7 @@ import MLH_Sticker from '../../public/assets/mlh-sticker.png';
 import HackTitle from './HackTitle';
 import { useState } from 'react';
 import { RequestHelper } from '../../lib/request-helper';
+import Link from 'next/link';
 
 export default function HomeHero() {
   const [userEmail, setUserEmail] = useState<string>('');
@@ -62,6 +63,11 @@ export default function HomeHero() {
                 Submit
               </button>
             </div>
+          </div>
+          <div className="absolute right-0 bottom-0 p-3">
+            <Link target="_blank" href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf">
+              <h1 className="text-lg cursor-pointer">MLH Code of Conduct</h1>
+            </Link>
           </div>
         </div>
       </div>
