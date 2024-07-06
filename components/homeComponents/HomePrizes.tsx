@@ -20,7 +20,7 @@ export default function HomePrizes({ prizes }: HomePrizesProps) {
       </div>
       {/* Component */}
       <div className="md:py-12 py-6 xl:w-9/10 w-11/12 m-auto">
-        <h1 className="font-[Fredoka] mt-[100px] text-3xl text-center font-bold text-[#05149C]">
+        <h1 className="font-fredoka mt-[100px] text-3xl text-center font-bold text-[#05149C]">
           Prizes
         </h1>
         <p className="text-center">Potential prize that participants can win!</p>

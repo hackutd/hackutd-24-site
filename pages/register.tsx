@@ -195,9 +195,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
       </Head>
       <section className="pl-4 relative mb-4">
         <Link href="/" passHref>
-          <a className="absolute top-4 z-10">
-            <ChevronLeftIcon fontSize={'large'} color={'primary'} />
-          </a>
+          <ChevronLeftIcon className="absolute top-4 z-10" fontSize={'large'} color={'primary'} />
         </Link>
       </section>
 
