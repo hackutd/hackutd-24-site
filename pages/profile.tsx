@@ -90,9 +90,9 @@ export default function ProfilePage() {
             </div>
           </div>
           <div className="border-y-[1.2px] border-primaryDark/20 py-4 md:my-8 my-6">
-            <div className="font-Fredoka font-semibold text-lg">Application Status</div>
+            <div className="font-fredoka font-semibold text-lg">Application Status</div>
             <h1
-              className={`font-Fredoka text-xl font-semibold ${
+              className={`font-fredoka text-xl font-semibold ${
                 profile.user.status === 'Accepted'
                   ? 'text-[#5DC55B]'
                   : profile.user.status === 'Rejected'
@@ -134,7 +134,7 @@ export default function ProfilePage() {
                   />
                   <label
                     id="resume_label"
-                    className="font-Fredoka transition py-3 font-semibold px-6 text-sm text-center whitespace-nowrap text-white w-min bg-[#5C67C9] rounded-full cursor-pointer hover:brightness-110"
+                    className="font-fredoka transition py-3 font-semibold px-6 text-sm text-center whitespace-nowrap text-white w-min bg-[#5C67C9] rounded-full cursor-pointer hover:brightness-110"
                     htmlFor="resume"
                   >
                     Resume
@@ -149,25 +149,25 @@ export default function ProfilePage() {
 
         {/* Info */}
         <div className="w-full">
-          <h1 className="font-Fredoka font-semibold text-5xl md:mt-0 mt-10 text-[#170F49]">{`${profile.user.firstName} ${profile.user.lastName}`}</h1>
+          <h1 className="font-fredoka font-semibold text-5xl md:mt-0 mt-10 text-[#170F49]">{`${profile.user.firstName} ${profile.user.lastName}`}</h1>
 
           <div className="md:flex items-center md:gap-x-10 mt-4">
             <div className="md:w-1/2">
-              <div className="font-Fredoka font-semibold md:text-2xl text-lg mt-6 mb-1 text-[#170F49]">
+              <div className="font-fredoka font-semibold md:text-2xl text-lg mt-6 mb-1 text-[#170F49]">
                 University
               </div>
               <h1 className="px-3 py-1 text-lg border border-3 border-[#C4C4C4] rounded-2xl text-[#4C4950]">
                 {profile.university}
               </h1>
 
-              <div className="font-Fredoka font-semibold md:text-2xl text-lg mt-6 mb-1 text-[#170F49]">
+              <div className="font-fredoka font-semibold md:text-2xl text-lg mt-6 mb-1 text-[#170F49]">
                 Major
               </div>
               <h1 className="px-3 py-1 text-lg border border-3 border-[#C4C4C4] rounded-2xl text-[#4C4950]">
                 {profile.major}
               </h1>
 
-              <div className="font-Fredoka font-semibold md:text-2xl text-lg mt-6 mb-1 text-[#170F49]">
+              <div className="font-fredoka font-semibold md:text-2xl text-lg mt-6 mb-1 text-[#170F49]">
                 Level of Study
               </div>
               <h1 className="px-3 py-1 text-lg border border-3 border-[#C4C4C4] rounded-2xl text-[#4C4950]">
@@ -176,21 +176,21 @@ export default function ProfilePage() {
             </div>
 
             <div className="md:w-1/2">
-              <div className="font-Fredoka font-semibold md:text-2xl text-lg mt-6 mb-1 text-[#170F49]">
+              <div className="font-fredoka font-semibold md:text-2xl text-lg mt-6 mb-1 text-[#170F49]">
                 Role
               </div>
               <h1 className="px-3 py-1 text-lg border border-3 border-[#C4C4C4] rounded-2xl text-[#4C4950]">
                 {profile.user.permissions[0]}
               </h1>
 
-              <div className="font-Fredoka font-semibold md:text-2xl text-lg mt-6 mb-1 text-[#170F49]">
+              <div className="font-fredoka font-semibold md:text-2xl text-lg mt-6 mb-1 text-[#170F49]">
                 Number of Hackathons Attended
               </div>
               <h1 className="px-3 py-1 text-lg border border-3 border-[#C4C4C4] rounded-2xl text-[#4C4950]">
                 {profile.hackathonExperience}
               </h1>
 
-              <div className="font-Fredoka font-semibold md:text-2xl text-lg mt-6 mb-1 text-[#170F49]">
+              <div className="font-fredoka font-semibold md:text-2xl text-lg mt-6 mb-1 text-[#170F49]">
                 Preferred Email
               </div>
               <h1 className="px-3 py-1 text-lg border border-3 border-[#C4C4C4] rounded-2xl text-[#4C4950]">

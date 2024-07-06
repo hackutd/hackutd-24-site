@@ -1,6 +1,3 @@
-import TwitterIcon from '@mui/icons-material/Twitter';
-import InstagramIcon from '@mui/icons-material/Instagram';
-import FacebookIcon from '@mui/icons-material/Facebook';
 import React, { SVGProps } from 'react';
 
 //TODO: need to do some media queries for footer, styling is off

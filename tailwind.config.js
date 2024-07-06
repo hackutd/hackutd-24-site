@@ -14,13 +14,13 @@ module.exports = {
         complementaryLight: '#999999',
       },
       fontFamily: {
+        dmSans: ['DM Sans', 'sans-serif'],
         fredoka: ['Fredoka', 'sans-serif'],
-        dmsans: ['DM Sans', 'sans-serif'],
+        fredokaOne: ['Fredoka One', 'sans-serif'],
+        nunito: ['Nunito', 'sans-serif'],
         poppins: ['Poppins', 'sans-serif'],
         inter: ['Inter', 'sans-serif'],
         sans: ['Fredoka', 'Roboto', 'sans-serif'],
-        Fredoka: ['Fredoka', 'sans-serif'],
-        nunito: ['Nunito', 'sans-serif'],
       },
       width: {
         '1/8': '12.5%',

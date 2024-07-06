@@ -97,18 +97,18 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
                           `}
           >
             <div className="flex justify-between pb-1">
-              <div className="text-md font-bold font-dmsans">{formattedTime}</div>
-              <div className="text-md font-bold font-dmsans">{data.title}</div>
+              <div className="text-md font-bold font-dmSans">{formattedTime}</div>
+              <div className="text-md font-bold font-dmSans">{data.title}</div>
             </div>
             <div className="flex justify-between">
               <div
-                className={`bg-white text-xs rounded-xl py-1 px-2 border-2 font-dmsans ${
+                className={`bg-white text-xs rounded-xl py-1 px-2 border-2 font-dmSans ${
                   eventColors[data.type]
                 }`}
               >
                 {data.type}
               </div>
-              <div className="text-gray-600 flex items-center font-dmsans">
+              <div className="text-gray-600 flex items-center font-dmSans">
                 <LocationOnIcon style={{ fontSize: 'large', marginRight: '2px' }} />
                 {data.location}
               </div>
@@ -138,7 +138,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
   const day2Events = getDailyEvents(day2StartDateAndTime, eventEndDateAndTime);
 
   return (
-    <div className="bg-[#F2F3FF]">
+    <div id="schedule-section" className="bg-[#F2F3FF]">
       <div className="text-center text-5xl font-bold text-[#05149C] p-4 font-fredoka">
         What to Expect?
       </div>

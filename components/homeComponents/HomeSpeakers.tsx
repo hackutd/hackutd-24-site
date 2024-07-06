@@ -10,7 +10,6 @@ export default function HomeSpeakers(props: { keynoteSpeakers: KeynoteSpeaker[] 
 
   useEffect(() => {
     setSpeakers(props.keynoteSpeakers);
-    console.log(speakers);
   }, []);
 
   return (
@@ -19,7 +18,7 @@ export default function HomeSpeakers(props: { keynoteSpeakers: KeynoteSpeaker[] 
         <div className="text-center text-4xl md:text-5xl font-bold text-[#05149C] pt-8 pb-2 font-fredoka">
           Speakers
         </div>
-        <div className="text-center text-sm md:text-md pb-8 font-dmsans">
+        <div className="text-center text-sm md:text-md pb-8 font-dmSans">
           The members that make HackPortal possible
         </div>
 
