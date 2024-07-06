@@ -8,6 +8,7 @@ import QRCode from '../components/dashboardComponents/QRCode';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LanguageIcon from '@mui/icons-material/Language';
+import ChickenImage from '@/public/assets/profile-chicken-egg.png';
 
 /**
  * A page that allows a user to modify app or profile settings and see their data.
@@ -71,18 +72,18 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="md:px-48 px-8 md:py-16 py-12 text-black">
-      <div className="flex flex-col md:flex-row 2xl:gap-x-14 gap-x-12 2xl:justify-center">
+    <div className="md:py-16 py-12 text-black flex justify-center">
+      <div className="bg-white py-12 px-16 rounded-xl flex flex-col md:flex-row 2xl:gap-x-14 gap-x-12 2xl:justify-center">
         {/* QR Code */}
         <div className="">
-          <div className="bg-secondary rounded-lg p-8 h-min w-min mx-auto">
+          <div className="bg-[#E0FDFF] rounded-lg p-8 h-min w-min mx-auto">
             {/* Dark represents dots, Light represents the background */}
             <QRCode
               data={'hack:' + user.id}
               loading={false}
               width={200}
               height={200}
-              darkColor="#05149C"
+              darkColor="#173950"
               lightColor="#0000"
             />
             <div className="text-center text-[#170F49] text-md font-semibold">
@@ -105,17 +106,17 @@ export default function ProfilePage() {
           </div>
 
           <div className="flex gap-x-4">
-            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#9CA6FF]">
+            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#40B7BA]">
               <a href={profile.linkedin} target="_blank" rel="noreferrer">
                 <LinkedInIcon style={{ fontSize: 29, color: 'white' }} />
               </a>
             </div>
-            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#9CA6FF]">
+            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#40B7BA]">
               <a href={profile.github} target="_blank" rel="noreferrer">
                 <GitHubIcon style={{ fontSize: 29, color: 'white' }} />
               </a>
             </div>
-            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#9CA6FF]">
+            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#40B7BA]">
               <a href={profile.website} target="_blank" rel="noreferrer">
                 <LanguageIcon style={{ fontSize: 29, color: 'white' }} />
               </a>
@@ -134,7 +135,7 @@ export default function ProfilePage() {
                   />
                   <label
                     id="resume_label"
-                    className="font-fredoka transition py-3 font-semibold px-6 text-sm text-center whitespace-nowrap text-white w-min bg-[#5C67C9] rounded-full cursor-pointer hover:brightness-110"
+                    className="font-fredoka transition py-3 font-semibold px-6 text-sm text-center whitespace-nowrap text-white w-min bg-[#40B7BA] rounded-full cursor-pointer hover:brightness-110"
                     htmlFor="resume"
                   >
                     Resume
@@ -149,7 +150,7 @@ export default function ProfilePage() {
 
         {/* Info */}
         <div className="w-full">
-          <h1 className="font-fredoka font-semibold text-5xl md:mt-0 mt-10 text-[#170F49]">{`${profile.user.firstName} ${profile.user.lastName}`}</h1>
+          <h1 className="text-center font-fredoka font-semibold text-5xl md:mt-0 mt-10 text-[#40B7BA]">{`${profile.user.firstName} ${profile.user.lastName}`}</h1>
 
           <div className="md:flex items-center md:gap-x-10 mt-4">
             <div className="md:w-1/2">
@@ -197,6 +198,17 @@ export default function ProfilePage() {
                 {profile.user.preferredEmail}
               </h1>
             </div>
+          </div>
+
+          {/* Chicken picture */}
+          <div className="w-full flex justify-center pt-12">
+            <Image
+              className="w-[200px] h-auto"
+              src={ChickenImage.src}
+              width={ChickenImage.width}
+              height={ChickenImage.height}
+              alt="chicken egg"
+            />
           </div>
         </div>
       </div>
