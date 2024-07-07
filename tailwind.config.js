@@ -7,11 +7,11 @@ module.exports = {
       colors: {
         primary: '#7B81FF', //purple
         primaryDark: '#05149C',
-        secondary: '#F2F3FF', //light purple
-        secondaryDark: '#BABFFF',
-        complementary: '#05149C', //dark purple
+        secondary: '#54DDE8', //aqua
+        secondaryDark: '#40B7BA', // dark aqua
+        complementary: '#8AD47E', //green
         complementaryDark: '#252427',
-        complementaryLight: '#999999',
+        complementaryLight: '#F7CE79', //yellow
       },
       fontFamily: {
         dmSans: ['DM Sans', 'sans-serif'],
@@ -21,6 +21,7 @@ module.exports = {
         poppins: ['Poppins', 'sans-serif'],
         inter: ['Inter', 'sans-serif'],
         sans: ['Fredoka', 'Roboto', 'sans-serif'],
+        concertOne: ['Concert One', 'sans-serif'],
       },
       width: {
         '1/8': '12.5%',

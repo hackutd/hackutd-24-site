@@ -57,15 +57,22 @@ export default function Home(props: {
       </Head>
       <HomeNotif />
       <HomeHero2 />
-      <div style={{ background: `url(${themedHomeHeroBackground.src})` }}>
+      {/* TODO: modify background dimension */}
+      <div
+        style={{
+          backgroundImage: `url(${themedHomeHeroBackground.src})`,
+          //TODO: should update this to contain
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
+        <HomeAbout />
         <HomeVideoStats />
         <HackCountdown />
-        <HomeAbout />
         <HomeSchedule scheduleCard={props.scheduleCard} dateCard={props.dateCard} />
         <HomeSpeakers keynoteSpeakers={props.keynoteSpeakers} />
         <HomeChallenges challenges={props.challenges} />
         <HomePrizes prizes={props.prizeData} />
-        <HomeTeam members={props.fetchedMembers} />
         <HomeFaq answeredQuestion={props.answeredQuestion} />
         <HomeSponsors sponsorCard={props.sponsorCard} />
         <HomeFooter />
