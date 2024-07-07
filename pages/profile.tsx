@@ -1,3 +1,4 @@
+import LanguageRoundedIcon from '@mui/icons-material/LanguageRounded';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import React, { useRef, useState } from 'react';
@@ -5,13 +6,8 @@ import { useAuthContext } from '../lib/user/AuthContext';
 import LoadIcon from '../components/LoadIcon';
 import { getFileExtension } from '../lib/util';
 import QRCode from '../components/dashboardComponents/QRCode';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import LanguageIcon from '@mui/icons-material/Language';
-import FacebookImage from '@/public/icons/facebook.png';
 import LinkedInImage from '@/public/icons/linkedin.png';
-import TwitterImage from '@/public/icons/twitter.png';
-import DiscordImage from '@/public/icons/discord.png';
 import ChickenImage from '@/public/assets/profile-chicken-egg.png';
 import { TextField, TextFieldProps } from '@mui/material';
 
@@ -137,32 +133,12 @@ export default function ProfilePage() {
             </div>
             <div className="flex items-center justify-center w-10 h-10 rounded-full">
               <a href={profile.github} target="_blank" rel="noreferrer">
-                <Image
-                  alt="Twitter"
-                  src={TwitterImage.src}
-                  width={TwitterImage.width}
-                  height={TwitterImage.height}
-                />
+                <GitHubIcon className="!w-10 !h-10" />
               </a>
             </div>
             <div className="flex items-center justify-center w-10 h-10 rounded-full">
               <a href={profile.website} target="_blank" rel="noreferrer">
-                <Image
-                  alt="Facebook"
-                  src={FacebookImage.src}
-                  width={FacebookImage.width}
-                  height={FacebookImage.height}
-                />
-              </a>
-            </div>
-            <div className="flex items-center justify-center w-10 h-10 rounded-full">
-              <a href={profile.website} target="_blank" rel="noreferrer">
-                <Image
-                  alt="Discord"
-                  src={DiscordImage.src}
-                  width={DiscordImage.width}
-                  height={DiscordImage.height}
-                />
+                <LanguageRoundedIcon className="text-[#5C67C9] !w-10 !h-10" />
               </a>
             </div>
 
@@ -228,15 +204,15 @@ export default function ProfilePage() {
             <TextField
               className="col-span-2"
               disabled
-              label="Current Level of Study"
+              label="Current level of study"
               value={profile.studyLevel}
               {...textFieldOverrides}
             />
             <TextField
               className="col-span-2"
               disabled
-              label="Interests"
-              value={profile.studyLevel}
+              label="Preferred email"
+              value={profile.user.preferredEmail}
               {...textFieldOverrides}
             />
           </div>
