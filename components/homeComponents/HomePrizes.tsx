@@ -9,7 +9,7 @@ interface HomePrizesProps {
 
 export default function HomePrizes({ prizes }: HomePrizesProps) {
   return (
-    <section className="w-full overflow-hidden">
+    <section id="prizes-section" className="w-full overflow-hidden">
       {/* Banner */}
       <div className="-mx-4 mt-[120px] -rotate-[7deg] bg-[#7B81FF] text-white py-[0.35rem] w-[2000px] overflow-hidden line-clamp-1">
         <p>

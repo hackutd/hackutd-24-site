@@ -5,8 +5,11 @@ import QuestionIcon from '@/public/icons/question.svg';
 import AdminIcon from '@/public/icons/admin.svg';
 import clsx from 'clsx';
 import Link from 'next/link';
+import { useAuthContext } from '@/lib/user/AuthContext';
 
 export default function AppNavbarBottom() {
+  const { hasProfile } = useAuthContext();
+
   return (
     <div
       className={clsx(
@@ -16,14 +19,22 @@ export default function AppNavbarBottom() {
       )}
     >
       <FilePlusIcon />
+
       <Link href="/#schedule-section">
         <CalendarIcon />
       </Link>
-      <TrophyIcon />
+
+      <Link href="/#prizes-section">
+        <TrophyIcon />
+      </Link>
+
       <Link href="#faq-section">
         <QuestionIcon />
       </Link>
-      <AdminIcon />
+
+      <Link href={hasProfile ? '/profile' : '/register'}>
+        <AdminIcon />
+      </Link>
     </div>
   );
 }
