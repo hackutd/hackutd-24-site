@@ -9,6 +9,7 @@ module.exports = {
         primaryDark: '#05149C',
         secondary: '#54DDE8', //aqua
         secondaryDark: '#40B7BA', // dark aqua
+        tertiary: '#F5A3B6', //pink
         complementary: '#8AD47E', //green
         complementaryDark: '#252427',
         complementaryLight: '#F7CE79', //yellow
