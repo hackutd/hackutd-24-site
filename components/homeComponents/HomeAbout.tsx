@@ -106,8 +106,6 @@ const HomeAbout = () => {
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      background:
-        '#FFFFFF url("data:image/svg+xml,%3Csvg width%3D%22100vw%22 height%3D%22706px%22 viewBox%3D%220 0 100vw 706px%22 fill%3D%22none%22 xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cdefs%3E%3Cfilter id%3D%22blurStrong%22%3E%3CfeGaussianBlur stdDeviation%3D%2220%22/%3E%3C/filter%3E%3C/defs%3E%3Cellipse cx%3D%2295vw%22 cy%3D%2280px%22 rx%3D%22180px%22 ry%3D%22180px%22 fill%3D%22%234A3AFF%22 opacity%3D%220.1%22 filter%3D%22url(%23blurStrong)%22/%3E%3Cellipse cx%3D%2290vw%22 cy%3D%220px%22 rx%3D%22195px%22 ry%3D%22180px%22 fill%3D%22%23962DFF%22 opacity%3D%220.1%22 filter%3D%22url(%23blurStrong)%22/%3E%3Cellipse cx%3D%2210vw%22 cy%3D%22606px%22 rx%3D%22130px%22 ry%3D%22130px%22 fill%3D%22%234A3AFF%22 opacity%3D%220.1%22 filter%3D%22url(%23blurStrong)%22/%3E%3Cellipse cx%3D%225vw%22 cy%3D%22556px%22 rx%3D%22110px%22 ry%3D%22110px%22 fill%3D%22%23962DFF%22 opacity%3D%220.1%22 filter%3D%22url(%23blurStrong)%22/%3E%3Cellipse cx%3D%220vw%22 cy%3D%22506px%22 rx%3D%2290px%22 ry%3D%2290px%22 fill%3D%22%232D5BFF%22 opacity%3D%220.1%22 filter%3D%22url(%23blurStrong)%22/%3E%3C/svg%3E") no-repeat top right',
       color: '#FFFFFF',
       fontFamily: 'Arial, sans-serif',
       textAlign: 'center',

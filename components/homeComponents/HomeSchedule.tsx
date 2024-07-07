@@ -138,7 +138,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
   const day2Events = getDailyEvents(day2StartDateAndTime, eventEndDateAndTime);
 
   return (
-    <div id="schedule-section" className="bg-[#F2F3FF]">
+    <div id="schedule-section">
       <div className="text-center text-5xl font-bold text-[#05149C] p-4 font-fredoka">
         What to Expect?
       </div>

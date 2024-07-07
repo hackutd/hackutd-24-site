@@ -16,6 +16,8 @@ import HomeFaq from '../components/homeComponents/HomeFaq';
 import HomePrizes from '../components/homeComponents/HomePrizes';
 import HomeHero2 from '../components/homeComponents/HomeHero2';
 
+import themedHomeHeroBackground from '../public/assets/hero-2.png';
+
 /**
  * The home page.
  *
@@ -55,17 +57,19 @@ export default function Home(props: {
       </Head>
       <HomeNotif />
       <HomeHero2 />
-      <HomeVideoStats />
-      <HackCountdown />
-      <HomeAbout />
-      <HomeSchedule scheduleCard={props.scheduleCard} dateCard={props.dateCard} />
-      <HomeSpeakers keynoteSpeakers={props.keynoteSpeakers} />
-      <HomeChallenges challenges={props.challenges} />
-      <HomePrizes prizes={props.prizeData} />
-      <HomeTeam members={props.fetchedMembers} />
-      <HomeFaq answeredQuestion={props.answeredQuestion} />
-      <HomeSponsors sponsorCard={props.sponsorCard} />
-      <HomeFooter />
+      <div style={{ background: `url(${themedHomeHeroBackground.src})` }}>
+        <HomeVideoStats />
+        <HackCountdown />
+        <HomeAbout />
+        <HomeSchedule scheduleCard={props.scheduleCard} dateCard={props.dateCard} />
+        <HomeSpeakers keynoteSpeakers={props.keynoteSpeakers} />
+        <HomeChallenges challenges={props.challenges} />
+        <HomePrizes prizes={props.prizeData} />
+        <HomeTeam members={props.fetchedMembers} />
+        <HomeFaq answeredQuestion={props.answeredQuestion} />
+        <HomeSponsors sponsorCard={props.sponsorCard} />
+        <HomeFooter />
+      </div>
     </>
   );
 }
