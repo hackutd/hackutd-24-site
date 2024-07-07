@@ -59,12 +59,14 @@ export default function Home(props: {
       <HomeHero2 />
       {/* TODO: modify background dimension */}
       <div
-        style={{
-          backgroundImage: `url(${themedHomeHeroBackground.src})`,
-          //TODO: should update this to contain
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-        }}
+        style={
+          {
+            // backgroundImage: `url(${themedHomeHeroBackground.src})`,
+            //TODO: should update this to contain
+            // backgroundSize: 'cover',
+            // backgroundRepeat: 'no-repeat',
+          }
+        }
       >
         <HomeAbout />
         <HomeVideoStats />
