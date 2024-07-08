@@ -1,3 +1,4 @@
+import LanguageRoundedIcon from '@mui/icons-material/LanguageRounded';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import React, { useRef, useState } from 'react';
@@ -5,9 +6,10 @@ import { useAuthContext } from '../lib/user/AuthContext';
 import LoadIcon from '../components/LoadIcon';
 import { getFileExtension } from '../lib/util';
 import QRCode from '../components/dashboardComponents/QRCode';
-import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import LanguageIcon from '@mui/icons-material/Language';
+import LinkedInImage from '@/public/icons/linkedin.png';
+import ChickenImage from '@/public/assets/profile-chicken-egg.png';
+import { TextField, TextFieldProps } from '@mui/material';
 
 /**
  * A page that allows a user to modify app or profile settings and see their data.
@@ -19,6 +21,20 @@ export default function ProfilePage() {
   const { isSignedIn, hasProfile, user, profile } = useAuthContext();
   const [uploading, setUploading] = useState<boolean>(false);
   const resumeRef = useRef(null);
+
+  const textFieldOverrides: TextFieldProps = {
+    InputLabelProps: {
+      classes: {
+        root: '!text-black',
+      },
+    },
+    InputProps: {
+      classes: {
+        input: '!text-black [-webkit-text-fill-color:unset!important]',
+        notchedOutline: '!border-[#79747E]',
+      },
+    },
+  };
 
   const handleResumeUpload = (profile) => {
     if (resumeRef.current.files.length !== 1) return alert('Must submit one file');
@@ -71,18 +87,18 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="md:px-48 px-8 md:py-16 py-12 text-black">
-      <div className="flex flex-col md:flex-row 2xl:gap-x-14 gap-x-12 2xl:justify-center">
+    <div className="md:py-16 py-12 text-black flex justify-center">
+      <div className="bg-white min-w-3/4 py-12 px-16 rounded-xl flex flex-col md:flex-row 2xl:gap-x-14 gap-x-12 2xl:justify-center">
         {/* QR Code */}
         <div className="">
-          <div className="bg-secondary rounded-lg p-8 h-min w-min mx-auto">
+          <div className="bg-[#E0FDFF] rounded-lg p-8 h-min w-min mx-auto">
             {/* Dark represents dots, Light represents the background */}
             <QRCode
               data={'hack:' + user.id}
               loading={false}
               width={200}
               height={200}
-              darkColor="#05149C"
+              darkColor="#173950"
               lightColor="#0000"
             />
             <div className="text-center text-[#170F49] text-md font-semibold">
@@ -105,19 +121,24 @@ export default function ProfilePage() {
           </div>
 
           <div className="flex gap-x-4">
-            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#9CA6FF]">
+            <div className="flex items-center justify-center w-10 h-10 rounded-full">
               <a href={profile.linkedin} target="_blank" rel="noreferrer">
-                <LinkedInIcon style={{ fontSize: 29, color: 'white' }} />
+                <Image
+                  alt="LinkedIn"
+                  src={LinkedInImage.src}
+                  width={LinkedInImage.width}
+                  height={LinkedInImage.height}
+                />
               </a>
             </div>
-            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#9CA6FF]">
+            <div className="flex items-center justify-center w-10 h-10 rounded-full">
               <a href={profile.github} target="_blank" rel="noreferrer">
-                <GitHubIcon style={{ fontSize: 29, color: 'white' }} />
+                <GitHubIcon className="!w-10 !h-10" />
               </a>
             </div>
-            <div className="flex items-center justify-center w-10 h-10 rounded-full bg-[#9CA6FF]">
+            <div className="flex items-center justify-center w-10 h-10 rounded-full">
               <a href={profile.website} target="_blank" rel="noreferrer">
-                <LanguageIcon style={{ fontSize: 29, color: 'white' }} />
+                <LanguageRoundedIcon className="text-[#5C67C9] !w-10 !h-10" />
               </a>
             </div>
 
@@ -134,7 +155,7 @@ export default function ProfilePage() {
                   />
                   <label
                     id="resume_label"
-                    className="font-fredoka transition py-3 font-semibold px-6 text-sm text-center whitespace-nowrap text-white w-min bg-[#5C67C9] rounded-full cursor-pointer hover:brightness-110"
+                    className="font-fredoka transition py-3 font-semibold px-6 text-sm text-center whitespace-nowrap text-white w-min bg-[#40B7BA] rounded-full cursor-pointer hover:brightness-110"
                     htmlFor="resume"
                   >
                     Resume
@@ -149,54 +170,62 @@ export default function ProfilePage() {
 
         {/* Info */}
         <div className="w-full">
-          <h1 className="font-fredoka font-semibold text-5xl md:mt-0 mt-10 text-[#170F49]">{`${profile.user.firstName} ${profile.user.lastName}`}</h1>
+          <h1 className="text-center font-fredoka font-semibold text-5xl md:mt-0 mt-10 text-[#40B7BA]">{`${profile.user.firstName} ${profile.user.lastName}`}</h1>
 
-          <div className="md:flex items-center md:gap-x-10 mt-4">
-            <div className="md:w-1/2">
-              <div className="font-fredoka font-semibold md:text-2xl text-lg mt-6 mb-1 text-[#170F49]">
-                University
-              </div>
-              <h1 className="px-3 py-1 text-lg border border-3 border-[#C4C4C4] rounded-2xl text-[#4C4950]">
-                {profile.university}
-              </h1>
+          <div className="w-full grid gap-8 grid-cols-1 md:grid-cols-2 mt-8">
+            <TextField
+              className="col-span-1"
+              disabled
+              label="University"
+              value={profile.university}
+              {...textFieldOverrides}
+            />
+            <TextField
+              className="col-span-1"
+              disabled
+              label="Major"
+              value={profile.major}
+              {...textFieldOverrides}
+            />
+            <TextField
+              className="col-span-1"
+              disabled
+              label="Role"
+              value={profile.user.permissions[0]}
+              {...textFieldOverrides}
+            />
+            <TextField
+              className="col-span-1"
+              disabled
+              label="Number of hackathons attended"
+              value={profile.hackathonExperience}
+              {...textFieldOverrides}
+            />
+            <TextField
+              className="col-span-2"
+              disabled
+              label="Current level of study"
+              value={profile.studyLevel}
+              {...textFieldOverrides}
+            />
+            <TextField
+              className="col-span-2"
+              disabled
+              label="Preferred email"
+              value={profile.user.preferredEmail}
+              {...textFieldOverrides}
+            />
+          </div>
 
-              <div className="font-fredoka font-semibold md:text-2xl text-lg mt-6 mb-1 text-[#170F49]">
-                Major
-              </div>
-              <h1 className="px-3 py-1 text-lg border border-3 border-[#C4C4C4] rounded-2xl text-[#4C4950]">
-                {profile.major}
-              </h1>
-
-              <div className="font-fredoka font-semibold md:text-2xl text-lg mt-6 mb-1 text-[#170F49]">
-                Level of Study
-              </div>
-              <h1 className="px-3 py-1 text-lg border border-3 border-[#C4C4C4] rounded-2xl text-[#4C4950]">
-                {profile.studyLevel}
-              </h1>
-            </div>
-
-            <div className="md:w-1/2">
-              <div className="font-fredoka font-semibold md:text-2xl text-lg mt-6 mb-1 text-[#170F49]">
-                Role
-              </div>
-              <h1 className="px-3 py-1 text-lg border border-3 border-[#C4C4C4] rounded-2xl text-[#4C4950]">
-                {profile.user.permissions[0]}
-              </h1>
-
-              <div className="font-fredoka font-semibold md:text-2xl text-lg mt-6 mb-1 text-[#170F49]">
-                Number of Hackathons Attended
-              </div>
-              <h1 className="px-3 py-1 text-lg border border-3 border-[#C4C4C4] rounded-2xl text-[#4C4950]">
-                {profile.hackathonExperience}
-              </h1>
-
-              <div className="font-fredoka font-semibold md:text-2xl text-lg mt-6 mb-1 text-[#170F49]">
-                Preferred Email
-              </div>
-              <h1 className="px-3 py-1 text-lg border border-3 border-[#C4C4C4] rounded-2xl text-[#4C4950]">
-                {profile.user.preferredEmail}
-              </h1>
-            </div>
+          {/* Chicken picture */}
+          <div className="w-full flex justify-center mt-8">
+            <Image
+              className="w-[200px] h-auto"
+              src={ChickenImage.src}
+              width={ChickenImage.width}
+              height={ChickenImage.height}
+              alt="chicken egg"
+            />
           </div>
         </div>
       </div>

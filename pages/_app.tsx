@@ -1,3 +1,5 @@
+import Image from 'next/image';
+import DuckBackgroundImage from '@/public/assets/duck-background.png';
 import Head from 'next/head';
 import { AppProps } from 'next/dist/shared/lib/router/router';
 import 'firebase/compat/auth';
@@ -38,6 +40,7 @@ function PortalApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [particlesInit, setParticlesInit] = useState(false);
   const hash = useUrlHash('');
+  const duckBackgroundPathnames = ['/profile'];
 
   useEffect(() => {
     const el = document.getElementById(hash);
@@ -93,7 +96,20 @@ function PortalApp({ Component, pageProps }: AppProps) {
               <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
               <meta name="theme-color" content="#5D5FEF" />
             </Head>
-            <div className="min-h-screen flex flex-col bg-white">
+
+            <div className="min-h-screen flex flex-col">
+              {duckBackgroundPathnames.includes(router.pathname) && (
+                <div className="fixed top-0 left-0 w-screen h-screen -z-10">
+                  <Image
+                    className="w-screen h-screen object-cover"
+                    alt="Duck background"
+                    src={DuckBackgroundImage.src}
+                    width={DuckBackgroundImage.width}
+                    height={DuckBackgroundImage.height}
+                  />
+                </div>
+              )}
+
               <AppHeader2_Wrapper />
 
               {/* Spacer at the top of the page so that content won't be covered by the navbar */}
