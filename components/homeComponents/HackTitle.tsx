@@ -1,8 +1,8 @@
 export default function HackTitle() {
   return (
     <svg
-      width="729"
-      height="178"
+      width={`${Math.min((window.innerWidth * 5) / 6, 729)}`}
+      height={`${Math.min((window.innerHeight * 5) / 6, 178)}`}
       viewBox="0 0 729 178"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

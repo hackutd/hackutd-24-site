@@ -46,16 +46,16 @@ export default function HomeHero() {
             <p className="font-poppins text-white font-medium">
               Get notified when application drops
             </p>
-            <div className="rounded-xl border-none w-2/5 p-[5px] flex items-center bg-white gap-x-3">
+            <div className="rounded-xl border-none w-4/5 lg:w-2/5 p-[5px] flex justify-between items-center bg-white gap-x-3">
               <input
                 type="text"
-                className="w-4/5 rounded-lg border-none focus:ring-0"
+                className="w-3/5 lg:w-4/5 rounded-lg border-none focus:ring-0"
                 placeholder="Email Address"
                 value={userEmail}
                 onChange={(e) => setUserEmail(e.target.value)}
               />
               <button
-                className="rounded-lg bg-[#F7CE79] px-4 py-3 w-1/5 text-white"
+                className="rounded-lg bg-[#F7CE79] px-4 py-3 text-white"
                 onClick={async () => {
                   await handleSubmitEmail(userEmail);
                 }}
