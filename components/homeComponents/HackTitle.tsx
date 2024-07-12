@@ -1,8 +1,20 @@
+import { useEffect, useState } from 'react';
+
 export default function HackTitle() {
+  const [height, setHeight] = useState<number>(Math.min((window.innerWidth * 5) / 6, 729));
+  const [width, setWidth] = useState<number>(Math.min((window.innerHeight * 5) / 6, 178));
+  useEffect(() => {
+    const updateDimensionFn = () => {
+      setWidth(Math.min((window.innerWidth * 5) / 6, 729));
+      setHeight(Math.min((window.innerHeight * 5) / 6, 178));
+    };
+    window.addEventListener('resize', updateDimensionFn);
+    return () => window.removeEventListener('resize', updateDimensionFn);
+  }, []);
   return (
     <svg
-      width={`${Math.min((window.innerWidth * 5) / 6, 729)}`}
-      height={`${Math.min((window.innerHeight * 5) / 6, 178)}`}
+      width={`${width}`}
+      height={`${height}`}
       viewBox="0 0 729 178"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
