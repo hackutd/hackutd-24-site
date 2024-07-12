@@ -4,6 +4,8 @@ export default function HackTitle() {
   const [height, setHeight] = useState<number>(Math.min((window.innerWidth * 5) / 6, 729));
   const [width, setWidth] = useState<number>(Math.min((window.innerHeight * 5) / 6, 178));
   useEffect(() => {
+    setWidth(Math.min((window.innerWidth * 5) / 6, 729));
+    setHeight(Math.min((window.innerHeight * 5) / 6, 178));
     const updateDimensionFn = () => {
       setWidth(Math.min((window.innerWidth * 5) / 6, 729));
       setHeight(Math.min((window.innerHeight * 5) / 6, 178));
