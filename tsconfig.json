@@ -28,7 +28,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "pages/_app.tsx"
+    "pages/_app.tsx",
+    "types/*"
   ],
   "exclude": [
     "node_modules"
