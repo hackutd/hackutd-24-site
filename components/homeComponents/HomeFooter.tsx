@@ -9,7 +9,7 @@ export default function HomeFooter() {
         // TODO: need to update box shadow, current box shadow is a bit off from the design
         boxShadow: 'rgba(0, 0, 0, 0.18) 20px -2px 20px',
       }}
-      className=" mt-16 md:text-base text-xs relative"
+      className="md:text-base text-xs relative"
     >
       <div className="flex">
         <Blob width={400} className="absolute hidden left-0 top-0 lg:block" />

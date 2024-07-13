@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import SponsorCard from './SponsorCard';
+import Wave2 from './Wave2';
 
 export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
   const [sponsor, setSponsor] = useState<Sponsor[]>([]);
@@ -10,8 +11,12 @@ export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
 
   return (
     sponsor.length != 0 && (
-      <section className="md:p-12 p-6">
-        <div className="flex flex-col flex-grow bg-white">
+      <section
+        style={{ backgroundColor: '#DAC397', paddingTop: '20rem', position: 'relative' }}
+        className="md:p-12 p-6"
+      >
+        <Wave2 style={{ position: 'absolute', top: '-400px', left: '-10px' }} />
+        <div className="flex flex-col flex-grow">
           <h4
             // change this after updating tailwind font
             style={{
