@@ -32,10 +32,8 @@ async function handleGetScanTypes(req: NextApiRequest, res: NextApiResponse) {
   // Probably not safe
   const isAuthorized = await userIsAuthorized(userToken, ['admin', 'super_admin']);
   if (!isAuthorized) {
-    return res.status(401).send({
-      type: 'request-unauthorized',
-      message: 'Request is not authorized to perform admin functionality.',
-    });
+    // Return empty array for navbar
+    return res.json([]);
   }
 
   try {

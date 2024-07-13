@@ -54,24 +54,22 @@ async function updateScanType(req: NextApiRequest, res: NextApiResponse) {
       });
     }
 
-    if (await checkIfNameAlreadyExists(scanData.name)) {
+    if (!(await checkIfNameAlreadyExists(scanData.name))) {
       return res.status(400).json({
-        msg: 'Scantype already exists',
+        msg: 'Scantype does not exists',
       });
-    }
-
-    if (scanData.isCheckIn) {
-      const hasCheckIn = await checkIfCheckInAlreadyExists();
-      if (hasCheckIn) {
-        return res.status(400).json({
-          msg: 'Check-in scantype already exists',
-        });
-      }
     }
 
     snapshot.forEach(async (doc) => {
       await updateUserDoc(doc.data().name, scanData.name);
-      await db.collection(SCANTYPES_COLLECTION).doc(doc.id).update(scanData);
+      await db
+        .collection(SCANTYPES_COLLECTION)
+        .doc(doc.id)
+        .update({
+          ...scanData,
+          startTime: new Date(scanData.startTime),
+          endTime: new Date(scanData.endTime),
+        });
     });
     return res.status(200).json({
       msg: 'update completed',
