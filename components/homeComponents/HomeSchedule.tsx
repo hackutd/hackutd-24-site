@@ -1,6 +1,16 @@
 import * as React from 'react';
 import { useState } from 'react';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import Image from 'next/image';
+
+import boulderRight from '../../public/assets/boulderRight.png';
+import boulderLeft from '../../public/assets/boulderLeft.png';
+import mascotOnLifeRing from '../../public/assets/mascot_life_ring.png';
+import cloud from '../../public/assets/cloud.png';
+
+import styles from './HomeSchedule.module.css';
+import BoulderLeft from './BoulderLeft';
+import BoulderRight from './BoulderRight';
 
 /* Calendar */
 export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dateCard: Dates }) {
@@ -138,7 +148,42 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
   const day2Events = getDailyEvents(day2StartDateAndTime, eventEndDateAndTime);
 
   return (
-    <div id="schedule-section">
+    <div
+      style={{
+        backgroundColor: '#3CB8B9',
+        zIndex: 1,
+        position: 'relative',
+        paddingTop: '10rem',
+      }}
+      className={styles.scheduleSection}
+      id="schedule-section"
+    >
+      <div className={styles.overlay1} />
+      <div className={styles.overlay2} />
+      <BoulderLeft
+        style={{
+          width: '47%',
+          position: 'absolute',
+          top: '-1px',
+          left: '0',
+        }}
+      />
+      <BoulderRight
+        style={{
+          width: '47%',
+          position: 'absolute',
+          top: '6px',
+          right: '0',
+        }}
+      />
+      <Image
+        style={{ position: 'absolute', top: '-10%', left: '34%', zIndex: 3 }}
+        src={mascotOnLifeRing.src}
+        alt="mascot_life_ring.png"
+        width={400}
+        height={400}
+      />
+
       <div className="text-center text-5xl font-bold text-[#05149C] p-4 font-fredoka">
         What to Expect?
       </div>
