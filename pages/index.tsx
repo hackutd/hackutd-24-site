@@ -16,7 +16,11 @@ import HomeFaq from '../components/homeComponents/HomeFaq';
 import HomePrizes from '../components/homeComponents/HomePrizes';
 import HomeHero2 from '../components/homeComponents/HomeHero2';
 
-import themedHomeHeroBackground from '../public/assets/hero-2.png';
+import themedBackground from '../public/assets/bg3.png';
+
+import cloud from '../public/assets/cloud.png';
+
+import Image from 'next/image';
 
 /**
  * The home page.
@@ -58,23 +62,39 @@ export default function Home(props: {
       <HomeNotif />
       <HomeHero2 />
       {/* TODO: modify background dimension */}
-      <div
-        style={
-          {
-            // backgroundImage: `url(${themedHomeHeroBackground.src})`,
-            //TODO: should update this to contain
-            // backgroundSize: 'cover',
-            // backgroundRepeat: 'no-repeat',
-          }
-        }
-      >
+      <div style={{ position: 'relative' }}>
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '2600px',
+            background: 'linear-gradient(to bottom, #3398D1 30%, #8BD1F0, #C6E9F4)',
+            zIndex: 0,
+          }}
+        />
+        <Image
+          style={{
+            position: 'absolute',
+            top: '1100px',
+            right: '-100px',
+            filter: 'blur(8px)',
+          }}
+          src={cloud.src}
+          width={300}
+          height={300}
+          alt="cloud.png"
+        />
+
         <HomeAbout />
         <HomeVideoStats />
         <HackCountdown />
         <HomeSchedule scheduleCard={props.scheduleCard} dateCard={props.dateCard} />
-        <HomeSpeakers keynoteSpeakers={props.keynoteSpeakers} />
+        {/* <HomeSpeakers keynoteSpeakers={props.keynoteSpeakers} /> */}
         <HomeChallenges challenges={props.challenges} />
-        <HomePrizes prizes={props.prizeData} />
+        {/* include HomePrizes in HomeChallenges */}
+        {/* <HomePrizes prizes={props.prizeData} /> */}
         <HomeFaq answeredQuestion={props.answeredQuestion} />
         <HomeSponsors sponsorCard={props.sponsorCard} />
         <HomeFooter />
