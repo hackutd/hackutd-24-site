@@ -1,10 +1,27 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import HomeChallengesCard from './HomeChallengeCard';
+import $ from 'jquery';
 
 export default function HomeChallengesComponent(props: { challenges: Challenge[] }) {
+  const waterPlatformRef = React.useRef(null);
+  React.useLayoutEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Dynamically import the ripples plugin
+      import('jquery.ripples').then(() => {
+        const jqueryEl: JQuery<any> = $(waterPlatformRef.current);
+        jqueryEl.ripples({
+          resolution: 512,
+          dropRadius: 20,
+          perturbance: 0.04,
+        });
+      });
+    }
+  }, [waterPlatformRef]);
+
   return (
     props.challenges.length !== 0 && (
       <section
+        ref={waterPlatformRef}
         style={{ background: 'linear-gradient(to bottom, #3AB8BA, #43C0C5 10%, #68CBDB)' }}
         className="md:py-12 py-6 m-auto"
       >

@@ -12,6 +12,8 @@ import styles from './HomeSchedule.module.css';
 import BoulderLeft from './BoulderLeft';
 import BoulderRight from './BoulderRight';
 
+import $ from 'jquery';
+
 /* Calendar */
 export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dateCard: Dates }) {
   /* Event Colors */
@@ -93,18 +95,19 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
     return (
       showEvent && (
         <>
+          {/* TODO: update border */}
           <div
-            className={`${
-              !showFilteredEvents
-                ? `${!hasEvenIndex && filter === 'All' ? 'bg-[#F2F3FF]' : 'bg-white'} 
-                             ${
-                               !isLastEvent && filter === 'All'
-                                 ? 'p-4 border-b border-[#05149C]'
-                                 : 'rounded-b-xl p-4'
-                             }`
-                : 'p-4 border-b border-[#05149C]'
-            }
-                          `}
+          // className={`${
+          //   !showFilteredEvents
+          //     ? `${!hasEvenIndex && filter === 'All' ? 'bg-[#F2F3FF]' : 'bg-white'}
+          //                  ${
+          //                    !isLastEvent && filter === 'All'
+          //                      ? 'p-4 border-b border-[#05149C]'
+          //                      : 'rounded-b-xl p-4'
+          //                  }`
+          //     : 'p-4 border-b border-[#05149C]'
+          // }
+          //               `}
           >
             <div className="flex justify-between pb-1">
               <div className="text-md font-bold font-dmSans">{formattedTime}</div>
@@ -147,8 +150,24 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
   const day1Events = getDailyEvents(day1StartDateAndTime, day2StartDateAndTime);
   const day2Events = getDailyEvents(day2StartDateAndTime, eventEndDateAndTime);
 
+  const waterPlatformRef = React.useRef(null);
+  React.useLayoutEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Dynamically import the ripples plugin
+      import('jquery.ripples').then(() => {
+        const jqueryEl: JQuery<any> = $(waterPlatformRef.current);
+        jqueryEl.ripples({
+          resolution: 512,
+          dropRadius: 20,
+          perturbance: 0.04,
+        });
+      });
+    }
+  }, [waterPlatformRef]);
+
   return (
     <div
+      ref={waterPlatformRef}
       style={{
         backgroundColor: '#3CB8B9',
         zIndex: 1,
@@ -158,6 +177,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
       className={styles.scheduleSection}
       id="schedule-section"
     >
+      {/* TODO: update media query for bg of overlay 1 */}
       <div className={styles.overlay1} />
       <div className={styles.overlay2} />
       <BoulderLeft
@@ -172,10 +192,11 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
         style={{
           width: '47%',
           position: 'absolute',
-          top: '6px',
+          top: '9px',
           right: '0',
         }}
       />
+
       <Image
         style={{ position: 'absolute', top: '-10%', left: '34%', zIndex: 3 }}
         src={mascotOnLifeRing.src}
@@ -184,64 +205,74 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
         height={400}
       />
 
-      <div className="text-center text-5xl font-bold text-[#05149C] p-4 font-fredoka">
-        What to Expect?
+      {/* TODO: add drop shadow */}
+      {/* TODO: change font family */}
+      <div className="text-center text-2xl font-bold text-white p-4 font-fredoka uppercase">
+        Schedule
       </div>
 
+      {/* TODO: add drop shadow */}
+      {/* TODO: change font family */}
+      <div className="text-center text-5xl font-bold text-[#F7CE79] p-4 font-fredoka uppercase">
+        What can you expect?
+      </div>
+
+      {/* TODO: change font family */}
+      <div className="text-center py-1 text-xl font-bold text-white font-poppins">Filters</div>
       {/* Filter */}
-      <div className="md:flex justify-center items-center mx-8">
-        <div className="bg-white border-2 border-blue-900 rounded-3xl px-8 my-4 border-opacity-40">
-          <div className="text-center py-1 text-xl font-bold text-[#05149C] font-poppins">
-            Filters
-          </div>
-          <div className="flex flex-wrap justify-center mb-2 font-poppins">
-            <div
-              onClick={() => changeFilter('All')}
-              className={`text-sm cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl border-gray-500 mb-1
+      <div className="flex justify-center">
+        {/* TODO: add border radius */}
+        {/* TODO: add shadow */}
+        <div
+          style={{ width: 'fit-content' }}
+          className="md:flex justify-center items-center bg-white bg-opacity-25 px-20 py-4"
+        >
+          <div
+            onClick={() => changeFilter('All')}
+            className={`text-sm cursor-pointer px-2 h-8 py-1 border-2 rounded-xl border-gray-500
               ${filter === 'All' ? eventColors['All-Filter'] : eventColors['All']}`}
-            >
-              All
-            </div>
+          >
+            All
+          </div>
 
-            <div
-              onClick={() => changeFilter('Required')}
-              className={`text-sm cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl
+          <div
+            onClick={() => changeFilter('Required')}
+            className={`text-sm cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl bg-white
               ${filter === 'Required' ? eventColors['Required-Filter'] : eventColors['Required']}`}
-            >
-              Required
-            </div>
+          >
+            Required
+          </div>
 
-            <div
-              onClick={() => changeFilter('Sponsor')}
-              className={`text-sm cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl
+          <div
+            onClick={() => changeFilter('Sponsor')}
+            className={`text-sm cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl bg-white
               ${filter === 'Sponsor' ? eventColors['Sponsor-Filter'] : eventColors['Sponsor']}`}
-            >
-              Sponsor
-            </div>
+          >
+            Sponsor
+          </div>
 
-            <div
-              onClick={() => changeFilter('Food')}
-              className={`text-sm cursor-pointer	mx-1 px-2 h-8 py-1 border-2 rounded-xl
+          <div
+            onClick={() => changeFilter('Food')}
+            className={`text-sm cursor-pointer	mx-1 px-2 h-8 py-1 border-2 rounded-xl bg-white
               ${filter === 'Food' ? eventColors['Food-Filter'] : eventColors['Food']}`}
-            >
-              Food
-            </div>
+          >
+            Food
+          </div>
 
-            <div
-              onClick={() => changeFilter('Workshop')}
-              className={`text-sm cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl
+          <div
+            onClick={() => changeFilter('Workshop')}
+            className={`text-sm cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl bg-white
               ${filter === 'Workshop' ? eventColors['Workshop-Filter'] : eventColors['Workshop']}`}
-            >
-              Workshop
-            </div>
+          >
+            Workshop
+          </div>
 
-            <div
-              onClick={() => changeFilter('Social')}
-              className={`text-sm cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl
+          <div
+            onClick={() => changeFilter('Social')}
+            className={`text-sm cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl bg-white
               ${filter === 'Social' ? eventColors['Social-Filter'] : eventColors['Social']}`}
-            >
-              Social
-            </div>
+          >
+            Social
           </div>
         </div>
       </div>
@@ -249,7 +280,8 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
       {/* Calendar */}
       <div className="md:flex p-1 overflow-y-auto overflow-x-hidden mx-auto lg:w-[80%] w-full h-full">
         <div className="w-full lg:w-1/2 px-4 md:px-0">
-          <div className="text-3xl font-black py-6 text-[#05149C] font-fredoka">
+          {/* TODO: add shadow */}
+          <div className="text-3xl font-black py-6 text-[#F7CE79] font-fredoka">
             Day 1: Saturday
           </div>
           <div className="bg-white mb-8 mx-2 p-2 border-2 rounded-2xl border-[#05149C] border-opacity-20">
@@ -258,7 +290,8 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
         </div>
 
         <div className="w-full lg:w-1/2 md:ml-6 px-4 md:px-0">
-          <div className="text-3xl font-black py-6 text-[#05149C] font-fredoka">Day 2: Sunday</div>
+          {/* TODO: add shadow */}
+          <div className="text-3xl font-black py-6 text-[#F7CE79] font-fredoka">Day 2: Sunday</div>
           <div className="bg-white mb-8 mx-2 p-2 border-2 rounded-2xl border-[#05149C] border-opacity-20">
             {day2Events}
           </div>
