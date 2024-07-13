@@ -4,7 +4,10 @@ import HomeChallengesCard from './HomeChallengeCard';
 export default function HomeChallengesComponent(props: { challenges: Challenge[] }) {
   return (
     props.challenges.length !== 0 && (
-      <section className="md:py-12 py-6 xl:w-9/10 w-11/12 m-auto">
+      <section
+        style={{ background: 'linear-gradient(to bottom, #3AB8BA, #43C0C5 10%, #68CBDB)' }}
+        className="md:py-12 py-6 m-auto"
+      >
         <div className="flex items-center">
           <div className="flex-1 mr-6 border-t-4 border-black"></div>
           <span className="font-fredoka font-bold md:text-4xl text-2xl text-center text-[#05149C]">
