@@ -60,13 +60,13 @@ export default function AppHeader2_Core() {
           <Menu as="div" className="w-full">
             <div>
               <Menu.Button className="p-2 cursor-pointer flex items-center gap-x-2">
-                <div className="text-[#5D5A88]">Admin</div>
+                <div className="text-[#40B7BA]">Admin</div>
                 <svg
                   xmlns="http:www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
-                  stroke="#5D5A88"
+                  stroke="#40B7BA"
                   className="size-4"
                 >
                   <path
