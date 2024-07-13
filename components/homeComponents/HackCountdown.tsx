@@ -1,6 +1,9 @@
 import React, { useState, useEffect, CSSProperties } from 'react';
 import styles from './HackCountdown.module.css';
 import { config } from '../../hackportal.config';
+import Image from 'next/image';
+
+import cloud from '../../public/assets/cloud.png';
 
 interface CountdownProps {
   targetDate: string;
