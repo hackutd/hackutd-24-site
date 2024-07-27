@@ -1,18 +1,10 @@
 import React, { SVGProps } from 'react';
 
-//TODO: need to do some media queries for footer, styling is off
 export default function HomeFooter() {
   return (
-    <section
-      style={{
-        minHeight: '387px',
-        // TODO: need to update box shadow, current box shadow is a bit off from the design
-        boxShadow: 'rgba(0, 0, 0, 0.18) 20px -2px 20px',
-      }}
-      className="md:text-base text-xs relative"
-    >
+    // TODO: update styling
+    <section className="md:text-base text-xs relative bg-[#40B7BA] text-white">
       <div className="flex">
-        <Blob width={400} className="absolute hidden left-0 top-0 lg:block" />
         <div className="z-10 grid grid-cols-1 lg:gap-36 lg:grid-cols-3">
           <div className="lg:text-white p-10">
             <h1 className="font-bold text-2xl mt-10">HackPortal</h1>
@@ -70,24 +62,3 @@ export default function HomeFooter() {
     </section>
   );
 }
-
-// blob
-const Blob: React.FC<SVGProps<SVGSVGElement>> = (props) => {
-  return (
-    <svg
-      width="480"
-      height="385"
-      viewBox="0 0 480 385"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      {...props}
-    >
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M38.9788 597.017C129.555 628.73 243.207 655.052 315.874 585.996C387.307 518.112 331.301 394.497 355.612 296.116C385.101 176.784 513.977 73.4295 470.3 -38.9127C425.588 -153.916 283.623 -190.831 166.515 -190.256C63.0498 -189.748 -30.1812 -121.127 -98.5997 -36.1217C-153.192 31.7049 -151.839 124.432 -157.987 212.914C-163.26 288.808 -164.756 363.637 -130.957 429.549C-92.3463 504.843 -37.3878 570.279 38.9788 597.017Z"
-        fill="#7B81FF"
-      />
-    </svg>
-  );
-};

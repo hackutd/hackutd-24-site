@@ -8,14 +8,14 @@ export default function HomeFaq(props: { answeredQuestion: AnsweredQuestion[] })
     props.answeredQuestion.length != 0 && (
       <section
         style={{
-          background: 'linear-gradient(to bottom, #3AB8BA, #43C0C5 10%, #68CBDB)',
-          paddingTop: '20rem',
+          // background: 'linear-gradient(to bottom, #3AB8BA, #43C0C5 10%, #68CBDB)',
+          paddingTop: '40rem',
           position: 'relative',
+          zIndex: 9997,
         }}
         id="faq-section"
-        className="p-1"
       >
-        <Wave1 style={{ position: 'absolute', top: '-420px', left: '-10px' }} />
+        <Wave1 style={{ position: 'absolute', top: '-200px', left: '-10px', zIndex: '9998' }} />
         <Faq fetchedFaqs={props.answeredQuestion}></Faq>
       </section>
     )

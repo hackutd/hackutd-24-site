@@ -1,0 +1,15 @@
+.sea {
+  height: 4100px;
+}
+
+@media screen and (min-width: 768px) {
+  .sea {
+    height: 3000px;
+  }
+}
+
+@media screen and (min-width: 1081px) {
+  .sea {
+    height: 2900px;
+  }
+}

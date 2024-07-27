@@ -4,6 +4,8 @@ import Head from 'next/head';
 import React, { useState, useEffect } from 'react';
 import FaqDisclosure from './FaqDisclosure';
 import { RequestHelper } from '../../lib/request-helper';
+import background from '../../public/assets/sea_bg.png';
+import styles from './Faq.module.css';
 
 /**
  * The FAQ page.
@@ -45,7 +47,19 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
   }
 
   return (
-    <div className="flex flex-col flex-grow">
+    <div className="flex flex-col flex-grow pt-40 relative">
+      <div
+        className={styles.sea}
+        style={{
+          position: 'absolute',
+          top: '-50%',
+          left: 0,
+          backgroundImage: `url(${background.src})`,
+          backgroundSize: 'cover',
+          width: '100%',
+          zIndex: -1,
+        }}
+      />
       <Head>
         <title>HackPortal</title>
         <meta name="description" content="HackPortal's Frequently Asked Questions" />
@@ -79,6 +93,7 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
         {/* FAQ for lg-md */}
         {/* Uses different section for mobile because using 2 columns is buggy when expanding FAQs */}
         <div style={{ zIndex: 9999 }} className="md:flex hidden justify-between p-6">
+          {/* TODO: add faq header card */}
           <div className="w-[49%] my-3 space-y-4 > * + *">
             {faqs.map(
               ({ question, answer }, idx) =>

@@ -16,6 +16,7 @@ export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
         className="md:p-12 p-6"
       >
         <Wave2 style={{ position: 'absolute', top: '-400px', left: '-10px' }} />
+        {/* TODO: add mascot */}
         <div className="flex flex-col flex-grow">
           <h4
             // change this after updating tailwind font

@@ -16,7 +16,7 @@ import HomeFaq from '../components/homeComponents/HomeFaq';
 import HomePrizes from '../components/homeComponents/HomePrizes';
 import HomeHero2 from '../components/homeComponents/HomeHero2';
 
-import themedBackground from '../public/assets/bg3.png';
+import themedBackground from '../public/assets/plain_bg.png';
 
 import cloud from '../public/assets/cloud.png';
 
@@ -69,7 +69,7 @@ export default function Home(props: {
             top: 0,
             left: 0,
             width: '100%',
-            height: '2600px',
+            height: '2400px',
             background: 'linear-gradient(to bottom, #3398D1 30%, #8BD1F0, #C6E9F4)',
             zIndex: 0,
           }}
