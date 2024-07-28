@@ -17,7 +17,6 @@
   justify-content: center;
   align-items: center;
   gap: 1.5vw;
-  z-index: 9999;
 }
 
 .notifySection {
@@ -29,7 +28,6 @@
   line-height: 3.5vw;
   color: #000000;
   width: 90%;
-  z-index: 9999;
 }
 
 .digitBox {
@@ -43,7 +41,6 @@
   width: 10vw;
   height: 15vw;
   border: 0.5px solid #05149c;
-  z-index: 9999;
 }
 
 .digit {
@@ -62,7 +59,6 @@
   line-height: 5vw;
   color: #05149c;
   margin-top: 1vw;
-  z-index: 9999;
 }
 
 .button {

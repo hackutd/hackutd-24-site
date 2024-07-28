@@ -1,0 +1,9 @@
+.container {
+  padding-top: 20rem;
+}
+
+@media screen and (min-width: 960px) {
+  .container {
+    padding-top: 35rem;
+  }
+}

@@ -1,10 +1,13 @@
 import Image from 'next/image';
 import MLH_Sticker from '../../public/assets/mlh-sticker.png';
 import BackgroundCircles from '../BackgroundCircles';
+import styles from './HomeHero2.module.css';
 
 export default function HomeHero() {
   return (
-    <section className="min-h-screen bg-contain bg-white flex flex-col-reverse md:flex-col">
+    <section
+      className={`${styles.container} min-h-screen bg-contain relative bg-white flex flex-col-reverse md:flex-col`}
+    >
       <div className="flex h-screen w-full relative">
         <div className="w-full h-full absolute top-0 left-0 z-0">
           <BackgroundCircles />

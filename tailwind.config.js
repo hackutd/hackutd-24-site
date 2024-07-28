@@ -26,6 +26,8 @@ module.exports = {
         inter: ['Inter', 'sans-serif'],
         sans: ['Fredoka', 'Roboto', 'sans-serif'],
         concertOne: ['Concert One', 'sans-serif'],
+        montserrat: ['Montserrat', 'sans-serif'],
+        atlasi: ['Atlasi', 'sans-serif'],
       },
       width: {
         '1/8': '12.5%',

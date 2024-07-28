@@ -63,30 +63,6 @@ export default function Home(props: {
       <HomeHero2 />
       {/* TODO: modify background dimension */}
       <div style={{ position: 'relative' }}>
-        <div
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '2400px',
-            background: 'linear-gradient(to bottom, #3398D1 30%, #8BD1F0, #C6E9F4)',
-            zIndex: 0,
-          }}
-        />
-        <Image
-          style={{
-            position: 'absolute',
-            top: '1100px',
-            right: '-100px',
-            filter: 'blur(8px)',
-          }}
-          src={cloud.src}
-          width={300}
-          height={300}
-          alt="cloud.png"
-        />
-
         <HomeAbout />
         <HomeVideoStats />
         <HackCountdown />

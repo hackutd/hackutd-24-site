@@ -13,3 +13,35 @@
     height: 2900px;
   }
 }
+
+.container {
+  background: #4bcbd3;
+}
+
+.container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: linear-gradient(0deg, rgba(64, 183, 186, 0.3), rgba(76, 208, 215, 0.3)),
+    url('/assets/middle_wave.png');
+  width: 100%;
+  min-height: 100%;
+  z-index: 0;
+
+  background-position: 0 0, 0 0;
+  animation: animatedBackground 30s linear infinite;
+}
+
+@keyframes animatedBackground {
+  from {
+    background-position: 0 0, 0 0;
+  }
+  to {
+    background-position: 0 100%, 100% 0;
+  }
+}
+.content {
+  position: relative;
+  z-index: 3;
+}

@@ -19,13 +19,11 @@ export default function HomeChallengeTrackCard(props: {
       </div>
       <div className="w-5/6 mx-auto">
         {/* Challenge Name */}
-        <h1 className="font-nunito text-2xl font-bold mt-4">
+        <h1 className="font-nunito text-xl font-bold mt-4">
           {props.challengeTrack.title.toUpperCase()}
         </h1>
         {/* Challenge subtittle */}
-        <h1 className="font-nunito text-xl text-[#05149C] font-bold my-4">
-          {props.challengeTrack.subtitle}
-        </h1>
+        <h1 className="font-nunito text-lg font-bold my-4">{props.challengeTrack.subtitle}</h1>
         {/* Description */}
         <div className="mb-8 max-w-fit">
           <p className="text-md line-clamp-5 text-balance">{props.challengeTrack.description}</p>

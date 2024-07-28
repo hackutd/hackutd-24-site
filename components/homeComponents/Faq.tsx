@@ -1,11 +1,12 @@
-import { ChevronDownIcon } from '@heroicons/react/solid';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import React, { useState, useEffect } from 'react';
 import FaqDisclosure from './FaqDisclosure';
 import { RequestHelper } from '../../lib/request-helper';
-import background from '../../public/assets/sea_bg.png';
-import styles from './Faq.module.css';
+
+import Fish1 from '../../public/assets/fish_1.png';
+import Fish2 from '../../public/assets/fish_2.png';
+import Image from 'next/image';
 
 /**
  * The FAQ page.
@@ -25,19 +26,6 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
     setLoading(false);
   }, [fetchedFaqs]);
 
-  /**
-   *
-   * Expand all FAQ disclosures
-   *
-   */
-  const expandAll = () => {
-    setDisclosureStatus(new Array(disclosuresStatus.length).fill(true));
-  };
-
-  const closeAll = () => {
-    setDisclosureStatus(new Array(disclosuresStatus.length).fill(false));
-  };
-
   if (loading) {
     return (
       <div>
@@ -47,52 +35,35 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
   }
 
   return (
-    <div className="flex flex-col flex-grow pt-40 relative">
-      <div
-        className={styles.sea}
-        style={{
-          position: 'absolute',
-          top: '-50%',
-          left: 0,
-          backgroundImage: `url(${background.src})`,
-          backgroundSize: 'cover',
-          width: '100%',
-          zIndex: -1,
-        }}
-      />
+    <div className="flex flex-col flex-grow relative">
       <Head>
         <title>HackPortal</title>
         <meta name="description" content="HackPortal's Frequently Asked Questions" />
       </Head>
-      {/* <AboutHeader active="/about/faq" /> */}
       <div className="top-6">
         <div className="flex flex-row justify-between items-center py-1">
-          {/* <h4 className="font-bold md:text-4xl text-2xl my-4 text-complementary">FAQ</h4> */}
-          {/* <div className="flex flex-row items-center gap-x-2">
-            <button
-              onClick={() => {
-                if (disclosuresStatus.every((status) => status)) {
-                  closeAll();
-                } else {
-                  expandAll();
-                }
-              }}
-              className="font-bold"
-            >
-              {disclosuresStatus.every((status) => status) ? 'Close All' : 'Expand All'}
+          <div>
+            <Image src={Fish2.src} alt="fish_2.png" width={200} height={200} />
+            <Image src={Fish1.src} alt="fish_1.png" width={200} height={200} />
+          </div>
+          <Image src={Fish2.src} alt="fish_2.png" width={200} height={200} />
+        </div>
+        <div className="bg-white mx-10 p-10 rounded-lg flex justify-between font-fredoka">
+          <div>
+            <h1 className="text-3xl mb-4 font-bold text-[#54DDE8]">FAQ</h1>
+            <p>
+              Can’t find what you’re looking for? Connect with our team at email@organization.com
+            </p>
+          </div>
+          <div className="flex items-center">
+            <button className="bg-[#DFFEFF] text-[#40B7BA] p-3 rounded-2xl">
+              Ask A Questions!
             </button>
-            <ChevronDownIcon
-              className={`${
-                disclosuresStatus.every((status) => status)
-                  ? 'transform rotate-180 transition duration-500 ease-in-out'
-                  : 'transition duration-500 ease-in-out'
-              } w-5 h-5`}
-            />
-          </div> */}
+          </div>
         </div>
         {/* FAQ for lg-md */}
         {/* Uses different section for mobile because using 2 columns is buggy when expanding FAQs */}
-        <div style={{ zIndex: 9999 }} className="md:flex hidden justify-between p-6">
+        <div className="md:flex hidden justify-between p-6">
           {/* TODO: add faq header card */}
           <div className="w-[49%] my-3 space-y-4 > * + *">
             {faqs.map(

@@ -1,5 +1,7 @@
 import React from 'react';
 import { CSSProperties } from 'react';
+import styles from './HomeAbout.module.css';
+import Image from 'next/image';
 
 const HomeAbout = () => {
   interface CustomShapesStyles {
@@ -99,101 +101,26 @@ const HomeAbout = () => {
     },
   };
 
-  const styles: { [key: string]: CSSProperties } = {
-    container: {
-      position: 'relative',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      color: '#FFFFFF',
-      fontFamily: 'Arial, sans-serif',
-      textAlign: 'center',
-      width: '100vw',
-      height: '120vh',
-      overflow: 'hidden',
-      paddingTop: '2vh',
-    },
-    header: {
-      fontFamily: 'Fredoka, sans-serif',
-      fontWeight: 600,
-      fontSize: 'calc(24px + 2vw)',
-      color: '#05149C',
-      padding: '1vh 0',
-    },
-    description: {
-      fontFamily: 'DM Sans, sans-serif',
-      fontWeight: 400,
-      fontSize: '16px',
-      color: '#000000',
-      width: '90%',
-      margin: '1vh 0',
-    },
-    statsContainer: {
-      position: 'relative',
-      width: '100%',
-      height: '100%',
-      fontFamily: 'DM Sans, sans-serif',
-      fontWeight: 400,
-      fontSize: '30px',
-      display: 'flex',
-      flexWrap: 'wrap',
-      justifyContent: 'space-around',
-      marginTop: '2vh',
-    },
-    statsItem: {
-      width: '45%',
-      margin: '2% 0',
-      position: 'relative',
-    },
-  };
-
   return (
-    <div style={styles.container}>
-      <style>
-        {`
-          @media (max-width: 600px) {
-            .container {
-              height: 400vh !important;
-            }
-            .statsContainer {
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-            }
-            .customShapeOne {
-              width: 50% !important;
-              height: 85px !important;
-              left: 45% !important;
-            }
-            .customShapeTwo {
-              width: 90% !important;
-              top: 110px !important;
-              height: 110px !important;
-              left: 5% !important;
-            }
-            .customShapeThree {
-              width: 90% !important;
-              top: 235px !important;
-              height: 275px !important;
-              left: 5% !important;
-            }
-            .customShapeFour {
-              width: 40% !important;
-              height: 85px !important;
-              left: 5% !important;
-            }
-          }
-        `}
-      </style>
-      <h1 className="header" style={styles.header}>
-        About HackPortal
-      </h1>
-      <p className="description" style={styles.description}>
+    <div className={styles.container}>
+      {/* <div
+        className={styles.sky}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+        width: '100%',
+          height: '2400px',
+          background: 'linear-gradient(to bottom, #3398D1 30%, #8BD1F0, #C6E9F4)',
+          zIndex: 0,
+        }}
+      /> */}
+      <h1 className={styles.header}>About HackPortal</h1>
+      <p className={styles.description}>
         Hackathons are 24-hour gatherings where students collaborate <br /> to create innovative
         projects, forge new connections, and compete for prizes.
       </p>
-      <div className="statsContainer" style={styles.statsContainer}>
+      <div className={styles.statsContainer}>
         <div className="statsItem">
           <div
             className="customShape customShapeFour"
