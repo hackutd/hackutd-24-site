@@ -43,7 +43,7 @@ const HomeAboutText = () => {
         src={oceanBorder.src}
         alt="OB"
         className="absolute"
-        style={{ top: '35vh', width: '100%', height: '180%', zIndex: '8' }}
+        style={{ top: '30vh', width: '100%', height: '180%', zIndex: '8' }}
       />
       <style jsx>{`
         @media (max-width: 1024px) {
