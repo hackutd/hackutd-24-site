@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import { RequestHelper } from '../lib/request-helper';
 import HomeNotif from '../components/homeComponents/HomeNotif';
 import HomeVideoStats from '../components/homeComponents/HomeVideoStats';
-import HomeAbout from '../components/homeComponents/HomeAbout';
+import HomeAboutText from '../components/homeComponents/HomeAboutText';
+import HomeAboutPhotos from '../components/homeComponents/HomeAboutPhotos';
 import HackCountdown from '../components/homeComponents/HackCountdown';
 import HomeSpeakers from '../components/homeComponents/HomeSpeakers';
 import HomeChallenges from '../components/homeComponents/HomeChallenges';
@@ -16,18 +17,12 @@ import HomeFaq from '../components/homeComponents/HomeFaq';
 import HomePrizes from '../components/homeComponents/HomePrizes';
 import HomeHero2 from '../components/homeComponents/HomeHero2';
 
-import themedBackground from '../public/assets/bg3.png';
-
+import themedBackground from '../public/assets/hackutd-bg.png';
+import countdownClouds from '../public/assets/countdown_clouds.png';
 import cloud from '../public/assets/cloud.png';
 
 import Image from 'next/image';
 
-/**
- * The home page.
- *
- * Landing: /
- *
- */
 export default function Home(props: {
   keynoteSpeakers: KeynoteSpeaker[];
   challenges: Challenge[];
@@ -40,7 +35,6 @@ export default function Home(props: {
 }) {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    // Wait for all components to render before showing page
     setLoading(false);
   }, []);
 
@@ -55,49 +49,62 @@ export default function Home(props: {
   return (
     <>
       <Head>
-        <title>HackPortal</title> {/* !change */}
-        <meta name="description" content="A default HackPortal instance" /> {/* !change */}
+        <title>HackPortal</title>
+        <meta name="description" content="A default HackPortal instance" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <HomeNotif />
       <HomeHero2 />
-      {/* TODO: modify background dimension */}
-      <div style={{ position: 'relative' }}>
+      <HomeAboutText />
+      <div style={{ position: 'relative', zIndex: 0 }}>
         <div
           style={{
             position: 'absolute',
             top: 0,
             left: 0,
             width: '100%',
-            height: '2600px',
-            background: 'linear-gradient(to bottom, #3398D1 30%, #8BD1F0, #C6E9F4)',
-            zIndex: 0,
+            height: '100%',
+            backgroundImage: `url(${themedBackground.src})`,
+            backgroundSize: '100% 100%',
+            backgroundPosition: 'center top',
+            backgroundRepeat: 'no-repeat',
           }}
         />
-        <Image
-          style={{
-            position: 'absolute',
-            top: '1100px',
-            right: '-100px',
-            filter: 'blur(8px)',
-          }}
-          src={cloud.src}
-          width={300}
-          height={300}
-          alt="cloud.png"
-        />
-
-        <HomeAbout />
-        <HomeVideoStats />
-        <HackCountdown />
-        <HomeSchedule scheduleCard={props.scheduleCard} dateCard={props.dateCard} />
-        {/* <HomeSpeakers keynoteSpeakers={props.keynoteSpeakers} /> */}
-        <HomeChallenges challenges={props.challenges} />
-        {/* include HomePrizes in HomeChallenges */}
-        {/* <HomePrizes prizes={props.prizeData} /> */}
-        <HomeFaq answeredQuestion={props.answeredQuestion} />
-        <HomeSponsors sponsorCard={props.sponsorCard} />
-        <HomeFooter />
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <div
+            style={{
+              position: 'relative',
+              zIndex: 1,
+              backgroundImage: `url(${countdownClouds.src})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center 100px',
+              backgroundRepeat: 'no-repeat',
+            }}
+          >
+            <HomeAboutPhotos />
+            <HackCountdown />
+          </div>
+          <Image
+            style={{
+              position: 'absolute',
+              top: '1100px',
+              right: '-100px',
+              filter: 'blur(8px)',
+            }}
+            src={cloud.src}
+            width={300}
+            height={300}
+            alt="cloud.png"
+          />
+          <HomeSchedule scheduleCard={props.scheduleCard} dateCard={props.dateCard} />
+          {/* <HomeSpeakers keynoteSpeakers={props.keynoteSpeakers} /> */}
+          <HomeChallenges challenges={props.challenges} />
+          {/* include HomePrizes in HomeChallenges */}
+          {/* <HomePrizes prizes={props.prizeData} /> */}
+          <HomeFaq answeredQuestion={props.answeredQuestion} />
+          <HomeSponsors sponsorCard={props.sponsorCard} />
+          <HomeFooter />
+        </div>
       </div>
     </>
   );
