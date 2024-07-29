@@ -55,7 +55,7 @@ export default function Home(props: {
         <meta name="description" content="A default HackPortal instance" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <HomeNotif />
+      {/* <HomeNotif /> */}
       <HomeHero2 />
       <HomeAboutText />
       <div style={{ position: 'relative', zIndex: 0 }}>

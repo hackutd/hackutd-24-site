@@ -17,7 +17,7 @@ export default function HomeHero2() {
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         width: '100vw',
-        height: '120vh',
+        height: '100vh',
       }}
     >
       <div className="flex-grow flex h-full w-full relative">

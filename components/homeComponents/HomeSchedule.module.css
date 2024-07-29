@@ -64,50 +64,12 @@
   }
 }
 
-.boulderLeft {
-  background: linear-gradient(#aedff2 43%, rgba(218, 195, 151, 0) 45%);
-}
-
-.boulderRight {
-  background: linear-gradient(#aedff2 23%, rgba(218, 195, 151, 0) 45%);
-}
-
-@media screen and (min-width: 600px) {
-  .boulderLeft {
-    background: linear-gradient(#b3e0f2 43%, rgba(218, 195, 151, 0) 45%);
-  }
-
-  .boulderRight {
-    background: linear-gradient(#b3e0f2 23%, rgba(218, 195, 151, 0) 45%);
-  }
-}
-
-@media screen and (min-width: 856px) {
-  .boulderLeft {
-    background: linear-gradient(#b2e1f2 43%, rgba(218, 195, 151, 0) 45%);
-  }
-
-  .boulderRight {
-    background: linear-gradient(#b2e1f2 23%, rgba(218, 195, 151, 0) 45%);
-  }
-}
-
-@media screen and (min-width: 1000px) {
-  .boulderLeft {
-    background: linear-gradient(#b8e3f2 43%, rgba(218, 195, 151, 0) 45%);
-  }
-
-  .boulderRight {
-    background: linear-gradient(#b8e3f2 23%, rgba(218, 195, 151, 0) 45%);
-  }
-}
-
 @media screen and (min-width: 1200px) {
   .boulderLeft {
-    background: linear-gradient(#c1e7f3 43%, rgba(218, 195, 151, 0) 45%);
+    background: linear-gradient(#b0e7fc 43%, rgba(218, 195, 151, 0) 45%);
   }
 
   .boulderRight {
-    background: linear-gradient(#c1e7f3 23%, rgba(218, 195, 151, 0) 45%);
+    background: linear-gradient(#b0e7fc 23%, rgba(218, 195, 151, 0) 45%);
   }
 }
