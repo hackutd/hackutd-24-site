@@ -1,16 +1,15 @@
 import Image from 'next/image';
 import MLH_Sticker from '../../public/assets/mlh-sticker.png';
-import BackgroundCircles from '../BackgroundCircles';
-import styles from './HomeHero2.module.css';
 import hero from '../../public/assets/hero.png';
 import HackUTDTitle from '../../public/assets/HackUTD 2024 Title.png';
 import Duck from '../../public/assets/duck.png';
 import mascotLifeRing from '../../public/assets/mascot_life_ring.png';
+import styles from './HomeHero2.module.css';
 
 export default function HomeHero2() {
   return (
     <section
-      className={`${styles.container} min-h-screen bg-contain relative bg-white flex flex-col-reverse md:flex-col`}
+      className={`${styles.container} min-h-screen bg-cover bg-center relative bg-white flex flex-col-reverse md:flex-col`}
       style={{
         backgroundImage: `url(${hero.src})`,
         backgroundSize: 'cover',
@@ -37,8 +36,8 @@ export default function HomeHero2() {
           <div className="w-full flex flex-col gap-2 justify-center items-center h-full">
             {/* Duck image */}
             <div
-              className="w-30 md:w-40  lg:w-60 mb-4"
-              style={{ position: 'absolute', top: '25%', right: '25%' }}
+              className="w-30 md:w-40 lg:w-60 mb-4"
+              style={{ position: 'absolute', top: '15%', right: '25%' }}
             >
               <Image
                 src={Duck.src}
@@ -81,7 +80,7 @@ export default function HomeHero2() {
           </div>
         </div>
       </div>
-      <div className="absolute bottom-10 left-5 md:left-10 lg:bottom-5 left-20 z-20">
+      <div className="absolute bottom-20 left-0 md:left-10 lg:bottom-5 z-20">
         <div className="w-40 md:w-60 lg:w-80">
           <Image
             src={mascotLifeRing.src}

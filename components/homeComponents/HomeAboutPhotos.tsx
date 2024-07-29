@@ -49,13 +49,13 @@ const HomeAboutPhotos = () => {
           <img src="/assets/frog-balloon.png" alt="Balloon" className="w-80 h-auto object-cover" />
         </div>
         <div className="text-center md:text-left text-[#F7CE79] text-stroke">
-          <p className="text-4xl font-bold">1200+ Hackers</p>
+          <p className="text-4xl font-bold">1000+ Hackers</p>
           <p className="text-4xl font-bold">24 hours</p>
           <p className="text-4xl font-bold">$50,000 in prizes</p>
           <p className="text-4xl font-bold">200+ projects</p>
         </div>
       </div>
-      <div className="relative w-full max-w-3xl h-96 bg-gray-300 flex items-center justify-center z-10">
+      {/* <div className="relative w-full max-w-3xl h-96 bg-gray-300 flex items-center justify-center z-10">
         <div
           className="absolute left-0 top-[-25%] transform z-50 -ml-40 sm:-ml-60 md:-ml-80"
           style={cloudStyle}
@@ -77,7 +77,7 @@ const HomeAboutPhotos = () => {
           />
         </div>
         <p className="text-2xl font-bold text-gray-500">hype video</p>
-      </div>
+      </div> */}
       <div className="absolute bottom-[-15%] left-[-10%] transform z-50" style={cloudStyle}>
         <img
           src="/assets/cloud.png"

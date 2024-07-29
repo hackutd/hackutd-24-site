@@ -17,15 +17,12 @@ const HomeAboutText = () => {
       </h1>
       <div className="relative w-full flex justify-center items-center z-10">
         <p className="text-l text-center text-[#616161] max-w-2xl mb-16 font-fredoka relative z-10">
-          Blah blah blah this is a summary drafted by the experience team as to what the hackathon
-          actually is. Blah blah blah this is a summary drafted by the experience team as to what
-          the hackathon actually is. Blah blah blah this is a summary drafted by the experience team
-          as to what the hackathon actually is. Blah blah blah this is a summary drafted by the
-          experience team as to what the hackathon actually is. Blah blah blah this is a summary
-          drafted by the experience team as to what the hackathon actually is. Blah blah blah this
-          is a summary drafted by the experience team as to what the hackathon actually is. Blah
-          blah blah this is a summary drafted by the experience team as to what the hackathon
-          actually is.
+          HackUTD, the largest university hackathon in Texas, is a weekend-long event where students
+          build apps, hardware, and more. HackUTD provides a venue for self-expression and
+          creativity through technology. People with varying technical backgrounds from universities
+          all over the US come together, form teams around a problem or idea, and collaboratively
+          build a unique solution from scratch. Whether you&apos;re a frequent hackathon attendee or
+          just getting started, we&apos;d love to see what you can make!
         </p>
         <div className="absolute inset-0 z-9">
           <img
@@ -46,7 +43,7 @@ const HomeAboutText = () => {
         src={oceanBorder.src}
         alt="OB"
         className="absolute"
-        style={{ top: '40vh', width: 'auto', height: '180%', zIndex: '8' }}
+        style={{ top: '35vh', width: '100%', height: '180%', zIndex: '8' }}
       />
       <style jsx>{`
         @media (max-width: 1024px) {
