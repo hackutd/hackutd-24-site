@@ -54,11 +54,12 @@ export default function HomeChallengesComponent(props: { challenges: Challenge[]
             ))}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:p-10 items-center gap-x-6 gap-y-6 mt-6 mx-auto">
+          {/* TODO: enable this after get challenge data */}
+          {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:p-10 items-center gap-x-6 gap-y-6 mt-6 mx-auto">
             {props.challenges.map((challenge, idx) => (
               <HomeChallengesCard key={idx} challenge={challenge} blockType={idx % 2} />
             ))}
-          </div>
+          </div> */}
         </div>
       </section>
     )

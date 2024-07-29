@@ -51,9 +51,7 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
         <div className="bg-white mx-10 p-10 rounded-lg flex justify-between font-fredoka">
           <div>
             <h1 className="text-3xl mb-4 font-bold text-[#54DDE8]">FAQ</h1>
-            <p>
-              Can’t find what you’re looking for? Connect with our team at email@organization.com
-            </p>
+            <p>Can’t find what you’re looking for? Connect with our team at hello@hackutd.co</p>
           </div>
           <div className="flex items-center">
             <button className="bg-[#DFFEFF] text-[#40B7BA] p-3 rounded-2xl">

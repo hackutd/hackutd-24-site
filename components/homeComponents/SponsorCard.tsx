@@ -38,7 +38,7 @@ export default function SponsorCard(props: SponsorCardProps) {
   return (
     <>
       {imgSrc !== undefined && (
-        <div className="flex justify-center">
+        <div className="flex justify-center items-center">
           <a href={props.link} target="_blank" className="" rel="noreferrer">
             <Image
               alt={`Sponsor Image ${props.reference}`}

@@ -209,7 +209,8 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
           </div>
         </div>
         {/* Calendar */}
-        <div className="md:flex p-1 overflow-y-auto overflow-x-hidden mx-auto lg:w-[80%] w-full h-full">
+        {/* TODO: enable this when have schedule data */}
+        {/* <div className="md:flex p-1 overflow-y-auto overflow-x-hidden mx-auto lg:w-[80%] w-full h-full">
           <div className="w-full lg:w-1/2 px-4 md:px-0 relative">
             <div
               style={{ textShadow: '0 4px 4px rgb(0,0,0,0.25)' }}
@@ -233,7 +234,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
               {day2Events}
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="flex justify-center px-[3rem]">
           {/* insert duck here */}
           <Image width={700} height={400} src={ducks.src} alt="ducks.png" />

@@ -63,13 +63,3 @@
     transform: translateY(-10px);
   }
 }
-
-@media screen and (min-width: 1200px) {
-  .boulderLeft {
-    background: linear-gradient(#b0e7fc 43%, rgba(218, 195, 151, 0) 45%);
-  }
-
-  .boulderRight {
-    background: linear-gradient(#b0e7fc 23%, rgba(218, 195, 151, 0) 45%);
-  }
-}

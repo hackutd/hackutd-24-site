@@ -42,12 +42,12 @@ export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
           <h2 className="text-center text-white">
             please reach out to us at&nbsp;
             <a
-              href="mailto:email@organization.com"
+              href="mailto:hello@hackutd.co"
               rel="noopener noreferrer"
               target="_blank"
               className="underline"
             >
-              email@organization.com
+              hello@hackutd.co
             </a>
           </h2>
           {/* Sponsor Card */}

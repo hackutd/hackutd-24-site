@@ -16,7 +16,6 @@ export default function HomeFaq(props: { answeredQuestion: AnsweredQuestion[] })
         }}
         id="faq-section"
       >
-        {/* TODO: add fishes */}
         <Wave1
           className={styles.wave1}
           style={{
