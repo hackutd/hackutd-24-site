@@ -60,7 +60,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
     formInitialValues['permissions'] = user?.permissions || ['hacker'];
   }, []);
 
-  // disbale this for testing
+  // disable this for testing
   useEffect(() => {
     checkRedirect();
   }, [user]);
@@ -129,9 +129,9 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
   }
 
   // disable this for testing
-  if (!user) {
-    router.push('/');
-  }
+  //if (!user) {
+  //  router.push('/');
+  //}
 
   if (loading) {
     return <LoadIcon width={200} height={200} />;
@@ -187,7 +187,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
   };
 
   return (
-    <div className="flex flex-col flex-grow bg-secondary">
+    <div className="flex flex-col flex-grow">
       <Head>
         <title>Hacker Registration</title>
         <meta name="description" content="Register for [HACKATHON NAME]" />
@@ -272,29 +272,46 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
             <Form
               onKeyDown={onKeyDown}
               noValidate
-              className="registrationForm px-6 w-full sm:text-base text-sm"
+              className="registrationForm px-24 w-full sm:text-base text-sm"
             >
               {/* General Questions */}
               {registrationSection == 0 && (
-                <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-4 py-6 px-8 mb-8 text-[#4C4950]">
+                <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-8 px-8 mb-8 text-[#4C4950]">
                   <header>
-                    <h1 className="text-primaryDark lg:text-4xl sm:text-3xl text-2xl font-bold text-center lg:mt-0 mt-4 mb-4 poppins-bold">
+                    <h1 className="text-[#40B7BA] lg:text-4xl sm:text-3xl text-2xl font-bold text-center lg:mt-0 mt-4 mb-4 poppins-bold">
                       Hacker Registration
                     </h1>
-                    <div style={{ color: '#A6A4A8' }} className="poppins-regular text-center mb-6">
+                    <div
+                      style={{ color: '#A6A4A8' }}
+                      className="poppins-regular text-center text-md mb-4 font-light"
+                    >
                       Please fill out the following fields. The application should take
                       approximately 5 minutes.
                     </div>
                   </header>
-                  <div className="flex flex-col">
-                    {generalQuestions.map((obj, idx) => (
-                      <DisplayQuestion
-                        key={idx}
-                        obj={obj}
-                        values={values}
-                        onChange={handleChange}
-                      />
-                    ))}
+                  <div className="px-8">
+                    <div className="flex flex-col">
+                      {generalQuestions.map((obj, idx) => (
+                        <DisplayQuestion
+                          key={idx}
+                          obj={obj}
+                          values={values}
+                          onChange={handleChange}
+                        />
+                      ))}
+                    </div>
+                    <div className="text-[#00000080] poppins-regular mt-4 font-semibold">
+                      Applying for travel reimbursement?
+                      <span className="ml-2 text-[#40B7BA] underline">Click here!</span>
+                    </div>
+
+                    <div className="flex items-center mt-4">
+                      <input type="checkbox" className="rounded border-[#313131] border-2" />
+                      <span className="text-[#313131] poppins-semibold text-sm ml-2">
+                        I agree to all the <span className="text-[#40B7BA]">Terms</span> and{' '}
+                        <span className="text-[#40B7BA]">Privacy Policies</span>
+                      </span>
+                    </div>
                   </div>
                 </section>
               )}
@@ -467,7 +484,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                 setRegistrationSection(registrationSection + 1);
               }}
             >
-              <div className="cursor-pointer select-none bg-primaryDark text-white rounded-md p-3">
+              <div className="cursor-pointer select-none bg-[#40B7BA] text-white text-lg rounded-xl py-2 px-3">
                 next page
                 <ChevronRightIcon />
               </div>
