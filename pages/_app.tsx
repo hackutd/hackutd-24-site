@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import DuckBackgroundImage from '@/public/assets/duck-background.png';
+import PondBackgroundImage from '@/public/assets/pond-background.png';
 import Head from 'next/head';
 import { AppProps } from 'next/dist/shared/lib/router/router';
 import 'firebase/compat/auth';
@@ -102,10 +102,10 @@ function PortalApp({ Component, pageProps }: AppProps) {
                 <div className="fixed top-0 left-0 w-screen h-screen -z-10">
                   <Image
                     className="w-screen h-screen object-cover"
-                    alt="Duck background"
-                    src={DuckBackgroundImage.src}
-                    width={DuckBackgroundImage.width}
-                    height={DuckBackgroundImage.height}
+                    alt="Pond Background"
+                    src={PondBackgroundImage.src}
+                    width={PondBackgroundImage.width}
+                    height={PondBackgroundImage.height}
                   />
                 </div>
               )}
