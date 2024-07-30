@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import DuckBackgroundImage from '@/public/assets/duck-background.png';
+import RegisterBackgroundImage from '@/public/assets/registration-background.png';
 import Head from 'next/head';
 import { AppProps } from 'next/dist/shared/lib/router/router';
 import 'firebase/compat/auth';
@@ -41,6 +42,7 @@ function PortalApp({ Component, pageProps }: AppProps) {
   const [particlesInit, setParticlesInit] = useState(false);
   const hash = useUrlHash('');
   const duckBackgroundPathnames = ['/profile'];
+  const registerBackgroundPathnames = ['/register'];
 
   useEffect(() => {
     const el = document.getElementById(hash);
@@ -106,6 +108,18 @@ function PortalApp({ Component, pageProps }: AppProps) {
                     src={DuckBackgroundImage.src}
                     width={DuckBackgroundImage.width}
                     height={DuckBackgroundImage.height}
+                  />
+                </div>
+              )}
+
+              {registerBackgroundPathnames.includes(router.pathname) && (
+                <div className="fixed top-0 left-0 w-screen h-screen -z-10">
+                  <Image
+                    className="w-screen h-screen object-cover"
+                    alt="Register background"
+                    src={RegisterBackgroundImage.src}
+                    width={RegisterBackgroundImage.width}
+                    height={RegisterBackgroundImage.height}
                   />
                 </div>
               )}
