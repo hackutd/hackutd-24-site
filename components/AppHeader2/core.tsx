@@ -21,17 +21,18 @@ export default function AppHeader2_Core() {
           FAQ
         </Link>
 
+        {/*TODO: Readd after applications open*/}
         <div className="p-2 text-white cursor-pointer">
-          {!hasProfile && (
+           {/* {!hasProfile && (
             <Link href="/register">
               <div className="py-3 px-5 rounded-[30px] bg-[#40B7BA] font-bold">Apply</div>
             </Link>
-          )}
-          {hasProfile && (
+          )} */}
+          {/* {hasProfile && (
             <Link href="/profile">
               <div className="py-3 px-5 rounded-[30px] bg-[#40B7BA] font-bold">Profile</div>
             </Link>
-          )}
+          )} */}
         </div>
       </div>
     </div>
