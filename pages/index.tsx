@@ -98,9 +98,9 @@ export default function Home(props: {
             height={300}
             alt="cloud.png"
           />
-          <HomeSchedule scheduleCard={props.scheduleCard} dateCard={props.dateCard} />
+          {/* <HomeSchedule scheduleCard={props.scheduleCard} dateCard={props.dateCard} /> */}
           {/* <HomeSpeakers keynoteSpeakers={props.keynoteSpeakers} /> */}
-          <HomeChallenges challenges={props.challenges} />
+          {/* <HomeChallenges challenges={props.challenges} /> */}
           {/* include HomePrizes in HomeChallenges */}
           {/* <HomePrizes prizes={props.prizeData} /> */}
           <HomeFaq answeredQuestion={props.answeredQuestion} />
@@ -114,48 +114,48 @@ export default function Home(props: {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const protocol = context.req.headers.referer?.split('://')[0] || 'http';
-  const { data: keynoteData } = await RequestHelper.get<KeynoteSpeaker[]>(
-    `${protocol}://${context.req.headers.host}/api/keynotespeakers`,
-    {},
-  );
-  const { data: challengeData } = await RequestHelper.get<Challenge[]>(
-    `${protocol}://${context.req.headers.host}/api/challenges/`,
-    {},
-  );
-  const { data: prizeData } = await RequestHelper.get<Array<{ rank: number; prizeName: string }>>(
-    `${protocol}://${context.req.headers.host}/api/prizes`,
-    {},
-  );
+  // const { data: keynoteData } = await RequestHelper.get<KeynoteSpeaker[]>(
+  //   `${protocol}://${context.req.headers.host}/api/keynotespeakers`,
+  //   {},
+  // );
+  // const { data: challengeData } = await RequestHelper.get<Challenge[]>(
+  //   `${protocol}://${context.req.headers.host}/api/challenges/`,
+  //   {},
+  // );
+  // const { data: prizeData } = await RequestHelper.get<Array<{ rank: number; prizeName: string }>>(
+  //   `${protocol}://${context.req.headers.host}/api/prizes`,
+  //   {},
+  // );
   const { data: answeredQuestion } = await RequestHelper.get<AnsweredQuestion[]>(
     `${protocol}://${context.req.headers.host}/api/questions/faq`,
     {},
   );
-  const { data: memberData } = await RequestHelper.get<TeamMember[]>(
-    `${protocol}://${context.req.headers.host}/api/members`,
-    {},
-  );
+  // const { data: memberData } = await RequestHelper.get<TeamMember[]>(
+  //   `${protocol}://${context.req.headers.host}/api/members`,
+  //   {},
+  // );
   const { data: sponsorData } = await RequestHelper.get<Sponsor[]>(
     `${protocol}://${context.req.headers.host}/api/sponsor`,
     {},
   );
-  const { data: scheduleData } = await RequestHelper.get<ScheduleEvent[]>(
-    `${protocol}://${context.req.headers.host}/api/schedule`,
-    {},
-  );
+  // const { data: scheduleData } = await RequestHelper.get<ScheduleEvent[]>(
+  //   `${protocol}://${context.req.headers.host}/api/schedule`,
+  //   {},
+  // );
   const { data: dateData } = await RequestHelper.get<ScheduleEvent[]>(
     `${protocol}://${context.req.headers.host}/api/dates`,
     {},
   );
   return {
     props: {
-      keynoteSpeakers: keynoteData,
-      challenges: challengeData,
+      // keynoteSpeakers: keynoteData,
+      // challenges: challengeData,
       answeredQuestion: answeredQuestion,
-      fetchedMembers: memberData,
+      // fetchedMembers: memberData,
       sponsorCard: sponsorData,
-      scheduleCard: scheduleData,
+      // scheduleCard: scheduleData,
       dateCard: dateData,
-      prizeData: prizeData,
+      // prizeData: prizeData,
     },
   };
 };
