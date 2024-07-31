@@ -59,13 +59,14 @@ export default function Home(props: {
       <HomeHero2 />
       <HomeAboutText />
       <div style={{ position: 'relative', zIndex: 0 }}>
+        {/* TODO: enable this when UI is finalized */}
         {/* <div
           style={{
             position: 'absolute',
             top: 0,
             left: 0,
             width: '100%',
-            height: '100%',
+          height: '100%',
             backgroundImage: `url(${themedBackground.src})`,
             backgroundSize: '100% 100%',
             backgroundPosition: 'center top',
