@@ -49,7 +49,7 @@ export default function HomeHero2() {
             </div>
             {/* Date */}
             <p
-              className="font-jua text-[#FFFFFF] text-sm md:text-xl lg:text-3xl"
+              className="font-jua text-[#FFFFFF] text-xl md:text-xl lg:text-3xl"
               style={{
                 position: 'absolute',
                 top: '40%',

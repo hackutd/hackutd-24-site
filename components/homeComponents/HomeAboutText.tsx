@@ -16,7 +16,7 @@ const HomeAboutText = () => {
         What is HackUTD?
       </h1>
       <div className="relative w-full flex justify-center items-center z-10">
-        <p className="text-l text-center text-[#616161] max-w-2xl mb-16 font-fredoka relative z-10">
+        <p className="text-xl text-center text-[#616161] max-w-2xl mb-16 font-fredoka relative z-10">
           HackUTD, the largest university hackathon in Texas, is a weekend-long event where students
           build apps, hardware, and more. HackUTD provides a venue for self-expression and
           creativity through technology. People with varying technical backgrounds from universities
