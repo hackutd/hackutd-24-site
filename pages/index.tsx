@@ -59,7 +59,7 @@ export default function Home(props: {
       <HomeHero2 />
       <HomeAboutText />
       <div style={{ position: 'relative', zIndex: 0 }}>
-        <div
+        {/* <div
           style={{
             position: 'absolute',
             top: 0,
@@ -71,7 +71,7 @@ export default function Home(props: {
             backgroundPosition: 'center top',
             backgroundRepeat: 'no-repeat',
           }}
-        />
+        /> */}
         <div style={{ position: 'relative', zIndex: 1 }}>
           <div
             style={{

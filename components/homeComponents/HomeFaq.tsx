@@ -16,7 +16,8 @@ export default function HomeFaq(props: { answeredQuestion: AnsweredQuestion[] })
         }}
         id="faq-section"
       >
-        <Wave1
+        {/* TODO: enable this when finalizing the UI */}
+        {/* <Wave1
           className={styles.wave1}
           style={{
             position: 'absolute',
@@ -24,7 +25,7 @@ export default function HomeFaq(props: { answeredQuestion: AnsweredQuestion[] })
             zIndex: 1,
             background: 'linear-gradient(to bottom, rgb(0,0,0,0), #48C2CB)',
           }}
-        />
+        /> */}
         <Faq fetchedFaqs={props.answeredQuestion}></Faq>
 
         <Wave2
