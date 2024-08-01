@@ -3,10 +3,12 @@ import SponsorCard from './SponsorCard';
 import Wave2 from '../assets/Wave2';
 import styles from './HomeSponsors.module.css';
 
-import PlaceholderMascot1 from '../../public/assets/duck_walking.png';
-import PlaceholderMascot2 from '../../public/assets/corgi_walking.gif';
-import PlaceholderMascot3 from '../../public/assets/frog.png';
-import PlaceholderMascot4 from '../../public/assets/mascot.png';
+import PlaceholderMascot1 from '../../public/assets/Mascot.gif';
+import PlaceholderMascot2 from '../../public/assets/Corgi.gif';
+import PlaceholderMascot3 from '../../public/assets/Capybara.gif';
+import PlaceholderMascot4 from '../../public/assets/Duck.gif';
+import PlaceholderMascot5 from '../../public/assets/Frog.gif';
+
 import Image from 'next/image';
 
 export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
@@ -24,11 +26,57 @@ export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
           <div className="text-center text-3xl text-white">
             <h1 className="uppercase">see you there!</h1>
           </div>
-          <div className="flex flex-wrap w-full items-end justify-center">
-            <Image src={PlaceholderMascot1} width={150} height={100} alt="placeholder_1" />
-            <Image src={PlaceholderMascot2} width={400} height={100} alt="placeholder_2" />
-            <Image src={PlaceholderMascot3} width={200} height={100} alt="placeholder_3" />
-            <Image src={PlaceholderMascot4} width={200} height={100} alt="placeholder_4" />
+          <div className="flex flex-wrap w-full items-end justify-center mb-8">
+            <div
+              className={styles.placeholder}
+              style={{
+                position: 'relative',
+                maxWidth: '200px',
+              }}
+            >
+              <Image
+                layout="fill"
+                unoptimized={true}
+                src={PlaceholderMascot1}
+                alt="placeholder_1"
+              />
+            </div>
+            <div
+              className={styles.placeholder}
+              style={{
+                position: 'relative',
+                maxWidth: '300px',
+              }}
+            >
+              <Image src={PlaceholderMascot2} layout="fill" alt="placeholder_2" />
+            </div>
+            <div
+              className={styles.placeholder}
+              style={{
+                position: 'relative',
+                maxWidth: '300px',
+              }}
+            >
+              <Image src={PlaceholderMascot3} layout="fill" alt="placeholder_3" />
+            </div>
+            <div
+              className={styles.placeholder}
+              style={{
+                position: 'relative',
+                maxWidth: '300px',
+              }}
+            >
+              <Image src={PlaceholderMascot4} layout="fill" alt="placeholder_4" />
+            </div>
+            <div
+              className={styles.placeholder}
+              style={{
+                position: 'relative',
+                maxWidth: '100px',
+              }}
+            >
+              <Image src={PlaceholderMascot5} layout="fill" alt="placeholder_5" />
+            </div>
           </div>
         </div>
         <div className="flex flex-col flex-grow">
