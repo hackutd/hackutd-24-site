@@ -67,14 +67,14 @@ const Countdown = () => {
                 {renderTimeBox(timeLeft.hours, 'HOURS')}
                 {renderTimeBox(timeLeft.minutes, 'MINUTES')}
               </div>
-              <p className="mt-4 text-lg md:text-md sm:text-sm xs:text-xs text-[#05149C] font-poppins">
+              {/* <p className="mt-4 text-lg md:text-md sm:text-sm xs:text-xs text-[#05149C] font-poppins">
                 We&apos;ll let you know when we are hatching
               </p>
               <button
                 className={`mt-4 bg-[#F7CE79] text-white py-2 px-4 rounded-lg w-40 md:w-32 sm:w-28 xs:w-24 font-poppins opacity-90 text-base md:text-sm sm:text-xs ${styles['notify-button']}`}
               >
                 Notify Me
-              </button>
+              </button> */}
             </div>
           </div>
         </div>
