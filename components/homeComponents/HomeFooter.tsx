@@ -1,7 +1,27 @@
-import React, { SVGProps } from 'react';
+import React, { SVGProps, useState } from 'react';
 import Link from 'next/link';
+import { RequestHelper } from '@/lib/request-helper';
 
 export default function HomeFooter() {
+  const [userEmail, setUserEmail] = useState<string>('');
+  const handleSubmitEmail = async (userEmail: string) => {
+    const res = await RequestHelper.post<{ userEmail: string }, unknown>(
+      '/api/email',
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+      {
+        userEmail,
+      },
+    );
+    if (res.status === 200) {
+      alert('Your email has been added to our mailing list');
+    } else {
+      alert('Something is wrong... please try again later');
+    }
+  };
   return (
     <section className="md:text-base text-xs relative bg-[#40B7BA] text-white">
       <div className="flex">
@@ -48,9 +68,16 @@ export default function HomeFooter() {
               type="text"
               name="email"
               id="contact-us"
+              value={userEmail}
+              onChange={(e) => setUserEmail(e.target.value)}
             />
             {/* subscribe button */}
-            <button className="rounded-lg text-white px-6 py-2 my-4 bg-complementary">
+            <button
+              onClick={async () => {
+                await handleSubmitEmail(userEmail);
+              }}
+              className="rounded-lg text-white px-6 py-2 my-4 bg-complementary"
+            >
               Subscribe
             </button>
           </div>
