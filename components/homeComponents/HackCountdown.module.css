@@ -1,0 +1,16 @@
+ /*For Countdown*/
+ .countdown-box {
+    width: 3rem;
+    height: 6rem;
+    font-size: 3rem;
+  }
+ @media (max-width: 370px) {
+    .countdown-box {
+      width: 2rem;
+      height: 4rem;
+      font-size: 2rem;
+    }
+    .countdown-label {
+        font-size: 0.75rem;
+    }
+  }

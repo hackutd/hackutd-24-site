@@ -11,7 +11,7 @@ const HomeAboutPhotos = () => {
   };
 
   return (
-    <div className="relative flex flex-col items-center justify-center font-jua mt-20">
+    <div className="relative flex flex-col items-center justify-center font-jua mt-60">
       <style>
         {`
           @keyframes moveUpDown {
@@ -45,7 +45,7 @@ const HomeAboutPhotos = () => {
           backgroundRepeat: 'no-repeat',
         }}
       >
-        <div className="flex justify-center items-center" style={balloonHoverStyle}>
+        <div className="flex justify-center items-center z-20" style={balloonHoverStyle}>
           <img src="/assets/frog-balloon.png" alt="Balloon" className="w-80 h-auto object-cover" />
         </div>
         <div className="text-center md:text-left text-[#F7CE79] text-stroke">

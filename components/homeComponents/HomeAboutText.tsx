@@ -1,5 +1,6 @@
 import React from 'react';
 import oceanBorder from '../../public/assets/ocean-border.png';
+import styles from './HomeAboutText.module.css';
 
 const HomeAboutText = () => {
   return (
@@ -42,41 +43,8 @@ const HomeAboutText = () => {
       <img
         src={oceanBorder.src}
         alt="OB"
-        className="absolute"
-        style={{ top: '27.5vh', width: '100%', height: '180%', zIndex: '8' }}
+        className={`absolute ${styles['ocean-border']}`}
       />
-      <style jsx>{`
-        @media (max-width: 1024px) {
-          img[alt='Fish']:first-child {
-            top: -10vw !important;
-            right: 5vw !important;
-          }
-          img[alt='Fish']:nth-child(2) {
-            bottom: 0vw !important;
-            left: 5vw !important;
-          }
-        }
-        @media (max-width: 768px) {
-          img[alt='Fish']:first-child {
-            top: -25vw !important;
-            right: 0vw !important;
-          }
-          img[alt='Fish']:nth-child(2) {
-            bottom: 0vw !important;
-            left: 0vw !important;
-          }
-        }
-        @media (max-width: 480px) {
-          img[alt='Fish']:first-child {
-            top: -25vw !important;
-            right: 0vw !important;
-          }
-          img[alt='Fish']:nth-child(2) {
-            bottom: 0vw !important;
-            left: 0vw !important;
-          }
-        }
-      `}</style>
     </div>
   );
 };

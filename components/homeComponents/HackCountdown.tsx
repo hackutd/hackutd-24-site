@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { config } from '../../hackportal.config';
+import styles from './HackCountdown.module.css'; 
 
 const Countdown = () => {
   const [timeLeft, setTimeLeft] = useState({
@@ -32,19 +33,15 @@ const Countdown = () => {
           {digits.map((digit, index) => (
             <div
               key={index}
-              className="bg-white rounded-md flex items-center justify-center"
-              style={{
-                width: '3rem',
-                height: '6rem',
-                fontSize: '3rem',
-                fontFamily: 'fredoka',
-              }}
+              className={`font-fredoka bg-white rounded-md flex items-center justify-center ${styles['countdown-box']}`}
             >
               {digit}
             </div>
           ))}
         </div>
-        <span className="text-lg md:text-md sm:text-sm xs:text-xs">{label}</span>
+        <span className={`text-lg md:text-md sm:text-sm xs:text-xs ${styles['countdown-label']}`}>
+          {label}
+        </span>
       </div>
     );
   };
@@ -73,7 +70,9 @@ const Countdown = () => {
               <p className="mt-4 text-lg md:text-md sm:text-sm xs:text-xs text-[#05149C] font-poppins">
                 We&apos;ll let you know when we are hatching
               </p>
-              <button className="mt-4 bg-[#F7CE79] text-white py-2 px-4 rounded-lg w-40 md:w-32 sm:w-28 xs:w-24 font-poppins opacity-90 text-base md:text-sm sm:text-xs">
+              <button
+                className={`mt-4 bg-[#F7CE79] text-white py-2 px-4 rounded-lg w-40 md:w-32 sm:w-28 xs:w-24 font-poppins opacity-90 text-base md:text-sm sm:text-xs ${styles['notify-button']}`}
+              >
                 Notify Me
               </button>
             </div>
