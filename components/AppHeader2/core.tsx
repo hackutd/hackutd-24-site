@@ -11,12 +11,12 @@ export default function AppHeader2_Core() {
         <Link href="/" className="p-2 text-[#40B7BA] cursor-pointer">
           Home
         </Link>
-        <Link href="/#schedule-section" className="p-2 text-[#40B7BA] cursor-pointer">
+        {/* <Link href="/#schedule-section" className="p-2 text-[#40B7BA] cursor-pointer">
           Schedule
         </Link>
         <Link href="/hackerpacks" className="p-2 text-[#40B7BA] cursor-pointer">
           Resources
-        </Link>
+        </Link> */}
         <Link href="/#faq-section" className="p-2 text-[#40B7BA] cursor-pointer">
           FAQ
         </Link>

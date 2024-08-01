@@ -1,4 +1,5 @@
 import React, { SVGProps } from 'react';
+import Link from 'next/link';
 
 export default function HomeFooter() {
   return (
@@ -7,18 +8,23 @@ export default function HomeFooter() {
         <div className="z-10 grid grid-cols-1 lg:gap-36 lg:grid-cols-3">
           <div className="lg:text-white p-10">
             <h1 className="font-bold text-2xl">HackUTD</h1>
-            <p style={{ maxWidth: '300px' }} className="mt-1">
+            {/* <p style={{ maxWidth: '300px' }} className="mt-1">
               Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit
               officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud
               amet.
-            </p>
+            </p> */}
             {/* social media here */}
           </div>
           <div className="p-10" style={{ minWidth: '400px', fontFamily: 'inter' }}>
             <h1 className="font-semibold text-xl mb-3">Learn more</h1>
             <div className="font-light">
               <p className="mb-2">
-                Check out HackUTD’s <span className="font-semibold">organizer website</span>
+                Check out HackUTD’s{' '}
+                <span className="font-semibold cursor-pointer">
+                  <Link href="https://hackutd.co/" target="_blank">
+                    organizer website
+                  </Link>
+                </span>
               </p>
               <p className="mb-2">
                 Designed by <span className="font-semibold">HackUTD</span>
@@ -27,7 +33,9 @@ export default function HomeFooter() {
                 HackPortal developed with {'<3'} <span className="font-semibold">HackUTD </span>
                 and <span className="font-semibold">ACM Development</span>
               </p>
-              <p className="mb-2">Source Code</p>
+              <Link target="_blank" href="https://github.com/acmutd/hackportal">
+                <p className="cursor-pointer mb-2">Source Code</p>
+              </Link>
             </div>
           </div>
           <div className="p-10" style={{ maxWidth: '300px', fontFamily: 'inter' }}>
