@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import MLH_Sticker from '../../public/assets/mlh-sticker.png';
+import MLH_Sticker from '../../public/assets/mlh-2025.png';
 import hero from '../../public/assets/hero.png';
 import HackUTDTitle from '../../public/assets/HackUTD 2024 Title.png';
 import Duck from '../../public/assets/duck.png';
@@ -26,7 +26,7 @@ export default function HomeHero2() {
             <Image
               src={MLH_Sticker.src}
               height={MLH_Sticker.height}
-              width={MLH_Sticker.width}
+              width={MLH_Sticker.width / 7}
               alt="MLH sticker"
               className="w-full h-full object-cover"
             />
