@@ -53,11 +53,11 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
             <h1 className="text-3xl mb-4 font-bold text-[#54DDE8]">FAQ</h1>
             <p>Can’t find what you’re looking for? Connect with our team at hello@hackutd.co</p>
           </div>
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             <button className="bg-[#DFFEFF] text-[#40B7BA] p-3 rounded-2xl">
               Ask A Questions!
             </button>
-          </div>
+          </div> */}
         </div>
         {/* FAQ for lg-md */}
         {/* Uses different section for mobile because using 2 columns is buggy when expanding FAQs */}
