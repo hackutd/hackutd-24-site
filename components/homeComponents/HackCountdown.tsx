@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { config } from '../../hackportal.config';
-import styles from './HackCountdown.module.css'; 
+import styles from './HackCountdown.module.css';
 
 const Countdown = () => {
   const [timeLeft, setTimeLeft] = useState({

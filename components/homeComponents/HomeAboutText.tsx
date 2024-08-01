@@ -40,11 +40,7 @@ const HomeAboutText = () => {
           />
         </div>
       </div>
-      <img
-        src={oceanBorder.src}
-        alt="OB"
-        className={`absolute ${styles['ocean-border']}`}
-      />
+      <img src={oceanBorder.src} alt="OB" className={`absolute ${styles['ocean-border']}`} />
     </div>
   );
 };

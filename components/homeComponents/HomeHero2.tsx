@@ -80,7 +80,7 @@ export default function HomeHero2() {
           </div>
         </div>
       </div>
-      <div className="absolute bottom-20 left-0 md:left-10 lg:bottom-5 z-20">
+      <div className="absolute bottom-[25%] left-0 md:left-10 lg:bottom-5 z-20">
         <div className="w-40 md:w-60 lg:w-80">
           <Image
             src={mascotLifeRing.src}
