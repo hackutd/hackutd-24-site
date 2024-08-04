@@ -9,10 +9,10 @@ import styles from './HomeHero2.module.css';
 export default function HomeHero2() {
   return (
     <section
-      className={`${styles.container} min-h-screen bg-cover bg-center relative bg-white flex flex-col-reverse md:flex-col`}
+      className={`${styles.container} min-h-screen bg-center relative bg-white flex flex-col-reverse md:flex-col`}
       style={{
         backgroundImage: `url(${hero.src})`,
-        backgroundSize: 'cover',
+        backgroundSize: '100% 100%',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         width: '100vw',
