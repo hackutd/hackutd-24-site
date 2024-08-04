@@ -12,7 +12,7 @@ export default function HomeHero2() {
       className={`${styles.container} min-h-screen bg-center relative bg-white flex flex-col-reverse md:flex-col`}
       style={{
         backgroundImage: `url(${hero.src})`,
-        backgroundSize: '100% 100%',
+        backgroundSize: '100% 101%',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         width: '100vw',
