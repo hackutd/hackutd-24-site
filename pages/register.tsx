@@ -195,7 +195,10 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
       </Head>
       <section className="pl-4 relative mb-4">
         <Link href="/" passHref>
-          <ChevronLeftIcon className="absolute top-4 z-10" fontSize={'large'} color={'primary'} />
+          <div className="cursor-pointer items-center inline-flex text-white font-bold">
+            <ChevronLeftIcon className="text-white" fontSize={'large'} />
+            Home
+          </div>
         </Link>
       </section>
 
@@ -272,13 +275,13 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
             <Form
               onKeyDown={onKeyDown}
               noValidate
-              className="registrationForm px-24 w-full sm:text-base text-sm"
+              className="registrationForm px-4 md:px-24 w-full sm:text-base text-sm"
             >
               {/* General Questions */}
               {registrationSection == 0 && (
                 <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-4 py-10 px-8 mb-8 text-[#4C4950]">
                   <header>
-                    <h1 className="text-[#40B7BA] lg:text-4xl sm:text-3xl text-2xl font-bold text-center mt-8 mb-4 poppins-bold">
+                    <h1 className="text-[#40B7BA] lg:text-4xl sm:text-3xl text-2xl font-bold text-center mt-2 md:mt-8 mb-4 poppins-bold">
                       Hacker Registration
                     </h1>
                     <div
@@ -289,7 +292,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                       approximately 5 minutes.
                     </div>
                   </header>
-                  <div className="px-10">
+                  <div className="md:px-10">
                     <div className="flex flex-col">
                       {generalQuestions.map((obj, idx) => (
                         <DisplayQuestion
@@ -319,8 +322,10 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
               {/* School Questions */}
               {registrationSection == 1 && (
                 <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
-                  <h2 className="sm:text-2xl text-xl sm:mb-3 mb-1 poppins-bold">School Info</h2>
-                  <div className="flex flex-col px-4 poppins-regular ">
+                  <h2 className="sm:text-2xl text-xl sm:mb-3 mb-1 poppins-bold mt-2">
+                    School Info
+                  </h2>
+                  <div className="flex flex-col md:px-4 poppins-regular ">
                     {schoolQuestions.map((obj, idx) => (
                       <DisplayQuestion
                         key={idx}
@@ -336,10 +341,10 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
               {/* Hackathon Questions */}
               {registrationSection == 2 && (
                 <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
-                  <h2 className="sm:text-2xl text-xl poppins-bold sm:mb-3 mb-1">
+                  <h2 className="sm:text-2xl text-xl poppins-bold sm:mb-3 mb-1 mt-2">
                     Hackathon Experience
                   </h2>
-                  <div className="flex flex-col poppins-regular px-4">
+                  <div className="flex flex-col poppins-regular md:px-4">
                     {hackathonExperienceQuestions.map((obj, idx) => (
                       <DisplayQuestion
                         key={idx}
@@ -355,8 +360,8 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
               {/* Event Questions */}
               {registrationSection == 3 && (
                 <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
-                  <h2 className="sm:text-2xl text-xl poppins-bold sm:mb-3 mb-1">Event Info</h2>
-                  <div className="flex flex-col poppins-regular px-4">
+                  <h2 className="sm:text-2xl text-xl poppins-bold sm:mb-3 mb-1 mt-2">Event Info</h2>
+                  <div className="flex flex-col poppins-regular md:px-4">
                     {/* apply styling issue fix, it's an ugly fix but this solve the styling issue */}
                     {eventInfoQuestions.map((obj, idx) => {
                       if (idx !== 0)
@@ -387,8 +392,10 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
               {/* Sponsor Questions */}
               {registrationSection == 4 && (
                 <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950] relative">
-                  <h2 className="sm:text-2xl text-xl poppins-bold sm:mb-3 mb-1">Sponsor Info</h2>
-                  <div className="flex flex-col poppins-regular px-4">
+                  <h2 className="sm:text-2xl text-xl poppins-bold sm:mb-3 mb-1 mt-2">
+                    Sponsor Info
+                  </h2>
+                  <div className="flex flex-col poppins-regular md:px-4">
                     {sponsorInfoQuestions.map((obj, idx) => (
                       <DisplayQuestion
                         key={idx}
@@ -399,7 +406,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                     ))}
                   </div>
                   {/* Resume Upload */}
-                  <div className="mt-8 px-4">
+                  <div className="mt-8 md:px-4">
                     Upload your resume:
                     <br />
                     <input
@@ -458,9 +465,9 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
             >
               <div
                 style={{ width: 'fit-content' }}
-                className="cursor-pointer select-none bg-[#40B7BA] text-white rounded-md p-3"
+                className="cursor-pointer select-none bg-[#40B7BA] text-white rounded-xl py-3 pl-2 pr-4 text-xs md:text-lg"
               >
-                <ChevronLeftIcon />
+                <ChevronLeftIcon className="text-white" />
                 prev page
               </div>
             </div>
@@ -484,7 +491,10 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                 setRegistrationSection(registrationSection + 1);
               }}
             >
-              <div className="cursor-pointer select-none bg-[#40B7BA] text-white text-lg rounded-xl py-2 px-3">
+              <div
+                style={{ width: 'fit-content' }}
+                className="cursor-pointer select-none bg-[#40B7BA] text-white text-xs md:text-lg rounded-xl py-3 pr-2 pl-4"
+              >
                 next page
                 <ChevronRightIcon />
               </div>

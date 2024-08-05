@@ -125,7 +125,7 @@ export default function AuthPage() {
             </div>
           </Link>
         </div>
-        <div className="py-2 md:px-16 px-10 flex items-center justify-center flex-wrap">
+        <div className="py-2 md:px-16 px-0 flex items-center justify-center flex-wrap">
           <div className="xl:w-1/2 lg:w-2/3 w-5/6 my-4">
             <section
               id="signInSection"
@@ -171,7 +171,7 @@ export default function AuthPage() {
                           Remember me
                         </div>
                         <div
-                          className="hover:underline cursor-pointer text-left text-[#40B7BA]"
+                          className="hover:underline cursor-pointer text-left text-[#40B7BA] mb-4 md:mb-0"
                           onClick={() => {
                             setPasswordResetDialog(true);
                             setErrorMsg('');
