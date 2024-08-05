@@ -278,7 +278,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
               {registrationSection == 0 && (
                 <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-4 py-10 px-8 mb-8 text-[#4C4950]">
                   <header>
-                    <h1 className="text-[#40B7BA] lg:text-4xl sm:text-3xl text-2xl font-bold text-center lg:mt-0 mt-4 mb-4 poppins-bold">
+                    <h1 className="text-[#40B7BA] lg:text-4xl sm:text-3xl text-2xl font-bold text-center mt-8 mb-4 poppins-bold">
                       Hacker Registration
                     </h1>
                     <div
@@ -289,7 +289,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                       approximately 5 minutes.
                     </div>
                   </header>
-                  <div className="px-8">
+                  <div className="px-10">
                     <div className="flex flex-col">
                       {generalQuestions.map((obj, idx) => (
                         <DisplayQuestion
@@ -305,7 +305,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                       <span className="ml-2 text-[#40B7BA] underline">Click here!</span>
                     </div>
 
-                    <div className="flex items-center mt-4 mb-4">
+                    <div className="flex items-center mt-4 mb-6">
                       <input type="checkbox" className="rounded border-[#313131] border-2" />
                       <span className="text-[#313131] poppins-semibold text-sm ml-2">
                         I agree to all the <span className="text-[#40B7BA]">Terms</span> and{' '}
@@ -319,8 +319,8 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
               {/* School Questions */}
               {registrationSection == 1 && (
                 <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
-                  <h2 className="sm:text-2xl text-xl font-semibold sm:mb-3 mb-1">School Info</h2>
-                  <div className="flex flex-col">
+                  <h2 className="sm:text-2xl text-xl sm:mb-3 mb-1 poppins-bold">School Info</h2>
+                  <div className="flex flex-col px-4 poppins-regular ">
                     {schoolQuestions.map((obj, idx) => (
                       <DisplayQuestion
                         key={idx}
@@ -336,10 +336,10 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
               {/* Hackathon Questions */}
               {registrationSection == 2 && (
                 <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
-                  <h2 className="sm:text-2xl text-xl font-semibold sm:mb-3 mb-1">
+                  <h2 className="sm:text-2xl text-xl poppins-bold sm:mb-3 mb-1">
                     Hackathon Experience
                   </h2>
-                  <div className="flex flex-col">
+                  <div className="flex flex-col poppins-regular px-4">
                     {hackathonExperienceQuestions.map((obj, idx) => (
                       <DisplayQuestion
                         key={idx}
@@ -355,8 +355,8 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
               {/* Event Questions */}
               {registrationSection == 3 && (
                 <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
-                  <h2 className="sm:text-2xl text-xl font-semibold sm:mb-3 mb-1">Event Info</h2>
-                  <div className="flex flex-col">
+                  <h2 className="sm:text-2xl text-xl poppins-bold sm:mb-3 mb-1">Event Info</h2>
+                  <div className="flex flex-col poppins-regular px-4">
                     {/* apply styling issue fix, it's an ugly fix but this solve the styling issue */}
                     {eventInfoQuestions.map((obj, idx) => {
                       if (idx !== 0)
@@ -387,8 +387,8 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
               {/* Sponsor Questions */}
               {registrationSection == 4 && (
                 <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950] relative">
-                  <h2 className="sm:text-2xl text-xl font-semibold sm:mb-3 mb-1">Sponsor Info</h2>
-                  <div className="flex flex-col">
+                  <h2 className="sm:text-2xl text-xl poppins-bold sm:mb-3 mb-1">Sponsor Info</h2>
+                  <div className="flex flex-col poppins-regular px-4">
                     {sponsorInfoQuestions.map((obj, idx) => (
                       <DisplayQuestion
                         key={idx}
@@ -399,7 +399,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                     ))}
                   </div>
                   {/* Resume Upload */}
-                  <div className=" mt-8">
+                  <div className="mt-8 px-4">
                     Upload your resume:
                     <br />
                     <input
@@ -408,10 +408,10 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                       type="file"
                       formEncType="multipart/form-data"
                       accept=".pdf, .doc, .docx, image/png, image/jpeg, .txt, .tex, .rtf"
-                      className="cursor-pointer w-full text-complementary border border-complementary/20 rounded-md file:md:p-2 file:p-1 file:bg-primaryDark file:text-white file:cursor-pointer file:h-full file:rounded-l-md file:border-none"
+                      className="cursor-pointer w-full text-[#4C4950] border border-[#40B7BA] rounded-md file:md:p-2 file:p-1 file:bg-[#40B7BA] file:text-white file:cursor-pointer file:h-full file:rounded-l-md file:border-none"
                     />
                     <br />
-                    <p className="text-xs text-complementary/50">
+                    <p className="text-xs text-[#40B7BA]">
                       Accepted file types: .pdf, .doc, .docx, .png, .jpeg, .txt, .tex, .rtf
                     </p>
                   </div>
@@ -419,7 +419,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                   <div className="text-white absolute right-4">
                     <button
                       type="submit"
-                      className="mr-auto cursor-pointer px-4 py-2 rounded-lg bg-primaryDark hover:brightness-90"
+                      className="mr-auto cursor-pointer px-4 py-2 rounded-lg bg-[#40B7BA] hover:brightness-90"
                       onClick={() => setFormValid(!(!isValid || !dirty))}
                     >
                       Submit
@@ -458,7 +458,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
             >
               <div
                 style={{ width: 'fit-content' }}
-                className="cursor-pointer select-none bg-primaryDark text-white rounded-md p-3"
+                className="cursor-pointer select-none bg-[#40B7BA] text-white rounded-md p-3"
               >
                 <ChevronLeftIcon />
                 prev page
