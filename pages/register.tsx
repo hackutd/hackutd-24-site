@@ -305,14 +305,24 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                     </div>
                     <div className="text-[#00000080] poppins-regular mt-4 font-semibold">
                       Applying for travel reimbursement?
-                      <span className="ml-2 text-[#40B7BA] underline">Click here!</span>
+                      <span className="ml-2 text-[#40B7BA] underline cursor-pointer">
+                        Click here!
+                      </span>
                     </div>
 
                     <div className="flex items-center mt-4 mb-6">
-                      <input type="checkbox" className="rounded border-[#313131] border-2" />
+                      <input
+                        type="checkbox"
+                        className="rounded border-[#313131] border-2 cursor-pointer"
+                      />
                       <span className="text-[#313131] poppins-semibold text-sm ml-2">
-                        I agree to all the <span className="text-[#40B7BA]">Terms</span> and{' '}
-                        <span className="text-[#40B7BA]">Privacy Policies</span>
+                        I have read and agree to the{' '}
+                        <a
+                          href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
+                          className="text-[#40B7BA] hover:underline"
+                        >
+                          MLH Code of Conduct
+                        </a>
                       </span>
                     </div>
                   </div>

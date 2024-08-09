@@ -164,7 +164,7 @@ export default function AuthPage() {
                         <div className="text-[#40B7BA]">
                           {/* TODO: should this feature be implemented or does it already exist? */}
                           <input
-                            className="mr-2 r text-[#40B7BA] focus:ring-0 border border-[#40B7BA] text-sm"
+                            className="mr-2 r text-[#40B7BA] focus:ring-0 border border-[#40B7BA] text-sm cursor-pointer"
                             type="checkbox"
                             onClick={() => setRememberMe(!rememberMe)}
                           />
