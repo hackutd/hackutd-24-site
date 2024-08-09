@@ -9,7 +9,7 @@ const db = firestore();
 
 const APPLICATIONS_COLLECTION = '/registrations';
 const MISC_COLLECTION = '/miscellaneous';
-const AUTO_ACCEPT_ELIGIBLE_TEAM_SIZE = 3;
+const AUTO_ACCEPT_ELIGIBLE_TEAM_SIZE = 4;
 
 async function checkRegistrationAllowed() {
   const preferenceDoc = await db.collection('miscellaneous').doc('preferences').get();
