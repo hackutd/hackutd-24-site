@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { auth, firestore } from 'firebase-admin';
+import { firestore } from 'firebase-admin';
 import initializeApi from '../../../lib/admin/init';
 import { userIsAuthorized } from '../../../lib/authorization/check-authorization';
 
@@ -191,7 +191,6 @@ async function handlePostApplications(req: NextApiRequest, res: NextApiResponse)
       .collection(APPLICATIONS_COLLECTION)
       .where('user.id', '==', body.user.id)
       .get();
-    console.log(snapshot.docs[0]);
     await autoAcceptTeam([...teamMembers, snapshot.docs[0].ref]);
   }
   await updateAllUsersDoc(body.user.id, body);
