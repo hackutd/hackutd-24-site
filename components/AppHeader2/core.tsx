@@ -106,7 +106,7 @@ export default function AppHeader2_Core() {
                 )}
                 <div className="w-1/2 px-1 py-1">
                   <AdminNavbarGrid
-                    numCols={3}
+                    numCols={2}
                     sectionTitle="Temporary Scans"
                     options={scanList
                       .filter((scan) => !scan.isPermanentScan)
