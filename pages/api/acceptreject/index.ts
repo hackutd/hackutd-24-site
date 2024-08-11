@@ -98,7 +98,7 @@ async function getAllHackers(req: NextApiRequest, res: NextApiResponse) {
     });
   }
 
-  const snapshot = await db.collection('acceptreject').where('adminId', '==', adminId).get();
+  const snapshot = await db.collection('acceptreject').get();
 
   let hackers = [];
   snapshot.forEach((doc) => {
