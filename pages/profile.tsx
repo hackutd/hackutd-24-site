@@ -109,14 +109,14 @@ export default function ProfilePage() {
             <div className="font-fredoka font-semibold text-lg">Application Status</div>
             <h1
               className={`font-fredoka text-xl font-semibold ${
-                profile.user.status === 'Accepted'
+                profile.status === 'Accepted'
                   ? 'text-[#5DC55B]'
-                  : profile.user.status === 'Rejected'
+                  : profile.status === 'Rejected'
                   ? 'text-[#DE3163]'
                   : 'text-[#5C67C9]'
               }`}
             >
-              {profile.user.status ? profile.user.status : 'Pending'}
+              {profile.status ? profile.status : 'Pending'}
             </h1>
           </div>
 

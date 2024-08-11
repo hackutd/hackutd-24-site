@@ -8,6 +8,19 @@ const db = firestore();
 
 const REGISTRATION_COLLECTION = '/registrations';
 
+async function checkApplicationDecisionFinalized() {
+  const preferenceDoc = await db.collection('miscellaneous').doc('preferences').get();
+  return preferenceDoc.data().applicationDecisions as boolean;
+}
+
+async function getApplicationDecision(userId: string): Promise<string> {
+  const snapshot = await db.collection('/acceptreject').where('hackerId', '==', userId).get();
+  if (snapshot.empty) {
+    return 'Waiting';
+  }
+  return snapshot.docs[0].data().status;
+}
+
 async function userIsAuthorized(token: string, queryId: string) {
   if (!token) return false;
   try {
@@ -64,7 +77,16 @@ async function handleUserInfo(req: NextApiRequest, res: NextApiResponse) {
     const snapshot = await db.collection(REGISTRATION_COLLECTION).doc(userID).get();
     if (!snapshot.exists)
       return res.status(404).json({ code: 'not found', message: "User doesn't exist..." });
-    res.status(200).json(snapshot.data());
+    const applicationDecisionFinalized = await checkApplicationDecisionFinalized();
+    if (applicationDecisionFinalized) {
+      const applicationStatus = await getApplicationDecision(userID);
+      return res.status(200).json({
+        ...snapshot.data(),
+        status: applicationStatus,
+      });
+    } else {
+      return res.status(200).json(snapshot.data());
+    }
   } catch (error) {
     console.error('Error when fetching applications', error);
     res.status(500).json({
