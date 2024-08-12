@@ -19,10 +19,17 @@ export default function HomeHero2() {
         height: '100vh',
       }}
     >
+      {/*Top banner*/}
+      <div className="font-dmSans w-full flex justify-center bg-[#40B7BA] text-white h-[1.75rem] text-nowrap overflow-hidden sm:hidden absolute top-0">
+        <p className="text-lg">
+          HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24
+        </p>
+      </div>
+
       <div className="flex-grow flex h-full w-full relative">
         <div className="relative z-10 shrink-0 w-full flex">
           {/* MLH sticker */}
-          <div className="absolute top-0 right-4 z-20">
+          <div className="absolute top-[1.75rem] sm:top-0 right-4 z-20 transition-all">
             <Image
               src={MLH_Sticker.src}
               height={MLH_Sticker.height}
@@ -47,18 +54,20 @@ export default function HomeHero2() {
                 height={Duck.height}
               />
             </div>
-            {/* Date */}
+
+            {/* Welcome To */}
             <p
-              className="font-jua text-[#FFFFFF] text-xl md:text-xl lg:text-3xl"
+              className="font-montserrat text-[#FFFFFF] text-2xl md:text-3xl lg:text-4xl"
               style={{
                 position: 'absolute',
                 top: '40%',
-                left: '50%',
+                left: '40%',
                 transform: 'translateX(-50%)',
               }}
             >
-              Nov 16 - Nov 17
+              WELCOME TO
             </p>
+
             {/* Title */}
             <div
               className="w-3/4 md:w-1/2 lg:w-1/3"
@@ -77,6 +86,19 @@ export default function HomeHero2() {
                 height={HackUTDTitle.height}
               />
             </div>
+
+            {/* Date */}
+            <p
+              className="font-montserrat text-[#FFFFFF] text-xl md:text-xl lg:text-2xl"
+              style={{
+                position: 'absolute',
+                top: '60%',
+                left: '60%',
+                transform: 'translateX(-50%)',
+              }}
+            >
+              Nov 16 - Nov 17
+            </p>
           </div>
         </div>
       </div>
@@ -89,6 +111,27 @@ export default function HomeHero2() {
             width={mascotLifeRing.width}
             height={mascotLifeRing.height}
           />
+        </div>
+      </div>
+
+      {/* Learn More Text and Arrow */}
+      <div className="absolute bottom-5 w-full flex flex-col items-center z-20">
+        <p className="font-montserrat text-white text-lg md:text-xl">Learn More</p>
+        <div className="animate-bounce">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth="2"
+            stroke="white"
+            className="w-6 h-6 md:w-8 md:h-8 mt-2"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M19 9l-7 7-7-7"
+            />
+          </svg>
         </div>
       </div>
     </section>

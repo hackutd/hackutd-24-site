@@ -7,14 +7,14 @@ const HomeAboutText = () => {
     <div
       className="relative py-12 flex flex-col items-center justify-center font-jua"
       style={{
-        background: '#7BEDE4',
+        background: '#54DDE8',
         backgroundSize: '100% 100%',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
       }}
     >
-      <h1 className="text-5xl font-bold text-complementaryLight mb-3 text-center relative text-stroke font-jua z-10">
-        What is HackUTD?
+      <h1 className="text-5xl font-bold text-complementaryLight mb-3 text-center relative font-jua z-10" style={{ WebkitTextStroke: '2px #AC5A1F' }}>
+  What is HackUTD?
       </h1>
       <div className="relative w-full flex justify-center items-center z-10">
         <p className="text-xl text-center text-[#616161] max-w-2xl mb-16 font-fredoka relative z-10">
@@ -29,13 +29,13 @@ const HomeAboutText = () => {
           <img
             src="/assets/fish.png"
             alt="Fish"
-            className="absolute"
+            className="absolute hidden md:block"
             style={{ top: '-10vw', right: '12vw', width: '20vw', height: '20vw' }}
           />
           <img
             src="/assets/fish.png"
             alt="Fish"
-            className="absolute transform rotate-180"
+            className="absolute transform rotate-180 hidden md:block"
             style={{ bottom: '-5vw', left: '13vw', width: '20vw', height: '20vw' }}
           />
         </div>

@@ -37,7 +37,7 @@ const HomeAboutPhotos = () => {
         `}
       </style>
       <div
-        className="relative flex flex-col md:flex-row items-center mb-5 font-fredoka z-10 space-y-8 md:space-y-0 md:space-x-15 mt-10"
+        className="relative flex flex-col-reverse lg:flex-row items-center mb-5 font-fredoka z-10 space-y-8 lg:space-y-0 lg:space-x-15 mt-10"
         style={{
           backgroundImage: `url(${birds.src})`,
           backgroundSize: 'contain',
@@ -45,17 +45,18 @@ const HomeAboutPhotos = () => {
           backgroundRepeat: 'no-repeat',
         }}
       >
-        <div className="flex justify-center items-center z-20" style={balloonHoverStyle}>
+        <div className="order-2 lg:order-1 flex justify-center items-center z-20 lg:justify-end lg:mr-8" style={balloonHoverStyle}>
           <img src="/assets/frog-balloon.png" alt="Balloon" className="w-80 h-auto object-cover" />
         </div>
-        <div className="text-center md:text-left text-[#F7CE79] text-stroke">
-          <p className="text-5xl font-bold">1000+ Hackers</p>
-          <p className="text-5xl font-bold">24 hours</p>
-          <p className="text-5xl font-bold">$50,000 in prizes</p>
-          <p className="text-5xl font-bold">200+ projects</p>
+        <div className="order-1 lg:order-2 text-center lg:text-left text-[#F7CE79] text-stroke lg:ml-8">
+          <p className="text-7xl font-bold">1000+ Hackers</p>
+          <p className="text-7xl font-bold">24 hours</p>
+          <p className="text-7xl font-bold">$50,000 in prizes</p>
+          <p className="text-7xl font-bold">200+ projects</p>
         </div>
       </div>
-      {/* <div className="relative w-full max-w-3xl h-96 bg-gray-300 flex items-center justify-center z-10">
+      {/* 
+      <div className="relative w-full max-w-3xl h-96 bg-gray-300 flex items-center justify-center z-10">
         <div
           className="absolute left-0 top-[-25%] transform z-50 -ml-40 sm:-ml-60 md:-ml-80"
           style={cloudStyle}
@@ -77,7 +78,8 @@ const HomeAboutPhotos = () => {
           />
         </div>
         <p className="text-2xl font-bold text-gray-500">hype video</p>
-      </div> */}
+      </div> 
+      */}
       <div className="absolute bottom-[-15%] left-[-10%] transform z-50" style={cloudStyle}>
         <img
           src="/assets/cloud.png"
