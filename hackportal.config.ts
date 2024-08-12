@@ -351,44 +351,30 @@ export const hackPortalConfig: HackPortalConfig = {
               {
                 title: 'Vegan',
                 value: 'Vegan',
-                link: '',
-                linkText: '',
               },
               {
                 title: 'Vegetarian',
                 value: 'Vegetarian',
-                link: '',
-                linkText: '',
               },
               {
                 title: 'Nuts',
                 value: 'Nuts',
-                link: '',
-                linkText: '',
               },
               {
                 title: 'Fish',
                 value: 'Fish',
-                link: '',
-                linkText: '',
               },
               {
                 title: 'Wheat',
                 value: 'Wheat',
-                link: '',
-                linkText: '',
               },
               {
                 title: 'Dairy',
                 value: 'Dairy',
-                link: '',
-                linkText: '',
               },
               {
                 title: 'Eggs',
                 value: 'Eggs',
-                link: '',
-                linkText: '',
               },
             ],
           },
@@ -451,32 +437,22 @@ export const hackPortalConfig: HackPortalConfig = {
               {
                 title: 'State Farm',
                 value: 'State Farm',
-                link: '',
-                linkText: '',
               },
               {
                 title: 'American Airlines',
                 value: 'American Airlines',
-                link: '',
-                linkText: '',
               },
               {
                 title: 'Capital One',
                 value: 'Capital One',
-                link: '',
-                linkText: '',
               },
               {
                 title: 'Ebay',
                 value: 'Ebay',
-                link: '',
-                linkText: '',
               },
               {
                 title: 'Facebook',
                 value: 'Facebook',
-                link: '',
-                linkText: '',
               },
             ],
           },
@@ -571,8 +547,8 @@ interface CheckboxQuestion extends RegistrationQuestion {
   options: Array<{
     title: string;
     value: string;
-    link: string;
-    linkText: string;
+    link?: string;
+    linkText?: string;
   }>;
 }
 
