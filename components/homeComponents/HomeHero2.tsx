@@ -12,7 +12,7 @@ export default function HomeHero2() {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsShort(window.innerHeight < 800);
+      setIsShort(window.innerHeight < 660);
     };
 
     window.addEventListener('resize', handleResize);
