@@ -22,7 +22,7 @@ export default function HomeHero2() {
       {/*Top banner*/}
       <div className="font-dmSans w-full flex justify-center bg-[#40B7BA] text-white h-[1.75rem] text-nowrap overflow-hidden sm:hidden absolute top-0">
         <p className="text-lg">
-          HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24
+          HACKUTD 24        • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24
         </p>
       </div>
 
@@ -92,7 +92,7 @@ export default function HomeHero2() {
               className="font-montserrat text-[#FFFFFF] text-xl md:text-xl lg:text-2xl"
               style={{
                 position: 'absolute',
-                top: '58%',
+                top: '60%',
                 left: '60%',
                 transform: 'translateX(-50%)',
               }}
