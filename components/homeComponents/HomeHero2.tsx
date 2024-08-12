@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import MLH_Sticker from '../../public/assets/mlh-2025.png';
 import hero from '../../public/assets/hero.png';
@@ -7,6 +8,21 @@ import mascotLifeRing from '../../public/assets/mascot_life_ring.png';
 import styles from './HomeHero2.module.css';
 
 export default function HomeHero2() {
+  const [isShort, setIsShort] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsShort(window.innerHeight < 800);
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
     <section
       className={`${styles.container} min-h-screen bg-center relative bg-white flex flex-col-reverse md:flex-col`}
@@ -22,7 +38,7 @@ export default function HomeHero2() {
       {/*Top banner*/}
       <div className="font-dmSans w-full flex justify-center bg-[#40B7BA] text-white h-[1.75rem] text-nowrap overflow-hidden sm:hidden absolute top-0">
         <p className="text-lg">
-          HACKUTD 24        • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24
+          HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24
         </p>
       </div>
 
@@ -55,18 +71,19 @@ export default function HomeHero2() {
               />
             </div>
 
-            {/* Welcome To */}
-            <p
-              className="font-montserrat text-[#FFFFFF] text-2xl md:text-3xl lg:text-4xl"
-              style={{
-                position: 'absolute',
-                top: '40%',
-                left: '40%',
-                transform: 'translateX(-50%)',
-              }}
-            >
-              WELCOME TO
-            </p>
+            {!isShort && (
+              <p
+                className="font-montserrat text-[#FFFFFF] text-2xl md:text-3xl lg:text-4xl"
+                style={{
+                  position: 'absolute',
+                  top: '40%',
+                  left: '45%',
+                  transform: 'translateX(-50%)',
+                }}
+              >
+                WELCOME TO
+              </p>
+            )}
 
             {/* Title */}
             <div
@@ -87,18 +104,19 @@ export default function HomeHero2() {
               />
             </div>
 
-            {/* Date */}
-            <p
-              className="font-montserrat text-[#FFFFFF] text-xl md:text-xl lg:text-2xl"
-              style={{
-                position: 'absolute',
-                top: '60%',
-                left: '60%',
-                transform: 'translateX(-50%)',
-              }}
-            >
-              Nov 16 - Nov 17
-            </p>
+            {!isShort && (
+              <p
+                className="font-montserrat text-[#FFFFFF] text-xl md:text-xl lg:text-2xl"
+                style={{
+                  position: 'absolute',
+                  top: '57.5%',
+                  left: '55%',
+                  transform: 'translateX(-50%)',
+                }}
+              >
+                Nov 16 - Nov 17
+              </p>
+            )}
           </div>
         </div>
       </div>
