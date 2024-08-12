@@ -49,10 +49,10 @@ const HomeAboutPhotos = () => {
           <img src="/assets/frog-balloon.png" alt="Balloon" className="w-80 h-auto object-cover" />
         </div>
         <div className="order-1 lg:order-2 text-center lg:text-left text-[#F7CE79] text-stroke lg:ml-8">
-          <p className="text-7xl font-bold">1000+ Hackers</p>
-          <p className="text-7xl font-bold">24 hours</p>
-          <p className="text-7xl font-bold">$50,000 in prizes</p>
-          <p className="text-7xl font-bold">200+ projects</p>
+          <p className="text-5xl font-bold">1000+ Hackers </p>
+          <p className="text-5xl font-bold">24 hours</p>
+          <p className="text-5xl font-bold">$50,000 in prizes</p>
+          <p className="text-5xl font-bold">200+ projects</p>
         </div>
       </div>
       {/* 
