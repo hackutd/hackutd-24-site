@@ -115,9 +115,11 @@ function Question(props) {
                 className="rounded border-[#313131] border-2 cursor-pointer"
               />
               &nbsp;{option.title}
-              <a href={option.link} className="text-[#40B7BA] hover:underline">
-                {option.linkText}
-              </a>
+              {option.link && option.linkText && (
+                <a href={option.link} className="text-[#40B7BA] hover:underline">
+                  {option.linkText}
+                </a>
+              )}
             </label>
           ))}
         </div>
