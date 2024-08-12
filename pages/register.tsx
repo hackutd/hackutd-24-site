@@ -303,26 +303,10 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                         />
                       ))}
                     </div>
-                    <div className="text-[#00000080] poppins-regular mt-4 font-semibold">
+                    <div className="text-[#00000080] poppins-regular mt-4 font-semibold mb-2">
                       Applying for travel reimbursement?
                       <span className="ml-2 text-[#40B7BA] underline cursor-pointer">
                         Click here!
-                      </span>
-                    </div>
-
-                    <div className="flex items-center mt-4 mb-6">
-                      <input
-                        type="checkbox"
-                        className="rounded border-[#313131] border-2 cursor-pointer"
-                      />
-                      <span className="text-[#313131] poppins-semibold text-sm ml-2">
-                        I have read and agree to the{' '}
-                        <a
-                          href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
-                          className="text-[#40B7BA] hover:underline"
-                        >
-                          MLH Code of Conduct
-                        </a>
                       </span>
                     </div>
                   </div>
@@ -416,7 +400,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                     ))}
                   </div>
                   {/* Resume Upload */}
-                  <div className="mt-8 md:px-4">
+                  <div className="mt-8 md:px-4 poppins-regular">
                     Upload your resume:
                     <br />
                     <input
@@ -425,10 +409,10 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                       type="file"
                       formEncType="multipart/form-data"
                       accept=".pdf, .doc, .docx, image/png, image/jpeg, .txt, .tex, .rtf"
-                      className="cursor-pointer w-full text-[#4C4950] border border-[#40B7BA] rounded-md file:md:p-2 file:p-1 file:bg-[#40B7BA] file:text-white file:cursor-pointer file:h-full file:rounded-l-md file:border-none"
+                      className="poppins-regular cursor-pointer w-full text-[#4C4950] border border-[#40B7BA] rounded-md file:md:p-2 file:p-1 file:bg-[#40B7BA] file:text-white file:cursor-pointer file:h-full file:rounded-l-md file:border-none"
                     />
                     <br />
-                    <p className="text-xs text-[#40B7BA]">
+                    <p className="poppins-regular text-xs text-[#40B7BA]">
                       Accepted file types: .pdf, .doc, .docx, .png, .jpeg, .txt, .tex, .rtf
                     </p>
                   </div>

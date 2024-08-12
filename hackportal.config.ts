@@ -139,6 +139,26 @@ export const hackPortalConfig: HackPortalConfig = {
           },
         ],
       },
+      {
+        checkboxQuestions: [
+          {
+            //Code of Conduct question
+            question: 'Code of Conduct',
+            required: true,
+            id: 'codeOfConduct',
+            name: 'codeOfConduct',
+            initialValue: [],
+            options: [
+              {
+                title: 'I have read and agree to the ',
+                value: 'Yes',
+                link: 'https://static.mlh.io/docs/mlh-code-of-conduct.pdf',
+                linkText: 'MLH Code of Conduct',
+              },
+            ],
+          },
+        ],
+      },
     ],
     //Question Topic
     schoolQuestions: [
@@ -331,30 +351,44 @@ export const hackPortalConfig: HackPortalConfig = {
               {
                 title: 'Vegan',
                 value: 'Vegan',
+                link: '',
+                linkText: '',
               },
               {
                 title: 'Vegetarian',
                 value: 'Vegetarian',
+                link: '',
+                linkText: '',
               },
               {
                 title: 'Nuts',
                 value: 'Nuts',
+                link: '',
+                linkText: '',
               },
               {
                 title: 'Fish',
                 value: 'Fish',
+                link: '',
+                linkText: '',
               },
               {
                 title: 'Wheat',
                 value: 'Wheat',
+                link: '',
+                linkText: '',
               },
               {
                 title: 'Dairy',
                 value: 'Dairy',
+                link: '',
+                linkText: '',
               },
               {
                 title: 'Eggs',
                 value: 'Eggs',
+                link: '',
+                linkText: '',
               },
             ],
           },
@@ -417,22 +451,32 @@ export const hackPortalConfig: HackPortalConfig = {
               {
                 title: 'State Farm',
                 value: 'State Farm',
+                link: '',
+                linkText: '',
               },
               {
                 title: 'American Airlines',
                 value: 'American Airlines',
+                link: '',
+                linkText: '',
               },
               {
                 title: 'Capital One',
                 value: 'Capital One',
+                link: '',
+                linkText: '',
               },
               {
                 title: 'Ebay',
                 value: 'Ebay',
+                link: '',
+                linkText: '',
               },
               {
                 title: 'Facebook',
                 value: 'Facebook',
+                link: '',
+                linkText: '',
               },
             ],
           },
@@ -480,7 +524,7 @@ export const fieldNames = {
 };
 
 //name fields that are checkbox questions belong here
-export const arrayField = ['scans', 'companies', 'dietary'];
+export const arrayField = ['scans', 'companies', 'dietary', 'codeOfConduct'];
 //any other fields belong here
 export const singleField = [
   'age',
@@ -527,6 +571,8 @@ interface CheckboxQuestion extends RegistrationQuestion {
   options: Array<{
     title: string;
     value: string;
+    link: string;
+    linkText: string;
   }>;
 }
 

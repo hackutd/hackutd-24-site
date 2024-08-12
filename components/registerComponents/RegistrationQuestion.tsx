@@ -28,11 +28,11 @@ function Question(props) {
               input: 'focus:ring-offset-0 focus:ring-0 focus:ring-shadow-0',
             },
           }}
-          className="!mt-4"
+          className="!mt-4 poppins-regular mb-1"
         />
         <ErrorMessage
           name={props.question.name}
-          render={(msg) => <div className="text-red-600">{msg}</div>}
+          render={(msg) => <div className="text-red-600 poppins-regular">{msg}</div>}
         />
       </Fragment>
     );
@@ -61,11 +61,11 @@ function Question(props) {
               input: 'focus:ring-offset-0 focus:ring-0 focus:ring-shadow-0',
             },
           }}
-          className="!mt-4"
+          className="!mt-4 poppins-regular mb-1"
         />
         <ErrorMessage
           name={props.question.name}
-          render={(msg) => <div className="text-red-600">{msg}</div>}
+          render={(msg) => <div className="text-red-600 poppins-regular">{msg}</div>}
         />
       </Fragment>
     );
@@ -78,7 +78,7 @@ function Question(props) {
           required={props.question.required}
           label={props.question.question}
           name={props.question.name}
-          className="!mt-4"
+          className="!mt-4 poppins-regular mb-1"
         >
           <MenuItem selected disabled value="" />
           {props.question.options.map((option) => (
@@ -89,35 +89,48 @@ function Question(props) {
         </TextField>
         <ErrorMessage
           name={props.question.name}
-          render={(msg) => <div className="text-red-600">{msg}</div>}
+          render={(msg) => <div className="text-red-600 poppins-regular">{msg}</div>}
         />
       </Fragment>
     );
   } else if (props.type === 'checkbox') {
     return (
       <Fragment>
-        <label htmlFor={props.question.name} className="mt-4">
+        <label htmlFor={props.question.name} className="mt-4 poppins-regular mb-1">
           {props.question.required ? '*' : ''}
           {props.question.question}
         </label>
         <div role="group" aria-labelledby="checkbox-group" className="flex flex-col">
           {props.question.options.map((option) => (
-            <label key={option.value}>
-              <Field type="checkbox" name={props.question.name} value={option.value} />
+            <label
+              key={option.value}
+              className={`text-[#313131] text-sm ml-2 ${
+                props.question.id === 'codeOfConduct' ? 'poppins-semibold' : 'poppins-regular'
+              }`}
+            >
+              <Field
+                type="checkbox"
+                name={props.question.name}
+                value={option.value}
+                className="rounded border-[#313131] border-2 cursor-pointer"
+              />
               &nbsp;{option.title}
+              <a href={option.link} className="text-[#40B7BA] hover:underline">
+                {option.linkText}
+              </a>
             </label>
           ))}
         </div>
         <ErrorMessage
           name={props.question.name}
-          render={(msg) => <div className="text-red-600">{msg}</div>}
+          render={(msg) => <div className="text-red-600 poppins-regular">{msg}</div>}
         />
       </Fragment>
     );
   } else if (props.type === 'datalist') {
     return (
       <Fragment>
-        <label htmlFor={props.question.name} className="mt-4">
+        <label htmlFor={props.question.name} className="mt-4 mb-1 poppins-regular">
           {props.question.required ? '*' : ''}
           {props.question.question}
         </label>
@@ -126,27 +139,27 @@ function Question(props) {
           id={props.question.id}
           name={props.question.name}
           list={props.question.datalist}
-          className="border border-complementary/20 rounded-md md:p-2 p-1"
+          className="border border-complementary/20 rounded-md md:p-2 p-1 poppins-regular"
           autoComplete="off"
         ></Field>
         <datalist id={props.question.datalist}>
           <option value="" disabled selected></option>
           {props.question.options.map((option) => (
-            <option key={option.value} value={option.value}>
+            <option key={option.value} value={option.value} className="poppins-regular">
               {option.title}
             </option>
           ))}
         </datalist>
         <ErrorMessage
           name={props.question.name}
-          render={(msg) => <div className="text-red-600">{msg}</div>}
+          render={(msg) => <div className="text-red-600 poppins-regular">{msg}</div>}
         />
       </Fragment>
     );
   } else if (props.type === 'textArea') {
     return (
       <Fragment>
-        <label htmlFor={props.question.name} className="mt-4">
+        <label htmlFor={props.question.name} className="mt-4 poppins-regular mb-1">
           {props.question.required ? '*' : ''}
           {props.question.question}
         </label>
@@ -154,11 +167,11 @@ function Question(props) {
           as="textarea"
           name={props.question.name}
           placeholder={props.question.placeholder}
-          className="border border-complementary/20 rounded-md md:p-2 p-1"
+          className="border border-complementary/20 rounded-md md:p-2 p-1 poppins-regular"
         ></Field>
         <ErrorMessage
           name={props.question.name}
-          render={(msg) => <div className="text-red-600">{msg}</div>}
+          render={(msg) => <div className="text-red-600 poppins-regular">{msg}</div>}
         />
       </Fragment>
     );
