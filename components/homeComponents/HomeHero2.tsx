@@ -110,7 +110,7 @@ export default function HomeHero2() {
                 style={{
                   position: 'absolute',
                   top: '57.5%',
-                  left: '55%',
+                  left: '50%',
                   transform: 'translateX(-50%)',
                 }}
               >
