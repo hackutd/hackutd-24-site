@@ -2,11 +2,9 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import LoadIcon from '../components/LoadIcon';
-import { useUser } from '../lib/profile/user-data';
 import { RequestHelper } from '../lib/request-helper';
 import { useAuthContext } from '../lib/user/AuthContext';
-import firebase from 'firebase/compat/app';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form } from 'formik';
 import { hackPortalConfig, formInitialValues } from '../hackportal.config';
 import DisplayQuestion from '../components/registerComponents/DisplayQuestion';
 import { getFileExtension } from '../lib/util';
@@ -14,7 +12,6 @@ import Link from 'next/link';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { GetServerSideProps } from 'next';
-import { grid } from '@mui/system';
 
 interface RegisterPageProps {
   allowedRegistrations: boolean;
@@ -36,19 +33,20 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
       hackathonExperienceQuestions,
       eventInfoQuestions,
       sponsorInfoQuestions,
+      teammateQuestions,
     },
   } = hackPortalConfig;
 
   const { user, hasProfile, updateProfile } = useAuthContext();
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   // update this to false for testing
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [formValid, setFormValid] = useState(true);
   const [registrationSection, setRegistrationSection] = useState(0);
   const checkRedirect = async () => {
     if (!allowedRegistrations) return;
     if (hasProfile) router.push('/profile');
-    else setLoading(false);
+    if (user) setLoading(false);
   };
 
   useEffect(() => {
@@ -130,7 +128,8 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
 
   // disable this for testing
   if (!user) {
-    router.push('/');
+    // If user haven't signed in, redirect them to login page
+    router.push('/auth');
   }
 
   if (loading) {
@@ -222,6 +221,9 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
               errors = setErrors(obj, values, errors);
             }
             for (let obj of sponsorInfoQuestions) {
+              errors = setErrors(obj, values, errors);
+            }
+            for (let obj of teammateQuestions) {
               errors = setErrors(obj, values, errors);
             }
 
@@ -416,8 +418,27 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                       Accepted file types: .pdf, .doc, .docx, .png, .jpeg, .txt, .tex, .rtf
                     </p>
                   </div>
+                </section>
+              )}
+              {/* Teammate Questions */}
+              {registrationSection == 5 && (
+                <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
+                  <h2 className="sm:text-2xl text-xl font-semibold sm:mb-3 mb-1">
+                    Teammate Questions
+                  </h2>
+                  <div className="flex flex-col">
+                    {teammateQuestions.map((obj, idx) => (
+                      <DisplayQuestion
+                        key={idx}
+                        obj={obj}
+                        values={values}
+                        onChange={handleChange}
+                      />
+                    ))}
+                  </div>
+
                   {/* Submit */}
-                  <div className="text-white absolute right-4">
+                  <div className="mt-8 text-white">
                     <button
                       type="submit"
                       className="mr-auto cursor-pointer px-4 py-2 rounded-lg bg-[#40B7BA] hover:brightness-90"
@@ -444,7 +465,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
           className={`lg:block ${
             registrationSection == 0
               ? 'justify-end'
-              : registrationSection >= 4
+              : registrationSection >= 5
               ? 'justify-start'
               : 'justify-between'
           } lg:pb-4 pb-8 lg:px-4 sm:px-8 px-6 text-primaryDark font-semibold text-primaryDark font-semibold text-md`}
@@ -477,7 +498,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
             ))}
           </div>
 
-          {registrationSection < 4 && (
+          {registrationSection < 5 && (
             <div
               className="flex justify-end "
               style={{ gridArea: '1 / 3 / 2 / 4' }}

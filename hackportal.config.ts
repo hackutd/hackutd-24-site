@@ -459,6 +459,33 @@ export const hackPortalConfig: HackPortalConfig = {
         ],
       },
     ],
+    teammateQuestions: [
+      {
+        textInputQuestions: [
+          {
+            id: 'teammate1',
+            initialValue: '',
+            question: 'Email of teammate #1 (if any): ',
+            name: 'teammate1',
+            required: false,
+          },
+          {
+            id: 'teammate2',
+            initialValue: '',
+            question: 'Email of teammate #2 (if any): ',
+            name: 'teammate2',
+            required: false,
+          },
+          {
+            id: 'teammate3',
+            initialValue: '',
+            question: 'Email of teammate #3 (if any): ',
+            name: 'teammate3',
+            required: false,
+          },
+        ],
+      },
+    ],
   },
 };
 
@@ -523,6 +550,7 @@ export interface HackPortalConfig {
     hackathonExperienceQuestions: QuestionTypes[];
     eventInfoQuestions: QuestionTypes[];
     sponsorInfoQuestions: QuestionTypes[];
+    teammateQuestions: QuestionTypes[];
   };
 }
 
@@ -593,6 +621,9 @@ const getInitialValues = () => {
     setInitialValues(obj);
   }
   for (let obj of hackPortalConfig.registrationFields.sponsorInfoQuestions) {
+    setInitialValues(obj);
+  }
+  for (let obj of hackPortalConfig.registrationFields.teammateQuestions) {
     setInitialValues(obj);
   }
   return InitialValues;
