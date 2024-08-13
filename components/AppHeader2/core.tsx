@@ -25,9 +25,6 @@ export default function AppHeader2_Core() {
   const [scanList, setScanList] = useState<Scan[]>([]);
   const [currentScan, setCurrentScan] = useState<Scan | null>(null);
   useEffect(() => {
-    if (!isAdmin) {
-      setScanList([]);
-    }
     async function getScanData() {
       const scans = await RequestHelper.get<Scan[]>('/api/scantypes', {
         headers: {
@@ -36,7 +33,11 @@ export default function AppHeader2_Core() {
       });
       setScanList(scans.data);
     }
-    getScanData();
+    if (!isAdmin) {
+      setScanList([]);
+    } else {
+      getScanData();
+    }
   }, [user, isAdmin]);
   return (
     <div className="flex justify-center py-2 w-full">
