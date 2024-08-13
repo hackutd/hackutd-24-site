@@ -17,6 +17,12 @@ export interface HackerStatus {
   status: string;
 }
 
+function appIsAutoAccepted(appData: HackerStatus) {
+  return appData.adminId === 'admin';
+}
+
+const INFINITY = 1000000000;
+
 /**
  *
  * API endpoint to post a list of hackers' statuses (accepted/rejected) by given admin id
@@ -41,7 +47,7 @@ async function postHackerStatus(req: NextApiRequest, res: NextApiResponse) {
 
   const jobs = [];
   for (const hackerId of hackerIds) {
-    const docRef = db.collection('acceptreject').doc(`${hackerId}`);
+    const docRef = db.collection('acceptreject').doc(`${hackerId}-${adminId}`);
 
     jobs.push([
       hackerId,
@@ -84,10 +90,7 @@ async function postHackerStatus(req: NextApiRequest, res: NextApiResponse) {
  *
  */
 async function getAllHackers(req: NextApiRequest, res: NextApiResponse) {
-  const {
-    headers,
-    query: { adminId },
-  } = req;
+  const { headers } = req;
 
   const userToken = headers['authorization'];
   const isAuthorized = await userIsAuthorized(userToken, ['super_admin']);
@@ -98,14 +101,34 @@ async function getAllHackers(req: NextApiRequest, res: NextApiResponse) {
     });
   }
 
-  const snapshot = await db.collection('acceptreject').where('adminId', '==', adminId).get();
+  const snapshot = await db.collection('acceptreject').get();
+  const hackerStatusData: Record<
+    string,
+    {
+      acceptCount: number;
+      rejectCount: number;
+    }
+  > = {};
 
-  let hackers = [];
   snapshot.forEach((doc) => {
-    hackers.push(doc.data());
+    if (!Object.hasOwn(hackerStatusData, doc.data().hackerId)) {
+      hackerStatusData[doc.data().hackerId] = {
+        acceptCount: 0,
+        rejectCount: 0,
+      };
+    }
+    if (doc.data().status === 'Accepted') {
+      if (appIsAutoAccepted(doc.data() as HackerStatus)) {
+        hackerStatusData[doc.data().hackerId].acceptCount = INFINITY;
+      } else {
+        hackerStatusData[doc.data().hackerId].acceptCount++;
+      }
+    } else {
+      hackerStatusData[doc.data().hackerId].rejectCount++;
+    }
   });
 
-  res.json(hackers);
+  res.json(hackerStatusData);
 }
 
 function handlePostRequest(req: NextApiRequest, res: NextApiResponse) {

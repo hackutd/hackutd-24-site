@@ -116,7 +116,7 @@ export default function ProfilePage() {
                   : 'text-[#5C67C9]'
               }`}
             >
-              {profile.status ? profile.status : 'Pending'}
+              {profile.status ? profile.status : 'Waiting'}
             </h1>
           </div>
 

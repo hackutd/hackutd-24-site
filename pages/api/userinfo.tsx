@@ -7,6 +7,7 @@ initializeApi();
 const db = firestore();
 
 const REGISTRATION_COLLECTION = '/registrations';
+const APPLICATION_POINT_THRESHOLD = 2;
 
 async function checkApplicationDecisionFinalized() {
   const preferenceDoc = await db.collection('miscellaneous').doc('preferences').get();
@@ -14,11 +15,19 @@ async function checkApplicationDecisionFinalized() {
 }
 
 async function getApplicationDecision(userId: string): Promise<string> {
-  const snapshot = await db.collection('/acceptreject').where('hackerId', '==', userId).get();
-  if (snapshot.empty) {
+  const applicationDecisionFinalized = await checkApplicationDecisionFinalized();
+  if (!applicationDecisionFinalized) {
     return 'Waiting';
   }
-  return snapshot.docs[0].data().status;
+  const snapshot = await db.collection('/acceptreject').where('hackerId', '==', userId).get();
+  const applicationPoint = snapshot.docs.reduce((acc: number, doc) => {
+    if (doc.data().status === 'Accepted') return acc + 1;
+    return acc - 1;
+  }, 0);
+  if (applicationPoint >= APPLICATION_POINT_THRESHOLD) {
+    return 'Accepted';
+  }
+  return 'Rejected';
 }
 
 async function userIsAuthorized(token: string, queryId: string) {
@@ -77,16 +86,11 @@ async function handleUserInfo(req: NextApiRequest, res: NextApiResponse) {
     const snapshot = await db.collection(REGISTRATION_COLLECTION).doc(userID).get();
     if (!snapshot.exists)
       return res.status(404).json({ code: 'not found', message: "User doesn't exist..." });
-    const applicationDecisionFinalized = await checkApplicationDecisionFinalized();
-    if (applicationDecisionFinalized) {
-      const applicationStatus = await getApplicationDecision(userID);
-      return res.status(200).json({
-        ...snapshot.data(),
-        status: applicationStatus,
-      });
-    } else {
-      return res.status(200).json(snapshot.data());
-    }
+    const applicationStatus = await getApplicationDecision(userID);
+    return res.status(200).json({
+      ...snapshot.data(),
+      status: applicationStatus,
+    });
   } catch (error) {
     console.error('Error when fetching applications', error);
     res.status(500).json({

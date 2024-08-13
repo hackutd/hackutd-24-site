@@ -59,8 +59,29 @@ export default function UserPage() {
       })
     )['data'];
 
+    const getHackerAppVerdict = ({
+      acceptCount,
+      rejectCount,
+    }: {
+      acceptCount: number;
+      rejectCount: number;
+    }) => {
+      if (allowRegistrationState.allowRegistrations) {
+        return 'Waiting';
+      }
+      return acceptCount - rejectCount >= 2 ? 'Accepted' : 'Rejected';
+    };
+
     const hackersStatus = (
-      await RequestHelper.get<HackerStatus[]>(`/api/acceptreject?adminId=${user.id}`, {
+      await RequestHelper.get<
+        Record<
+          string,
+          {
+            acceptCount: number;
+            rejectCount: number;
+          }
+        >
+      >(`/api/acceptreject`, {
         headers: {
           Authorization: user.token,
         },
@@ -70,10 +91,6 @@ export default function UserPage() {
     setRegistrationStatus(
       allowRegistrationState.allowRegistrations ? RegistrationState.OPEN : RegistrationState.CLOSED,
     );
-    const hackerStatusMapping: Map<string, string> = new Map();
-    hackersStatus.forEach((hackerStatus) =>
-      hackerStatusMapping.set(hackerStatus.hackerId, hackerStatus.status),
-    );
 
     const usersData = (
       await RequestHelper.get<UserIdentifier[]>('/api/users', {
@@ -81,13 +98,17 @@ export default function UserPage() {
           Authorization: user.token,
         },
       })
-    )['data'].map((userData) => ({
-      ...userData,
-      status: hackerStatusMapping.has(userData.id)
-        ? hackerStatusMapping.get(userData.id)
-        : 'Waiting',
-      selected: false,
-    }));
+    )['data'].map((userData) => {
+      const hackerApplicationScore = !Object.hasOwn(hackersStatus, userData.id)
+        ? { acceptCount: 0, rejectCount: 0 }
+        : hackersStatus[userData.id];
+      return {
+        ...userData,
+        status: getHackerAppVerdict(hackerApplicationScore),
+        selected: false,
+        applicationScore: hackerApplicationScore,
+      };
+    });
 
     setUsers(usersData);
     setFilteredUsers([...usersData.filter((user) => user.user.permissions.includes('hacker'))]);
@@ -185,7 +206,7 @@ export default function UserPage() {
           setUsers((prev) =>
             prev.map((user) => ({
               ...user,
-              status: hackerIds.includes(user.id) ? status : user.status,
+              // status: hackerIds.includes(user.id) ? status : user.status,
               selected: false,
             })),
           );
@@ -193,7 +214,7 @@ export default function UserPage() {
             prev.map((user) => ({
               ...user,
               selected: false,
-              status: hackerIds.includes(user.id) ? status : user.status,
+              // status: hackerIds.includes(user.id) ? status : user.status,
             })),
           );
           alert('Hackers update success');
@@ -289,7 +310,9 @@ export default function UserPage() {
                               allowRegistrations: nextRegistrationStatus === RegistrationState.OPEN,
                             },
                           );
-                          alert('Registration state updated successfully');
+                          alert(
+                            'Registration state updated successfully. Please refresh the page to view application status',
+                          );
                           setRegistrationStatus(nextRegistrationStatus);
                         } catch (error) {
                           alert(error);
@@ -321,7 +344,7 @@ export default function UserPage() {
       <section id="subheader" className="p-2 md:p-4">
         <AdminHeader />
       </section>
-      <div className="w-full max-w-screen-2xl" style={{ height: 'calc(100vh - 180px)' }}>
+      <div className="w-full max-w-screen-2xl mb-10" style={{ height: 'calc(100vh - 180px)' }}>
         {currentUser === '' ? (
           <AllUsersAdminView
             users={filteredUsers}
