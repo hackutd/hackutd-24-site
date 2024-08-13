@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import MLH_Sticker from '../../public/assets/mlh-2025.png';
 import hero from '../../public/assets/hero.png';
@@ -10,19 +10,6 @@ import styles from './HomeHero2.module.css';
 export default function HomeHero2() {
   const [isShort, setIsShort] = useState(false);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsShort(window.innerHeight < 660);
-    };
-
-    window.addEventListener('resize', handleResize);
-    handleResize();
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
   return (
     <section
       className={`${styles.container} min-h-screen bg-center relative bg-white flex flex-col-reverse md:flex-col`}
@@ -33,9 +20,10 @@ export default function HomeHero2() {
         backgroundRepeat: 'no-repeat',
         width: '100vw',
         height: '100vh',
+        minHeight: '100vh',
       }}
     >
-      {/*Top banner*/}
+      {/* Top banner */}
       <div className="font-dmSans w-full flex justify-center bg-[#40B7BA] text-white h-[1.75rem] text-nowrap overflow-hidden sm:hidden absolute top-0">
         <p className="text-lg">
           HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24
@@ -71,56 +59,49 @@ export default function HomeHero2() {
               />
             </div>
 
-            {!isShort && (
-              <p
-                className="font-montserrat text-[#FFFFFF] text-2xl md:text-3xl lg:text-4xl"
-                style={{
-                  position: 'absolute',
-                  top: '40%',
-                  left: '45%',
-                  transform: 'translateX(-50%)',
-                }}
-              >
-                WELCOME TO
-              </p>
-            )}
-
-            {/* Title */}
+            {/* Container to manage the positioning of welcome, title, and date */}
             <div
-              className="w-3/4 md:w-1/2 lg:w-1/3"
-              style={{
-                position: 'absolute',
-                top: '45%',
-                left: '50%',
-                transform: 'translateX(-50%)',
-              }}
+              className="relative flex flex-col items-center gap-2"
+              style={{ paddingTop: isShort ? '30vh' : '0'}} 
             >
-              <Image
-                src={HackUTDTitle.src}
-                alt="HackUTD Title"
-                layout="responsive"
-                width={HackUTDTitle.width}
-                height={HackUTDTitle.height}
-              />
-            </div>
+              {!isShort && (
+                <p
+                  className="font-montserrat text-[#FFFFFF] text-2xl md:text-3xl lg:text-4xl"
+                  style={{ marginRight: '10rem' }} 
+                >
+                  WELCOME TO
+                </p>
+              )}
 
-            {!isShort && (
-              <p
-                className="font-montserrat text-[#FFFFFF] text-xl md:text-xl lg:text-2xl"
+              {/* Title */}
+              <div
+                className="w-[60vw] md:w-[40vw] lg:w-[30vw]"
                 style={{
-                  position: 'absolute',
-                  top: '57.5%',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
+                  maxWidth: '600px',
                 }}
               >
-                Nov 16 - Nov 17
-              </p>
-            )}
+                <Image
+                  src={HackUTDTitle.src}
+                  alt="HackUTD Title"
+                  layout="responsive"
+                  width={HackUTDTitle.width}
+                  height={HackUTDTitle.height}
+                />
+              </div>
+
+              {!isShort && (
+                <p
+                  className="font-montserrat text-[#FFFFFF] text-xl md:text-xl lg:text-2xl"
+                  style={{ marginLeft: '10rem' }} 
+                >
+                  Nov 16 - Nov 17
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </div>
-      <div className="absolute bottom-[25%] left-0 md:left-10 lg:bottom-5 z-20">
+      <div className="absolute bottom-[10vh] left-0 md:left-10 lg:bottom-5 z-20">
         <div className="w-40 md:w-60 lg:w-80">
           <Image
             src={mascotLifeRing.src}
