@@ -1,10 +1,12 @@
 import Image from 'next/image';
 import MLH_Sticker from '../../public/assets/mlh-sticker.png';
 import BackgroundCircles from '../BackgroundCircles';
+import AppHeader2_Wrapper from '../AppHeader2/wrapper';
 
 export default function HomeHero() {
   return (
     <section className="min-h-screen bg-contain bg-white flex flex-col-reverse md:flex-col">
+      <AppHeader2_Wrapper />
       <div className="flex h-screen w-full relative">
         <div className="w-full h-full absolute top-0 left-0 z-0">
           <BackgroundCircles />

@@ -36,7 +36,11 @@ async function createScan(req: NextApiRequest, res: NextApiResponse) {
       }
     }
 
-    await db.collection(SCANTYPES_COLLECTION).add(scanData);
+    await db.collection(SCANTYPES_COLLECTION).add({
+      ...scanData,
+      startTime: new Date(scanData.startTime),
+      endTime: new Date(scanData.endTime),
+    });
     return res.status(201).json({
       msg: 'ScanType created',
     });

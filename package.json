@@ -48,6 +48,7 @@
     "next-fonts": "^1.5.1",
     "next-pwa": "^5.6.0",
     "notion-client": "^6.12.9",
+    "qr-scanner": "^1.4.2",
     "qrcode": "^1.4.4",
     "raw-loader": "^4.0.2",
     "react": "^18.2.0",
@@ -78,8 +79,8 @@
     "lint-staged": "^11.0.0",
     "postcss": "^8.4.21",
     "prettier": "^2.3.2",
-    "typescript": "^5.3.3",
-    "tailwindcss": "^3.4.3"
+    "tailwindcss": "^3.4.3",
+    "typescript": "^5.3.3"
   },
   "lint-staged": {
     "**/*.{js,ts,tsx}": [
