@@ -12,10 +12,16 @@ export default function HomeFaq(props: { answeredQuestion: AnsweredQuestion[] })
         style={{
           background: 'linear-gradient(#47c1ca 40%, #4fd4dd)',
           position: 'relative',
-          paddingTop: '30rem',
+          // TODO: enable this when finalizing the UI
+          // paddingTop: '30rem',
         }}
         id="faq-section"
       >
+        {/* placeholder text */}
+        <h1 className="text-6xl md:text-6xl sm:text-md xs:text-small font-bold text-[#F7CE79] text-stroke text-center py-10">
+          Schedule coming soon...
+        </h1>
+
         {/* TODO: enable this when finalizing the UI */}
         {/* <Wave1
           className={styles.wave1}
