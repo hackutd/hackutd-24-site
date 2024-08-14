@@ -1,15 +1,17 @@
 import { useState } from 'react';
 import Image from 'next/image';
-import MLH_Sticker from '../../public/assets/mlh-2025.png';
+// import MLH_Sticker from '../../public/assets/mlh-2025.png';
 import hero from '../../public/assets/hero.png';
 import HackUTDTitle from '../../public/assets/HackUTD 2024 Title.png';
 import Duck from '../../public/assets/duck.png';
 import mascotLifeRing from '../../public/assets/mascot_life_ring.png';
 import styles from './HomeHero2.module.css';
-
+import MLH_Sticker from '../../public/assets/mlh-sticker.png';
+import BackgroundCircles from '../BackgroundCircles';
+import AppHeader2_Wrapper from '../AppHeader2/wrapper';
+        
 export default function HomeHero2() {
   const [isShort, setIsShort] = useState(false);
-
   return (
     <section
       className={`${styles.container} min-h-screen bg-center relative bg-white flex flex-col-reverse md:flex-col`}
@@ -29,6 +31,12 @@ export default function HomeHero2() {
           HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24
         </p>
       </div>
+    <section className="min-h-screen bg-contain bg-white flex flex-col-reverse md:flex-col">
+      <AppHeader2_Wrapper />
+      <div className="flex h-screen w-full relative">
+        <div className="w-full h-full absolute top-0 left-0 z-0">
+          <BackgroundCircles />
+        </div>
 
       <div className="flex-grow flex h-full w-full relative">
         <div className="relative z-10 shrink-0 w-full flex">

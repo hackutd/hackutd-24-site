@@ -78,6 +78,8 @@ function Question(props) {
           required={props.question.required}
           label={props.question.question}
           name={props.question.name}
+          defaultValue={props.question.initialValue}
+          onChange={props.onChange}
           className="!mt-4"
         >
           <MenuItem selected disabled value="" />
