@@ -1,6 +1,4 @@
 import Faq from './Faq';
-import Image from 'next/image';
-import Wave1 from '../assets/Wave1';
 import styles from './HomeFaq.module.css';
 import Wave2 from '../assets/Wave2';
 
@@ -18,7 +16,7 @@ export default function HomeFaq(props: { answeredQuestion: AnsweredQuestion[] })
         id="faq-section"
       >
         {/* placeholder text */}
-        <h1 className="text-6xl md:text-6xl sm:text-md xs:text-small font-bold text-[#F7CE79] text-stroke text-center py-10">
+        <h1 className="text-6xl md:text-6xl sm:text-md xs:text-small font-bold text-[#F7CE79] text-stroke text-center py-10 uppercase">
           Schedule coming soon...
         </h1>
 
