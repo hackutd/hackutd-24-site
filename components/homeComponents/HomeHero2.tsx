@@ -1,17 +1,15 @@
 import { useState } from 'react';
 import Image from 'next/image';
-// import MLH_Sticker from '../../public/assets/mlh-2025.png';
+import MLH_Sticker from '../../public/assets/mlh-2025.png';
 import hero from '../../public/assets/hero.png';
 import HackUTDTitle from '../../public/assets/HackUTD 2024 Title.png';
 import Duck from '../../public/assets/duck.png';
 import mascotLifeRing from '../../public/assets/mascot_life_ring.png';
 import styles from './HomeHero2.module.css';
-import MLH_Sticker from '../../public/assets/mlh-sticker.png';
-import BackgroundCircles from '../BackgroundCircles';
-import AppHeader2_Wrapper from '../AppHeader2/wrapper';
-        
+
 export default function HomeHero2() {
   const [isShort, setIsShort] = useState(false);
+
   return (
     <section
       className={`${styles.container} min-h-screen bg-center relative bg-white flex flex-col-reverse md:flex-col`}
@@ -28,15 +26,10 @@ export default function HomeHero2() {
       {/* Top banner */}
       <div className="font-dmSans w-full flex justify-center bg-[#40B7BA] text-white h-[1.75rem] text-nowrap overflow-hidden sm:hidden absolute top-0">
         <p className="text-lg">
-          HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24
+          HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 •
+          HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24
         </p>
       </div>
-    <section className="min-h-screen bg-contain bg-white flex flex-col-reverse md:flex-col">
-      <AppHeader2_Wrapper />
-      <div className="flex h-screen w-full relative">
-        <div className="w-full h-full absolute top-0 left-0 z-0">
-          <BackgroundCircles />
-        </div>
 
       <div className="flex-grow flex h-full w-full relative">
         <div className="relative z-10 shrink-0 w-full flex">
@@ -70,12 +63,12 @@ export default function HomeHero2() {
             {/* Container to manage the positioning of welcome, title, and date */}
             <div
               className="relative flex flex-col items-center gap-2"
-              style={{ paddingTop: isShort ? '30vh' : '0'}} 
+              style={{ paddingTop: isShort ? '30vh' : '0' }}
             >
               {!isShort && (
                 <p
                   className="font-montserrat text-[#FFFFFF] text-2xl md:text-3xl lg:text-4xl"
-                  style={{ marginRight: '10rem' }} 
+                  style={{ marginRight: '10rem' }}
                 >
                   WELCOME TO
                 </p>
@@ -100,7 +93,7 @@ export default function HomeHero2() {
               {!isShort && (
                 <p
                   className="font-montserrat text-[#FFFFFF] text-xl md:text-xl lg:text-2xl"
-                  style={{ marginLeft: '10rem' }} 
+                  style={{ marginLeft: '10rem' }}
                 >
                   Nov 16 - Nov 17
                 </p>
@@ -133,11 +126,7 @@ export default function HomeHero2() {
             stroke="white"
             className="w-6 h-6 md:w-8 md:h-8 mt-2"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M19 9l-7 7-7-7"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
           </svg>
         </div>
       </div>
