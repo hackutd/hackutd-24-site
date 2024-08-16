@@ -37,7 +37,7 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
   return (
     <div className="flex flex-col flex-grow relative">
       <Head>
-        <title>HackPortal</title>
+        <title>HackUTD 2024</title>
         <meta name="description" content="HackPortal's Frequently Asked Questions" />
       </Head>
       <div className="top-6">
