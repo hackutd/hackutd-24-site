@@ -41,6 +41,21 @@ export const hackPortalConfig: HackPortalConfig = {
       {
         numberInputQuestions: [
           {
+            //Phone number question
+            question: 'Phone Number',
+            required: true,
+            id: 'phoneNumber',
+            name: 'phoneNumber',
+            min: '0000000000',
+            max: '9999999999',
+            pattern: '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]',
+            initialValue: null,
+          },
+        ],
+      },
+      {
+        numberInputQuestions: [
+          {
             //Age question
             question: 'Age',
             required: true,
@@ -275,7 +290,7 @@ export const hackPortalConfig: HackPortalConfig = {
           },
           {
             //Heard from question
-            question: 'Where did you hear about HackPortal?',
+            question: 'Where did you hear about HACKUTD: Ripple Effect?',
             required: true,
             id: 'heardFrom',
             name: 'heardFrom',
@@ -302,6 +317,47 @@ export const hackPortalConfig: HackPortalConfig = {
                 value: 'Other',
               },
             ],
+          },
+        ],
+      },
+      {
+        textAreaQuestions: [
+          {
+            //Why do you want to attend question
+            question: 'Why do you want to attend HackUTD: Ripple Effect?',
+            id: 'whyAttend',
+            name: 'whyAttend',
+            required: true,
+            initialValue: '',
+            placeholder: '',
+          },
+          {
+            //How many hackathons submitted question
+            question: 'How many hackathons have you submitted to and what did you learn from them?',
+            id: 'hackathonExperience',
+            name: 'hackathonExperience',
+            required: true,
+            initialValue: '',
+            placeholder: '',
+          },
+          {
+            //What do you hope to learn from HackUTD as a first timer question
+            question:
+              'If you haven’t been to a hackathon, what do you hope to learn from HackUTD: Ripple Effect?',
+            id: 'hackathonFirstTimer',
+            name: 'hackathonFirstTimer',
+            required: false,
+            initialValue: '',
+            placeholder: '',
+          },
+          {
+            //What are you looking forward to question
+            question: 'What are you looking forward to at HackUTD: Ripple Effect?',
+            id: 'learnExpectations',
+            name: 'accomodations',
+            required: true,
+            initialValue: '',
+            placeholder: '',
           },
         ],
       },
