@@ -62,11 +62,13 @@ export default function UserPage() {
     const getHackerAppVerdict = ({
       acceptCount,
       rejectCount,
+      alreadyJudged,
     }: {
       acceptCount: number;
       rejectCount: number;
+      alreadyJudged: boolean;
     }) => {
-      if (allowRegistrationState.allowRegistrations) {
+      if (allowRegistrationState.allowRegistrations && !alreadyJudged && acceptCount < 1000000000) {
         return 'Waiting';
       }
       return acceptCount - rejectCount >= 2 ? 'Accepted' : 'Rejected';
@@ -79,6 +81,7 @@ export default function UserPage() {
           {
             acceptCount: number;
             rejectCount: number;
+            alreadyJudged: boolean;
           }
         >
       >(`/api/acceptreject`, {
@@ -100,7 +103,7 @@ export default function UserPage() {
       })
     )['data'].map((userData) => {
       const hackerApplicationScore = !Object.hasOwn(hackersStatus, userData.id)
-        ? { acceptCount: 0, rejectCount: 0 }
+        ? { acceptCount: 0, rejectCount: 0, alreadyJudged: false }
         : hackersStatus[userData.id];
       return {
         ...userData,
@@ -206,7 +209,7 @@ export default function UserPage() {
           setUsers((prev) =>
             prev.map((user) => ({
               ...user,
-              // status: hackerIds.includes(user.id) ? status : user.status,
+              status: hackerIds.includes(user.id) ? status : user.status,
               selected: false,
             })),
           );
@@ -214,7 +217,7 @@ export default function UserPage() {
             prev.map((user) => ({
               ...user,
               selected: false,
-              // status: hackerIds.includes(user.id) ? status : user.status,
+              status: hackerIds.includes(user.id) ? status : user.status,
             })),
           );
           alert('Hackers update success');

@@ -1,7 +1,10 @@
 import { firestore, messaging } from 'firebase-admin';
 import { NextApiRequest, NextApiResponse } from 'next';
 import initializeApi from '../../../lib/admin/init';
-import { userIsAuthorized } from '../../../lib/authorization/check-authorization';
+import {
+  extractUserDataFromToken,
+  userIsAuthorized,
+} from '../../../lib/authorization/check-authorization';
 
 initializeApi();
 const db = firestore();
@@ -93,13 +96,17 @@ async function getAllHackers(req: NextApiRequest, res: NextApiResponse) {
   const { headers } = req;
 
   const userToken = headers['authorization'];
-  const isAuthorized = await userIsAuthorized(userToken, ['super_admin']);
+  const userData = await extractUserDataFromToken(userToken);
+  const isAuthorized =
+    (userData.user.permissions as string[]).includes('super_admin') ||
+    (userData.user.permissions as string[]).includes('admin');
 
   if (!isAuthorized) {
     return res.status(403).json({
       msg: 'Request is not authorized to perform admin functionality.',
     });
   }
+  const adminId = userData.user.id; // TODO: fill out this value
 
   const snapshot = await db.collection('acceptreject').get();
   const hackerStatusData: Record<
@@ -107,6 +114,7 @@ async function getAllHackers(req: NextApiRequest, res: NextApiResponse) {
     {
       acceptCount: number;
       rejectCount: number;
+      alreadyJudged: boolean;
     }
   > = {};
 
@@ -115,6 +123,7 @@ async function getAllHackers(req: NextApiRequest, res: NextApiResponse) {
       hackerStatusData[doc.data().hackerId] = {
         acceptCount: 0,
         rejectCount: 0,
+        alreadyJudged: doc.data().adminId === adminId,
       };
     }
     if (doc.data().status === 'Accepted') {
@@ -125,6 +134,9 @@ async function getAllHackers(req: NextApiRequest, res: NextApiResponse) {
       }
     } else {
       hackerStatusData[doc.data().hackerId].rejectCount++;
+    }
+    if (doc.data().adminId === adminId) {
+      hackerStatusData[doc.data().hackerId].alreadyJudged = true;
     }
   });
 

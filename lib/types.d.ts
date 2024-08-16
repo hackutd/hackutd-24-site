@@ -313,5 +313,6 @@ type UserIdentifier = Omit<Registration, 'scans'> & {
   applicationScore: {
     acceptCount: number;
     rejectCount: number;
+    alreadyJudged: boolean;
   };
 };
