@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 
 import clsx from 'clsx';
 import AppHeader2_Core from './core';
+import { useAuthContext } from '@/lib/user/AuthContext';
+import { useRouter } from 'next/router';
 
 export const APP_HEADER_HEIGHT = 86;
 const INITIAL_HEADER_HEIGHT = APP_HEADER_HEIGHT;
@@ -11,6 +13,8 @@ export default function AppHeader2_Wrapper() {
   // Handle scrolling state
 
   const [height, setHeight] = useState(INITIAL_HEADER_HEIGHT);
+  const { user, signOut } = useAuthContext();
+  const router = useRouter();
 
   const prevScrollY = useRef(0);
   const appHeaderRef = useRef<HTMLDivElement | null>(null);
@@ -89,7 +93,7 @@ export default function AppHeader2_Wrapper() {
       {/* App header core */}
       <div
         ref={appHeaderRef}
-        className={'w-full bg-transparent'} // NOTE: Comment this line for special hiding effect
+        className={'w-full bg-transparent relative flex items-center'} // NOTE: Comment this line for special hiding effect
 
         // NOTE: Uncomment this block for special hiding effect
         // className={clsx('sticky top-0 w-full bg-transparent')}
@@ -98,6 +102,18 @@ export default function AppHeader2_Wrapper() {
         // }}
       >
         <AppHeader2_Core />
+        <button
+          className="absolute right-[10rem] py-3 px-5 rounded-[30px] bg-[#40B7BA] font-bold text-white"
+          onClick={async () => {
+            if (user) {
+              await signOut();
+            } else {
+              await router.push('/auth');
+            }
+          }}
+        >
+          {user ? 'Sign Out' : 'Sign In'}
+        </button>
       </div>
     </header>
   );
