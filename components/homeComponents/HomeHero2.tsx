@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import MLH_Sticker from '../../public/assets/mlh-2025.png';
-import hero from '../../public/assets/hero.png';
 import HackUTDTitle from '../../public/assets/HackUTD 2024 Title.png';
 import Duck from '../../public/assets/duck.png';
 import mascotLifeRing from '../../public/assets/mascot_life_ring.png';
@@ -9,13 +8,11 @@ import styles from './HomeHero2.module.css';
 
 export default function HomeHero2() {
   const [isShort, setIsShort] = useState(false);
-
   return (
     <section
-      className={`${styles.container} min-h-screen bg-center relative bg-white flex flex-col-reverse md:flex-col`}
+      className={`bg-[url('/assets/hero.png')] md:bg-[url('/assets/hero-desktop.png')] lg:bg-[url('/assets/hero-xl.png')] ${styles.container} min-h-screen bg-center relative bg-white flex flex-col-reverse md:flex-col`}
       style={{
-        backgroundImage: `url(${hero.src})`,
-        backgroundSize: '100% 101%',
+        backgroundSize: '100% 100%',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         width: '100vw',
@@ -47,10 +44,7 @@ export default function HomeHero2() {
           {/* Big welcome */}
           <div className="w-full flex flex-col gap-2 justify-center items-center h-full">
             {/* Duck image */}
-            <div
-              className="w-30 md:w-40 lg:w-60 mb-4"
-              style={{ position: 'absolute', top: '15%', right: '25%' }}
-            >
+            <div className="w-[10rem] absolute top-[20%] md:top-[10%] right-[25%] md:w-[20rem] lg:w-[25rem] mb-4">
               <Image
                 src={Duck.src}
                 alt="Duck"
@@ -67,8 +61,11 @@ export default function HomeHero2() {
             >
               {!isShort && (
                 <p
-                  className="font-montserrat text-[#FFFFFF] text-2xl md:text-3xl lg:text-4xl"
-                  style={{ marginRight: '10rem' }}
+                  className="font-montserrat mx-auto lg:ml-[5rem] text-[#FFFFFF] text-xs sm:text-sm md:text-md lg:text-lg xl:text-xl font-semibold"
+                  style={{
+                    lineHeight: '24.38px',
+                    letterSpacing: '0.3em',
+                  }}
                 >
                   WELCOME TO
                 </p>
@@ -92,18 +89,21 @@ export default function HomeHero2() {
 
               {!isShort && (
                 <p
-                  className="font-montserrat text-[#FFFFFF] text-xl md:text-xl lg:text-2xl"
-                  style={{ marginLeft: '10rem' }}
+                  className="font-montserrat text-[#FFFFFF] text-xs sm:text-sm md:text-md lg:text-lg xl:text-xl font-semibold"
+                  style={{
+                    lineHeight: '24.38px',
+                    letterSpacing: '0.3em',
+                  }}
                 >
-                  Nov 16 - Nov 17
+                  NOV 16 - 17
                 </p>
               )}
             </div>
           </div>
         </div>
       </div>
-      <div className="absolute bottom-[10vh] left-0 md:left-10 lg:bottom-5 z-20">
-        <div className="w-40 md:w-60 lg:w-80">
+      <div className="absolute bottom-[35%] left-0 lg:left-[5%] lg:bottom-[30%] z-20">
+        <div className="w-[10rem] md:w-[20rem] lg:w-[25rem]">
           <Image
             src={mascotLifeRing.src}
             alt="Mascot Life Ring"
