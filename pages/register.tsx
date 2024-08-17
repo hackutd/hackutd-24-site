@@ -80,7 +80,10 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
         });
         resumeUrl = (await res.json()).url;
       }
-      await RequestHelper.post<Registration, any>(
+      const { data } = await RequestHelper.post<
+        Registration,
+        { msg: string; registrationData: Registration }
+      >(
         '/api/applications',
         {},
         {
@@ -94,7 +97,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
         },
       );
       alert('Registered successfully');
-      updateProfile(registrationData);
+      updateProfile(data.registrationData);
       router.push('/profile');
     } catch (error) {
       console.error(error);
@@ -309,12 +312,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                   <div className="md:px-10">
                     <div className="flex flex-col">
                       {generalQuestions.map((obj, idx) => (
-                        <DisplayQuestion
-                          key={idx}
-                          obj={obj}
-                          values={values}
-                          onChange={handleChange}
-                        />
+                        <DisplayQuestion key={idx} obj={obj} />
                       ))}
                     </div>
                     <div className="text-[#00000080] poppins-regular mt-4 font-semibold mb-2">
@@ -335,12 +333,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                   </h2>
                   <div className="flex flex-col md:px-4 poppins-regular ">
                     {schoolQuestions.map((obj, idx) => (
-                      <DisplayQuestion
-                        key={idx}
-                        obj={obj}
-                        values={values}
-                        onChange={handleChange}
-                      />
+                      <DisplayQuestion key={idx} obj={obj} />
                     ))}
                   </div>
                 </section>
@@ -354,12 +347,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                   </h2>
                   <div className="flex flex-col poppins-regular md:px-4">
                     {hackathonExperienceQuestions.map((obj, idx) => (
-                      <DisplayQuestion
-                        key={idx}
-                        obj={obj}
-                        values={values}
-                        onChange={handleChange}
-                      />
+                      <DisplayQuestion key={idx} obj={obj} />
                     ))}
                   </div>
                 </section>
@@ -373,12 +361,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                   </h2>
                   <div className="flex flex-col poppins-regular md:px-4">
                     {shortAnswerQuestions.map((obj, idx) => (
-                      <DisplayQuestion
-                        key={idx}
-                        obj={obj}
-                        values={values}
-                        onChange={handleChange}
-                      />
+                      <DisplayQuestion key={idx} obj={obj} />
                     ))}
                   </div>
                 </section>
@@ -391,24 +374,11 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                   <div className="flex flex-col poppins-regular md:px-4">
                     {/* apply styling issue fix, it's an ugly fix but this solve the styling issue */}
                     {eventInfoQuestions.map((obj, idx) => {
-                      if (idx !== 0)
-                        return (
-                          <DisplayQuestion
-                            key={idx}
-                            obj={obj}
-                            values={values}
-                            onChange={handleChange}
-                          />
-                        );
+                      if (idx !== 0) return <DisplayQuestion key={idx} obj={obj} />;
 
                       return (
                         <div style={{ height: '56px' }} className="mb-8" key={idx}>
-                          <DisplayQuestion
-                            key={idx}
-                            obj={obj}
-                            values={values}
-                            onChange={handleChange}
-                          />
+                          <DisplayQuestion key={idx} obj={obj} />
                         </div>
                       );
                     })}
@@ -424,12 +394,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                   </h2>
                   <div className="flex flex-col poppins-regular md:px-4">
                     {sponsorInfoQuestions.map((obj, idx) => (
-                      <DisplayQuestion
-                        key={idx}
-                        obj={obj}
-                        values={values}
-                        onChange={handleChange}
-                      />
+                      <DisplayQuestion key={idx} obj={obj} />
                     ))}
                   </div>
                   {/* Resume Upload */}
@@ -459,12 +424,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                   </h2>
                   <div className="flex flex-col">
                     {teammateQuestions.map((obj, idx) => (
-                      <DisplayQuestion
-                        key={idx}
-                        obj={obj}
-                        values={values}
-                        onChange={handleChange}
-                      />
+                      <DisplayQuestion key={idx} obj={obj} />
                     ))}
                   </div>
 

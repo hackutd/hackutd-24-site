@@ -616,7 +616,7 @@ export interface HackPortalConfig {
   };
 }
 
-interface QuestionTypes {
+export interface QuestionTypes {
   checkboxQuestions?: CheckboxQuestion[];
   dropdownQuestions?: DropdownQuestion[];
   textInputQuestions?: RegistrationQuestion[];
@@ -633,7 +633,7 @@ interface RegistrationQuestion {
   initialValue: any; //value that will be first presented on the form
 }
 
-interface CheckboxQuestion extends RegistrationQuestion {
+export interface CheckboxQuestion extends RegistrationQuestion {
   options: Array<{
     title: string;
     value: string;
@@ -642,20 +642,20 @@ interface CheckboxQuestion extends RegistrationQuestion {
   }>;
 }
 
-interface DropdownQuestion extends RegistrationQuestion {
+export interface DropdownQuestion extends RegistrationQuestion {
   options: Array<{
     title: string;
     value: string;
   }>;
 }
 
-interface NumberInputQuestion extends RegistrationQuestion {
+export interface NumberInputQuestion extends RegistrationQuestion {
   min: string;
   max: string;
   pattern: string;
 }
 
-interface datalistQuestion extends RegistrationQuestion {
+export interface datalistQuestion extends RegistrationQuestion {
   datalist: string;
   options: Array<{
     title: string;
@@ -663,7 +663,7 @@ interface datalistQuestion extends RegistrationQuestion {
   }>;
 }
 
-interface textAreaQuestion extends RegistrationQuestion {
+export interface textAreaQuestion extends RegistrationQuestion {
   placeholder: string;
 }
 

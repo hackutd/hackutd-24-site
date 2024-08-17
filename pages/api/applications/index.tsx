@@ -183,17 +183,14 @@ async function handlePostApplications(req: NextApiRequest, res: NextApiResponse)
       msg: 'Profile already exists',
     });
   }
-
-  await db
-    .collection(APPLICATIONS_COLLECTION)
-    .doc(body.user.id)
-    .set({
-      ...body,
-      user: {
-        ...body.user,
-        permissions: ['hacker'],
-      },
-    });
+  const completedRegistrationInfo = {
+    ...body,
+    user: {
+      ...body.user,
+      permissions: ['hacker'],
+    },
+  };
+  await db.collection(APPLICATIONS_COLLECTION).doc(body.user.id).set(completedRegistrationInfo);
   const { eligible, teamMembers } = await checkAutoAcceptEligibility(body);
   if (eligible) {
     snapshot = await db
@@ -205,6 +202,7 @@ async function handlePostApplications(req: NextApiRequest, res: NextApiResponse)
   // await updateAllUsersDoc(body.user.id, body);
   res.status(200).json({
     msg: 'Operation completed',
+    registrationData: completedRegistrationInfo,
   });
 }
 
