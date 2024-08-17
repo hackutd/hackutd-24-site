@@ -83,7 +83,15 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
       await RequestHelper.post<Registration, any>(
         '/api/applications',
         {},
-        { ...registrationData, resume: resumeUrl },
+        {
+          ...registrationData,
+          id: registrationData.id || user.id,
+          user: {
+            ...registrationData.user,
+            id: registrationData.user.id || user.id,
+          },
+          resume: resumeUrl,
+        },
       );
       alert('Registered successfully');
       updateProfile(registrationData);
