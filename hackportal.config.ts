@@ -319,8 +319,8 @@ export const hackPortalConfig: HackPortalConfig = {
           {
             //How many hackathons submitted question
             question: 'How many hackathons have you submitted to and what did you learn from them?',
-            id: 'hackathonExperience',
-            name: 'hackathonExperience',
+            id: 'hackathonNumber',
+            name: 'hackathonNumber',
             required: true,
             initialValue: '',
             placeholder: '',
@@ -338,8 +338,8 @@ export const hackPortalConfig: HackPortalConfig = {
           {
             //What are you looking forward to question
             question: 'What are you looking forward to at HackUTD: Ripple Effect?',
-            id: 'learnExpectations',
-            name: 'accomodations',
+            id: 'lookingForward',
+            name: 'lookingForward',
             required: true,
             initialValue: '',
             placeholder: '',
