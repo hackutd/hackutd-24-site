@@ -1,5 +1,6 @@
 import schools from './public/schools.json';
 import majors from './public/majors.json';
+import countries from './public/countries.json';
 
 export const hackPortalConfig: HackPortalConfig = {
   //registration fields are separated by question topics (general, school, hackathon experience, etc. )
@@ -36,20 +37,12 @@ export const hackPortalConfig: HackPortalConfig = {
             required: true,
             initialValue: '',
           },
-        ],
-      },
-      {
-        numberInputQuestions: [
           {
-            //Phone number question
-            question: 'Phone Number',
-            required: true,
+            question: 'Phone number',
             id: 'phoneNumber',
             name: 'phoneNumber',
-            min: '0000000000',
-            max: '9999999999',
-            pattern: '[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]',
-            initialValue: null,
+            required: true,
+            initialValue: '',
           },
         ],
       },
@@ -70,6 +63,15 @@ export const hackPortalConfig: HackPortalConfig = {
       },
       {
         dropdownQuestions: [
+          {
+            //Country question
+            question: 'Country of Residence',
+            id: 'country',
+            name: 'country',
+            required: true,
+            initialValue: '',
+            options: countries.map(({ country }) => ({ title: country, value: country })),
+          },
           {
             //Gender question
             question: 'Gender',
@@ -149,26 +151,6 @@ export const hackPortalConfig: HackPortalConfig = {
               {
                 title: 'Not Hispanic or Latino',
                 value: 'notHispanic',
-              },
-            ],
-          },
-        ],
-      },
-      {
-        checkboxQuestions: [
-          {
-            //Code of Conduct question
-            question: 'Code of Conduct',
-            required: true,
-            id: 'codeOfConduct',
-            name: 'codeOfConduct',
-            initialValue: [],
-            options: [
-              {
-                title: 'I have read and agree to the ',
-                value: 'Yes',
-                link: 'https://static.mlh.io/docs/mlh-code-of-conduct.pdf',
-                linkText: 'MLH Code of Conduct',
               },
             ],
           },
@@ -320,6 +302,9 @@ export const hackPortalConfig: HackPortalConfig = {
           },
         ],
       },
+    ],
+    //Short answer questions
+    shortAnswerQuestions: [
       {
         textAreaQuestions: [
           {
@@ -541,6 +526,26 @@ export const hackPortalConfig: HackPortalConfig = {
           },
         ],
       },
+      {
+        checkboxQuestions: [
+          {
+            //Code of Conduct question
+            question: 'Code of Conduct',
+            required: true,
+            id: 'codeOfConduct',
+            name: 'codeOfConduct',
+            initialValue: [],
+            options: [
+              {
+                title: 'I have read and agree to the ',
+                value: 'Yes',
+                link: 'https://static.mlh.io/docs/mlh-code-of-conduct.pdf',
+                linkText: 'MLH Code of Conduct',
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
 };
@@ -604,6 +609,7 @@ export interface HackPortalConfig {
     generalQuestions: QuestionTypes[];
     schoolQuestions: QuestionTypes[];
     hackathonExperienceQuestions: QuestionTypes[];
+    shortAnswerQuestions: QuestionTypes[];
     eventInfoQuestions: QuestionTypes[];
     sponsorInfoQuestions: QuestionTypes[];
     teammateQuestions: QuestionTypes[];
@@ -671,6 +677,9 @@ const getInitialValues = () => {
     setInitialValues(obj);
   }
   for (let obj of hackPortalConfig.registrationFields.hackathonExperienceQuestions) {
+    setInitialValues(obj);
+  }
+  for (let obj of hackPortalConfig.registrationFields.shortAnswerQuestions) {
     setInitialValues(obj);
   }
   for (let obj of hackPortalConfig.registrationFields.eventInfoQuestions) {

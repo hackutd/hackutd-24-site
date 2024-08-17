@@ -31,6 +31,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
       generalQuestions,
       schoolQuestions,
       hackathonExperienceQuestions,
+      shortAnswerQuestions,
       eventInfoQuestions,
       sponsorInfoQuestions,
       teammateQuestions,
@@ -40,7 +41,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
   const { user, hasProfile, updateProfile } = useAuthContext();
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   // update this to false for testing
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [formValid, setFormValid] = useState(true);
   const [registrationSection, setRegistrationSection] = useState(0);
   const checkRedirect = async () => {
@@ -127,10 +128,10 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
   }
 
   // disable this for testing
-  if (!user) {
-    // If user haven't signed in, redirect them to login page
-    router.push('/auth');
-  }
+  ////if (!user) {
+  // If user haven't signed in, redirect them to login page
+  ////router.push('/auth');
+  ////}
 
   if (loading) {
     return <LoadIcon width={200} height={200} />;
@@ -215,6 +216,9 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
               errors = setErrors(obj, values, errors);
             }
             for (let obj of hackathonExperienceQuestions) {
+              errors = setErrors(obj, values, errors);
+            }
+            for (let obj of shortAnswerQuestions) {
               errors = setErrors(obj, values, errors);
             }
             for (let obj of eventInfoQuestions) {
@@ -353,8 +357,27 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                 </section>
               )}
 
-              {/* Event Questions */}
+              {/* Short Answer Questions */}
               {registrationSection == 3 && (
+                <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
+                  <h2 className="sm:text-2xl text-xl poppins-bold sm:mb-3 mb-1 mt-2">
+                    Short Answer Questions
+                  </h2>
+                  <div className="flex flex-col poppins-regular md:px-4">
+                    {shortAnswerQuestions.map((obj, idx) => (
+                      <DisplayQuestion
+                        key={idx}
+                        obj={obj}
+                        values={values}
+                        onChange={handleChange}
+                      />
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              {/* Event Questions */}
+              {registrationSection == 4 && (
                 <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
                   <h2 className="sm:text-2xl text-xl poppins-bold sm:mb-3 mb-1 mt-2">Event Info</h2>
                   <div className="flex flex-col poppins-regular md:px-4">
@@ -386,7 +409,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
               )}
 
               {/* Sponsor Questions */}
-              {registrationSection == 4 && (
+              {registrationSection == 5 && (
                 <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950] relative">
                   <h2 className="sm:text-2xl text-xl poppins-bold sm:mb-3 mb-1 mt-2">
                     Sponsor Info
@@ -421,7 +444,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                 </section>
               )}
               {/* Teammate Questions */}
-              {registrationSection == 5 && (
+              {registrationSection == 6 && (
                 <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
                   <h2 className="sm:text-2xl text-xl font-semibold sm:mb-3 mb-1">
                     Teammate Questions
@@ -465,7 +488,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
           className={`lg:block ${
             registrationSection == 0
               ? 'justify-end'
-              : registrationSection >= 5
+              : registrationSection >= 6
               ? 'justify-start'
               : 'justify-between'
           } lg:pb-4 pb-8 lg:px-4 sm:px-8 px-6 text-primaryDark font-semibold text-primaryDark font-semibold text-md`}
@@ -489,7 +512,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
           )}
 
           <div className="flex justify-center items-center" style={{ gridArea: '1 / 2 / 2 / 3' }}>
-            {Array.from({ length: 5 }).map((_, i) => (
+            {Array.from({ length: 7 }).map((_, i) => (
               <div
                 key={i}
                 style={{ backgroundColor: registrationSection == i ? '#4C4950' : '#9F9EA7' }}
@@ -498,7 +521,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
             ))}
           </div>
 
-          {registrationSection < 5 && (
+          {registrationSection < 6 && (
             <div
               className="flex justify-end "
               style={{ gridArea: '1 / 3 / 2 / 4' }}
