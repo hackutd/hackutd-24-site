@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Field, ErrorMessage, FieldProps } from 'formik';
 import { MenuItem, TextField } from '@mui/material';
 import {
@@ -27,7 +27,7 @@ interface QuestionProps {
 function Question(props: QuestionProps) {
   if (props.type === 'text') {
     return (
-      <Fragment>
+      <div key={props.question.id} className="flex flex-col">
         <Field name={props.question.name} type="text">
           {({ field }: FieldProps) => (
             <TextField
@@ -54,11 +54,11 @@ function Question(props: QuestionProps) {
           name={props.question.name}
           render={(msg) => <div className="text-red-600 poppins-regular">{msg}</div>}
         />
-      </Fragment>
+      </div>
     );
   } else if (props.type === 'number') {
     return (
-      <Fragment key={props.question.id}>
+      <div className="flex flex-col" key={props.question.id}>
         <Field name={props.question.name}>
           {({ field }: FieldProps) => (
             <TextField
@@ -90,11 +90,11 @@ function Question(props: QuestionProps) {
           name={props.question.name}
           render={(msg) => <div className="text-red-600 poppins-regular">{msg}</div>}
         />
-      </Fragment>
+      </div>
     );
   } else if (props.type === 'dropdown') {
     return (
-      <Fragment>
+      <div className="flex flex-col" key={props.question.id}>
         <Field as="select" name={props.question.name}>
           {({ field }: FieldProps) => (
             <TextField
@@ -119,11 +119,11 @@ function Question(props: QuestionProps) {
           name={props.question.name}
           render={(msg) => <div className="text-red-600 poppins-regular">{msg}</div>}
         />
-      </Fragment>
+      </div>
     );
   } else if (props.type === 'checkbox') {
     return (
-      <Fragment>
+      <div className="flex flex-col" key={props.question.id}>
         <label htmlFor={props.question.name} className="mt-4 poppins-regular mb-1">
           {props.question.required ? '*' : ''}
           {props.question.question}
@@ -155,11 +155,11 @@ function Question(props: QuestionProps) {
           name={props.question.name}
           render={(msg) => <div className="text-red-600 poppins-regular">{msg}</div>}
         />
-      </Fragment>
+      </div>
     );
   } else if (props.type === 'datalist') {
     return (
-      <Fragment>
+      <div className="flex flex-col" key={props.question.id}>
         <label htmlFor={props.question.name} className="mt-4 mb-1 poppins-regular">
           {props.question.required ? '*' : ''}
           {props.question.question}
@@ -184,11 +184,11 @@ function Question(props: QuestionProps) {
           name={props.question.name}
           render={(msg) => <div className="text-red-600 poppins-regular">{msg}</div>}
         />
-      </Fragment>
+      </div>
     );
   } else if (props.type === 'textArea') {
     return (
-      <Fragment>
+      <div className="flex flex-col" key={props.question.id}>
         <label htmlFor={props.question.name} className="mt-4 poppins-regular mb-1">
           {props.question.required ? '*' : ''}
           {props.question.question}
@@ -203,7 +203,7 @@ function Question(props: QuestionProps) {
           name={props.question.name}
           render={(msg) => <div className="text-red-600 poppins-regular">{msg}</div>}
         />
-      </Fragment>
+      </div>
     );
   }
 }

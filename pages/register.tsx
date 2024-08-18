@@ -216,6 +216,8 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
       <section className="relative">
         <Formik
           initialValues={formInitialValues}
+          validateOnBlur={false}
+          validateOnChange={false}
           //validation
           //Get condition in which values.[value] is invalid and set error message in errors.[value]. Value is a value from the form(look at initialValues)
           validate={(values) => {
