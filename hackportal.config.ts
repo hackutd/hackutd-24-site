@@ -295,6 +295,10 @@ export const hackPortalConfig: HackPortalConfig = {
                 value: 'Friend',
               },
               {
+                title: 'TikTok',
+                value: 'TikTok',
+              },
+              {
                 title: 'Other',
                 value: 'Other',
               },

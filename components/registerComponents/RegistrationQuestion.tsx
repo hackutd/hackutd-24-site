@@ -33,7 +33,9 @@ function Question(props: QuestionProps) {
           className="flex items-center mt-4 poppins-regular mb-1"
         >
           {props.question.question}
-          {!props.question.required && <span className="ml-2 text-sm">optional</span>}
+          {!props.question.required && (
+            <span className="text-gray-600 ml-2 text-[8px]">optional</span>
+          )}
         </label>
         <Field name={props.question.name} type="text">
           {({ field }: FieldProps) => (
@@ -70,7 +72,9 @@ function Question(props: QuestionProps) {
           className="flex items-center mt-4 poppins-regular mb-1"
         >
           {props.question.question}
-          {!props.question.required && <span className="ml-2 text-xs">optional</span>}
+          {!props.question.required && (
+            <span className="text-gray-600 ml-2 text-[8px]">optional</span>
+          )}
         </label>
         <Field name={props.question.name}>
           {({ field }: FieldProps) => (
@@ -112,7 +116,9 @@ function Question(props: QuestionProps) {
           className="flex items-center mt-4 poppins-regular mb-1"
         >
           {props.question.question}
-          {!props.question.required && <span className="ml-2 text-xs">optional</span>}
+          {!props.question.required && (
+            <span className="text-gray-600 ml-2 text-[8px]">optional</span>
+          )}
         </label>
         <Field as="select" name={props.question.name}>
           {({ field }: FieldProps) => (
@@ -148,7 +154,9 @@ function Question(props: QuestionProps) {
           className="flex items-center mt-4 poppins-regular mb-1"
         >
           {props.question.question}
-          {!props.question.required && <span className="ml-2 text-xs">optional</span>}
+          {!props.question.required && (
+            <span className="text-gray-600 ml-2 text-[8px]">optional</span>
+          )}
         </label>
         <div role="group" aria-labelledby="checkbox-group" className="flex flex-col">
           {(props.question as CheckboxQuestion).options.map((option) => (
@@ -187,7 +195,9 @@ function Question(props: QuestionProps) {
           className="flex items-center mt-4 mb-1 poppins-regular"
         >
           {props.question.question}
-          {!props.question.required && <span className="ml-2 text-xs">optional</span>}
+          {!props.question.required && (
+            <span className="text-gray-600 ml-2 text-[8px]">optional</span>
+          )}
         </label>
         <Field
           type="text"
@@ -219,7 +229,9 @@ function Question(props: QuestionProps) {
           className="flex items-center mt-4 poppins-regular mb-1"
         >
           {props.question.question}
-          {!props.question.required && <span className="ml-2 text-xs">optional</span>}
+          {!props.question.required && (
+            <span className="text-gray-600 ml-2 text-[8px]">optional</span>
+          )}
         </label>
         <Field
           as="textarea"

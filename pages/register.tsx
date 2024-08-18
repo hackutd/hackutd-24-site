@@ -484,7 +484,10 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                   </div>
                   {/* Resume Upload */}
                   <div className="mt-8 md:px-4 poppins-regular">
-                    Upload your resume:
+                    <div className="flex items-center">
+                      Upload your resume{' '}
+                      <span className="text-gray-600 ml-2 text-[8px]">optional</span>
+                    </div>
                     <br />
                     <input
                       onChange={(e) => handleResumeFileChange(e)}
