@@ -246,7 +246,7 @@ export const hackPortalConfig: HackPortalConfig = {
         dropdownQuestions: [
           {
             //Experience question
-            question: 'Relative software-building experience:',
+            question: 'Relative software-building experience',
             required: true,
             id: 'softwareExperience',
             name: 'softwareExperience',
@@ -383,7 +383,7 @@ export const hackPortalConfig: HackPortalConfig = {
         checkboxQuestions: [
           {
             //Allergies question
-            question: 'Allergies / Dietary Restrictions:',
+            question: 'Allergies / Dietary Restrictions',
             required: false,
             id: 'dietary',
             name: 'dietary',
@@ -449,7 +449,7 @@ export const hackPortalConfig: HackPortalConfig = {
         textInputQuestions: [
           {
             //Github question
-            question: 'Github:',
+            question: 'Github',
             id: 'github',
             name: 'github',
             required: false,
@@ -457,7 +457,7 @@ export const hackPortalConfig: HackPortalConfig = {
           },
           {
             //LinkedIn question
-            question: 'LinkedIn:',
+            question: 'LinkedIn',
             id: 'linkedin',
             name: 'linkedin',
             required: false,
@@ -465,7 +465,7 @@ export const hackPortalConfig: HackPortalConfig = {
           },
           {
             //Website question
-            question: 'Personal Website:',
+            question: 'Personal Website',
             id: 'website',
             name: 'website',
             required: false,
@@ -480,21 +480,21 @@ export const hackPortalConfig: HackPortalConfig = {
           {
             id: 'teammate1',
             initialValue: '',
-            question: 'Email of teammate #1 (if any): ',
+            question: 'Email of teammate #1 (if any)',
             name: 'teammate1',
             required: false,
           },
           {
             id: 'teammate2',
             initialValue: '',
-            question: 'Email of teammate #2 (if any): ',
+            question: 'Email of teammate #2 (if any)',
             name: 'teammate2',
             required: false,
           },
           {
             id: 'teammate3',
             initialValue: '',
-            question: 'Email of teammate #3 (if any): ',
+            question: 'Email of teammate #3 (if any)',
             name: 'teammate3',
             required: false,
           },
