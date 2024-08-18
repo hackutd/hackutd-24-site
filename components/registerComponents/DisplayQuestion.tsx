@@ -23,12 +23,9 @@ function DisplayQuestion(props: { obj: QuestionTypes }) {
         <Question key={inputObj.id} type="number" question={inputObj} />
       ))}
       {/* Display dropdown input questions */}
-      <div className={styles.dropdownQuestionsContainer}>
-        {props.obj.dropdownQuestions?.map((inputObj) => (
-          <Question key={inputObj.id} type="dropdown" question={inputObj} />
-        ))}
-      </div>
-
+      {props.obj.dropdownQuestions?.map((inputObj) => (
+        <Question key={inputObj.id} type="dropdown" question={inputObj} />
+      ))}
       {/* Display datalist input questions */}
       {props.obj.datalistQuestions?.map((inputObj) => (
         <Question key={inputObj.id} type="datalist" question={inputObj} />

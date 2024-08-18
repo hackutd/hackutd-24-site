@@ -378,13 +378,9 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                   <div className="flex flex-col poppins-regular md:px-4">
                     {/* apply styling issue fix, it's an ugly fix but this solve the styling issue */}
                     {eventInfoQuestions.map((obj, idx) => {
-                      if (idx !== 0) return <DisplayQuestion key={idx} obj={obj} />;
+                      // if (idx !== 0) return <DisplayQuestion key={idx} obj={obj} />;
 
-                      return (
-                        <div style={{ height: '56px' }} className="mb-8" key={idx}>
-                          <DisplayQuestion key={idx} obj={obj} />
-                        </div>
-                      );
+                      return <DisplayQuestion key={idx} obj={obj} />;
                     })}
                   </div>
                 </section>

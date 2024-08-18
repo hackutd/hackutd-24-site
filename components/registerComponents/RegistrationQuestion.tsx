@@ -28,11 +28,14 @@ function Question(props: QuestionProps) {
   if (props.type === 'text') {
     return (
       <div key={props.question.id} className="flex flex-col">
+        <label htmlFor={props.question.name} className="mt-4 poppins-regular mb-1">
+          {props.question.required ? '*' : ''}
+          {props.question.question}
+        </label>
         <Field name={props.question.name} type="text">
           {({ field }: FieldProps) => (
             <TextField
               required={props.question.required}
-              label={props.question.question}
               id={props.question.id}
               variant="outlined"
               type="text"
@@ -45,7 +48,7 @@ function Question(props: QuestionProps) {
                   input: 'focus:ring-offset-0 focus:ring-0 focus:ring-shadow-0',
                 },
               }}
-              className="!mt-4 poppins-regular mb-1"
+              className="poppins-regular mb-1"
               {...field}
             />
           )}
@@ -59,11 +62,14 @@ function Question(props: QuestionProps) {
   } else if (props.type === 'number') {
     return (
       <div className="flex flex-col" key={props.question.id}>
+        <label htmlFor={props.question.name} className="mt-4 poppins-regular mb-1">
+          {props.question.required ? '*' : ''}
+          {props.question.question}
+        </label>
         <Field name={props.question.name}>
           {({ field }: FieldProps) => (
             <TextField
               required={props.question.required}
-              label={props.question.question}
               id={props.question.id}
               variant="outlined"
               type={props.type}
@@ -81,7 +87,7 @@ function Question(props: QuestionProps) {
                   input: 'focus:ring-offset-0 focus:ring-0 focus:ring-shadow-0',
                 },
               }}
-              className="!mt-4 poppins-regular mb-1"
+              className="poppins-regular mb-1"
               {...field}
             />
           )}
@@ -95,15 +101,19 @@ function Question(props: QuestionProps) {
   } else if (props.type === 'dropdown') {
     return (
       <div className="flex flex-col" key={props.question.id}>
+        <label htmlFor={props.question.name} className="mt-4 poppins-regular mb-1">
+          {props.question.required ? '*' : ''}
+          {props.question.question}
+        </label>
         <Field as="select" name={props.question.name}>
           {({ field }: FieldProps) => (
             <TextField
               select
+              variant="outlined"
               id={props.question.id}
               required={props.question.required}
-              label={props.question.question}
               defaultValue={props.question.initialValue}
-              className="!mt-4 poppins-regular mb-1"
+              className="poppins-regular mb-1"
               {...field}
             >
               <MenuItem selected disabled value="" />

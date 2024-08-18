@@ -272,7 +272,7 @@ export const hackPortalConfig: HackPortalConfig = {
           },
           {
             //Heard from question
-            question: 'Where did you hear about HACKUTD: Ripple Effect?',
+            question: 'Where did you hear about HackUTD: Ripple Effect?',
             required: true,
             id: 'heardFrom',
             name: 'heardFrom',
