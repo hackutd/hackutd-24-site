@@ -1,9 +1,25 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import birds from '../../public/assets/birds.png';
 
 const HomeAboutPhotos = () => {
+  const [windowScroll, setWindowScroll] = useState(0);
+
+  useEffect(() => {
+    window.addEventListener('scroll', () => setWindowScroll(window.scrollY));
+    window.removeEventListener('scroll', () => setWindowScroll(window.scrollY));
+  }, []);
+
   const cloudStyle = {
     transition: 'transform 0.3s ease-in-out',
+  };
+
+  const cloudLeftScroll = {
+    transform: `translateX(${-1 * windowScroll * 0.3}px)`,
+  };
+
+  const cloudRightScroll = {
+    transform: `translateX(${windowScroll * 0.3}px)`,
   };
 
   const balloonHoverStyle = {
@@ -45,7 +61,10 @@ const HomeAboutPhotos = () => {
           backgroundRepeat: 'no-repeat',
         }}
       >
-        <div className="order-2 lg:order-1 flex justify-center items-center z-20 lg:justify-end lg:mr-8" style={balloonHoverStyle}>
+        <div
+          className="order-2 lg:order-1 flex justify-center items-center z-20 lg:justify-end lg:mr-8"
+          style={balloonHoverStyle}
+        >
           <img src="/assets/frog-balloon.png" alt="Balloon" className="w-80 h-auto object-cover" />
         </div>
         <div className="order-1 lg:order-2 text-center lg:text-left text-[#F7CE79] text-stroke lg:ml-8">
@@ -80,7 +99,10 @@ const HomeAboutPhotos = () => {
         <p className="text-2xl font-bold text-gray-500">hype video</p>
       </div> 
       */}
-      <div className="absolute bottom-[-15%] left-[-10%] transform z-50" style={cloudStyle}>
+      <div
+        className="absolute bottom-[-15%] left-[20%] transform z-50"
+        style={cloudStyle && cloudLeftScroll}
+      >
         <img
           src="/assets/cloud.png"
           alt="Cloud Background"
@@ -88,7 +110,10 @@ const HomeAboutPhotos = () => {
         />
       </div>
 
-      <div className="absolute bottom-[-20%] right-[-10%] transform z-50" style={cloudStyle}>
+      <div
+        className="absolute bottom-[-20%] right-[20%] transform z-50"
+        style={cloudStyle && cloudRightScroll}
+      >
         <img
           src="/assets/cloud.png"
           alt="Cloud Background"
