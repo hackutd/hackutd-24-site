@@ -417,6 +417,14 @@ export const hackPortalConfig: HackPortalConfig = {
                 title: 'Eggs',
                 value: 'Eggs',
               },
+              {
+                title: 'No Beef',
+                value: 'NoBeef',
+              },
+              {
+                title: 'No Pork',
+                value: 'NoPork',
+              },
             ],
           },
         ],

@@ -130,14 +130,14 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
     setResumeFile(file);
   };
 
-  // if (!allowedRegistrations) {
-  //   return (
-  //     <h1 className="mx-auto text-2xl mt-4 font-bold">
-  //       Registrations is closed and no longer allowed
-  //     </h1>
-  //   );
-  // }
-  //
+  if (!allowedRegistrations) {
+    return (
+      <h1 className="mx-auto text-2xl mt-4 font-bold">
+        Registrations is closed and no longer allowed
+      </h1>
+    );
+  }
+
   // disable this for testing
   if (!user) {
     // If user haven't signed in, redirect them to login page
