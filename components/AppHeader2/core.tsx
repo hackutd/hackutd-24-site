@@ -42,6 +42,11 @@ export default function AppHeader2_Core() {
   return (
     <div className="flex justify-center py-2 w-full">
       {/* Real navbar */}
+      <div className="font-dmSans flex items-center gap-4 border-[3px] border-[rgba(30,30,30,0.60)] rounded-xl px-20 bg-white">
+        <Link href="/" className="p-2 text-[#40B7BA] cursor-pointer">
+          Home
+        </Link>
+        {/* <Link href="/#schedule-section" className="p-2 text-[#40B7BA] cursor-pointer">
       <div className="font-dmSans flex items-center gap-4 border-[3px] border-[rgba(30,30,30,0.60)] rounded-xl px-20 lg:px-[8rem] bg-white relative">
         <Link href="/" className="p-2 text-[#40B7BA] cursor-pointer">
           Home
@@ -51,7 +56,8 @@ export default function AppHeader2_Core() {
         </Link>
         <Link href="/hackerpacks" className="p-2 text-[#40B7BA] cursor-pointer">
           Resources
-        </Link>
+        </Link> 
+        </Link>*/}
         <Link href="/#faq-section" className="p-2 text-[#40B7BA] cursor-pointer">
           FAQ
         </Link>
@@ -133,6 +139,7 @@ export default function AppHeader2_Core() {
           </Menu>
         )}
 
+        {/*TODO: Readd after applications open*/}
         <div className="p-2 text-white cursor-pointer">
           {user && hasProfile ? (
             <Link href="/profile">

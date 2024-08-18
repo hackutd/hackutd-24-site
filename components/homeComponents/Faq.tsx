@@ -1,9 +1,13 @@
-import { ChevronDownIcon } from '@heroicons/react/solid';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import React, { useState, useEffect } from 'react';
 import FaqDisclosure from './FaqDisclosure';
 import { RequestHelper } from '../../lib/request-helper';
+
+import Fish1 from '../../public/assets/fish_1.png';
+import Fish2 from '../../public/assets/fish_2.png';
+import Image from 'next/image';
+import { transform } from 'next/dist/build/swc';
 
 /**
  * The FAQ page.
@@ -17,24 +21,23 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
   const [faqs, setFaqs] = useState<AnsweredQuestion[]>([]);
   const [disclosuresStatus, setDisclosureStatus] = useState<boolean[]>();
 
+  const fish1HoverStyle = {
+    animation: 'moveLeftRight 2s infinite alternate',
+  };
+
+  const fish2HoverStyle = {
+    animation: 'moveUpDownLeftRight 4s infinite alternate',
+  };
+
+  const fish3HoverStyle = {
+    animation: 'moveUpDown 2s infinite alternate',
+  };
+
   useEffect(() => {
     setFaqs(fetchedFaqs);
     setDisclosureStatus(fetchedFaqs.map(() => false));
     setLoading(false);
   }, [fetchedFaqs]);
-
-  /**
-   *
-   * Expand all FAQ disclosures
-   *
-   */
-  const expandAll = () => {
-    setDisclosureStatus(new Array(disclosuresStatus.length).fill(true));
-  };
-
-  const closeAll = () => {
-    setDisclosureStatus(new Array(disclosuresStatus.length).fill(false));
-  };
 
   if (loading) {
     return (
@@ -45,40 +48,73 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
   }
 
   return (
-    <div className="flex flex-col flex-grow">
+    <div className="flex flex-col flex-grow relative">
+      <style>
+        {`
+          @keyframes moveUpDown {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-8px); }
+          }
+
+          @keyframes moveUpDownLeftRight {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(4px, -4px); }
+            50% { transform: translate(8px, 0); }
+            75% { transform: translate(4px, 4px); }
+            100% { transform: translate(0, 0); }
+          }
+
+          @keyframes moveLeftRight {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(8px); }
+          }
+        `}
+      </style>
       <Head>
-        <title>HackPortal</title>
+        <title>HackUTD 2024</title>
         <meta name="description" content="HackPortal's Frequently Asked Questions" />
       </Head>
-      {/* <AboutHeader active="/about/faq" /> */}
       <div className="top-6">
         <div className="flex flex-row justify-between items-center py-1">
-          {/* <h4 className="font-bold md:text-4xl text-2xl my-4 text-complementary">FAQ</h4> */}
-          {/* <div className="flex flex-row items-center gap-x-2">
-            <button
-              onClick={() => {
-                if (disclosuresStatus.every((status) => status)) {
-                  closeAll();
-                } else {
-                  expandAll();
-                }
-              }}
-              className="font-bold"
-            >
-              {disclosuresStatus.every((status) => status) ? 'Close All' : 'Expand All'}
-            </button>
-            <ChevronDownIcon
-              className={`${
-                disclosuresStatus.every((status) => status)
-                  ? 'transform rotate-180 transition duration-500 ease-in-out'
-                  : 'transition duration-500 ease-in-out'
-              } w-5 h-5`}
+          <div>
+            <Image
+              src={Fish2.src}
+              alt="fish_2.png"
+              width={200}
+              height={200}
+              style={fish1HoverStyle}
             />
+            <Image
+              src={Fish1.src}
+              alt="fish_1.png"
+              width={200}
+              height={200}
+              style={fish2HoverStyle}
+            />
+          </div>
+          <Image
+            src={Fish2.src}
+            alt="fish_2.png"
+            width={200}
+            height={200}
+            style={fish3HoverStyle}
+          />
+        </div>
+        <div className="bg-white mx-10 p-10 rounded-lg flex justify-between font-fredoka">
+          <div>
+            <h1 className="text-3xl mb-4 font-bold text-[#54DDE8]">FAQ</h1>
+            <p>Can’t find what you’re looking for? Connect with our team at hello@hackutd.co</p>
+          </div>
+          {/* <div className="flex items-center">
+            <button className="bg-[#DFFEFF] text-[#40B7BA] p-3 rounded-2xl">
+              Ask A Questions!
+            </button>
           </div> */}
         </div>
         {/* FAQ for lg-md */}
         {/* Uses different section for mobile because using 2 columns is buggy when expanding FAQs */}
         <div className="md:flex hidden justify-between p-6">
+          {/* TODO: add faq header card */}
           <div className="w-[49%] my-3 space-y-4 > * + *">
             {faqs.map(
               ({ question, answer }, idx) =>
