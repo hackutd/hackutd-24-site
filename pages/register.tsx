@@ -140,7 +140,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
   // disable this for testing
   if (!user) {
     // If user haven't signed in, redirect them to login page
-    /////router.push('/auth');
+    router.push('/auth');
   }
 
   if (loading) {
