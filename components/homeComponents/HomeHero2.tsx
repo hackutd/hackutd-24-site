@@ -119,11 +119,16 @@ export default function HomeHero2() {
       {/* Learn More Text and Arrow */}
       <button
         onClick={() => {
-          aboutRef.current?.scrollIntoView({
+          const offset = -180; // Adjust this value as needed to control the scroll offset
+          const elementPosition = aboutRef.current?.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset + offset;
+
+          window.scrollTo({
+            top: offsetPosition,
             behavior: 'smooth',
           });
         }}
-      >
+    >
         <div className="absolute bottom-5 w-full flex flex-col items-center z-20">
           <p className="font-montserrat text-white text-lg md:text-xl">Learn More</p>
           <div className="animate-bounce">
