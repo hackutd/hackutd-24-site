@@ -126,7 +126,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
           resume: resumeUrl,
         },
       );
-      alert('Registered successfully');
+      alert('Application Submitted');
       updateProfile(data.registrationData);
       router.push('/profile');
     } catch (error) {
