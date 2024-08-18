@@ -1,13 +1,13 @@
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import FaqDisclosure from './FaqDisclosure';
 import { RequestHelper } from '../../lib/request-helper';
 
 import Fish1 from '../../public/assets/fish_1.png';
 import Fish2 from '../../public/assets/fish_2.png';
 import Image from 'next/image';
-import { transform } from 'next/dist/build/swc';
+import { SectionReferenceContext } from '@/lib/context/section';
 
 /**
  * The FAQ page.
@@ -20,6 +20,7 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
   const [loading, setLoading] = useState(true);
   const [faqs, setFaqs] = useState<AnsweredQuestion[]>([]);
   const [disclosuresStatus, setDisclosureStatus] = useState<boolean[]>();
+  const { faqRef } = useContext(SectionReferenceContext);
 
   const fish1HoverStyle = {
     animation: 'moveLeftRight 2s infinite alternate',
@@ -74,7 +75,7 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
         <title>HackUTD 2024</title>
         <meta name="description" content="HackPortal's Frequently Asked Questions" />
       </Head>
-      <div className="top-6">
+      <div className="top-6" ref={faqRef}>
         <div className="flex flex-row justify-between items-center py-1">
           <div>
             <Image

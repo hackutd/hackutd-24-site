@@ -1,7 +1,7 @@
 import { createContext, MutableRefObject } from 'react';
 
 interface SectionReferenceContextValueType {
-  faqRef: MutableRefObject<HTMLElement> | null;
+  faqRef: MutableRefObject<HTMLDivElement> | null;
   aboutRef: MutableRefObject<HTMLDivElement> | null;
 }
 

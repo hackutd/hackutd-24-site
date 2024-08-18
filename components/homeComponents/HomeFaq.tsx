@@ -1,15 +1,11 @@
 import Faq from './Faq';
 import styles from './HomeFaq.module.css';
 import Wave2 from '../assets/Wave2';
-import { SectionReferenceContext } from '@/lib/context/section';
-import { useContext } from 'react';
 
 export default function HomeFaq(props: { answeredQuestion: AnsweredQuestion[] }) {
-  const { faqRef } = useContext(SectionReferenceContext);
   return (
     props.answeredQuestion.length != 0 && (
       <section
-        ref={faqRef}
         className={styles.container}
         style={{
           background: 'linear-gradient(#47c1ca 40%, #4fd4dd)',

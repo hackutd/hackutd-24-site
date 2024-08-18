@@ -42,7 +42,7 @@ function PortalApp({ Component, pageProps }: AppProps) {
   const [particlesInit, setParticlesInit] = useState(false);
   const hash = useUrlHash('');
   const duckBackgroundPathnames = ['/profile'];
-  const faqRef = useRef<HTMLElement | null>(null);
+  const faqRef = useRef<HTMLDivElement | null>(null);
   const aboutRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
