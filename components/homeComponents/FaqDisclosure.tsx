@@ -35,12 +35,9 @@ export default function FaqDisclosure({
         style={{
           boxShadow: '0 5px 16px 0 rgb(8,52,15,0.06)',
         }}
-        className="transition duration-500 ease-in-out bg-white rounded-md p-4"
+        className="transition duration-500 ease-in-out bg-white rounded-md p-4 mx-5"
       >
-        <Disclosure.Button
-          className={`p-2 text-complementary font-medium text-left  w-full`}
-          as="div"
-        >
+        <Disclosure.Button className={`p-2 text-[#6F6C90] font-medium text-left  w-full`} as="div">
           <button
             className="w-full flex flex-row justify-between items-center"
             onClick={() => {
@@ -51,7 +48,7 @@ export default function FaqDisclosure({
               {question}
             </h1>
             <div
-              style={{ backgroundColor: !isOpen ? '#F7F7FB' : '#4A3AFF' }}
+              style={{ backgroundColor: !isOpen ? '#F7F7FB' : '#54DDE8' }}
               className="p-3 rounded-md transition duration-500 ease-in-out"
             >
               {!isOpen ? (

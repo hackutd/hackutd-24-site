@@ -6,9 +6,12 @@ import AdminIcon from '@/public/icons/admin.svg';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useAuthContext } from '@/lib/user/AuthContext';
+import { useContext } from 'react';
+import { SectionReferenceContext } from '@/lib/context/section';
 
 export default function AppNavbarBottom() {
   const { hasProfile } = useAuthContext();
+  const { faqRef, scheduleRef } = useContext(SectionReferenceContext);
 
   return (
     <div
@@ -18,21 +21,33 @@ export default function AppNavbarBottom() {
         'p-4 rounded-xl',
       )}
     >
-      <FilePlusIcon />
+      {/* <FilePlusIcon /> */}
 
-      <Link href="/#schedule-section">
+      <button
+        onClick={() => {
+          scheduleRef.current?.scrollIntoView({
+            behavior: 'smooth',
+          });
+        }}
+      >
         <CalendarIcon />
-      </Link>
+      </button>
 
-      <Link href="/#prizes-section">
-        <TrophyIcon />
-      </Link>
+      {/* <Link href="/#prizes-section"> */}
+      {/*   <TrophyIcon /> */}
+      {/* </Link> */}
 
-      <Link href="#faq-section">
+      <button
+        onClick={() => {
+          faqRef.current?.scrollIntoView({
+            behavior: 'smooth',
+          });
+        }}
+      >
         <QuestionIcon />
-      </Link>
+      </button>
 
-      <Link href={hasProfile ? '/profile' : '/register'}>
+      <Link href={hasProfile ? '/profile' : '/auth'}>
         <AdminIcon />
       </Link>
     </div>

@@ -1,70 +1,94 @@
-import React, { useState, useEffect, CSSProperties } from 'react';
-import styles from './HackCountdown.module.css';
+import React, { useEffect, useState } from 'react';
 import { config } from '../../hackportal.config';
+import styles from './HackCountdown.module.css';
 
-interface CountdownProps {
-  targetDate: string;
-}
-
-const HackCountdown: React.FC<CountdownProps> = ({ targetDate }) => {
-  const calculateTimeLeft = () => {
-    const difference = +new Date(targetDate) - +new Date();
-    let timeLeft = {
-      days: 0,
-      hours: 0,
-      minutes: 0,
-    };
-
-    if (difference > 0) {
-      timeLeft = {
-        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((difference / 1000 / 60) % 60),
-      };
-    }
-
-    return timeLeft;
-  };
-
-  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
-
-    return () => clearTimeout(timer);
+const Countdown = () => {
+  const [timeLeft, setTimeLeft] = useState({
+    days: 20,
+    hours: 22,
+    minutes: 56,
   });
 
-  return (
-    <div className={styles.countdownContainer}>
-      <div className={styles.timeSection}>
-        {Object.entries(timeLeft).map(([unit, value]) => {
-          const digits = value.toString().padStart(2, '0').split('');
-          return (
-            <div key={unit} style={{ textAlign: 'center' }}>
-              <div style={{ display: 'flex' }}>
-                {digits.map((digit, index) => (
-                  <div key={`${unit}-${index}`} className={styles.digitBox}>
-                    <span className={styles.digit}>{digit}</span>
-                  </div>
-                ))}
-              </div>
-              <div className={styles.label}>{unit.toUpperCase()}</div>
+  const cloudHoverStyle = {
+    animation: 'moveUpDown 2s infinite alternate',
+  };
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const now = new Date();
+      const eventDate = new Date(config.targetDate); // Using the date from config
+      const timeDifference = eventDate.getTime() - now.getTime();
+
+      const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+
+      setTimeLeft({ days, hours, minutes });
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const renderTimeBox = (value, label) => {
+    const digits = value.toString().padStart(2, '0').split('');
+    return (
+      <div className="flex flex-col items-center space-y-2">
+        <div className="flex space-x-1 p-2 rounded-md">
+          {digits.map((digit, index) => (
+            <div
+              key={index}
+              className={`font-fredoka bg-white rounded-md flex items-center justify-center ${styles['countdown-box']}`}
+            >
+              {digit}
             </div>
-          );
-        })}
+          ))}
+        </div>
+        <span className={`text-lg md:text-md sm:text-sm xs:text-xs ${styles['countdown-label']}`}>
+          {label}
+        </span>
       </div>
-      <div className={styles.notifySection}>
-        <p>We will let you know when we are launching</p>
-        <button className={styles.button}>Notify Me</button>
+    );
+  };
+
+  return (
+    <>
+      <div
+        className="relative min-h-screen flex flex-col items-center justify-center font-jua"
+        style={{ position: 'relative', minHeight: '120vh' }}
+      >
+        <div className="relative flex justify-center items-center w-full " style={cloudHoverStyle}>
+          <div
+            className="relative w-full flex justify-center items-center"
+            style={{ maxWidth: '1000px', height: 'auto' }}
+          >
+            <img
+              src="/assets/bigCloud.png"
+              alt="Cloud"
+              className={`w-full h-auto ${styles.cloud} `}
+            />
+            <div className="absolute flex flex-col items-center justify-center w-full h-full p-4 text-center">
+              <h1 className="text-6xl md:text-6xl sm:text-md xs:text-small font-bold text-[#F7CE79] text-stroke">
+                COUNTDOWN
+              </h1>
+              <div className="flex justify-center mt-2 space-x-2 text-3xl md:text-2xl sm:text-xl xs:text-lg font-poppins text-[#05149C]">
+                {renderTimeBox(timeLeft.days, 'DAYS')}
+                {renderTimeBox(timeLeft.hours, 'HOURS')}
+                {renderTimeBox(timeLeft.minutes, 'MINUTES')}
+              </div>
+              {/* <p className="mt-4 text-lg md:text-md sm:text-sm xs:text-xs text-[#05149C] font-poppins">
+                We&apos;ll let you know when we are hatching
+              </p>
+              <button
+                className={`mt-4 bg-[#F7CE79] text-white py-2 px-4 rounded-lg w-40 md:w-32 sm:w-28 xs:w-24 font-poppins opacity-90 text-base md:text-sm sm:text-xs ${styles['notify-button']}`}
+              >
+                Notify Me
+              </button> */}
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
-const HackUTDCountdown: React.FC = () => {
-  return <HackCountdown targetDate={config.targetDate} />;
-};
-
-export default HackUTDCountdown;
+export default Countdown;

@@ -1,0 +1,13 @@
+.container::before {
+  content: '';
+  height: 100px;
+  width: 100%;
+  background-color: red;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.placeholder > img {
+  position: relative !important;
+}

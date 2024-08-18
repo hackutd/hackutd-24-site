@@ -21,7 +21,7 @@ import 'react-notion-x/src/styles.css';
 import 'prismjs/themes/prism-tomorrow.css';
 // used for rendering equations
 import 'katex/dist/katex.min.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { initParticlesEngine } from '../components/Particles';
 import { loadSlim } from '@tsparticles/slim';
 import { ParticlesContext } from '../components/Particles/ParticlesProvider';
@@ -29,6 +29,7 @@ import AppHeader2_Wrapper from '@/components/AppHeader2/wrapper';
 import AppNavbarBottom from '@/components/AppNavbarBottom/AppNavbarBottom';
 import { useRouter } from 'next/router';
 import { useUrlHash } from '@/lib/hooks';
+import { SectionReferenceContext } from '@/lib/context/section';
 
 initFirebase();
 
@@ -44,6 +45,9 @@ function PortalApp({ Component, pageProps }: AppProps) {
   const hash = useUrlHash('');
   const duckBackgroundPathnames = ['/profile'];
   const registerBackgroundPathnames = ['/register', '/auth'];
+  const faqRef = useRef<HTMLDivElement | null>(null);
+  const aboutRef = useRef<HTMLDivElement | null>(null);
+  const scheduleRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const el = document.getElementById(hash);
@@ -88,7 +92,7 @@ function PortalApp({ Component, pageProps }: AppProps) {
                 name="viewport"
                 content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
               />
-              <title>HackPortal</title> {/* !change */}
+              <title>HackUTD 2024</title> {/* !change */}
               <meta name="description" content="Your all-in-one guide to this hackathon." />
               {process.env.ENABLE_PWA ||
                 (process.env.NODE_ENV !== 'development' && (
@@ -112,30 +116,38 @@ function PortalApp({ Component, pageProps }: AppProps) {
                   />
                 </div>
               )}
+              <SectionReferenceContext.Provider
+                value={{
+                  faqRef,
+                  aboutRef,
+                  scheduleRef,
+                }}
+              >
+                <AppHeader2_Wrapper />
 
-              {registerBackgroundPathnames.includes(router.pathname) && (
-                <div className="fixed top-0 left-0 w-screen h-screen -z-10">
-                  <Image
-                    className="w-screen h-screen object-cover"
-                    alt="Register background"
-                    src={RegisterBackgroundImage.src}
-                    width={RegisterBackgroundImage.width}
-                    height={RegisterBackgroundImage.height}
-                  />
-                </div>
-              )}
+                {registerBackgroundPathnames.includes(router.pathname) && (
+                  <div className="fixed top-0 left-0 w-screen h-screen -z-10">
+                    <Image
+                      className="w-screen h-screen object-cover"
+                      alt="Register background"
+                      src={RegisterBackgroundImage.src}
+                      width={RegisterBackgroundImage.width}
+                      height={RegisterBackgroundImage.height}
+                    />
+                  </div>
+                )}
 
-              <AppHeader2_Wrapper />
+                <AppHeader2_Wrapper />
+                {/* Spacer at the top of the page so that content won't be covered by the navbar */}
+                {router.pathname !== '/' && <div className="hidden md:block h-[86px] shrink-0" />}
 
-              {/* Spacer at the top of the page so that content won't be covered by the navbar */}
-              {router.pathname !== '/' && <div className="hidden md:block h-[86px] shrink-0" />}
+                <Component {...pageProps} />
 
-              <Component {...pageProps} />
+                {/* Spacer at the bottom of the page for navbar bottom on mobile, so that content won't be covered by the navbar */}
+                <div className="md:hidden h-[80px] shrink-0" />
 
-              {/* Spacer at the bottom of the page for navbar bottom on mobile, so that content won't be covered by the navbar */}
-              <div className="md:hidden h-[80px] shrink-0" />
-
-              <AppNavbarBottom />
+                <AppNavbarBottom />
+              </SectionReferenceContext.Provider>
             </div>
           </ParticlesContext.Provider>
         </FCMProvider>

@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 import { RequestHelper } from '../lib/request-helper';
 import HomeNotif from '../components/homeComponents/HomeNotif';
 import HomeVideoStats from '../components/homeComponents/HomeVideoStats';
-import HomeAbout from '../components/homeComponents/HomeAbout';
+import HomeAboutText from '../components/homeComponents/HomeAboutText';
+import HomeAboutPhotos from '../components/homeComponents/HomeAboutPhotos';
 import HackCountdown from '../components/homeComponents/HackCountdown';
 import HomeSpeakers from '../components/homeComponents/HomeSpeakers';
 import HomeChallenges from '../components/homeComponents/HomeChallenges';
@@ -16,12 +17,14 @@ import HomeFaq from '../components/homeComponents/HomeFaq';
 import HomePrizes from '../components/homeComponents/HomePrizes';
 import HomeHero2 from '../components/homeComponents/HomeHero2';
 
-/**
- * The home page.
- *
- * Landing: /
- *
- */
+import themedBackground from '../public/assets/plain_bg.png';
+
+// import themedBackground from '../public/assets/hackutd-bg.png';
+import countdownClouds from '../public/assets/countdown_clouds.png';
+import cloud from '../public/assets/cloud.png';
+
+import Image from 'next/image';
+
 export default function Home(props: {
   keynoteSpeakers: KeynoteSpeaker[];
   challenges: Challenge[];
@@ -34,7 +37,6 @@ export default function Home(props: {
 }) {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    // Wait for all components to render before showing page
     setLoading(false);
   }, []);
 
@@ -49,71 +51,112 @@ export default function Home(props: {
   return (
     <>
       <Head>
-        <title>HackPortal</title> {/* !change */}
-        <meta name="description" content="A default HackPortal instance" /> {/* !change */}
+        <title>HackUTD 2024</title>
+        <meta name="description" content="A default HackPortal instance" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <HomeNotif />
+      {/* <HomeNotif /> */}
       <HomeHero2 />
-      <HomeVideoStats />
-      <HackCountdown />
-      <HomeAbout />
-      <HomeSchedule scheduleCard={props.scheduleCard} dateCard={props.dateCard} />
-      <HomeSpeakers keynoteSpeakers={props.keynoteSpeakers} />
-      <HomeChallenges challenges={props.challenges} />
-      <HomePrizes prizes={props.prizeData} />
-      <HomeTeam members={props.fetchedMembers} />
-      <HomeFaq answeredQuestion={props.answeredQuestion} />
-      <HomeSponsors sponsorCard={props.sponsorCard} />
-      <HomeFooter />
+      <HomeAboutText />
+      <div style={{ position: 'relative', zIndex: 0 }}>
+        {/* TODO: enable this when UI is finalized */}
+        {/* <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+          height: '100%',
+            backgroundImage: `url(${themedBackground.src})`,
+            backgroundSize: '100% 100%',
+            backgroundPosition: 'center top',
+            backgroundRepeat: 'no-repeat',
+          }}
+        /> */}
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <div
+            style={{
+              position: 'relative',
+              zIndex: 1,
+              backgroundImage: `url(${countdownClouds.src})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center 100px',
+              backgroundRepeat: 'no-repeat',
+            }}
+          >
+            <HomeAboutPhotos />
+            <HackCountdown />
+          </div>
+          <Image
+            style={{
+              position: 'absolute',
+              top: '1100px',
+              right: '-100px',
+              filter: 'blur(8px)',
+            }}
+            src={cloud.src}
+            width={300}
+            height={300}
+            alt="cloud.png"
+          />
+          {/* <HomeSchedule scheduleCard={props.scheduleCard} dateCard={props.dateCard} /> */}
+          {/* <HomeSpeakers keynoteSpeakers={props.keynoteSpeakers} /> */}
+          {/* <HomeChallenges challenges={props.challenges} /> */}
+          {/* include HomePrizes in HomeChallenges */}
+          {/* <HomePrizes prizes={props.prizeData} /> */}
+          <HomeFaq answeredQuestion={props.answeredQuestion} />
+          <HomeSponsors sponsorCard={props.sponsorCard} />
+          <HomeFooter />
+        </div>
+      </div>
     </>
   );
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const protocol = context.req.headers.referer?.split('://')[0] || 'http';
-  const { data: keynoteData } = await RequestHelper.get<KeynoteSpeaker[]>(
-    `${protocol}://${context.req.headers.host}/api/keynotespeakers`,
-    {},
-  );
-  const { data: challengeData } = await RequestHelper.get<Challenge[]>(
-    `${protocol}://${context.req.headers.host}/api/challenges/`,
-    {},
-  );
-  const { data: prizeData } = await RequestHelper.get<Array<{ rank: number; prizeName: string }>>(
-    `${protocol}://${context.req.headers.host}/api/prizes`,
-    {},
-  );
+  // const { data: keynoteData } = await RequestHelper.get<KeynoteSpeaker[]>(
+  //   `${protocol}://${context.req.headers.host}/api/keynotespeakers`,
+  //   {},
+  // );
+  // const { data: challengeData } = await RequestHelper.get<Challenge[]>(
+  //   `${protocol}://${context.req.headers.host}/api/challenges/`,
+  //   {},
+  // );
+  // const { data: prizeData } = await RequestHelper.get<Array<{ rank: number; prizeName: string }>>(
+  //   `${protocol}://${context.req.headers.host}/api/prizes`,
+  //   {},
+  // );
   const { data: answeredQuestion } = await RequestHelper.get<AnsweredQuestion[]>(
     `${protocol}://${context.req.headers.host}/api/questions/faq`,
     {},
   );
-  const { data: memberData } = await RequestHelper.get<TeamMember[]>(
-    `${protocol}://${context.req.headers.host}/api/members`,
-    {},
-  );
+  // const { data: memberData } = await RequestHelper.get<TeamMember[]>(
+  //   `${protocol}://${context.req.headers.host}/api/members`,
+  //   {},
+  // );
   const { data: sponsorData } = await RequestHelper.get<Sponsor[]>(
     `${protocol}://${context.req.headers.host}/api/sponsor`,
     {},
   );
-  const { data: scheduleData } = await RequestHelper.get<ScheduleEvent[]>(
-    `${protocol}://${context.req.headers.host}/api/schedule`,
-    {},
-  );
+  // const { data: scheduleData } = await RequestHelper.get<ScheduleEvent[]>(
+  //   `${protocol}://${context.req.headers.host}/api/schedule`,
+  //   {},
+  // );
   const { data: dateData } = await RequestHelper.get<ScheduleEvent[]>(
     `${protocol}://${context.req.headers.host}/api/dates`,
     {},
   );
   return {
     props: {
-      keynoteSpeakers: keynoteData,
-      challenges: challengeData,
+      // keynoteSpeakers: keynoteData,
+      // challenges: challengeData,
       answeredQuestion: answeredQuestion,
-      fetchedMembers: memberData,
+      // fetchedMembers: memberData,
       sponsorCard: sponsorData,
-      scheduleCard: scheduleData,
+      // scheduleCard: scheduleData,
       dateCard: dateData,
-      prizeData: prizeData,
+      // prizeData: prizeData,
     },
   };
 };

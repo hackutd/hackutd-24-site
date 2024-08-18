@@ -14,7 +14,7 @@ export default function HomeSpeakers(props: { keynoteSpeakers: KeynoteSpeaker[] 
 
   return (
     speakers.length != 0 && (
-      <section className=" overflow-x-auto min-h-[24rem] bg-[#F2F3FF] pb-20">
+      <section className=" overflow-x-auto min-h-[24rem] pb-20">
         <div className="text-center text-4xl md:text-5xl font-bold text-[#05149C] pt-8 pb-2 font-fredoka">
           Speakers
         </div>
