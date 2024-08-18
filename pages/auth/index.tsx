@@ -119,9 +119,9 @@ export default function AuthPage() {
       <section className="min-h-screen">
         <div className="p-4">
           <Link href="/" passHref legacyBehavior>
-            <div className="cursor-pointer items-center inline-flex text-white font-bold">
+            <div className="cursor-pointer items-center inline-flex text-white font-bold bg-[#40B7BA] rounded-lg px-3 py-2">
               <ChevronLeftIcon />
-              Home
+              return to event site
             </div>
           </Link>
         </div>
