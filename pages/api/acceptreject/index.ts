@@ -1,7 +1,10 @@
 import { firestore, messaging } from 'firebase-admin';
 import { NextApiRequest, NextApiResponse } from 'next';
 import initializeApi from '../../../lib/admin/init';
-import { userIsAuthorized } from '../../../lib/authorization/check-authorization';
+import {
+  extractUserDataFromToken,
+  userIsAuthorized,
+} from '../../../lib/authorization/check-authorization';
 
 initializeApi();
 const db = firestore();
@@ -16,6 +19,12 @@ export interface HackerStatus {
   hackerId: string;
   status: string;
 }
+
+function appIsAutoAccepted(appData: HackerStatus) {
+  return appData.adminId === 'admin';
+}
+
+const INFINITY = 1000000000;
 
 /**
  *
@@ -41,7 +50,7 @@ async function postHackerStatus(req: NextApiRequest, res: NextApiResponse) {
 
   const jobs = [];
   for (const hackerId of hackerIds) {
-    const docRef = db.collection('acceptreject').doc(`${adminId}-${hackerId}`);
+    const docRef = db.collection('acceptreject').doc(`${hackerId}-${adminId}`);
 
     jobs.push([
       hackerId,
@@ -84,28 +93,54 @@ async function postHackerStatus(req: NextApiRequest, res: NextApiResponse) {
  *
  */
 async function getAllHackers(req: NextApiRequest, res: NextApiResponse) {
-  const {
-    headers,
-    query: { adminId },
-  } = req;
+  const { headers } = req;
 
   const userToken = headers['authorization'];
-  const isAuthorized = await userIsAuthorized(userToken, ['super_admin']);
+  const userData = await extractUserDataFromToken(userToken);
+  const isAuthorized =
+    (userData.user.permissions as string[]).includes('super_admin') ||
+    (userData.user.permissions as string[]).includes('admin');
 
   if (!isAuthorized) {
     return res.status(403).json({
       msg: 'Request is not authorized to perform admin functionality.',
     });
   }
+  const adminId = userData.user.id; // TODO: fill out this value
 
-  const snapshot = await db.collection('acceptreject').where('adminId', '==', adminId).get();
+  const snapshot = await db.collection('acceptreject').get();
+  const hackerStatusData: Record<
+    string,
+    {
+      acceptCount: number;
+      rejectCount: number;
+      alreadyJudged: boolean;
+    }
+  > = {};
 
-  let hackers = [];
   snapshot.forEach((doc) => {
-    hackers.push(doc.data());
+    if (!Object.hasOwn(hackerStatusData, doc.data().hackerId)) {
+      hackerStatusData[doc.data().hackerId] = {
+        acceptCount: 0,
+        rejectCount: 0,
+        alreadyJudged: doc.data().adminId === adminId,
+      };
+    }
+    if (doc.data().status === 'Accepted') {
+      if (appIsAutoAccepted(doc.data() as HackerStatus)) {
+        hackerStatusData[doc.data().hackerId].acceptCount = INFINITY;
+      } else {
+        hackerStatusData[doc.data().hackerId].acceptCount++;
+      }
+    } else {
+      hackerStatusData[doc.data().hackerId].rejectCount++;
+    }
+    if (doc.data().adminId === adminId) {
+      hackerStatusData[doc.data().hackerId].alreadyJudged = true;
+    }
   });
 
-  res.json(hackers);
+  res.json(hackerStatusData);
 }
 
 function handlePostRequest(req: NextApiRequest, res: NextApiResponse) {

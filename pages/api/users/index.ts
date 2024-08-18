@@ -2,7 +2,10 @@ import { firestore } from 'firebase-admin';
 import { auth } from 'firebase-admin';
 import { NextApiRequest, NextApiResponse } from 'next';
 import initializeApi from '../../../lib/admin/init';
-import { userIsAuthorized } from '../../../lib/authorization/check-authorization';
+import {
+  extractUserDataFromToken,
+  userIsAuthorized,
+} from '../../../lib/authorization/check-authorization';
 
 initializeApi();
 const db = firestore();
@@ -64,7 +67,10 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
   const { headers } = req;
 
   const userToken = headers['authorization'];
-  const isAuthorized = await userIsAuthorized(userToken);
+  const userData = await extractUserDataFromToken(userToken);
+  const isAuthorized =
+    (userData.user.permissions as string[]).includes('super_admin') ||
+    (userData.user.permissions as string[]).includes('admin');
 
   if (!isAuthorized) {
     return res.status(403).json({
@@ -74,8 +80,20 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
 
   const collectionRef = await db.collection(USERS_COLLECTION).get();
   const data = collectionRef.docs.map((doc) => doc.data());
-
-  return res.json(data);
+  if (!(userData.user.permissions as string[]).includes('super_admin')) {
+    return res.json(
+      data.map((data) => ({
+        ...data,
+        user: {
+          ...data.user,
+          firstName: 'Anonymous',
+          lastName: '',
+        },
+      })),
+    );
+  } else {
+    return res.json(data);
+  }
 }
 
 function handleGetRequest(req: NextApiRequest, res: NextApiResponse) {
