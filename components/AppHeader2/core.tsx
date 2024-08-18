@@ -49,10 +49,12 @@ export default function AppHeader2_Core() {
           <button
             className="p-2 text-[#40B7BA] cursor-pointer"
             onClick={() => {
-              window.scroll({
-                top: 0,
-                behavior: 'smooth',
-              });
+              if (router.pathname === '/')
+                window.scroll({
+                  top: 0,
+                  behavior: 'smooth',
+                });
+              else router.push('/');
             }}
           >
             Home
@@ -71,20 +73,29 @@ export default function AppHeader2_Core() {
         </Link>*/}
           <button
             onClick={() => {
-              scheduleRef.current?.scrollIntoView({
-                behavior: 'smooth',
-              });
+              if (router.pathname === '/')
+                scheduleRef.current?.scrollIntoView({
+                  behavior: 'smooth',
+                });
+              else {
+                router.push('/#schedule-section');
+              }
             }}
             className="p-2 text-[#40B7BA] cursor-pointer"
           >
             Schedule
           </button>
+
           <button
             className="p-2 text-[#40B7BA] cursor-pointer"
             onClick={() => {
-              faqRef.current?.scrollIntoView({
-                behavior: 'smooth',
-              });
+              if (router.pathname === '/')
+                faqRef.current?.scrollIntoView({
+                  behavior: 'smooth',
+                });
+              else {
+                router.push('/#faq-section');
+              }
             }}
           >
             FAQ
