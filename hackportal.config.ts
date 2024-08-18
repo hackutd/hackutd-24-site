@@ -153,7 +153,7 @@ export const hackPortalConfig: HackPortalConfig = {
                 value: 'notHispanic',
               },
               {
-                title: 'Prefer not to say',
+                title: 'Prefer not to answer',
                 value: 'notSay',
               },
             ],
