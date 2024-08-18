@@ -130,13 +130,13 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
     setResumeFile(file);
   };
 
-  if (!allowedRegistrations) {
-    return (
-      <h1 className="mx-auto text-2xl mt-4 font-bold">
-        Registrations is closed and no longer allowed
-      </h1>
-    );
-  }
+  // if (!allowedRegistrations) {
+  //   return (
+  //     <h1 className="mx-auto text-2xl mt-4 font-bold">
+  //       Registrations is closed and no longer allowed
+  //     </h1>
+  //   );
+  // }
 
   // disable this for testing
   if (!user) {
@@ -422,6 +422,9 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                   <h2 className="sm:text-2xl text-xl font-semibold sm:mb-3 mb-1">
                     Teammate Questions
                   </h2>
+                  <p className="text-md my-6 font-bold">
+                    Emails of teammates should be the same as the email they registered with!
+                  </p>
                   <div className="flex flex-col">
                     {teammateQuestions.map((obj, idx) => (
                       <DisplayQuestion key={idx} obj={obj} />
