@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import oceanBorder from '../../public/assets/ocean-border.png';
 import styles from './HomeAboutText.module.css';
+import { SectionReferenceContext } from '@/lib/context/section';
 
 const HomeAboutText = () => {
   const fish1HoverStyle = {
@@ -11,8 +12,11 @@ const HomeAboutText = () => {
     animation: 'moveRight 120s linear infinite',
   };
 
+  const { aboutRef } = useContext(SectionReferenceContext);
+
   return (
     <div
+      ref={aboutRef}
       className="relative py-12 flex flex-col items-center justify-center font-jua"
       style={{
         background: '#54DDE8',

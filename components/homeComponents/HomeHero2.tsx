@@ -1,13 +1,15 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import Image from 'next/image';
 import MLH_Sticker from '../../public/assets/mlh-2025.png';
 import HackUTDTitle from '../../public/assets/HackUTD 2024 Title.png';
 import Duck from '../../public/assets/duck.png';
 import mascotLifeRing from '../../public/assets/mascot_life_ring.png';
 import styles from './HomeHero2.module.css';
+import { SectionReferenceContext } from '@/lib/context/section';
 
 export default function HomeHero2() {
   const [isShort, setIsShort] = useState(false);
+  const { aboutRef } = useContext(SectionReferenceContext);
   return (
     <section
       className={`bg-[url('/assets/hero.png')] md:bg-[url('/assets/hero-desktop.png')] lg:bg-[url('/assets/hero-xl.png')] ${styles.container} min-h-screen bg-center relative bg-white flex flex-col-reverse md:flex-col`}
@@ -115,7 +117,13 @@ export default function HomeHero2() {
       </div>
 
       {/* Learn More Text and Arrow */}
-      <a href="#what-is-hackutd">
+      <button
+        onClick={() => {
+          aboutRef.current?.scrollIntoView({
+            behavior: 'smooth',
+          });
+        }}
+      >
         <div className="absolute bottom-5 w-full flex flex-col items-center z-20">
           <p className="font-montserrat text-white text-lg md:text-xl">Learn More</p>
           <div className="animate-bounce">
@@ -131,7 +139,7 @@ export default function HomeHero2() {
             </svg>
           </div>
         </div>
-      </a>
+      </button>
     </section>
   );
 }

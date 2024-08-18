@@ -19,7 +19,7 @@ import 'react-notion-x/src/styles.css';
 import 'prismjs/themes/prism-tomorrow.css';
 // used for rendering equations
 import 'katex/dist/katex.min.css';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { initParticlesEngine } from '../components/Particles';
 import { loadSlim } from '@tsparticles/slim';
 import { ParticlesContext } from '../components/Particles/ParticlesProvider';
@@ -27,6 +27,7 @@ import AppHeader2_Wrapper from '@/components/AppHeader2/wrapper';
 import AppNavbarBottom from '@/components/AppNavbarBottom/AppNavbarBottom';
 import { useRouter } from 'next/router';
 import { useUrlHash } from '@/lib/hooks';
+import { SectionReferenceContext } from '@/lib/context/section';
 
 initFirebase();
 
@@ -41,6 +42,9 @@ function PortalApp({ Component, pageProps }: AppProps) {
   const [particlesInit, setParticlesInit] = useState(false);
   const hash = useUrlHash('');
   const duckBackgroundPathnames = ['/profile'];
+  const faqRef = useRef<HTMLDivElement | null>(null);
+  const aboutRef = useRef<HTMLDivElement | null>(null);
+  const scheduleRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const el = document.getElementById(hash);
@@ -109,18 +113,25 @@ function PortalApp({ Component, pageProps }: AppProps) {
                   />
                 </div>
               )}
+              <SectionReferenceContext.Provider
+                value={{
+                  faqRef,
+                  aboutRef,
+                  scheduleRef,
+                }}
+              >
+                <AppHeader2_Wrapper />
 
-              <AppHeader2_Wrapper />
+                {/* Spacer at the top of the page so that content won't be covered by the navbar */}
+                {router.pathname !== '/' && <div className="hidden md:block h-[86px] shrink-0" />}
 
-              {/* Spacer at the top of the page so that content won't be covered by the navbar */}
-              {router.pathname !== '/' && <div className="hidden md:block h-[86px] shrink-0" />}
+                <Component {...pageProps} />
 
-              <Component {...pageProps} />
+                {/* Spacer at the bottom of the page for navbar bottom on mobile, so that content won't be covered by the navbar */}
+                <div className="md:hidden h-[80px] shrink-0" />
 
-              {/* Spacer at the bottom of the page for navbar bottom on mobile, so that content won't be covered by the navbar */}
-              <div className="md:hidden h-[80px] shrink-0" />
-
-              <AppNavbarBottom />
+                <AppNavbarBottom />
+              </SectionReferenceContext.Provider>
             </div>
           </ParticlesContext.Provider>
         </FCMProvider>
