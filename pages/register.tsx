@@ -206,7 +206,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
       </Head>
       <section className="pl-4 relative mb-4">
         <Link href="/" passHref>
-          <div className="cursor-pointer items-center inline-flex text-white font-bold">
+          <div className="cursor-pointer items-center inline-flex text-white font-bold bg-[#40B7BA] rounded-lg px-3 py-2">
             <ChevronLeftIcon className="text-white" fontSize={'large'} />
             Home
           </div>
