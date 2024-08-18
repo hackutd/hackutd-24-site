@@ -1,4 +1,6 @@
 import Image from 'next/image';
+import DuckBackgroundImage from '@/public/assets/duck-background.png';
+import RegisterBackgroundImage from '@/public/assets/registration-background.png';
 import PondBackgroundImage from '@/public/assets/pond-background.png';
 import Head from 'next/head';
 import { AppProps } from 'next/dist/shared/lib/router/router';
@@ -42,6 +44,7 @@ function PortalApp({ Component, pageProps }: AppProps) {
   const [particlesInit, setParticlesInit] = useState(false);
   const hash = useUrlHash('');
   const duckBackgroundPathnames = ['/profile'];
+  const registerBackgroundPathnames = ['/register', '/auth'];
   const faqRef = useRef<HTMLDivElement | null>(null);
   const aboutRef = useRef<HTMLDivElement | null>(null);
   const scheduleRef = useRef<HTMLDivElement | null>(null);
@@ -122,6 +125,19 @@ function PortalApp({ Component, pageProps }: AppProps) {
               >
                 <AppHeader2_Wrapper />
 
+                {registerBackgroundPathnames.includes(router.pathname) && (
+                  <div className="fixed top-0 left-0 w-screen h-screen -z-10">
+                    <Image
+                      className="w-screen h-screen object-cover"
+                      alt="Register background"
+                      src={RegisterBackgroundImage.src}
+                      width={RegisterBackgroundImage.width}
+                      height={RegisterBackgroundImage.height}
+                    />
+                  </div>
+                )}
+
+                <AppHeader2_Wrapper />
                 {/* Spacer at the top of the page so that content won't be covered by the navbar */}
                 {router.pathname !== '/' && <div className="hidden md:block h-[86px] shrink-0" />}
 

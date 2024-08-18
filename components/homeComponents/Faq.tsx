@@ -17,9 +17,10 @@ import { SectionReferenceContext } from '@/lib/context/section';
  * Route: /about/faq
  */
 export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion[] }) {
-  const [loading, setLoading] = useState(true);
-  const [faqs, setFaqs] = useState<AnsweredQuestion[]>([]);
-  const [disclosuresStatus, setDisclosureStatus] = useState<boolean[]>();
+  const [faqs, setFaqs] = useState<AnsweredQuestion[]>(fetchedFaqs);
+  const [disclosuresStatus, setDisclosureStatus] = useState<boolean[]>(
+    fetchedFaqs.map(() => false),
+  );
   const { faqRef } = useContext(SectionReferenceContext);
 
   const fish1HoverStyle = {
@@ -33,20 +34,6 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
   const fish3HoverStyle = {
     animation: 'moveUpDown 2s infinite alternate',
   };
-
-  useEffect(() => {
-    setFaqs(fetchedFaqs);
-    setDisclosureStatus(fetchedFaqs.map(() => false));
-    setLoading(false);
-  }, [fetchedFaqs]);
-
-  if (loading) {
-    return (
-      <div>
-        <h1>Loading...</h1>
-      </div>
-    );
-  }
 
   return (
     <div className="flex flex-col flex-grow relative">
@@ -101,7 +88,7 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
             style={fish3HoverStyle}
           />
         </div>
-        <div ref={faqRef} className="pt-[8rem]">
+        <div id="faq-section" ref={faqRef} className="pt-[8rem]">
           <div className="bg-white mx-10 p-10 rounded-lg flex justify-between font-fredoka">
             <div className="pt-3">
               <h1 className="text-3xl mb-4 font-bold text-[#54DDE8]">FAQ</h1>
