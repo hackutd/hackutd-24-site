@@ -252,7 +252,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
             majorManual: '',
             universityManual: '',
             heardFromManual: '',
-            preferredEmail: formInitialValues.preferredEmail || user.preferredEmail || '',
+            preferredEmail: formInitialValues.preferredEmail || user?.preferredEmail || '',
           }}
           validateOnBlur={false}
           validateOnChange={false}
