@@ -1,8 +1,11 @@
 import Faq from './Faq';
 import styles from './HomeFaq.module.css';
 import Wave2 from '../assets/Wave2';
+import { useContext } from 'react';
+import { SectionReferenceContext } from '@/lib/context/section';
 
 export default function HomeFaq(props: { answeredQuestion: AnsweredQuestion[] }) {
+  const { scheduleRef } = useContext(SectionReferenceContext);
   return (
     props.answeredQuestion.length != 0 && (
       <section
@@ -16,9 +19,12 @@ export default function HomeFaq(props: { answeredQuestion: AnsweredQuestion[] })
         id="faq-section"
       >
         {/* placeholder text */}
-        <h1 className="text-6xl md:text-6xl sm:text-md xs:text-small font-bold text-[#F7CE79] text-stroke text-center py-10 uppercase">
-          Schedule coming soon...
-        </h1>
+        {/* TODO: change the ref value once we un-comment the HomeSchedule section */}
+        <div ref={scheduleRef}>
+          <h1 className="text-6xl md:text-6xl sm:text-md xs:text-small font-bold text-[#F7CE79] text-stroke text-center pb-10 pt-[10rem] uppercase">
+            Schedule coming soon...
+          </h1>
+        </div>
 
         {/* TODO: enable this when finalizing the UI */}
         {/* <Wave1

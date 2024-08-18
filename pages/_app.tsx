@@ -44,6 +44,7 @@ function PortalApp({ Component, pageProps }: AppProps) {
   const duckBackgroundPathnames = ['/profile'];
   const faqRef = useRef<HTMLDivElement | null>(null);
   const aboutRef = useRef<HTMLDivElement | null>(null);
+  const scheduleRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     const el = document.getElementById(hash);
@@ -116,6 +117,7 @@ function PortalApp({ Component, pageProps }: AppProps) {
                 value={{
                   faqRef,
                   aboutRef,
+                  scheduleRef,
                 }}
               >
                 <AppHeader2_Wrapper />

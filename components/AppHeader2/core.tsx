@@ -25,7 +25,7 @@ export default function AppHeader2_Core() {
   const isAdmin = isSuperAdmin || (user ? user.permissions.indexOf('admin') !== -1 : false);
   const [scanList, setScanList] = useState<Scan[]>([]);
   const [currentScan, setCurrentScan] = useState<Scan | null>(null);
-  const { faqRef } = useContext(SectionReferenceContext);
+  const { faqRef, scheduleRef } = useContext(SectionReferenceContext);
   useEffect(() => {
     async function getScanData() {
       const scans = await RequestHelper.get<Scan[]>('/api/scantypes', {
@@ -68,6 +68,16 @@ export default function AppHeader2_Core() {
           Resources
         </Link> 
         </Link>*/}
+        <button
+          onClick={() => {
+            scheduleRef.current?.scrollIntoView({
+              behavior: 'smooth',
+            });
+          }}
+          className="p-2 text-[#40B7BA] cursor-pointer"
+        >
+          Schedule
+        </button>
         <button
           className="p-2 text-[#40B7BA] cursor-pointer"
           onClick={() => {
