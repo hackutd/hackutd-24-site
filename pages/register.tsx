@@ -42,7 +42,6 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   // update this to false for testing
   const [loading, setLoading] = useState(false);
-  const [formValid, setFormValid] = useState(true);
   const [registrationSection, setRegistrationSection] = useState(0);
   const checkRedirect = async () => {
     if (!allowedRegistrations) return;
@@ -165,7 +164,9 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
     if (obj.numberInputQuestions)
       for (let inputObj of obj.numberInputQuestions) {
         if (inputObj.required) {
-          if (!values[inputObj.name] && values[inputObj.name] !== 0)
+          if (isNaN(parseInt(values[inputObj.name]))) {
+            errors[inputObj.name] = 'Invalid number';
+          } else if (!values[inputObj.name] && values[inputObj.name] !== 0)
             errors[inputObj.name] = 'Required';
         }
       }
@@ -249,6 +250,13 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
               errors = setErrors(obj, values, errors);
             }
 
+            const validPhoneNumber = /^(1[ -]?)?\d{3}[ -]?\d{3}[ -]?\d{4}$/.test(
+              values['phoneNumber'],
+            );
+            if (!validPhoneNumber) {
+              errors.phoneNumber = 'Invalid phone number';
+            }
+
             //additional custom error validation
             if (
               values.preferredEmail &&
@@ -281,7 +289,6 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
             return errors;
           }}
           onSubmit={async (values, { setSubmitting }) => {
-            await new Promise((r) => setTimeout(r, 500));
             let finalValues: any = values;
             //add user object
             const userValues: any = {
@@ -314,17 +321,16 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
             delete values.majorManual;
             delete values.heardFromManual;
             //submitting
-            handleSubmit(values);
+            await handleSubmit(values);
             setSubmitting(false);
             // alert(JSON.stringify(values, null, 2)); //Displays form results on submit for testing purposes
           }}
         >
-          {({ values, handleChange, isValid, dirty }) => (
+          {({ values, isValid, isSubmitting }) => (
             // Field component automatically hooks input to form values. Use name attribute to match corresponding value
             // ErrorMessage component automatically displays error based on validation above. Use name attribute to match corresponding value
             <Form
               onKeyDown={onKeyDown}
-              noValidate
               className="registrationForm px-4 md:px-24 w-full sm:text-base text-sm"
             >
               {/* General Questions */}
@@ -513,13 +519,13 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                   {/* Submit */}
                   <div className="mt-8 text-white">
                     <button
+                      disabled={isSubmitting}
                       type="submit"
                       className="mr-auto cursor-pointer px-4 py-2 rounded-lg bg-[#40B7BA] hover:brightness-90"
-                      onClick={() => setFormValid(!(!isValid || !dirty))}
                     >
                       Submit
                     </button>
-                    {!isValid && !formValid && (
+                    {!isValid && (
                       <div className="text-red-600 poppins-regular">
                         Error: The form has invalid fields. Please go through the form again to make
                         sure that every required fields are filled out.
