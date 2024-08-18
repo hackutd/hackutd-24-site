@@ -160,7 +160,7 @@ export const hackPortalConfig: HackPortalConfig = {
     //Question Topic
     schoolQuestions: [
       {
-        datalistQuestions: [
+        dropdownQuestions: [
           {
             //University question
             question:
@@ -168,11 +168,13 @@ export const hackPortalConfig: HackPortalConfig = {
             id: 'university',
             name: 'university',
             required: true,
-            datalist: 'schools',
-            options: schools.map(({ university }) => ({
-              title: university,
-              value: university,
-            })),
+            options: [
+              ...schools.map(({ university }) => ({
+                title: university,
+                value: university,
+              })),
+              { title: 'Other', value: 'Other' },
+            ],
             initialValue: '',
           },
           {
@@ -181,17 +183,15 @@ export const hackPortalConfig: HackPortalConfig = {
             id: 'major',
             name: 'major',
             required: true,
-            datalist: 'majors',
-            options: majors.map(({ major }) => ({
-              title: major,
-              value: major,
-            })),
+            options: [
+              ...majors.map(({ major }) => ({
+                title: major,
+                value: major,
+              })),
+              { title: 'Other', value: 'Other' },
+            ],
             initialValue: '',
           },
-        ],
-      },
-      {
-        dropdownQuestions: [
           {
             //Grade question
             question: 'Current level of study',

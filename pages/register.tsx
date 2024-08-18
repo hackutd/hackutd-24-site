@@ -215,7 +215,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
 
       <section className="relative">
         <Formik
-          initialValues={formInitialValues}
+          initialValues={{ ...formInitialValues, majorManual: '', universityManual: '' }}
           validateOnBlur={false}
           validateOnChange={false}
           //validation
@@ -262,6 +262,13 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
               errors.hackathonExperience = 'Not a valid number';
             }
 
+            if (values['major'] === 'Other' && values['majorManual'] === '') {
+              errors['majorManual'] = 'Required';
+            }
+
+            if (values['university'] === 'Other' && values['universityManual'] === '') {
+              errors['universityManual'] = 'Required';
+            }
             return errors;
           }}
           onSubmit={async (values, { setSubmitting }) => {
@@ -282,6 +289,16 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
             delete finalValues.permissions;
             delete finalValues.preferredEmail;
 
+            if (values['university'] === 'Other') {
+              values['university'] = values['universityManual'];
+            }
+
+            if (values['major'] === 'Other') {
+              values['major'] = values['majorManual'];
+            }
+
+            delete values.universityManual;
+            delete values.majorManual;
             //submitting
             handleSubmit(values);
             setSubmitting(false);
@@ -339,6 +356,38 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                     {schoolQuestions.map((obj, idx) => (
                       <DisplayQuestion key={idx} obj={obj} />
                     ))}
+                    {values['major'] === 'Other' && (
+                      <DisplayQuestion
+                        key={1000}
+                        obj={{
+                          textInputQuestions: [
+                            {
+                              id: 'majorManual',
+                              name: 'majorManual',
+                              question: 'What is your major?',
+                              required: values['major'] === 'Other',
+                              initialValue: '',
+                            },
+                          ],
+                        }}
+                      />
+                    )}
+                    {values['university'] === 'Other' && (
+                      <DisplayQuestion
+                        key={1000}
+                        obj={{
+                          textInputQuestions: [
+                            {
+                              id: 'universityManual',
+                              name: 'universityManual',
+                              question: 'What is your university?',
+                              required: values['university'] === 'Other',
+                              initialValue: '',
+                            },
+                          ],
+                        }}
+                      />
+                    )}
                   </div>
                 </section>
               )}

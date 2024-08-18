@@ -13,7 +13,13 @@ function DisplayQuestion(props: { obj: QuestionTypes }) {
   return (
     <Fragment>
       {/* Display text input questions */}
-      <div className={styles.textInputQuestionsContainer}>
+      <div
+        className={styles.textInputQuestionsContainer}
+        style={{
+          gridTemplateColumns:
+            (props.obj.textInputQuestions?.length || 0) === 1 ? 'repeat(1, 1fr)' : 'repeat(2, 1fr)',
+        }}
+      >
         {props.obj.textInputQuestions?.map((inputObj) => (
           <Question key={inputObj.id} type="text" question={inputObj} />
         ))}
