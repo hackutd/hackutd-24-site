@@ -215,7 +215,12 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
 
       <section className="relative">
         <Formik
-          initialValues={{ ...formInitialValues, majorManual: '', universityManual: '' }}
+          initialValues={{
+            ...formInitialValues,
+            majorManual: '',
+            universityManual: '',
+            heardFromManual: '',
+          }}
           validateOnBlur={false}
           validateOnChange={false}
           //validation
@@ -269,6 +274,10 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
             if (values['university'] === 'Other' && values['universityManual'] === '') {
               errors['universityManual'] = 'Required';
             }
+
+            if (values['heardFrom'] === 'Other' && values['heardFromManual'] === '') {
+              errors['heardFromManual'] = 'Required';
+            }
             return errors;
           }}
           onSubmit={async (values, { setSubmitting }) => {
@@ -297,8 +306,13 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
               values['major'] = values['majorManual'];
             }
 
+            if (values['heardFrom'] === 'Other') {
+              values['heardFrom'] = values['heardFromManual'];
+            }
+
             delete values.universityManual;
             delete values.majorManual;
+            delete values.heardFromManual;
             //submitting
             handleSubmit(values);
             setSubmitting(false);
@@ -402,6 +416,22 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                     {hackathonExperienceQuestions.map((obj, idx) => (
                       <DisplayQuestion key={idx} obj={obj} />
                     ))}
+                    {values['heardFrom'] === 'Other' && (
+                      <DisplayQuestion
+                        key={1000}
+                        obj={{
+                          textInputQuestions: [
+                            {
+                              id: 'heardFromManual',
+                              name: 'heardFromManual',
+                              question: 'Where did you hear about HackUTD Ripple Effect?',
+                              required: values['heardFrom'] === 'Other',
+                              initialValue: '',
+                            },
+                          ],
+                        }}
+                      />
+                    )}
                   </div>
                 </section>
               )}
