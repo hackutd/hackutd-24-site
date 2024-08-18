@@ -1,12 +1,13 @@
 import { useAuthContext } from '@/lib/user/AuthContext';
 import { Menu, Transition } from '@headlessui/react';
 import Link from 'next/link';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useContext, useEffect, useState } from 'react';
 import AdminNavbarColumn from './AdminNavbarColumn';
 import { useRouter } from 'next/router';
 import AdminNavbarGrid from './AdminNavbarGrid';
 import { RequestHelper } from '@/lib/request-helper';
 import QRScanDialog from './QRScanDialog';
+import { SectionReferenceContext } from '@/lib/context/section';
 
 type Scan = {
   precendence: number;
@@ -24,6 +25,7 @@ export default function AppHeader2_Core() {
   const isAdmin = isSuperAdmin || (user ? user.permissions.indexOf('admin') !== -1 : false);
   const [scanList, setScanList] = useState<Scan[]>([]);
   const [currentScan, setCurrentScan] = useState<Scan | null>(null);
+  const { faqRef } = useContext(SectionReferenceContext);
   useEffect(() => {
     async function getScanData() {
       const scans = await RequestHelper.get<Scan[]>('/api/scantypes', {
@@ -42,10 +44,18 @@ export default function AppHeader2_Core() {
   return (
     <div className="flex justify-center py-2 w-full">
       {/* Real navbar */}
-      <div className="font-dmSans flex items-center gap-4 border-[3px] border-[rgba(30,30,30,0.60)] rounded-xl px-20 bg-white">
-        <Link href="/" className="p-2 text-[#40B7BA] cursor-pointer">
+      <div className="font-dmSans flex items-center gap-4 border-[3px] border-[rgba(30,30,30,0.60)] rounded-xl px-20 bg-white p-2 text-[#40B7BA] cursor-pointer">
+        <button
+          className="p-2 text-[#40B7BA] cursor-pointer"
+          onClick={() => {
+            window.scroll({
+              top: 0,
+              behavior: 'smooth',
+            });
+          }}
+        >
           Home
-        </Link>
+        </button>
         {/* <Link href="/#schedule-section" className="p-2 text-[#40B7BA] cursor-pointer">
       <div className="font-dmSans flex items-center gap-4 border-[3px] border-[rgba(30,30,30,0.60)] rounded-xl px-20 lg:px-[8rem] bg-white relative">
         <Link href="/" className="p-2 text-[#40B7BA] cursor-pointer">
@@ -58,9 +68,16 @@ export default function AppHeader2_Core() {
           Resources
         </Link> 
         </Link>*/}
-        <Link href="/#faq-section" className="p-2 text-[#40B7BA] cursor-pointer">
+        <button
+          className="p-2 text-[#40B7BA] cursor-pointer"
+          onClick={() => {
+            faqRef.current?.scrollIntoView({
+              behavior: 'smooth',
+            });
+          }}
+        >
           FAQ
-        </Link>
+        </button>
         <QRScanDialog scan={currentScan} onModalClose={() => setCurrentScan(null)} />
 
         {isAdmin && (
