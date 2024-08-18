@@ -130,14 +130,14 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
     setResumeFile(file);
   };
 
-  if (!allowedRegistrations) {
-    return (
-      <h1 className="mx-auto text-2xl mt-4 font-bold">
-        Registrations is closed and no longer allowed
-      </h1>
-    );
-  }
-
+  // if (!allowedRegistrations) {
+  //   return (
+  //     <h1 className="mx-auto text-2xl mt-4 font-bold">
+  //       Registrations is closed and no longer allowed
+  //     </h1>
+  //   );
+  // }
+  //
   // disable this for testing
   if (!user) {
     // If user haven't signed in, redirect them to login page
@@ -483,6 +483,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
             {Array.from({ length: 7 }).map((_, i) => (
               <div
                 key={i}
+                onClick={() => setRegistrationSection(i)}
                 style={{ backgroundColor: registrationSection == i ? '#4C4950' : '#9F9EA7' }}
                 className="rounded-full w-3 h-3 mr-2"
               />
