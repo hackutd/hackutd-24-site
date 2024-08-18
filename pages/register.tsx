@@ -130,13 +130,13 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
     setResumeFile(file);
   };
 
-  // if (!allowedRegistrations) {
-  //   return (
-  //     <h1 className="mx-auto text-2xl mt-4 font-bold">
-  //       Registrations is closed and no longer allowed
-  //     </h1>
-  //   );
-  // }
+  if (!allowedRegistrations) {
+    return (
+      <h1 className="mx-auto text-2xl mt-4 font-bold">
+        Registrations is closed and no longer allowed
+      </h1>
+    );
+  }
 
   // disable this for testing
   if (!user) {
@@ -441,7 +441,10 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                       Submit
                     </button>
                     {!isValid && !formValid && (
-                      <div className="text-red-600">Error: The form has invalid fields</div>
+                      <div className="text-red-600 poppins-regular">
+                        Error: The form has invalid fields. Please go through the form again to make
+                        sure that every required fields are filled out.
+                      </div>
                     )}
                   </div>
                 </section>
