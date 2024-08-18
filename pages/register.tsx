@@ -130,13 +130,13 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
     setResumeFile(file);
   };
 
-  if (!allowedRegistrations) {
-    return (
-      <h1 className="mx-auto text-2xl mt-4 font-bold">
-        Registrations is closed and no longer allowed
-      </h1>
-    );
-  }
+  // if (!allowedRegistrations) {
+  //   return (
+  //     <h1 className="mx-auto text-2xl mt-4 font-bold">
+  //       Registrations is closed and no longer allowed
+  //     </h1>
+  //   );
+  // }
 
   // disable this for testing
   if (!user) {
@@ -200,7 +200,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
   return (
     <div className="flex flex-col flex-grow">
       <Head>
-        <title>Hacker Registration</title>
+        <title>Hacker Application</title>
         <meta name="description" content="Register for [HACKATHON NAME]" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -318,7 +318,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                 <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-4 py-10 px-8 mb-8 text-[#4C4950]">
                   <header>
                     <h1 className="text-[#40B7BA] lg:text-4xl sm:text-3xl text-2xl font-bold text-center mt-2 md:mt-8 mb-4 poppins-bold">
-                      Hacker Registration
+                      Hacker Appplication
                     </h1>
                     <div
                       style={{ color: '#A6A4A8' }}
