@@ -28,9 +28,12 @@ function Question(props: QuestionProps) {
   if (props.type === 'text') {
     return (
       <div key={props.question.id} className="flex flex-col">
-        <label htmlFor={props.question.name} className="mt-4 poppins-regular mb-1">
-          {props.question.required ? '*' : ''}
+        <label
+          htmlFor={props.question.name}
+          className="flex items-center mt-4 poppins-regular mb-1"
+        >
           {props.question.question}
+          {!props.question.required && <span className="ml-2 text-sm">optional</span>}
         </label>
         <Field name={props.question.name} type="text">
           {({ field }: FieldProps) => (
@@ -62,9 +65,12 @@ function Question(props: QuestionProps) {
   } else if (props.type === 'number') {
     return (
       <div className="flex flex-col" key={props.question.id}>
-        <label htmlFor={props.question.name} className="mt-4 poppins-regular mb-1">
-          {props.question.required ? '*' : ''}
+        <label
+          htmlFor={props.question.name}
+          className="flex items-center mt-4 poppins-regular mb-1"
+        >
           {props.question.question}
+          {!props.question.required && <span className="ml-2 text-xs">optional</span>}
         </label>
         <Field name={props.question.name}>
           {({ field }: FieldProps) => (
@@ -101,9 +107,12 @@ function Question(props: QuestionProps) {
   } else if (props.type === 'dropdown') {
     return (
       <div className="flex flex-col" key={props.question.id}>
-        <label htmlFor={props.question.name} className="mt-4 poppins-regular mb-1">
-          {props.question.required ? '*' : ''}
+        <label
+          htmlFor={props.question.name}
+          className="flex items-center mt-4 poppins-regular mb-1"
+        >
           {props.question.question}
+          {!props.question.required && <span className="ml-2 text-xs">optional</span>}
         </label>
         <Field as="select" name={props.question.name}>
           {({ field }: FieldProps) => (
@@ -134,9 +143,12 @@ function Question(props: QuestionProps) {
   } else if (props.type === 'checkbox') {
     return (
       <div className="flex flex-col" key={props.question.id}>
-        <label htmlFor={props.question.name} className="mt-4 poppins-regular mb-1">
-          {props.question.required ? '*' : ''}
+        <label
+          htmlFor={props.question.name}
+          className="flex items-center mt-4 poppins-regular mb-1"
+        >
           {props.question.question}
+          {!props.question.required && <span className="ml-2 text-xs">optional</span>}
         </label>
         <div role="group" aria-labelledby="checkbox-group" className="flex flex-col">
           {(props.question as CheckboxQuestion).options.map((option) => (
@@ -170,9 +182,12 @@ function Question(props: QuestionProps) {
   } else if (props.type === 'datalist') {
     return (
       <div className="flex flex-col" key={props.question.id}>
-        <label htmlFor={props.question.name} className="mt-4 mb-1 poppins-regular">
-          {props.question.required ? '*' : ''}
+        <label
+          htmlFor={props.question.name}
+          className="flex items-center mt-4 mb-1 poppins-regular"
+        >
           {props.question.question}
+          {!props.question.required && <span className="ml-2 text-xs">optional</span>}
         </label>
         <Field
           type="text"
@@ -199,9 +214,12 @@ function Question(props: QuestionProps) {
   } else if (props.type === 'textArea') {
     return (
       <div className="flex flex-col" key={props.question.id}>
-        <label htmlFor={props.question.name} className="mt-4 poppins-regular mb-1">
-          {props.question.required ? '*' : ''}
+        <label
+          htmlFor={props.question.name}
+          className="flex items-center mt-4 poppins-regular mb-1"
+        >
           {props.question.question}
+          {!props.question.required && <span className="ml-2 text-xs">optional</span>}
         </label>
         <Field
           as="textarea"
