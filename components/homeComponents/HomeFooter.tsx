@@ -26,13 +26,11 @@ export default function HomeFooter() {
     <section className="md:text-base text-xs relative bg-[#40B7BA] text-white">
       <div className="flex">
         <div className="z-10 grid grid-cols-1 lg:gap-36 lg:grid-cols-3">
-          <div className="lg:text-white p-10">
+          <div className="lg:text-white p-10 flex flex-col gap-y-2">
             <h1 className="font-bold text-2xl">HackUTD</h1>
-            {/* <p style={{ maxWidth: '300px' }} className="mt-1">
-              Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint. Velit
-              officia consequat duis enim velit mollit. Exercitation veniam consequat sunt nostrud
-              amet.
-            </p> */}
+            <Link href="mailto:hello@hackutd.co">
+              <p className="underline underline-offset-8 mt-1 font-medium">Contact Us</p>
+            </Link>
             {/* social media here */}
           </div>
           <div className="p-10" style={{ minWidth: '400px', fontFamily: 'inter' }}>
@@ -40,7 +38,7 @@ export default function HomeFooter() {
             <div className="font-light">
               <p className="mb-2">
                 Check out HackUTD’s{' '}
-                <span className="font-semibold cursor-pointer">
+                <span className="font-semibold cursor-pointer underline underline-offset-8">
                   <Link href="https://hackutd.co/" target="_blank">
                     organizer website
                   </Link>
@@ -54,12 +52,12 @@ export default function HomeFooter() {
                 and <span className="font-semibold">ACM Development</span>
               </p>
               <Link target="_blank" href="https://github.com/acmutd/hackportal">
-                <p className="cursor-pointer mb-2">Source Code</p>
+                <p className="cursor-pointer mb-2 underline underline-offset-8">Source Code</p>
               </Link>
             </div>
           </div>
           <div className="p-10" style={{ maxWidth: '300px', fontFamily: 'inter' }}>
-            <h1 className="font-semibold text-xl mb-3">Contact Us</h1>
+            <h1 className="font-semibold text-xl mb-3">Follow our Newsletter</h1>
             {/* input for email */}
             <input
               style={{ backgroundColor: '#E2E2E2' }}
