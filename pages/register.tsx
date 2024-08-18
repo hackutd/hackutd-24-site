@@ -64,6 +64,37 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
   }, [user]);
 
   const handleSubmit = async (registrationData) => {
+    let finalValues: any = registrationData;
+    //add user object
+    const userValues: any = {
+      id: registrationData.id,
+      firstName: registrationData.firstName,
+      lastName: registrationData.lastName,
+      preferredEmail: registrationData.preferredEmail,
+      permissions: registrationData.permissions,
+    };
+    finalValues['user'] = userValues;
+    //delete unnecessary values
+    delete finalValues.firstName;
+    delete finalValues.lastName;
+    delete finalValues.permissions;
+    delete finalValues.preferredEmail;
+
+    if (registrationData['university'] === 'Other') {
+      registrationData['university'] = registrationData['universityManual'];
+    }
+
+    if (registrationData['major'] === 'Other') {
+      registrationData['major'] = registrationData['majorManual'];
+    }
+
+    if (registrationData['heardFrom'] === 'Other') {
+      registrationData['heardFrom'] = registrationData['heardFromManual'];
+    }
+
+    delete registrationData.universityManual;
+    delete registrationData.majorManual;
+    delete registrationData.heardFromManual;
     let resumeUrl: string = '';
     try {
       if (resumeFile) {
@@ -221,6 +252,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
             majorManual: '',
             universityManual: '',
             heardFromManual: '',
+            preferredEmail: formInitialValues.preferredEmail || user.preferredEmail,
           }}
           validateOnBlur={false}
           validateOnChange={false}
@@ -289,37 +321,6 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
             return errors;
           }}
           onSubmit={async (values, { setSubmitting }) => {
-            let finalValues: any = values;
-            //add user object
-            const userValues: any = {
-              id: values.id,
-              firstName: values.firstName,
-              lastName: values.lastName,
-              preferredEmail: values.preferredEmail,
-              permissions: values.permissions,
-            };
-            finalValues['user'] = userValues;
-            //delete unnecessary values
-            delete finalValues.firstName;
-            delete finalValues.lastName;
-            delete finalValues.permissions;
-            delete finalValues.preferredEmail;
-
-            if (values['university'] === 'Other') {
-              values['university'] = values['universityManual'];
-            }
-
-            if (values['major'] === 'Other') {
-              values['major'] = values['majorManual'];
-            }
-
-            if (values['heardFrom'] === 'Other') {
-              values['heardFrom'] = values['heardFromManual'];
-            }
-
-            delete values.universityManual;
-            delete values.majorManual;
-            delete values.heardFromManual;
             //submitting
             await handleSubmit(values);
             setSubmitting(false);
