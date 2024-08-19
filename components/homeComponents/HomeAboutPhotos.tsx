@@ -27,7 +27,7 @@ const HomeAboutPhotos = () => {
   };
 
   return (
-    <div className="relative flex flex-col items-center justify-center font-jua mt-60">
+    <div className="relative flex flex-col items-center justify-center font-jua">
       <style>
         {`
           @keyframes moveUpDown {
