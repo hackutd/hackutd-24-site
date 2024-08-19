@@ -22,18 +22,18 @@ export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
 
   return (
     sponsor.length != 0 && (
-      <section className="relative pt-[10rem] bg-[#DAC397]">
+      <section className="relative pt-[10rem] bg-[#DAC397] font-fredoka">
         {/* TODO: will update styling better once get more assets and finalized content */}
         <div>
-          <div className="text-center text-3xl text-white">
-            <h1 className="uppercase">see you there!</h1>
+          <div className="text-center text-5xl text-white">
+            <h1 className="uppercase font-bold">see you there!</h1>
           </div>
           <div className="flex flex-wrap w-full items-end justify-center mb-8">
             <div
               className={styles.placeholder}
               style={{
                 position: 'relative',
-                maxWidth: '100vw',
+                maxWidth: '90vw',
               }}
             >
               <Image src={PlaceholderMascot.src} layout="fill" alt="placeholder_5" />
@@ -41,12 +41,10 @@ export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
           </div>
         </div>
         <div className="flex flex-col flex-grow">
-          <h4 className="text-white font-semibold md:text-2xl text-xl my-4 text-center uppercase font-fredoka">
+          <h4 className="text-white font-bold md:text-5xl text-2xl my-4 text-center uppercase font-fredoka pt-32">
             Sponsorship
           </h4>
-          <h2 className="uppercase text-center text-white font-bold text-4xl">
-            interested in sponsoring?
-          </h2>
+          <h2 className="uppercase text-center text-white text-3xl">interested in sponsoring?</h2>
           <h2 className="mt-1 text-center text-white">If you would like to sponsor HackUTD,</h2>
           <h2 className="text-center text-white">
             please reach out to us at&nbsp;
@@ -69,9 +67,8 @@ export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
           </section>
         </div>
         <div className="mt-4">
-  <p className="text-4xl text-center font-bold text-white">and more to come!</p>
-</div>
-
+          <p className="text-4xl text-center text-white pb-28">and more to come!</p>
+        </div>
       </section>
     )
   );
