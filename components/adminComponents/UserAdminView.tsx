@@ -151,7 +151,7 @@ export default function UserAdminView({
                 className={`py-0.6 px-6 rounded-md  ${
                   user.status === 'Accepted' ? 'text-[#409019] bg-[#84DF58]/25' : ''
                 } ${user.status === 'Rejected' ? 'text-[#872852] bg-[#EA609C]/25' : ''}
-                  ${user.status === 'Waiting' ? 'text-[#F59E0B] bg-[#FDE68A]/25' : ''}
+                  ${user.status === 'In Review' ? 'text-[#F59E0B] bg-[#FDE68A]/25' : ''}
                   `}
               >
                 {user.status}
@@ -202,7 +202,7 @@ export default function UserAdminView({
                   className={`text-lg font-bold py-1 px-6 rounded-md ${
                     currentUser.status === 'Accepted' ? 'text-[#409019] bg-[#84DF58]/25' : ''
                   } ${currentUser.status === 'Rejected' ? 'text-[#872852] bg-[#EA609C]/25' : ''}
-                  ${currentUser.status === 'Waiting' ? 'text-[#F59E0B] bg-[#FDE68A]/25' : ''}
+                  ${currentUser.status === 'In Review' ? 'text-[#F59E0B] bg-[#FDE68A]/25' : ''}
                   `}
                 >
                   {currentUser.status}
