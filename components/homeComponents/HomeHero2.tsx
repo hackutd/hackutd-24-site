@@ -2,7 +2,7 @@ import { useContext, useState } from 'react';
 import Image from 'next/image';
 import MLH_Sticker from '../../public/assets/mlh-2025.png';
 import HackUTDTitle from '../../public/assets/HackUTD 2024 Title.png';
-import Duck from '../../public/assets/duck.png';
+import DuckMoving from '../../public/assets/duck-moving.gif';
 import mascotLifeRing from '../../public/assets/mascot_life_ring.png';
 import styles from './HomeHero2.module.css';
 import { SectionReferenceContext } from '@/lib/context/section';
@@ -48,11 +48,11 @@ export default function HomeHero2() {
             {/* Duck image */}
             <div className="w-[10rem] absolute top-[20%] md:top-[10%] right-[25%] md:w-[20rem] lg:w-[25rem] mb-4">
               <Image
-                src={Duck.src}
+                src={DuckMoving.src}
                 alt="Duck"
                 layout="responsive"
-                width={Duck.width}
-                height={Duck.height}
+                width={DuckMoving.width}
+                height={DuckMoving.height}
               />
             </div>
 
