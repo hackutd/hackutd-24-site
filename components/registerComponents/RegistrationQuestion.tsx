@@ -174,7 +174,7 @@ function Question(props: QuestionProps) {
               />
               &nbsp;{option.title}
               {option.link && option.linkText && (
-                <a href={option.link} className="text-[#40B7BA] hover:underline">
+                <a href={option.link} target="_blank" className="text-[#40B7BA] hover:underline">
                   {option.linkText}
                 </a>
               )}
