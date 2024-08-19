@@ -54,7 +54,7 @@ const Countdown = () => {
     <>
       <div
         className="relative min-h-screen flex flex-col items-center justify-center font-jua"
-        style={{ position: 'relative', minHeight: '120vh' }}
+        style={{ position: 'relative', minHeight: '100vh' }}
       >
         <div className="relative flex justify-center items-center w-full " style={cloudHoverStyle}>
           <div
