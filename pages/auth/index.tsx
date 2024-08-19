@@ -116,16 +116,16 @@ export default function AuthPage() {
 
   return (
     <>
-      <section className="bg-secondary min-h-screen">
+      <section className="min-h-screen">
         <div className="p-4">
           <Link href="/" passHref legacyBehavior>
-            <div className="cursor-pointer items-center inline-flex text-primaryDark font-medium">
+            <div className="cursor-pointer items-center inline-flex text-white font-bold bg-[#40B7BA] rounded-lg px-3 py-2">
               <ChevronLeftIcon />
               return to event site
             </div>
           </Link>
         </div>
-        <div className="py-2 md:px-16 px-10 flex items-center justify-center flex-wrap">
+        <div className="py-2 md:px-16 px-0 flex items-center justify-center flex-wrap">
           <div className="xl:w-1/2 lg:w-2/3 w-5/6 my-4">
             <section
               id="signInSection"
@@ -133,16 +133,16 @@ export default function AuthPage() {
             >
               {!passwordResetDialog ? (
                 <>
-                  <h1 className="md:text-3xl text-2xl text-center text-primaryDark mt-4 poppins-bold">
+                  <h1 className="md:text-3xl text-2xl text-center text-[#40B7BA] mt-4 poppins-bold">
                     {signInOption ? 'Login' : 'Create an account'}
                   </h1>
-                  <div className="text-center text-complementary/60 mt-4 mb-12 poppins-semibold">
+                  <div className="text-center text-[#4C495080] mt-4 mb-12 poppins-semibold">
                     {signInOption ? ' New to HackUTD?' : 'Already have an account?'}{' '}
                     <span
                       onClick={() =>
                         signInOption ? setSignInOption(false) : setSignInOption(true)
                       }
-                      className="text-primaryDark cursor-pointer underline"
+                      className="text-[#40B7BA] cursor-pointer underline"
                     >
                       {signInOption ? 'Register here!' : 'Sign in'}
                     </span>
@@ -161,17 +161,17 @@ export default function AuthPage() {
                       />
 
                       <div className="inline-flex md:flex justify-between md:flex-row flex-col-reverse poppins-semibold text-sm">
-                        <div className="text-primaryDark">
+                        <div className="text-[#40B7BA]">
                           {/* TODO: should this feature be implemented or does it already exist? */}
                           <input
-                            className="mr-2 r text-primaryDark focus:ring-0 border border-primaryDark text-sm"
+                            className="mr-2 r text-[#40B7BA] focus:ring-0 border border-[#40B7BA] text-sm cursor-pointer"
                             type="checkbox"
                             onClick={() => setRememberMe(!rememberMe)}
                           />
-                          Remember be
+                          Remember me
                         </div>
                         <div
-                          className="hover:underline cursor-pointer text-left text-primaryDark"
+                          className="hover:underline cursor-pointer text-left text-[#40B7BA] mb-4 md:mb-0"
                           onClick={() => {
                             setPasswordResetDialog(true);
                             setErrorMsg('');
@@ -185,7 +185,7 @@ export default function AuthPage() {
                       <div className="flex justify-center mt-6 mb-4">
                         <button
                           type="button"
-                          className="rounded-lg text-base w-full text-white bg-primaryDark hover:brightness-90 px-4 py-2"
+                          className="rounded-lg text-base w-full text-white bg-[#40B7BA] hover:brightness-90 px-4 py-2"
                           onClick={() => {
                             handleSubmit();
                           }}
@@ -209,7 +209,7 @@ export default function AuthPage() {
                       <p>or continue with</p>
                     </div>
                     <button
-                      className="mt-2 px-4 py-2 w-full rounded-lg border border-complementary/20 text-complementary bg-white my-4 text-base font-bold text-center flex items-center justify-center"
+                      className="mt-2 px-4 py-2 w-full rounded-lg border border-[#4C495026] text-[#79767C] bg-white my-4 text-base font-bold text-center flex items-center justify-center"
                       onClick={() => signInWithGoogle()}
                     >
                       <Image src={GoogleIcon} alt="GoogleIcon" width={25} height={25} />
@@ -221,17 +221,17 @@ export default function AuthPage() {
                 <React.Fragment>
                   <div className="text-left">
                     <ArrowBackIcon
-                      className="cursor-pointer text-primaryDark"
+                      className="cursor-pointer text-[#40B7BA]"
                       onClick={() => {
                         setPasswordResetDialog(false);
                         setErrorMsg('');
                       }}
                     />
                   </div>
-                  <h1 className="md:text-3xl text-2xl font-black text-center text-primaryDark mt-4">
+                  <h1 className="md:text-3xl text-2xl font-black text-center text-[#40B7BA] mt-4">
                     Reset Password
                   </h1>
-                  <div className="text-center text-complementary/60 mt-4 mb-12">
+                  <div className="text-center text-[#4C495080] mt-4 mb-12">
                     Enter your email address and we&apos;ll send you a link to reset your password.
                   </div>
 
@@ -247,7 +247,7 @@ export default function AuthPage() {
                   <div className="flex justify-center mt-6 mb-4">
                     <button
                       type="button"
-                      className="rounded-full text-base w-full text-white bg-primaryDark hover:brightness-90 px-4 py-2"
+                      className="rounded-full text-base w-full text-white bg-[#40B7BA] hover:brightness-90 px-4 py-2"
                       onClick={() => {
                         sendResetEmail();
                         setErrorMsg('');

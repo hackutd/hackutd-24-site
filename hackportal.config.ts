@@ -1,5 +1,6 @@
 import schools from './public/schools.json';
 import majors from './public/majors.json';
+import countries from './public/countries.json';
 
 export const hackPortalConfig: HackPortalConfig = {
   //registration fields are separated by question topics (general, school, hackathon experience, etc. )
@@ -36,6 +37,13 @@ export const hackPortalConfig: HackPortalConfig = {
             required: true,
             initialValue: '',
           },
+          {
+            question: 'Phone number',
+            id: 'phoneNumber',
+            name: 'phoneNumber',
+            required: true,
+            initialValue: '',
+          },
         ],
       },
       {
@@ -55,6 +63,15 @@ export const hackPortalConfig: HackPortalConfig = {
       },
       {
         dropdownQuestions: [
+          {
+            //Country question
+            question: 'Country of Residence',
+            id: 'country',
+            name: 'country',
+            required: true,
+            initialValue: '',
+            options: countries.map(({ country }) => ({ title: country, value: country })),
+          },
           {
             //Gender question
             question: 'Gender',
@@ -135,6 +152,10 @@ export const hackPortalConfig: HackPortalConfig = {
                 title: 'Not Hispanic or Latino',
                 value: 'notHispanic',
               },
+              {
+                title: 'Prefer not to answer',
+                value: 'notSay',
+              },
             ],
           },
         ],
@@ -143,7 +164,7 @@ export const hackPortalConfig: HackPortalConfig = {
     //Question Topic
     schoolQuestions: [
       {
-        datalistQuestions: [
+        dropdownQuestions: [
           {
             //University question
             question:
@@ -151,11 +172,13 @@ export const hackPortalConfig: HackPortalConfig = {
             id: 'university',
             name: 'university',
             required: true,
-            datalist: 'schools',
-            options: schools.map(({ university }) => ({
-              title: university,
-              value: university,
-            })),
+            options: [
+              ...schools.map(({ university }) => ({
+                title: university,
+                value: university,
+              })),
+              { title: 'Other', value: 'Other' },
+            ],
             initialValue: '',
           },
           {
@@ -164,17 +187,15 @@ export const hackPortalConfig: HackPortalConfig = {
             id: 'major',
             name: 'major',
             required: true,
-            datalist: 'majors',
-            options: majors.map(({ major }) => ({
-              title: major,
-              value: major,
-            })),
+            options: [
+              ...majors.map(({ major }) => ({
+                title: major,
+                value: major,
+              })),
+              { title: 'Other', value: 'Other' },
+            ],
             initialValue: '',
           },
-        ],
-      },
-      {
-        dropdownQuestions: [
           {
             //Grade question
             question: 'Current level of study',
@@ -229,7 +250,7 @@ export const hackPortalConfig: HackPortalConfig = {
         dropdownQuestions: [
           {
             //Experience question
-            question: 'Relative software-building experience:',
+            question: 'Relative software-building experience',
             required: true,
             id: 'softwareExperience',
             name: 'softwareExperience',
@@ -255,7 +276,7 @@ export const hackPortalConfig: HackPortalConfig = {
           },
           {
             //Heard from question
-            question: 'Where did you hear about HackPortal?',
+            question: 'Where did you hear about HackUTD Ripple Effect?',
             required: true,
             id: 'heardFrom',
             name: 'heardFrom',
@@ -278,10 +299,58 @@ export const hackPortalConfig: HackPortalConfig = {
                 value: 'Friend',
               },
               {
+                title: 'TikTok',
+                value: 'TikTok',
+              },
+              {
                 title: 'Other',
                 value: 'Other',
               },
             ],
+          },
+        ],
+      },
+    ],
+    //Short answer questions
+    shortAnswerQuestions: [
+      {
+        textAreaQuestions: [
+          {
+            //Why do you want to attend question
+            question: 'Why do you want to attend HackUTD Ripple Effect?',
+            id: 'whyAttend',
+            name: 'whyAttend',
+            required: true,
+            initialValue: '',
+            placeholder: '',
+          },
+          {
+            //How many hackathons submitted question
+            question: 'How many hackathons have you submitted to and what did you learn from them?',
+            id: 'hackathonNumber',
+            name: 'hackathonNumber',
+            required: true,
+            initialValue: '',
+            placeholder: '',
+          },
+          {
+            //What do you hope to learn from HackUTD as a first timer question
+            question:
+              'If you haven’t been to a hackathon, what do you hope to learn from HackUTD Ripple Effect?',
+            id: 'hackathonFirstTimer',
+            name: 'hackathonFirstTimer',
+            required: true,
+            initialValue: '',
+            placeholder: '',
+          },
+          {
+            //What are you looking forward to question
+            question: 'What are you looking forward to at HackUTD Ripple Effect?',
+            id: 'lookingForward',
+            name: 'lookingForward',
+            required: true,
+            initialValue: '',
+            placeholder: '',
           },
         ],
       },
@@ -322,7 +391,7 @@ export const hackPortalConfig: HackPortalConfig = {
         checkboxQuestions: [
           {
             //Allergies question
-            question: 'Allergies / Dietary Restrictions:',
+            question: 'Allergies / Dietary Restrictions',
             required: false,
             id: 'dietary',
             name: 'dietary',
@@ -356,6 +425,14 @@ export const hackPortalConfig: HackPortalConfig = {
                 title: 'Eggs',
                 value: 'Eggs',
               },
+              {
+                title: 'No Beef',
+                value: 'NoBeef',
+              },
+              {
+                title: 'No Pork',
+                value: 'NoPork',
+              },
             ],
           },
         ],
@@ -380,7 +457,7 @@ export const hackPortalConfig: HackPortalConfig = {
         textInputQuestions: [
           {
             //Github question
-            question: 'Github:',
+            question: 'Github',
             id: 'github',
             name: 'github',
             required: false,
@@ -388,7 +465,7 @@ export const hackPortalConfig: HackPortalConfig = {
           },
           {
             //LinkedIn question
-            question: 'LinkedIn:',
+            question: 'LinkedIn',
             id: 'linkedin',
             name: 'linkedin',
             required: false,
@@ -396,45 +473,11 @@ export const hackPortalConfig: HackPortalConfig = {
           },
           {
             //Website question
-            question: 'Personal Website:',
+            question: 'Personal Website',
             id: 'website',
             name: 'website',
             required: false,
             initialValue: '',
-          },
-        ],
-      },
-      {
-        checkboxQuestions: [
-          {
-            //Companies question
-            question: 'Companies to send my resume to:',
-            required: false,
-            id: 'companies',
-            name: 'companies',
-            initialValue: [],
-            options: [
-              {
-                title: 'State Farm',
-                value: 'State Farm',
-              },
-              {
-                title: 'American Airlines',
-                value: 'American Airlines',
-              },
-              {
-                title: 'Capital One',
-                value: 'Capital One',
-              },
-              {
-                title: 'Ebay',
-                value: 'Ebay',
-              },
-              {
-                title: 'Facebook',
-                value: 'Facebook',
-              },
-            ],
           },
         ],
       },
@@ -445,23 +488,43 @@ export const hackPortalConfig: HackPortalConfig = {
           {
             id: 'teammate1',
             initialValue: '',
-            question: 'Email of teammate #1 (if any): ',
+            question: 'Email of teammate #1 (if any)',
             name: 'teammate1',
             required: false,
           },
           {
             id: 'teammate2',
             initialValue: '',
-            question: 'Email of teammate #2 (if any): ',
+            question: 'Email of teammate #2 (if any)',
             name: 'teammate2',
             required: false,
           },
           {
             id: 'teammate3',
             initialValue: '',
-            question: 'Email of teammate #3 (if any): ',
+            question: 'Email of teammate #3 (if any)',
             name: 'teammate3',
             required: false,
+          },
+        ],
+      },
+      {
+        checkboxQuestions: [
+          {
+            //Code of Conduct question
+            question: 'Code of Conduct',
+            required: true,
+            id: 'codeOfConduct',
+            name: 'codeOfConduct',
+            initialValue: [],
+            options: [
+              {
+                title: 'I have read and agree to the ',
+                value: 'Yes',
+                link: 'https://static.mlh.io/docs/mlh-code-of-conduct.pdf',
+                linkText: 'MLH Code of Conduct',
+              },
+            ],
           },
         ],
       },
@@ -507,7 +570,7 @@ export const fieldNames = {
 };
 
 //name fields that are checkbox questions belong here
-export const arrayField = ['scans', 'companies', 'dietary'];
+export const arrayField = ['scans', 'companies', 'dietary', 'codeOfConduct'];
 //any other fields belong here
 export const singleField = [
   'age',
@@ -528,13 +591,14 @@ export interface HackPortalConfig {
     generalQuestions: QuestionTypes[];
     schoolQuestions: QuestionTypes[];
     hackathonExperienceQuestions: QuestionTypes[];
+    shortAnswerQuestions: QuestionTypes[];
     eventInfoQuestions: QuestionTypes[];
     sponsorInfoQuestions: QuestionTypes[];
     teammateQuestions: QuestionTypes[];
   };
 }
 
-interface QuestionTypes {
+export interface QuestionTypes {
   checkboxQuestions?: CheckboxQuestion[];
   dropdownQuestions?: DropdownQuestion[];
   textInputQuestions?: RegistrationQuestion[];
@@ -551,27 +615,29 @@ interface RegistrationQuestion {
   initialValue: any; //value that will be first presented on the form
 }
 
-interface CheckboxQuestion extends RegistrationQuestion {
+export interface CheckboxQuestion extends RegistrationQuestion {
+  options: Array<{
+    title: string;
+    value: string;
+    link?: string;
+    linkText?: string;
+  }>;
+}
+
+export interface DropdownQuestion extends RegistrationQuestion {
   options: Array<{
     title: string;
     value: string;
   }>;
 }
 
-interface DropdownQuestion extends RegistrationQuestion {
-  options: Array<{
-    title: string;
-    value: string;
-  }>;
-}
-
-interface NumberInputQuestion extends RegistrationQuestion {
+export interface NumberInputQuestion extends RegistrationQuestion {
   min: string;
   max: string;
   pattern: string;
 }
 
-interface datalistQuestion extends RegistrationQuestion {
+export interface datalistQuestion extends RegistrationQuestion {
   datalist: string;
   options: Array<{
     title: string;
@@ -579,7 +645,7 @@ interface datalistQuestion extends RegistrationQuestion {
   }>;
 }
 
-interface textAreaQuestion extends RegistrationQuestion {
+export interface textAreaQuestion extends RegistrationQuestion {
   placeholder: string;
 }
 
@@ -593,6 +659,9 @@ const getInitialValues = () => {
     setInitialValues(obj);
   }
   for (let obj of hackPortalConfig.registrationFields.hackathonExperienceQuestions) {
+    setInitialValues(obj);
+  }
+  for (let obj of hackPortalConfig.registrationFields.shortAnswerQuestions) {
     setInitialValues(obj);
   }
   for (let obj of hackPortalConfig.registrationFields.eventInfoQuestions) {

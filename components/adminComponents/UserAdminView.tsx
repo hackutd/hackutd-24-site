@@ -32,8 +32,16 @@ export default function UserAdminView({
     return false;
   });
 
+  const stringifyScore = (appScore: { acceptCount: number; rejectCount: number }) => {
+    if (appScore.acceptCount >= 1000000000) return 'Auto-Accepted by HackPortal';
+    return `${appScore.acceptCount - appScore.rejectCount} (${appScore.acceptCount} accepted, ${
+      appScore.rejectCount
+    } rejected)`;
+  };
+
   const user_info = [
     ['Major', currentUser.major],
+    ['Application Score', stringifyScore(currentUser.applicationScore)],
     ['University', currentUser.university],
     ['Current Level of Study', currentUser.studyLevel],
     ['Number of Hackathons Attended', currentUser.hackathonExperience],
@@ -41,16 +49,10 @@ export default function UserAdminView({
     [
       'Resume',
       currentUser.resume === '' ? (
-        'No resume found'
+        <p>No resume found</p>
       ) : (
-        <Link
-          passHref
-          href={currentUser.resume}
-          className="border-2 p-3 hover:bg-gray-200"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Click here to download resume
+        <Link passHref href={currentUser.resume} target="_blank" rel="noopener noreferrer">
+          <button className="border-2 p-3 hover:bg-gray-200">Click here to download resume</button>
         </Link>
       ),
     ],
@@ -296,7 +298,7 @@ export default function UserAdminView({
             {user_info.map(([title, desc], id) => (
               <div key={id} className="mt-5">
                 <h3 className="font-bold">{title}</h3>
-                <p>{desc}</p>
+                {desc}
               </div>
             ))}
           </div>
