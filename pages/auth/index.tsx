@@ -110,6 +110,10 @@ export default function AuthPage() {
     }
   }
 
+  const prettyPrint = (s: string) => {
+    if (s.startsWith('Firebase')) return s.substring(10, s.indexOf('('));
+  };
+
   if (isSignedIn) {
     router.push('/profile');
   }
@@ -195,7 +199,7 @@ export default function AuthPage() {
                       </div>
                     </form>
                     {/* Error and verification messages */}
-                    <div className="text-center">{errorMsg}</div>
+                    <div className="poppins-regular text-center">{prettyPrint(errorMsg)}</div>
                     {/* !change if needed */}
                     {/* Uncomment to allow resend verification email option (users could spam) */}
                     {/* {sendVerification && (
