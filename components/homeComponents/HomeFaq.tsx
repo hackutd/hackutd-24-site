@@ -16,11 +16,10 @@ export default function HomeFaq(props: { answeredQuestion: AnsweredQuestion[] })
           // TODO: enable this when finalizing the UI
           // paddingTop: '30rem',
         }}
-        id="faq-section"
       >
         {/* placeholder text */}
         {/* TODO: change the ref value once we un-comment the HomeSchedule section */}
-        <div ref={scheduleRef}>
+        <div id="schedule-section" ref={scheduleRef}>
           <h1 className="text-6xl md:text-6xl sm:text-md xs:text-small font-bold text-[#F7CE79] text-stroke text-center pb-10 pt-[10rem] uppercase">
             Schedule coming soon...
           </h1>

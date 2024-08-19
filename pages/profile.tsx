@@ -22,6 +22,18 @@ export default function ProfilePage() {
   const [uploading, setUploading] = useState<boolean>(false);
   const resumeRef = useRef(null);
 
+  const formatStudyLevel = (s: string) => {
+    if (s === 'grad') return 'Graduate Student';
+    return s.substring(0, 1).toUpperCase() + s.substring(1);
+  };
+
+  const formatRole = (s: string) => {
+    return s
+      .split('_')
+      .map((w) => w.substring(0, 1).toUpperCase() + w.substring(1))
+      .join(' ');
+  };
+
   const textFieldOverrides: TextFieldProps = {
     InputLabelProps: {
       classes: {
@@ -78,7 +90,7 @@ export default function ProfilePage() {
   };
 
   if (!isSignedIn) {
-    return <div className="p-4 flex-grow text-center">Sign in to see your profile!</div>;
+    return <div className="p-4 flex-grow text-center text-white">Sign in to see your profile!</div>;
   }
 
   if (!hasProfile) {
@@ -109,14 +121,14 @@ export default function ProfilePage() {
             <div className="font-fredoka font-semibold text-lg">Application Status</div>
             <h1
               className={`font-fredoka text-xl font-semibold ${
-                profile.user.status === 'Accepted'
+                profile.status === 'Accepted'
                   ? 'text-[#5DC55B]'
-                  : profile.user.status === 'Rejected'
+                  : profile.status === 'Rejected'
                   ? 'text-[#DE3163]'
                   : 'text-[#5C67C9]'
               }`}
             >
-              {profile.user.status ? profile.user.status : 'Pending'}
+              {profile.status ? profile.status : 'Waiting'}
             </h1>
           </div>
 
@@ -191,7 +203,7 @@ export default function ProfilePage() {
               className="col-span-1"
               disabled
               label="Role"
-              value={profile.user.permissions[0]}
+              value={formatRole(profile.user.permissions[0])}
               {...textFieldOverrides}
             />
             <TextField
@@ -205,7 +217,7 @@ export default function ProfilePage() {
               className="col-span-2"
               disabled
               label="Current level of study"
-              value={profile.studyLevel}
+              value={formatStudyLevel(profile.studyLevel)}
               {...textFieldOverrides}
             />
             <TextField

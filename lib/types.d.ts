@@ -87,7 +87,6 @@ type Registration = {
      */
     preferredEmail: string;
     group: string;
-    status: string;
   };
   // TODO: Allow for qualifiers like "how old will you be at the day of the event?"
   // TODO: Allow this to be dynamically defined by the organizers
@@ -110,6 +109,7 @@ type Registration = {
   website?: string;
   resume?: string;
   companies: Companies[];
+  status: string;
   //claims: []; //Array of Strings will be used to id any claims (lunch, merch, etc.) made by user
   teammate1: string;
   teammate2: string;
@@ -310,4 +310,9 @@ declare module '*.md' {
 type UserIdentifier = Omit<Registration, 'scans'> & {
   status: string;
   selected: boolean;
+  applicationScore: {
+    acceptCount: number;
+    rejectCount: number;
+    alreadyJudged: boolean;
+  };
 };
