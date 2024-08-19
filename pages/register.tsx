@@ -567,9 +567,9 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
             >
               <div
                 style={{ width: 'fit-content' }}
-                className="cursor-pointer select-none bg-[#40B7BA] text-white rounded-xl py-3 pl-2 pr-4 text-xs md:text-lg"
+                className="cursor-pointer select-none bg-white text-[#40B7BA] rounded-xl py-3 pl-2 pr-4 text-xs md:text-lg border-2 border-[#40B7BA]"
               >
-                <ChevronLeftIcon className="text-white" />
+                <ChevronLeftIcon className="text-[#40B7BA]" />
                 prev page
               </div>
             </div>
@@ -596,7 +596,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
             >
               <div
                 style={{ width: 'fit-content' }}
-                className="cursor-pointer select-none bg-[#40B7BA] text-white text-xs md:text-lg rounded-xl py-3 pr-2 pl-4"
+                className="cursor-pointer select-none bg-white text-[#40B7BA] text-xs md:text-lg rounded-xl py-3 pr-2 pl-4 border-2 border-[#40B7BA]"
               >
                 next page
                 <ChevronRightIcon />
