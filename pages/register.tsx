@@ -233,7 +233,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
     <div className="flex flex-col flex-grow">
       <Head>
         <title>Hacker Application</title>
-        <meta name="description" content="Register for [HACKATHON NAME]" />
+        <meta name="description" content="Register for HackUTD 2024" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section className="pl-4 relative mb-4">
@@ -346,7 +346,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                       className="poppins-regular text-center text-md mb-4 font-light"
                     >
                       Please fill out the following fields. The application should take
-                      approximately 5 minutes.
+                      approximately 10 minutes.
                     </div>
                   </header>
                   <div className="md:px-10">
