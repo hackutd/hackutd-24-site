@@ -69,7 +69,7 @@ export default function UserPage() {
       alreadyJudged: boolean;
     }) => {
       if (allowRegistrationState.allowRegistrations && !alreadyJudged && acceptCount < 1000000000) {
-        return 'Waiting';
+        return 'In Review';
       }
       return acceptCount - rejectCount >= 2 ? 'Accepted' : 'Rejected';
     };

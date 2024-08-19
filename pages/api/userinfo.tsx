@@ -17,7 +17,7 @@ async function checkApplicationDecisionFinalized() {
 async function getApplicationDecision(userId: string): Promise<string> {
   const applicationDecisionFinalized = await checkApplicationDecisionFinalized();
   if (!applicationDecisionFinalized) {
-    return 'Waiting';
+    return 'In Review';
   }
   const snapshot = await db.collection('/acceptreject').where('hackerId', '==', userId).get();
   const applicationPoint = snapshot.docs.reduce((acc: number, doc) => {
