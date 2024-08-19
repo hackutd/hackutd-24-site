@@ -58,7 +58,8 @@ export default function HomeFaq(props: { answeredQuestion: AnsweredQuestion[] })
 
         <style jsx>{`
           @keyframes bobbing {
-            0%, 100% {
+            0%,
+            100% {
               transform: translateX(-50%) translateY(0);
             }
             50% {
