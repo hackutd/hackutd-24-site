@@ -10,6 +10,17 @@ const withPWA = require('next-pwa')({
 (module.exports = withPWA({
   reactStrictMode: true,
 
+  async redirects() {
+    return [
+      {
+        source: '/travel-reimbursement',
+        destination:
+          'https://hackutd.notion.site/HackUTD-Ripple-Effect-fab1d9efcfd0468fbaee0ba4010caec7?pvs=4',
+        permanent: true,
+      },
+    ];
+  },
+
   images: {
     remotePatterns: [
       {
