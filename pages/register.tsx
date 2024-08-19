@@ -210,7 +210,8 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
     if (obj.checkboxQuestions)
       for (let inputObj of obj.checkboxQuestions) {
         if (inputObj.required) {
-          if (!values[inputObj.name]) errors[inputObj.name] = 'Required';
+          if (!values[inputObj.name] || values[inputObj.name].length === 0)
+            errors[inputObj.name] = 'Required';
         }
       }
     if (obj.datalistQuestions)

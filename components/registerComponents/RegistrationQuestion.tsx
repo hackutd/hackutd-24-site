@@ -163,7 +163,9 @@ function Question(props: QuestionProps) {
             <label
               key={option.value}
               className={`text-[#313131] text-sm ml-2 ${
-                props.question.id === 'codeOfConduct' ? 'poppins-semibold' : 'poppins-regular'
+                props.question.id === 'codeOfConduct' || 'disclaimer'
+                  ? 'poppins-semibold'
+                  : 'poppins-regular'
               }`}
             >
               <Field

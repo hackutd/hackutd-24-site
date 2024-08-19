@@ -515,6 +515,20 @@ export const hackPortalConfig: HackPortalConfig = {
       {
         checkboxQuestions: [
           {
+            // Agree to terms
+            question: 'Disclaimer',
+            required: true,
+            id: 'disclaimer',
+            name: 'disclaimer',
+            initialValue: [],
+            options: [
+              {
+                title: 'I understand that this is an Application and does not guarantee admission.',
+                value: 'Yes',
+              },
+            ],
+          },
+          {
             //Code of Conduct question
             question: 'Code of Conduct',
             required: true,
@@ -574,7 +588,7 @@ export const fieldNames = {
 };
 
 //name fields that are checkbox questions belong here
-export const arrayField = ['scans', 'companies', 'dietary', 'codeOfConduct'];
+export const arrayField = ['scans', 'companies', 'dietary', 'disclaimer', 'codeOfConduct'];
 //any other fields belong here
 export const singleField = [
   'age',
