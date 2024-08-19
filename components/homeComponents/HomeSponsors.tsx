@@ -68,6 +68,10 @@ export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
             </div>
           </section>
         </div>
+        <div className="mt-4">
+  <p className="text-4xl text-center font-bold text-white">and more to come!</p>
+</div>
+
       </section>
     )
   );

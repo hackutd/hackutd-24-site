@@ -16,6 +16,7 @@ import HomeSchedule from '../components/homeComponents/HomeSchedule';
 import HomeFaq from '../components/homeComponents/HomeFaq';
 import HomePrizes from '../components/homeComponents/HomePrizes';
 import HomeHero2 from '../components/homeComponents/HomeHero2';
+import Wave from '../components/homeComponents/Wave';
 
 import themedBackground from '../public/assets/plain_bg.png';
 
@@ -73,6 +74,7 @@ export default function Home(props: {
             backgroundRepeat: 'no-repeat',
           }}
         /> */}
+        <Wave />
         <div style={{ position: 'relative', zIndex: 1 }}>
           <div
             style={{
