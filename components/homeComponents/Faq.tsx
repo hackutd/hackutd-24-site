@@ -8,6 +8,7 @@ import Fish1 from '../../public/assets/fish_1.png';
 import Fish2 from '../../public/assets/fish_2.png';
 import Image from 'next/image';
 import { SectionReferenceContext } from '@/lib/context/section';
+import Link from 'next/link';
 
 /**
  * The FAQ page.
@@ -94,11 +95,14 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
               <h1 className="text-3xl mb-4 font-bold text-[#54DDE8]">FAQ</h1>
               <p>Can’t find what you’re looking for? Connect with our team at hello@hackutd.co</p>
             </div>
-            {/* <div className="flex items-center">
-            <button className="bg-[#DFFEFF] text-[#40B7BA] p-3 rounded-2xl">
-              Ask A Questions!
-            </button>
-          </div> */}
+            <div className="flex items-center">
+              <Link
+                href="mailto:hello@hackutd.co"
+                className="bg-[#DFFEFF] text-[#40B7BA] p-3 rounded-2xl"
+              >
+                Ask A Question!
+              </Link>
+            </div>
           </div>
           {/* FAQ for lg-md */}
           {/* Uses different section for mobile because using 2 columns is buggy when expanding FAQs */}
