@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/storage';
+import 'firebase/compat/auth';
 import nc from 'next-connect';
 import multer from 'multer';
 
