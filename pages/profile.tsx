@@ -228,17 +228,6 @@ export default function ProfilePage() {
               {...textFieldOverrides}
             />
           </div>
-
-          {/* Chicken picture */}
-          <div className="w-full flex justify-center mt-8">
-            <Image
-              className="w-[200px] h-auto"
-              src={ChickenImage.src}
-              width={ChickenImage.width}
-              height={ChickenImage.height}
-              alt="chicken egg"
-            />
-          </div>
         </div>
       </div>
     </div>
