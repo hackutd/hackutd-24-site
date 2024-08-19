@@ -54,10 +54,7 @@ const HomeAboutText = () => {
 
         `}
       </style>
-      <h1
-        className="text-5xl font-bold text-complementaryLight mb-3 text-center relative font-jua z-10"
-        style={{ WebkitTextStroke: '1px #AC5A1F' }}
-      >
+      <h1 className="text-5xl font-bold mb-3 text-center relative font-jua z-10  text-[#F7CE79] text-stroke">
         What is HackUTD?
       </h1>
       <div className="relative w-full flex justify-center items-center z-10">
