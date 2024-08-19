@@ -103,7 +103,7 @@ export default function AppHeader2_Wrapper() {
       >
         <AppHeader2_Core />
         <button
-          className="absolute right-[7.5rem] py-3 px-5 rounded-[30px] bg-[#40B7BA] font-bold text-white"
+          className="absolute right-[2rem] lg:right-[10rem] py-3 px-5 rounded-[30px] bg-[#40B7BA] font-bold text-white ml-3"
           onClick={async () => {
             if (user) {
               await signOut();
