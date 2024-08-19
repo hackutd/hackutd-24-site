@@ -152,7 +152,15 @@ export default function AuthPage() {
                     </span>
                   </div>
                   <React.Fragment>
-                    <form onSubmit={handleSubmit} className="mt-4">
+                    <form
+                      onKeyDown={(keyEvent) => {
+                        if (keyEvent.key === 'Enter') {
+                          keyEvent.preventDefault();
+                        }
+                      }}
+                      onSubmit={handleSubmit}
+                      className="mt-4"
+                    >
                       <EmailInput
                         onChange={(e) => setCurrentEmail(e.target.value)}
                         placeholder="Enter your email address"
