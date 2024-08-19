@@ -2,10 +2,10 @@ import LanguageRoundedIcon from '@mui/icons-material/LanguageRounded';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import React, { useRef, useState } from 'react';
-import { useAuthContext } from '../lib/user/AuthContext';
-import LoadIcon from '../components/LoadIcon';
-import { getFileExtension } from '../lib/util';
-import QRCode from '../components/dashboardComponents/QRCode';
+import { useAuthContext } from '../../lib/user/AuthContext';
+import LoadIcon from '../../components/LoadIcon';
+import { getFileExtension } from '../../lib/util';
+import QRCode from '../../components/dashboardComponents/QRCode';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInImage from '@/public/icons/linkedin.png';
 import ChickenImage from '@/public/assets/profile-chicken-egg.png';
@@ -89,6 +89,12 @@ export default function ProfilePage() {
     });
   };
 
+  React.useEffect(() => {
+    if (profile) {
+      console.log(profile);
+    }
+  }, [profile]);
+
   if (!isSignedIn) {
     return <div className="p-4 flex-grow text-center text-white">Sign in to see your profile!</div>;
   }
@@ -119,6 +125,8 @@ export default function ProfilePage() {
           </div>
           <div className="border-y-[1.2px] border-primaryDark/20 py-4 md:my-8 my-6">
             <div className="font-fredoka font-semibold text-lg">Application Status</div>
+            <div>Edit Application</div>
+            <div>Review Application</div>
             <h1
               className={`font-fredoka text-xl font-semibold ${
                 profile.status === 'Accepted'

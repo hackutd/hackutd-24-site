@@ -114,6 +114,9 @@ type Registration = {
   teammate1: string;
   teammate2: string;
   teammate3: string;
+  phoneNumber: string;
+  country: string;
+  whyAttend: string;
 };
 
 /**
