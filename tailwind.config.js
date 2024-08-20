@@ -15,7 +15,7 @@ module.exports = {
         tertiary: '#F5A3B6', //pink
         complementary: '#8AD47E', //green
         complementaryDark: '#252427',
-        complementaryLight: '#F7CE79', //yellow
+        complementaryLight: '#4C495080', //gray
       },
       fontFamily: {
         dmSans: ['DM Sans', 'sans-serif'],

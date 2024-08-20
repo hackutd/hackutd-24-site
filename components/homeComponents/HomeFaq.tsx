@@ -70,7 +70,7 @@ export default function HomeFaq(props: { answeredQuestion: AnsweredQuestion[] })
 
         {/* placeholder text */}
         <div id="schedule-section" ref={scheduleRef}>
-          <h1 className="text-6xl md:text-6xl sm:text-md xs:text-small font-bold text-[#F7CE79] text-stroke text-center pb-10 pt-[10rem] uppercase">
+          <h1 className="text-stroke text-6xl md:text-6xl sm:text-md xs:text-small font-bold text-[#F7CE79] font-jua text-center pb-10 pt-[10rem] uppercase">
             Schedule coming soon...
           </h1>
         </div>

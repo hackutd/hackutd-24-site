@@ -5,11 +5,11 @@ import { SectionReferenceContext } from '@/lib/context/section';
 
 const HomeAboutText = () => {
   const fish1HoverStyle = {
-    animation: 'moveLeft 120s linear infinite',
+    animation: 'moveLeft 100s linear infinite',
   };
 
   const fish2HoverStyle = {
-    animation: 'moveRight 120s linear infinite',
+    animation: 'moveRight 100s linear infinite',
   };
 
   const { aboutRef } = useContext(SectionReferenceContext);
@@ -45,8 +45,8 @@ const HomeAboutText = () => {
             13% { transform: translate(25vw, 6vw) rotate(-210deg); }
             25% { transform: translate(50vw, 0) rotate(-270deg); }
             38% { transform: translate(55vw, -6vw) rotate(-300deg); }
-            50% { transform: translate(50vw, -12vw) rotate(-360deg); }
-            63% { transform: translate(15vw, -18vw) rotate(-380deg); }
+            50% { transform: translate(50vw, -16vw) rotate(-360deg); }
+            63% { transform: translate(15vw, -20vw) rotate(-380deg); }
             75% { transform: translate(5vw, -10vw) rotate(-450deg); }
             88% { transform: translate(-2vw, -5vw) rotate(-480deg); }
             100% { transform: translate(0, 0) rotate(-510deg); }
@@ -54,10 +54,7 @@ const HomeAboutText = () => {
 
         `}
       </style>
-      <h1
-        className="text-5xl font-bold text-complementaryLight mb-3 text-center relative font-jua z-10"
-        style={{ WebkitTextStroke: '2px #AC5A1F' }}
-      >
+      <h1 className="text-5xl font-bold mb-3 text-center relative font-jua z-10  text-[#F7CE79] text-stroke">
         What is HackUTD?
       </h1>
       <div className="relative w-full flex justify-center items-center z-10">
@@ -77,8 +74,8 @@ const HomeAboutText = () => {
             style={{
               top: '-10vw',
               right: '12vw',
-              width: '20vw',
-              height: '20vw',
+              width: '15vw',
+              height: '15vw',
               ...fish1HoverStyle,
             }}
           />
@@ -89,8 +86,8 @@ const HomeAboutText = () => {
             style={{
               bottom: '-5vw',
               left: '13vw',
-              width: '20vw',
-              height: '20vw',
+              width: '15vw',
+              height: '15vw',
               ...fish2HoverStyle,
             }}
           />
