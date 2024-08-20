@@ -278,6 +278,7 @@ export default function EditApplication() {
             teammate2: profile?.teammate2 || '',
             teammate3: profile?.teammate3 || '',
             codeOfConduct: ['Yes'],
+            disclaimer: ['Yes'],
           }}
           validateOnBlur={false}
           validateOnChange={false}
