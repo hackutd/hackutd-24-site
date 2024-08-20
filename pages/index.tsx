@@ -18,9 +18,7 @@ import HomePrizes from '../components/homeComponents/HomePrizes';
 import HomeHero2 from '../components/homeComponents/HomeHero2';
 import Wave from '../components/homeComponents/Wave';
 
-import themedBackground from '../public/assets/plain_bg.png';
-
-// import themedBackground from '../public/assets/hackutd-bg.png';
+import themedBackground from '../public/assets/hackutd-bg.png';
 import countdownClouds from '../public/assets/countdown_clouds.png';
 import cloud from '../public/assets/cloud.png';
 

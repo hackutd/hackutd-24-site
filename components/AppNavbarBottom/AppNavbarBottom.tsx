@@ -8,10 +8,12 @@ import Link from 'next/link';
 import { useAuthContext } from '@/lib/user/AuthContext';
 import { useContext } from 'react';
 import { SectionReferenceContext } from '@/lib/context/section';
+import { useRouter } from 'next/router';
 
 export default function AppNavbarBottom() {
   const { hasProfile } = useAuthContext();
   const { faqRef, scheduleRef } = useContext(SectionReferenceContext);
+  const router = useRouter();
 
   return (
     <div
@@ -25,9 +27,11 @@ export default function AppNavbarBottom() {
 
       <button
         onClick={() => {
-          scheduleRef.current?.scrollIntoView({
-            behavior: 'smooth',
-          });
+          if (router.pathname === '/')
+            scheduleRef.current?.scrollIntoView({
+              behavior: 'smooth',
+            });
+          else router.push('/#schedule-section');
         }}
       >
         <CalendarIcon />
@@ -39,9 +43,11 @@ export default function AppNavbarBottom() {
 
       <button
         onClick={() => {
-          faqRef.current?.scrollIntoView({
-            behavior: 'smooth',
-          });
+          if (router.pathname === '/')
+            faqRef.current?.scrollIntoView({
+              behavior: 'smooth',
+            });
+          else router.push('/#faq-section');
         }}
       >
         <QuestionIcon />

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Field, ErrorMessage, FieldProps } from 'formik';
-import { MenuItem, TextField } from '@mui/material';
+import { MenuItem, TextField, Autocomplete } from '@mui/material';
 import {
   CheckboxQuestion,
   datalistQuestion,
@@ -120,24 +120,34 @@ function Question(props: QuestionProps) {
             <span className="text-gray-600 ml-2 text-[8px]">optional</span>
           )}
         </label>
-        <Field as="select" name={props.question.name}>
+        <Field name={props.question.name}>
           {({ field }: FieldProps) => (
-            <TextField
-              select
-              variant="outlined"
+            <Autocomplete
               id={props.question.id}
-              required={props.question.required}
-              defaultValue={props.question.initialValue}
-              className="poppins-regular mb-1"
-              {...field}
-            >
-              <MenuItem selected disabled value="" />
-              {(props.question as DropdownQuestion).options.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  {option.title}
-                </MenuItem>
-              ))}
-            </TextField>
+              options={(props.question as DropdownQuestion).options}
+              getOptionLabel={(option) => option.title}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="outlined"
+                  required={props.question.required}
+                  className="poppins-regular mb-1"
+                />
+              )}
+              onChange={(event, value) => {
+                field.onChange({
+                  target: {
+                    name: field.name,
+                    value: value ? value.value : '',
+                  },
+                });
+              }}
+              value={
+                (props.question as DropdownQuestion).options.find(
+                  (option) => option.value === field.value,
+                ) || null
+              }
+            />
           )}
         </Field>
         <ErrorMessage
@@ -163,7 +173,9 @@ function Question(props: QuestionProps) {
             <label
               key={option.value}
               className={`text-[#313131] text-sm ml-2 ${
-                props.question.id === 'codeOfConduct' ? 'poppins-semibold' : 'poppins-regular'
+                props.question.id === 'codeOfConduct' || 'disclaimer'
+                  ? 'poppins-semibold'
+                  : 'poppins-regular'
               }`}
             >
               <Field
