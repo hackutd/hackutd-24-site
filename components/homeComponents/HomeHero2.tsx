@@ -4,7 +4,6 @@ import MLH_Sticker from '../../public/assets/mlh-2025.png';
 import HackUTDTitle from '../../public/assets/HackUTD 2024 Title.png';
 import DuckMoving from '../../public/assets/duck-moving.gif';
 import MascotMoving from '../../public/assets/mascot-moving.gif';
-import mascotLifeRing from '../../public/assets/mascot_life_ring.png';
 import styles from './HomeHero2.module.css';
 import { SectionReferenceContext } from '@/lib/context/section';
 

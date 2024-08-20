@@ -10,6 +10,7 @@ import corgi from 'public/assets/corgi_on_boat.png';
 
 export default function HomeFaq(props: { answeredQuestion: AnsweredQuestion[] }) {
   const { scheduleRef } = useContext(SectionReferenceContext);
+
   return (
     props.answeredQuestion.length != 0 && (
       <section
@@ -21,28 +22,10 @@ export default function HomeFaq(props: { answeredQuestion: AnsweredQuestion[] })
       >
         {/*****************Delete boulders and corgi once schedule page is back up*****************/}
         {/* Boulder Left */}
-        <img
-          src={BoulderLeft.src}
-          style={{
-            position: 'absolute',
-            top: '-105px', // Move the boulder higher up
-            left: '0px', // Adjust from the left edge
-            zIndex: 10,
-            width: '600px', // Set the width to make the boulder less wide
-          }}
-        />
+        <img src={BoulderLeft.src} className={styles.boulderLeft} />
 
         {/* Boulder Right */}
-        <img
-          src={BoulderRight.src}
-          style={{
-            position: 'absolute',
-            top: '-105px', // Move the boulder higher up
-            right: '0px', // Adjust from the right edge
-            zIndex: 10,
-            width: '600px', // Set the width to make the boulder less wide
-          }}
-        />
+        <img src={BoulderRight.src} className={styles.boulderRight} />
 
         {/* Corgi Image with Bobbing Animation */}
         <div
