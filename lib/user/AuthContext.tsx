@@ -122,6 +122,9 @@ function AuthProvider({ children }: React.PropsWithChildren<Record<string, any>>
   React.useEffect(() => {
     firebase.auth().onAuthStateChanged(async (user) => {
       if (user && profile && user.uid !== profile.id) {
+        // If we actually execute things inside this if statement, then things is pretty bad ngl
+        setProfile(null);
+        setLoading(true);
         const token = await user.getIdToken();
 
         const query = new URL(`http://localhost:3000/api/userinfo`);
