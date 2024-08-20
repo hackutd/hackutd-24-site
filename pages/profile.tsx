@@ -90,6 +90,11 @@ export default function ProfilePage() {
   };
 
   if (!isSignedIn) {
+    return (
+      <div className="p-10 flex-grow text-center text-white text-xl">
+        Sign in to see your profile!
+      </div>
+    );
     router.push('/auth');
     return <div></div>;
   }
