@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Formik, Form } from 'formik';
 import Link from 'next/link';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -36,6 +36,7 @@ export default function EditApplication() {
 
   const { user, hasProfile, updateProfile, profile } = useAuthContext();
   const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const resumeFileRef = useRef(null);
   // update this to false for testing
   const [loading, setLoading] = useState(false);
   const [registrationSection, setRegistrationSection] = useState(0);
@@ -502,20 +503,39 @@ export default function EditApplication() {
                     </div>
                     <br />
                     <input
-                      style={{ display: profile.resume && resumeFile == null ? 'none' : 'block' }}
                       onChange={(e) => handleResumeFileChange(e)}
                       name="resume"
+                      ref={resumeFileRef}
                       type="file"
                       id="resume"
                       formEncType="multipart/form-data"
                       accept=".pdf, .doc, .docx, image/png, image/jpeg, .txt, .tex, .rtf"
-                      className="poppins-regular cursor-pointer w-full text-[#4C4950] border border-[#40B7BA] rounded-md file:md:p-2 file:p-1 file:bg-[#40B7BA] file:text-white file:cursor-pointer file:h-full file:rounded-l-md file:border-none"
+                      className="hidden poppins-regular cursor-pointer w-full text-[#4C4950] border border-[#40B7BA] rounded-md file:md:p-2 file:p-1 file:bg-[#40B7BA] file:text-white file:cursor-pointer file:h-full file:rounded-l-md file:border-none"
                     />
-                    {profile.resume && (
+                    {profile.resume && resumeFile === null && (
                       <label className="cursor-pointer underline text-[#40B7BA]" htmlFor="resume">
                         Replace resume
                       </label>
                     )}
+                    <div
+                      style={{
+                        display: resumeFile !== null ? 'flex' : 'none',
+                      }}
+                      className="items-center gap-x-3 poppins-regular w-full border border-[#40B7BA] rounded-md"
+                    >
+                      <button
+                        className="md:p-2 p-1 bg-[#40B7BA] text-white h-full rounded-l-md border-none"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          resumeFileRef.current?.click();
+                        }}
+                      >
+                        Browse...
+                      </button>
+                      <p className="text-[#4C4950]">
+                        {resumeFile ? resumeFile.name : 'No file selected.'}
+                      </p>
+                    </div>
 
                     <br />
                     {profile.resume && (
