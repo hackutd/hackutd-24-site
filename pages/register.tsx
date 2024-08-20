@@ -504,7 +504,8 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                     <div className="flex items-center gap-x-3 poppins-regular w-full border border-[#40B7BA] rounded-md">
                       <button
                         className="md:p-2 p-1 bg-[#40B7BA] text-white h-full rounded-l-md border-none"
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.preventDefault();
                           resumeFileRef.current?.click();
                         }}
                       >
