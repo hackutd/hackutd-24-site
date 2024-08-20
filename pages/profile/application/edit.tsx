@@ -235,9 +235,8 @@ export default function EditApplication() {
             // have no idea why this works, but need to hard code it for the form values to overwrite the default
             preferredEmail: profile?.user?.preferredEmail || '',
             // have no idea why we need formInitialValues but we need to add it for it to works
-            firstName: formInitialValues.firstName || user?.firstName || '',
-            lastName: formInitialValues.lastName || user?.lastName || '',
-
+            firstName: profile?.user?.firstName || '',
+            lastName: profile?.user?.lastName || '',
             phoneNumber: profile?.phoneNumber || '',
             age: profile?.age || '',
             country: profile?.country || '',
