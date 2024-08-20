@@ -151,6 +151,7 @@ function AuthProvider({ children }: React.PropsWithChildren<Record<string, any>>
           university: userData.university,
         });
         setProfile(userData);
+        setLoading(false);
         return;
       }
       if (user !== null && !user.emailVerified) {
