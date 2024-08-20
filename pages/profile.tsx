@@ -95,6 +95,8 @@ export default function ProfilePage() {
         Sign in to see your profile!
       </div>
     );
+    router.push('/auth');
+    return <div></div>;
   }
 
   if (!hasProfile) {
