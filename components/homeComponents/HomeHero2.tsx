@@ -2,7 +2,8 @@ import { useContext, useState } from 'react';
 import Image from 'next/image';
 import MLH_Sticker from '../../public/assets/mlh-2025.png';
 import HackUTDTitle from '../../public/assets/HackUTD 2024 Title.png';
-import Duck from '../../public/assets/duck.png';
+import DuckMoving from '../../public/assets/duck-moving.gif';
+import MascotMoving from '../../public/assets/mascot-moving.gif';
 import mascotLifeRing from '../../public/assets/mascot_life_ring.png';
 import styles from './HomeHero2.module.css';
 import { SectionReferenceContext } from '@/lib/context/section';
@@ -48,11 +49,11 @@ export default function HomeHero2() {
             {/* Duck image */}
             <div className="w-[10rem] absolute top-[20%] md:top-[10%] right-[25%] md:w-[20rem] lg:w-[25rem] mb-4">
               <Image
-                src={Duck.src}
+                src={DuckMoving.src}
                 alt="Duck"
                 layout="responsive"
-                width={Duck.width}
-                height={Duck.height}
+                width={DuckMoving.width}
+                height={DuckMoving.height}
               />
             </div>
 
@@ -107,11 +108,11 @@ export default function HomeHero2() {
       <div className="absolute bottom-[35%] left-0 lg:left-[5%] lg:bottom-[30%] z-20">
         <div className="w-[10rem] md:w-[20rem] lg:w-[25rem]">
           <Image
-            src={mascotLifeRing.src}
-            alt="Mascot Life Ring"
+            src={MascotMoving.src}
+            alt="Mascot Moving"
             layout="responsive"
-            width={mascotLifeRing.width}
-            height={mascotLifeRing.height}
+            width={MascotMoving.width}
+            height={MascotMoving.height}
           />
         </div>
       </div>
@@ -128,7 +129,7 @@ export default function HomeHero2() {
             behavior: 'smooth',
           });
         }}
-    >
+      >
         <div className="absolute bottom-5 w-full flex flex-col items-center z-20">
           <p className="font-montserrat text-white text-lg md:text-xl">Learn More</p>
           <div className="animate-bounce">
