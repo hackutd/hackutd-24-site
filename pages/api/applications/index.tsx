@@ -252,7 +252,8 @@ async function handlePutApplications(req: NextApiRequest, res: NextApiResponse) 
     ...body,
     user: {
       ...body.user,
-      permissions: ['hacker'],
+      // update permissions according to original permission
+      permissions: snapshot.docs[0].data().user.permissions,
     },
   };
 

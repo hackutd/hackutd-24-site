@@ -233,7 +233,7 @@ export default function EditApplication() {
             universityManual: '',
             heardFromManual: '',
             // have no idea why this works, but need to hard code it for the form values to overwrite the default
-            preferredEmail: user?.preferredEmail || '',
+            preferredEmail: profile?.user?.preferredEmail || '',
             // have no idea why we need formInitialValues but we need to add it for it to works
             firstName: formInitialValues.firstName || user?.firstName || '',
             lastName: formInitialValues.lastName || user?.lastName || '',
@@ -264,6 +264,7 @@ export default function EditApplication() {
             teammate1: profile?.teammate1 || '',
             teammate2: profile?.teammate2 || '',
             teammate3: profile?.teammate3 || '',
+            codeOfConduct: true,
           }}
           validateOnBlur={false}
           validateOnChange={false}
