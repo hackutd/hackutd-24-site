@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Formik, Form } from 'formik';
 import Link from 'next/link';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -12,12 +12,10 @@ import { RequestHelper } from '@/lib/request-helper';
 import { getFileExtension } from '@/lib/util';
 import LoadIcon from '@/components/LoadIcon';
 import DisplayQuestion from '@/components/registerComponents/DisplayQuestion';
-import { te } from 'date-fns/locale';
 
 /**
- * The registration page.
+ * The edit application page.
  *
- * Registration: /
  */
 
 export default function EditApplication() {
@@ -359,14 +357,6 @@ export default function EditApplication() {
                         <DisplayQuestion key={idx} obj={obj} />
                       ))}
                     </div>
-                    <div className="text-[#00000080] poppins-regular mt-4 font-semibold mb-2">
-                      Applying for travel reimbursement?
-                      <a href="https://acmutd.typeform.com/to/RxlL9v8R" target="_blank">
-                        <span className="ml-2 text-[#40B7BA] underline cursor-pointer">
-                          Click here!
-                        </span>
-                      </a>
-                    </div>
                   </div>
                 </section>
               )}
@@ -560,14 +550,19 @@ export default function EditApplication() {
                     </div>
                   )}
                   <p className="text-md my-6 font-bold">
-                    Emails of teammates should be the same as the email they registered with!
-                  </p>
-                  <p className="text-md my-6 font-bold">
                     Want to request a teammate change? Email us at{' '}
                     <Link className="underline" href="mailto:hello@hackutd.co" target="__blank__">
                       hello@hackutd.co
                     </Link>
                   </p>
+                  {
+                    <div className="flex flex-col poppins-regular md:px-4">
+                      {teammateQuestions.map(
+                        (obj, idx) =>
+                          obj.checkboxQuestions && <DisplayQuestion key={idx} obj={obj} />,
+                      )}
+                    </div>
+                  }
                   {/* Submit */}
                   <div className="mt-8 text-white">
                     <button
