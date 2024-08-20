@@ -123,6 +123,9 @@ type Registration = {
 
   updatedAt: string;
   createdAt: string;
+
+  disclaimer: string[];
+  codeOfConduct: string[];
 };
 
 /**
