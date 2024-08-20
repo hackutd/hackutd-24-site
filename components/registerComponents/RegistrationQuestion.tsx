@@ -121,7 +121,7 @@ function Question(props: QuestionProps) {
           )}
         </label>
         <Field name={props.question.name}>
-          {({ field }: FieldProps) => (
+            {({ field }: FieldProps) => (
             <Autocomplete
               id={props.question.id}
               options={(props.question as DropdownQuestion).options}
@@ -142,11 +142,7 @@ function Question(props: QuestionProps) {
                   },
                 });
               }}
-              value={
-                (props.question as DropdownQuestion).options.find(
-                  (option) => option.value === field.value,
-                ) || null
-              }
+              value={(props.question as DropdownQuestion).options.find(option => option.value === field.value) || null}
             />
           )}
         </Field>
