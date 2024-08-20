@@ -90,12 +90,6 @@ export default function ProfilePage() {
     });
   };
 
-  React.useEffect(() => {
-    if (profile) {
-      console.log(profile);
-    }
-  }, [profile]);
-
   if (!isSignedIn) {
     return <div className="p-4 flex-grow text-center text-white">Sign in to see your profile!</div>;
   }
