@@ -75,6 +75,7 @@ function AuthProvider({ children }: React.PropsWithChildren<Record<string, any>>
       // User is signed out
       // TODO(auth): Determine if we want to remove user data from device on sign out
       setUser(null);
+      setProfile(null);
       setLoading(false);
       return;
     }
@@ -119,8 +120,40 @@ function AuthProvider({ children }: React.PropsWithChildren<Record<string, any>>
   };
 
   React.useEffect(() => {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user !== null && !user.emailVerified) return;
+    firebase.auth().onAuthStateChanged(async (user) => {
+      if (user && profile && user.uid !== profile.id) {
+        const token = await user.getIdToken();
+
+        const query = new URL(`http://localhost:3000/api/userinfo`);
+        query.searchParams.append('id', user.uid);
+        const data = await fetch(query.toString().replaceAll('http://localhost:3000', ''), {
+          mode: 'cors',
+          headers: { Authorization: token },
+          method: 'GET',
+        });
+        if (data.status !== 200) {
+          console.error('Unexpected error when fetching AuthContext permission data...');
+          setLoading(false);
+          return;
+        }
+        const userData = await data.json();
+        let permissions: UserPermission[] = userData.user?.permissions || ['hacker'];
+        setUser({
+          id: user.uid,
+          token,
+          firstName: userData.user.firstName,
+          lastName: userData.user.lastName,
+          preferredEmail: userData.user.preferredEmail,
+          permissions,
+          university: userData.university,
+        });
+        setProfile(userData);
+        return;
+      }
+      if (user !== null && !user.emailVerified) {
+        setProfile(null);
+        return;
+      }
       updateUser(user);
     });
   }, []);
@@ -135,6 +168,7 @@ function AuthProvider({ children }: React.PropsWithChildren<Record<string, any>>
       .auth()
       .signOut()
       .then(() => {
+        setProfile(null);
         setUser(null);
       })
       .catch((error) => {
@@ -150,6 +184,7 @@ function AuthProvider({ children }: React.PropsWithChildren<Record<string, any>>
       .then(async ({ credential, user }) => {
         if (user === null) {
           // Something really went wrong
+          setProfile(null);
           console.warn("The signed-in user is null? That doesn't seem right.");
           return;
         }
