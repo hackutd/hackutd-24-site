@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
 import Link from 'next/link';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -12,7 +12,8 @@ import { RequestHelper } from '@/lib/request-helper';
 import { getFileExtension } from '@/lib/util';
 import LoadIcon from '@/components/LoadIcon';
 import DisplayQuestion from '@/components/registerComponents/DisplayQuestion';
-
+import schoolsList from 'public/schools.json';
+import majorsList from 'public/majors.json';
 /**
  * The edit application page.
  *
@@ -146,7 +147,6 @@ export default function EditApplication() {
   //     );
   //   }
 
-  // disable this for testing
   if (!user) {
     // If user haven't signed in, redirect them to login page
     router.push('/auth');
@@ -227,9 +227,8 @@ export default function EditApplication() {
         <Formik
           initialValues={{
             ...formInitialValues,
-            majorManual: '',
-            universityManual: '',
-            heardFromManual: '',
+            majorManual: profile?.major || '',
+            heardFromManual: profile?.heardFrom || '',
             // have no idea why this works, but need to hard code it for the form values to overwrite the default
             preferredEmail: profile?.user?.preferredEmail || '',
             // have no idea why we need formInitialValues but we need to add it for it to works
@@ -238,11 +237,28 @@ export default function EditApplication() {
             phoneNumber: profile?.phoneNumber || '',
             age: profile?.age || '',
             country: profile?.country || '',
-            hackathonExperience: profile?.hackathonExperience || '',
+            hackathonExperience: profile?.hackathonExperience || 0,
             studyLevel: profile?.studyLevel || '',
-            major: profile?.major || '',
-            university: profile?.university || '',
-            heardFrom: profile?.heardFrom || '',
+            major:
+              (profile?.university &&
+                majorsList.filter((major) => major.major == profile.major).length > 0 &&
+                profile?.major) ||
+              'Other',
+            // check if university is in our university list if not set to other
+            university:
+              (profile?.university &&
+                schoolsList.filter((school) => school.university == profile.university).length >
+                  0 &&
+                profile?.university) ||
+              'Other',
+            universityManual: profile?.university || '',
+            heardFrom:
+              (profile?.heardFrom &&
+                ['Instagram', 'Twitter', 'Event Site', 'Friend', 'TikTok'].includes(
+                  profile.heardFrom,
+                ) &&
+                profile.heardFrom) ||
+              'Other',
             gender: profile?.gender || '',
             race: profile?.race || '',
             ethnicity: profile?.ethnicity || '',
@@ -485,7 +501,7 @@ export default function EditApplication() {
                     </div>
                     <br />
                     <input
-                      style={{ display: resumeFile == null ? 'none' : 'block' }}
+                      style={{ display: profile.resume && resumeFile == null ? 'none' : 'block' }}
                       onChange={(e) => handleResumeFileChange(e)}
                       name="resume"
                       type="file"
@@ -522,8 +538,13 @@ export default function EditApplication() {
                   <h2 className="sm:text-2xl text-xl font-semibold sm:mb-3 mb-1">
                     Current Teammate
                   </h2>
+                  {profile && !profile.teammate1 && !profile.teammate2 && !profile.teammate3 && (
+                    <div className="flex flex-col poppins-regular">
+                      You currently have no teammates.
+                    </div>
+                  )}
                   {/* show teammate 1 if exists */}
-                  {profile.teammate1 && (
+                  {profile?.teammate1 && (
                     <div className="flex flex-col poppins-regular md:px-4">
                       <div className="flex items-center">
                         <label className="font-semibold">Teammate 1:</label>
@@ -532,7 +553,7 @@ export default function EditApplication() {
                     </div>
                   )}
                   {/* show teammate 2 if exists */}
-                  {profile.teammate2 && (
+                  {profile?.teammate2 && (
                     <div className="flex flex-col poppins-regular md:px-4">
                       <div className="flex items-center">
                         <label className="font-semibold">Teammate 2:</label>
@@ -541,7 +562,7 @@ export default function EditApplication() {
                     </div>
                   )}
                   {/* show teammate 3 if exists */}
-                  {profile.teammate3 && (
+                  {profile?.teammate3 && (
                     <div className="flex flex-col poppins-regular md:px-4">
                       <div className="flex items-center">
                         <label className="font-semibold">Teammate 3:</label>
