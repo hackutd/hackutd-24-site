@@ -206,6 +206,73 @@ async function handlePostApplications(req: NextApiRequest, res: NextApiResponse)
   });
 }
 
+/**
+ * Handles PUT requests to /api/applications.
+ *
+ * This updates an existing application in the database using the information
+ * provided in the request. If a user is not signed in, this route will return a
+ * 403 Unauthenticated error.
+ *
+ * @param req The HTTP request
+ * @param res The HTTP response
+ */
+async function handlePutApplications(req: NextApiRequest, res: NextApiResponse) {
+  const registrationAllowed = await checkRegistrationAllowed();
+  if (!registrationAllowed) {
+    return res.status(403).json({
+      msg: 'Registration updates are no longer allowed',
+    });
+  }
+
+  const applicationBody = req.body;
+
+  let body: Registration;
+  try {
+    body = JSON.parse(req.body);
+  } catch (error) {
+    console.error('Could not parse request JSON body');
+    return res.status(400).json({
+      type: 'invalid',
+      message: 'Invalid JSON body',
+    });
+  }
+
+  const snapshot = await db
+    .collection(APPLICATIONS_COLLECTION)
+    .where('user.id', '==', body.user.id)
+    .get();
+
+  if (snapshot.empty) {
+    return res.status(404).json({
+      msg: 'Profile does not exist',
+    });
+  }
+
+  const completedRegistrationInfo = {
+    ...body,
+    user: {
+      ...body.user,
+      permissions: ['hacker'],
+    },
+  };
+
+  await db.collection(APPLICATIONS_COLLECTION).doc(body.user.id).update(completedRegistrationInfo);
+
+  const { eligible, teamMembers } = await checkAutoAcceptEligibility(body);
+  if (eligible) {
+    const updatedSnapshot = await db
+      .collection(APPLICATIONS_COLLECTION)
+      .where('user.id', '==', body.user.id)
+      .get();
+    await autoAcceptTeam([...teamMembers, updatedSnapshot.docs[0].ref]);
+  }
+
+  res.status(200).json({
+    msg: 'Application updated successfully',
+    updatedData: completedRegistrationInfo,
+  });
+}
+
 type ApplicationsResponse = {};
 
 /**
@@ -223,8 +290,10 @@ export default async function handleApplications(
     return handleGetApplications(req, res);
   } else if (method === 'POST') {
     return handlePostApplications(req, res);
+  } else if (method == 'PUT') {
+    return handlePutApplications(req, res);
   } else {
-    res.setHeader('Allow', ['GET', 'POST']);
+    res.setHeader('Allow', ['GET', 'POST', 'PUT']);
     res.status(405).end(`Method ${method} Not Allowed`);
   }
 }

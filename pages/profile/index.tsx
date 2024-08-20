@@ -10,6 +10,7 @@ import GitHubIcon from '@mui/icons-material/GitHub';
 import LinkedInImage from '@/public/icons/linkedin.png';
 import ChickenImage from '@/public/assets/profile-chicken-egg.png';
 import { TextField, TextFieldProps } from '@mui/material';
+import Link from 'next/link';
 
 /**
  * A page that allows a user to modify app or profile settings and see their data.
@@ -120,23 +121,25 @@ export default function ProfilePage() {
               lightColor="#0000"
             />
             <div className="text-center text-[#170F49] text-md font-semibold">
-              {profile.user.group ? profile.user.group : 'Group TBD'}
+              {profile?.user.group ? profile.user.group : 'Group TBD'}
             </div>
           </div>
           <div className="border-y-[1.2px] border-primaryDark/20 py-4 md:my-8 my-6">
             <div className="font-fredoka font-semibold text-lg">Application Status</div>
-            <div>Edit Application</div>
-            <div>Review Application</div>
+
+            <Link href="/profile/application/edit" className="text-[#40B7BA] font-bold underline">
+              Edit Application
+            </Link>
             <h1
               className={`font-fredoka text-xl font-semibold ${
-                profile.status === 'Accepted'
+                profile?.status === 'Accepted'
                   ? 'text-[#5DC55B]'
-                  : profile.status === 'Rejected'
+                  : profile?.status === 'Rejected'
                   ? 'text-[#DE3163]'
                   : 'text-[#5C67C9]'
               }`}
             >
-              {profile.status ? profile.status : 'In Review'}
+              {profile?.status ? profile.status : 'In Review'}
             </h1>
           </div>
 

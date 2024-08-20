@@ -43,7 +43,7 @@ function PortalApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [particlesInit, setParticlesInit] = useState(false);
   const hash = useUrlHash('');
-  const duckBackgroundPathnames = ['/profile'];
+  const duckBackgroundPathnames = ['/profile', '/profile/application/edit'];
   const registerBackgroundPathnames = ['/register', '/auth'];
   const faqRef = useRef<HTMLDivElement | null>(null);
   const aboutRef = useRef<HTMLDivElement | null>(null);

@@ -12,6 +12,7 @@ import { RequestHelper } from '@/lib/request-helper';
 import { getFileExtension } from '@/lib/util';
 import LoadIcon from '@/components/LoadIcon';
 import DisplayQuestion from '@/components/registerComponents/DisplayQuestion';
+import { te } from 'date-fns/locale';
 
 /**
  * The registration page.
@@ -41,15 +42,6 @@ export default function EditApplication() {
   const [registrationSection, setRegistrationSection] = useState(0);
 
   // TODO: do some auth check
-
-  useEffect(() => {
-    //setting user specific initial values
-    // formInitialValues['id'] = user?.id || '';
-    // formInitialValues['preferredEmail'] = user?.preferredEmail || '';
-    // formInitialValues['firstName'] = user?.firstName?.split(' ')[0] || '';
-    // formInitialValues['lastName'] = user?.lastName || '';
-    // formInitialValues['permissions'] = user?.permissions || ['hacker'];
-  }, []);
 
   const handleSubmit = async (registrationData) => {
     let finalValues: any = registrationData;
@@ -83,7 +75,7 @@ export default function EditApplication() {
     delete registrationData.universityManual;
     delete registrationData.majorManual;
     delete registrationData.heardFromManual;
-    let resumeUrl: string = '';
+    let resumeUrl: string = registrationData.resume;
     try {
       if (resumeFile) {
         const formData = new FormData();
@@ -98,7 +90,7 @@ export default function EditApplication() {
         });
         resumeUrl = (await res.json()).url;
       }
-      const { data } = await RequestHelper.post<
+      const { data } = await RequestHelper.put<
         Registration,
         { msg: string; registrationData: Registration }
       >(
@@ -114,7 +106,7 @@ export default function EditApplication() {
           resume: resumeUrl,
         },
       );
-      alert('Application Submitted');
+      alert('Application Updated Successfully');
       updateProfile(data.registrationData);
       router.push('/profile');
     } catch (error) {
@@ -241,24 +233,37 @@ export default function EditApplication() {
             universityManual: '',
             heardFromManual: '',
             // have no idea why this works, but need to hard code it for the form values to overwrite the default
-            preferredEmail: formInitialValues.preferredEmail || user?.preferredEmail || '',
+            preferredEmail: user?.preferredEmail || '',
+            // have no idea why we need formInitialValues but we need to add it for it to works
             firstName: formInitialValues.firstName || user?.firstName || '',
             lastName: formInitialValues.lastName || user?.lastName || '',
-            phoneNumber: formInitialValues.phoneNumber || profile?.phoneNumber || '',
-            age: formInitialValues.age || profile?.age || '',
-            country: formInitialValues.country || profile?.country || '',
-            hackathonExperience:
-              formInitialValues.hackathonExperience || profile?.hackathonExperience || '',
-            studyLevel: formInitialValues.studyLevel || profile?.studyLevel || '',
-            major: formInitialValues.major || profile?.major || '',
-            university: formInitialValues.university || profile?.university || '',
-            heardFrom: formInitialValues.heardFrom || profile?.heardFrom || '',
-            gender: formInitialValues.gender || profile?.gender || '',
-            race: formInitialValues.race || profile?.race || '',
-            ethnicity: formInitialValues.ethnicity || profile?.ethnicity || '',
-            softwareExperience:
-              formInitialValues.softWareExperience || profile?.softwareExperience || '',
-            whyAttend: formInitialValues.whyAttend || profile?.whyAttend || '',
+
+            phoneNumber: profile?.phoneNumber || '',
+            age: profile?.age || '',
+            country: profile?.country || '',
+            hackathonExperience: profile?.hackathonExperience || '',
+            studyLevel: profile?.studyLevel || '',
+            major: profile?.major || '',
+            university: profile?.university || '',
+            heardFrom: profile?.heardFrom || '',
+            gender: profile?.gender || '',
+            race: profile?.race || '',
+            ethnicity: profile?.ethnicity || '',
+            softwareExperience: profile?.softwareExperience || '',
+            whyAttend: profile?.whyAttend || '',
+            hackathonNumber: profile?.hackathonNumber || '',
+            hackathonFirstTimer: profile?.hackathonFirstTimer || '',
+            lookingForward: profile?.lookingForward || '',
+            size: profile?.size || '',
+            dietary: profile?.dietary || [],
+            accomodations: profile?.accomodations || '',
+            github: profile?.github || '',
+            linkedin: profile?.linkedin || '',
+            website: profile?.website || '',
+            resume: profile?.resume || '',
+            teammate1: profile?.teammate1 || '',
+            teammate2: profile?.teammate2 || '',
+            teammate3: profile?.teammate3 || '',
           }}
           validateOnBlur={false}
           validateOnChange={false}
@@ -490,14 +495,31 @@ export default function EditApplication() {
                     </div>
                     <br />
                     <input
+                      style={{ display: resumeFile == null ? 'none' : 'block' }}
                       onChange={(e) => handleResumeFileChange(e)}
                       name="resume"
                       type="file"
+                      id="resume"
                       formEncType="multipart/form-data"
                       accept=".pdf, .doc, .docx, image/png, image/jpeg, .txt, .tex, .rtf"
                       className="poppins-regular cursor-pointer w-full text-[#4C4950] border border-[#40B7BA] rounded-md file:md:p-2 file:p-1 file:bg-[#40B7BA] file:text-white file:cursor-pointer file:h-full file:rounded-l-md file:border-none"
                     />
+                    {profile.resume && (
+                      <label className="cursor-pointer underline text-[#40B7BA]" htmlFor="resume">
+                        Replace resume
+                      </label>
+                    )}
+
                     <br />
+                    {profile.resume && (
+                      <a
+                        href={profile.resume}
+                        target="_blank"
+                        className="text-[#40B7BA] underline cursor-pointer"
+                      >
+                        View current resume
+                      </a>
+                    )}
                     <p className="poppins-regular text-xs text-[#40B7BA]">
                       Accepted file types: .pdf, .doc, .docx, .png, .jpeg, .txt, .tex, .rtf
                     </p>
@@ -518,7 +540,6 @@ export default function EditApplication() {
                       <DisplayQuestion key={idx} obj={obj} />
                     ))}
                   </div>
-
                   {/* Submit */}
                   <div className="mt-8 text-white">
                     <button
@@ -526,7 +547,7 @@ export default function EditApplication() {
                       type="submit"
                       className="mr-auto cursor-pointer px-4 py-2 rounded-lg bg-[#40B7BA] hover:brightness-90"
                     >
-                      Submit
+                      Update Application
                     </button>
                     {!isValid && (
                       <div className="text-red-600 poppins-regular">

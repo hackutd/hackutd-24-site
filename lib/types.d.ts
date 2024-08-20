@@ -117,6 +117,9 @@ type Registration = {
   phoneNumber: string;
   country: string;
   whyAttend: string;
+  hackathonNumber: string;
+  hackathonFirstTimer: string;
+  lookingForward: string;
 };
 
 /**

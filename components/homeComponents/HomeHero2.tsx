@@ -128,7 +128,7 @@ export default function HomeHero2() {
             behavior: 'smooth',
           });
         }}
-    >
+      >
         <div className="absolute bottom-5 w-full flex flex-col items-center z-20">
           <p className="font-montserrat text-white text-lg md:text-xl">Learn More</p>
           <div className="animate-bounce">
