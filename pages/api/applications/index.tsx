@@ -248,8 +248,13 @@ async function handlePutApplications(req: NextApiRequest, res: NextApiResponse) 
     });
   }
 
+  // disable user to manually update teammate
+  // TODO: could expand on this to allow admin to update teammate
   const completedRegistrationInfo = {
     ...body,
+    teammate1: snapshot.docs[0].data().teammate1,
+    teammate2: snapshot.docs[0].data().teammate2,
+    teammate3: snapshot.docs[0].data().teammate3,
     user: {
       ...body.user,
       // update permissions according to original permission
@@ -259,14 +264,15 @@ async function handlePutApplications(req: NextApiRequest, res: NextApiResponse) 
 
   await db.collection(APPLICATIONS_COLLECTION).doc(body.user.id).update(completedRegistrationInfo);
 
-  const { eligible, teamMembers } = await checkAutoAcceptEligibility(body);
-  if (eligible) {
-    const updatedSnapshot = await db
-      .collection(APPLICATIONS_COLLECTION)
-      .where('user.id', '==', body.user.id)
-      .get();
-    await autoAcceptTeam([...teamMembers, updatedSnapshot.docs[0].ref]);
-  }
+  // temporarily disable this
+  // const { eligible, teamMembers } = await checkAutoAcceptEligibility(body);
+  // if (eligible) {
+  //   const updatedSnapshot = await db
+  //     .collection(APPLICATIONS_COLLECTION)
+  //     .where('user.id', '==', body.user.id)
+  //     .get();
+  //   await autoAcceptTeam([...teamMembers, updatedSnapshot.docs[0].ref]);
+  // }
 
   res.status(200).json({
     msg: 'Application updated successfully',
