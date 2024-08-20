@@ -120,6 +120,9 @@ type Registration = {
   hackathonNumber: string;
   hackathonFirstTimer: string;
   lookingForward: string;
+
+  updatedAt: string;
+  createdAt: string;
 };
 
 /**

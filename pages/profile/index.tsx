@@ -138,12 +138,17 @@ export default function ProfilePage() {
               >
                 {profile?.status ? profile?.status : 'In Review'}
               </h1>
-              <Link
-                href="/profile/application/edit"
-                className="text-[#40B7BA] font-bold underline text-sm"
-              >
-                Edit Application
-              </Link>
+              <div className="text-sm flex">
+                <p className="text-nowrap mr-4">
+                  Application last worked on {new Date(profile?.updatedAt).toLocaleDateString()}
+                </p>
+                <Link
+                  href="/profile/application/edit"
+                  className="text-[#40B7BA] font-bold underline text-nowrap"
+                >
+                  Edit Application
+                </Link>
+              </div>
             </div>
 
             <div className="flex gap-x-4">
