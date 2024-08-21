@@ -519,7 +519,7 @@ export default function EditApplication() {
                     )}
                     <div
                       style={{
-                        display: resumeFile !== null ? 'flex' : 'none',
+                        display: !profile.resume || resumeFile !== null ? 'flex' : 'none',
                       }}
                       className="items-center gap-x-3 poppins-regular w-full border border-[#40B7BA] rounded-md"
                     >
