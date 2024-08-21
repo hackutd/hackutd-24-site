@@ -84,6 +84,32 @@ export class RequestHelper {
       data,
     };
   }
+
+  /**
+   * Will make a PUT request to the provided URL with the provided config and body
+   *
+   * @param url URL to which the request will be made
+   * @param config Config that can be added into the request, usually used to add information to the headers
+   * @param body Request body
+   * @returns Response data
+   */
+  static async put<ReqBody, ResBody>(
+    url: string,
+    config: RequestInit,
+    body?: ReqBody,
+  ): Promise<ResponseData<ResBody>> {
+    const temp = await fetch(url, {
+      ...config,
+      method: 'PUT',
+      mode: 'cors',
+      body: JSON.stringify(body),
+    });
+    const data = await temp.json();
+    return {
+      status: temp.status,
+      data,
+    };
+  }
 }
 
 /**
