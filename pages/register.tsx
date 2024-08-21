@@ -12,6 +12,7 @@ import Link from 'next/link';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { GetServerSideProps } from 'next';
+import { Snackbar } from '@mui/material';
 
 interface RegisterPageProps {
   allowedRegistrations: boolean;
@@ -41,6 +42,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
   const { user, profile, hasProfile, updateProfile } = useAuthContext();
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const resumeFileRef = useRef(null);
+  const [displayProfileSavedToaster, setDisplayProfileSavedToaster] = useState(false);
   // update this to false for testing
   const [loading, setLoading] = useState(false);
   const [registrationSection, setRegistrationSection] = useState(
@@ -162,6 +164,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
       },
     )
       .then(() => {
+        setDisplayProfileSavedToaster(true);
         resetForm({ values: registrationData });
       })
       .catch((err) => {
@@ -285,9 +288,9 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
           initialValues={{
             ...generateInitialValues(profile),
             id: profile?.user.id || '',
-            firstName: profile?.user.firstName || '',
-            lastName: profile?.user.lastName || '',
-            preferredEmail: profile?.user.preferredEmail || user.preferredEmail,
+            firstName: profile?.user?.firstName || '',
+            lastName: profile?.user?.lastName || '',
+            preferredEmail: profile?.user?.preferredEmail || user?.preferredEmail || '',
             majorManual: profile?.majorManual || '',
             universityManual: profile?.universityManual || '',
             heardFromManual: profile?.heardFromManual || '',
@@ -408,9 +411,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                         disabled={!dirty}
                         onClick={(e) => {
                           e.preventDefault();
-                          handleSaveProfile(values, registrationSection, resetForm).then(() => {
-                            alert('Profile saved');
-                          });
+                          handleSaveProfile(values, registrationSection, resetForm);
                         }}
                         className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
                       >
@@ -468,9 +469,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                         disabled={!dirty}
                         onClick={(e) => {
                           e.preventDefault();
-                          handleSaveProfile(values, registrationSection, resetForm).then(() => {
-                            alert('Profile saved');
-                          });
+                          handleSaveProfile(values, registrationSection, resetForm);
                         }}
                         className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
                       >
@@ -512,9 +511,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                         disabled={!dirty}
                         onClick={(e) => {
                           e.preventDefault();
-                          handleSaveProfile(values, registrationSection, resetForm).then(() => {
-                            alert('Profile saved');
-                          });
+                          handleSaveProfile(values, registrationSection, resetForm);
                         }}
                         className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
                       >
@@ -540,9 +537,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                         disabled={!dirty}
                         onClick={(e) => {
                           e.preventDefault();
-                          handleSaveProfile(values, registrationSection, resetForm).then(() => {
-                            alert('Profile saved');
-                          });
+                          handleSaveProfile(values, registrationSection, resetForm);
                         }}
                         className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
                       >
@@ -571,9 +566,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                         disabled={!dirty}
                         onClick={(e) => {
                           e.preventDefault();
-                          handleSaveProfile(values, registrationSection, resetForm).then(() => {
-                            alert('Profile saved');
-                          });
+                          handleSaveProfile(values, registrationSection, resetForm);
                         }}
                         className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
                       >
@@ -628,6 +621,18 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                         Accepted file types: .pdf, .doc, .docx, .png, .jpeg, .txt, .tex, .rtf
                       </p>
                     </div>
+                    <div className="flex justify-end my-4">
+                      <button
+                        disabled={!dirty}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleSaveProfile(values, registrationSection, resetForm);
+                        }}
+                        className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
+                      >
+                        Save Profile
+                      </button>
+                    </div>
                   </section>
                 )}
                 {/* Teammate Questions */}
@@ -666,9 +671,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                         disabled={!dirty}
                         onClick={(e) => {
                           e.preventDefault();
-                          handleSaveProfile(values, registrationSection, resetForm).then(() => {
-                            alert('Profile saved');
-                          });
+                          handleSaveProfile(values, registrationSection, resetForm);
                         }}
                         className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
                       >
@@ -748,6 +751,12 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                   </div>
                 )}
               </section>
+              <Snackbar
+                open={displayProfileSavedToaster}
+                autoHideDuration={5000}
+                onClose={() => setDisplayProfileSavedToaster(false)}
+                message="Profile saved"
+              />
             </>
           )}
         </Formik>
