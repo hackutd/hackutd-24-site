@@ -669,59 +669,77 @@ export interface textAreaQuestion extends RegistrationQuestion {
 }
 
 //extracting initial values
-var InitialValues: any = {};
-const getInitialValues = () => {
+export const generateInitialValues = (savedValues) => {
+  let finalValues: any = {};
   for (let obj of hackPortalConfig.registrationFields.generalQuestions) {
-    setInitialValues(obj);
+    setInitialValues(obj, finalValues, savedValues);
   }
   for (let obj of hackPortalConfig.registrationFields.schoolQuestions) {
-    setInitialValues(obj);
+    setInitialValues(obj, finalValues, savedValues);
   }
   for (let obj of hackPortalConfig.registrationFields.hackathonExperienceQuestions) {
-    setInitialValues(obj);
+    setInitialValues(obj, finalValues, savedValues);
   }
   for (let obj of hackPortalConfig.registrationFields.shortAnswerQuestions) {
-    setInitialValues(obj);
+    setInitialValues(obj, finalValues, savedValues);
   }
   for (let obj of hackPortalConfig.registrationFields.eventInfoQuestions) {
-    setInitialValues(obj);
+    setInitialValues(obj, finalValues, savedValues);
   }
   for (let obj of hackPortalConfig.registrationFields.sponsorInfoQuestions) {
-    setInitialValues(obj);
+    setInitialValues(obj, finalValues, savedValues);
   }
   for (let obj of hackPortalConfig.registrationFields.teammateQuestions) {
-    setInitialValues(obj);
+    setInitialValues(obj, finalValues, savedValues);
   }
-  return InitialValues;
+  return finalValues;
 };
-const setInitialValues = (obj) => {
+const setInitialValues = (obj, finalValues, savedValues) => {
   if (obj.textInputQuestions)
     for (let inputObj of obj.textInputQuestions) {
-      InitialValues[inputObj.name] = inputObj.initialValue;
+      finalValues[inputObj.name] = inputObj.initialValue;
+      if (savedValues && savedValues[inputObj.name]) {
+        finalValues[inputObj.name] = savedValues[inputObj.name];
+      }
     }
   if (obj.numberInputQuestions)
     for (let inputObj of obj.numberInputQuestions) {
-      InitialValues[inputObj.name] = inputObj.initialValue;
+      finalValues[inputObj.name] = inputObj.initialValue;
+      if (savedValues && savedValues[inputObj.name]) {
+        finalValues[inputObj.name] = savedValues[inputObj.name];
+      }
     }
   if (obj.dropdownQuestions)
     for (let inputObj of obj.dropdownQuestions) {
-      InitialValues[inputObj.name] = inputObj.initialValue;
+      finalValues[inputObj.name] = inputObj.initialValue;
+      if (savedValues && savedValues[inputObj.name]) {
+        finalValues[inputObj.name] = savedValues[inputObj.name];
+      }
     }
   if (obj.checkboxQuestions)
     for (let inputObj of obj.checkboxQuestions) {
-      InitialValues[inputObj.name] = inputObj.initialValue;
+      finalValues[inputObj.name] = inputObj.initialValue;
+      if (savedValues && savedValues[inputObj.name]) {
+        finalValues[inputObj.name] = savedValues[inputObj.name];
+      }
     }
   if (obj.datalistQuestions)
     for (let inputObj of obj.datalistQuestions) {
-      InitialValues[inputObj.name] = inputObj.initialValue;
+      finalValues[inputObj.name] = inputObj.initialValue;
+      if (savedValues && savedValues[inputObj.name]) {
+        finalValues[inputObj.name] = savedValues[inputObj.name];
+      }
     }
   if (obj.textAreaQuestions)
     for (let inputObj of obj.textAreaQuestions) {
-      InitialValues[inputObj.name] = inputObj.initialValue;
+      finalValues[inputObj.name] = inputObj.initialValue;
+      if (savedValues && savedValues[inputObj.name]) {
+        finalValues[inputObj.name] = savedValues[inputObj.name];
+      }
     }
 };
 
-export const formInitialValues = getInitialValues();
+// export const formInitialValues = getInitialValues();
 
 export const config = {
   targetDate: '2024-11-15T18:00:00-11:00',

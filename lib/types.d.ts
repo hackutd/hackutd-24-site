@@ -126,6 +126,13 @@ type Registration = {
 
   disclaimer: string[];
   codeOfConduct: string[];
+  // if currentRegistrationPage is undefined, then user already created profile before this field is being added
+  // if currentRegistrationPage is less than 1,000,000,000, then user haven't finished creating profile yet
+  // otherwise, user finished creating profile
+  currentRegistrationPage?: number;
+  majorManual?: string;
+  universityManual?: string;
+  heardFromManual?: string;
 };
 
 /**
