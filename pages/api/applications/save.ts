@@ -31,17 +31,17 @@ async function handlePutRequest(req: NextApiRequest, res: NextApiResponse) {
       message: '',
     });
   }
-
-  await db.collection(APPLICATIONS_COLLECTION).doc(body.user.id).set(body);
+  const completedRegistrationData = {
+    ...body,
+    user: {
+      ...body.user,
+      ...(body.currentRegistrationPage === 1000000000 ? { permissions: ['hacker'] } : {}),
+    },
+  };
+  await db.collection(APPLICATIONS_COLLECTION).doc(body.user.id).set(completedRegistrationData);
   res.status(200).json({
     msg: 'Operation completed',
-    registrationData: {
-      ...body,
-      user: {
-        ...body.user,
-        ...(body.currentRegistrationPage === 1000000000 ? { permissions: ['hacker'] } : {}),
-      },
-    },
+    registrationData: completedRegistrationData,
   });
 }
 
