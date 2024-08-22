@@ -6,7 +6,7 @@ import Link from 'next/link';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { GetServerSideProps } from 'next';
-import { generateInitialValues, hackPortalConfig } from '@/hackportal.config';
+import { formInitialValues, hackPortalConfig } from '@/hackportal.config';
 import { useAuthContext } from '@/lib/user/AuthContext';
 import { RequestHelper } from '@/lib/request-helper';
 import LoadIcon from '@/components/LoadIcon';
@@ -188,7 +188,7 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
       <section className="relative">
         <Formik
           initialValues={{
-            ...generateInitialValues(profile),
+            ...formInitialValues,
             majorManual: profile?.major || '',
             heardFromManual: profile?.heardFrom || '',
             // have no idea why this works, but need to hard code it for the form values to overwrite the default
