@@ -11,6 +11,7 @@ import LinkedInImage from '@/public/icons/linkedin.png';
 import ChickenImage from '@/public/assets/profile-chicken-egg.png';
 import { TextField, TextFieldProps } from '@mui/material';
 import Link from 'next/link';
+import { RequestHelper } from '@/lib/request-helper';
 
 /**
  * A page that allows a user to modify app or profile settings and see their data.
@@ -19,7 +20,7 @@ import Link from 'next/link';
  */
 export default function ProfilePage() {
   const router = useRouter();
-  const { isSignedIn, hasProfile, user, profile } = useAuthContext();
+  const { isSignedIn, hasProfile, user, profile, updateProfile } = useAuthContext();
   const [uploading, setUploading] = useState<boolean>(false);
   const resumeRef = useRef(null);
 
@@ -53,7 +54,7 @@ export default function ProfilePage() {
     },
   };
 
-  const handleResumeUpload = (profile) => {
+  const handleResumeUpload = async (profile) => {
     if (resumeRef.current.files.length !== 1) return alert('Must submit one file');
 
     const fileExtension = getFileExtension(resumeRef.current.files[0].name);
@@ -82,16 +83,33 @@ export default function ProfilePage() {
     formData.append('studyLevel', profile.studyLevel);
     formData.append('major', profile.major);
 
-    fetch('/api/resume/upload', {
-      method: 'post',
-      body: formData,
-    }).then((res) => {
-      if (res.status !== 200) alert('Resume upload failed...');
-      else {
-        setUploading(false);
-        alert('Resume updated...');
-      }
-    });
+    try {
+      const res = await fetch('/api/resume/upload', {
+        method: 'post',
+        body: formData,
+      });
+      // upload resume
+      const resumeUrl = (await res.json()).url;
+
+      // upload profile with new resume data
+      const { data } = await RequestHelper.put<
+        Registration,
+        { msg: string; registrationData: Registration }
+      >(
+        '/api/applications',
+        {},
+        {
+          ...profile,
+          resume: resumeUrl,
+        },
+      );
+      alert('Resume updated successfully');
+      updateProfile(data.registrationData);
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+      console.log('Request creation error');
+    }
   };
 
   if (!isSignedIn) {
@@ -188,11 +206,20 @@ export default function ProfilePage() {
                     />
                     <label
                       id="resume_label"
-                      className="font-fredoka transition py-3 font-semibold px-6 text-sm text-center whitespace-nowrap text-white w-min bg-[#40B7BA] rounded-full cursor-pointer hover:brightness-110"
+                      className="font-fredoka transition py-3 font-semibold px-6 text-sm text-center whitespace-nowrap text-white w-min bg-[#40B7BA] rounded-full cursor-pointer hover:brightness-110 mr-4"
                       htmlFor="resume"
                     >
-                      Resume
+                      {profile.resume ? 'Update' : 'Add'} Resume
                     </label>
+                    {profile.resume && (
+                      <Link
+                        className="font-fredoka transition py-3 font-semibold px-6 text-sm text-center whitespace-nowrap text-white w-min bg-[#40B7BA] rounded-full cursor-pointer hover:brightness-110"
+                        href={profile.resume}
+                        target="__blank__"
+                      >
+                        View Resume
+                      </Link>
+                    )}
                   </>
                 ) : (
                   <LoadIcon width={16} height={16} />

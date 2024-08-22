@@ -237,7 +237,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
         <meta name="description" content="Register for HackUTD 2024" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <section className="pl-4 relative mb-4">
+      <section className="pl-4 relative mb-4 z-[9999]">
         <Link href="/" passHref>
           <div className="cursor-pointer items-center inline-flex text-white font-bold bg-[#40B7BA] rounded-[30px] pr-4 pl-1 py-2 border-2 border-white">
             <ChevronLeftIcon className="text-white" fontSize={'large'} />

@@ -9,7 +9,6 @@ import { GetServerSideProps } from 'next';
 import { formInitialValues, hackPortalConfig } from '@/hackportal.config';
 import { useAuthContext } from '@/lib/user/AuthContext';
 import { RequestHelper } from '@/lib/request-helper';
-import { getFileExtension } from '@/lib/util';
 import LoadIcon from '@/components/LoadIcon';
 import DisplayQuestion from '@/components/registerComponents/DisplayQuestion';
 import schoolsList from 'public/schools.json';
@@ -35,8 +34,6 @@ export default function EditApplication() {
   } = hackPortalConfig;
 
   const { user, hasProfile, updateProfile, profile } = useAuthContext();
-  const [resumeFile, setResumeFile] = useState<File | null>(null);
-  const resumeFileRef = useRef(null);
   // update this to false for testing
   const [loading, setLoading] = useState(false);
   const [registrationSection, setRegistrationSection] = useState(0);
@@ -75,21 +72,7 @@ export default function EditApplication() {
     delete registrationData.universityManual;
     delete registrationData.majorManual;
     delete registrationData.heardFromManual;
-    let resumeUrl: string = registrationData.resume;
     try {
-      if (resumeFile) {
-        const formData = new FormData();
-        formData.append('resume', resumeFile);
-        formData.append('fileName', `${user.id}${getFileExtension(resumeFile.name)}`);
-        formData.append('studyLevel', registrationData['studyLevel']);
-        formData.append('major', registrationData['major']);
-
-        const res = await fetch('/api/resume/upload', {
-          method: 'post',
-          body: formData,
-        });
-        resumeUrl = (await res.json()).url;
-      }
       const { data } = await RequestHelper.put<
         Registration,
         { msg: string; registrationData: Registration }
@@ -103,7 +86,6 @@ export default function EditApplication() {
             ...registrationData.user,
             id: registrationData.user.id || user.id,
           },
-          resume: resumeUrl,
         },
       );
       alert('Application Updated Successfully');
@@ -113,31 +95,6 @@ export default function EditApplication() {
       console.error(error);
       console.log('Request creation error');
     }
-  };
-
-  const handleResumeFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files.length !== 1) return alert('Must submit one file');
-
-    const file = e.target.files[0];
-
-    const fileExtension = getFileExtension(file.name);
-
-    const acceptedFileExtensions = [
-      '.pdf',
-      '.doc',
-      '.docx',
-      '.png',
-      '.jpg',
-      '.jpeg',
-      '.txt',
-      '.tex',
-      '.rtf',
-    ];
-
-    if (!acceptedFileExtensions.includes(fileExtension))
-      return alert(`Accepted file types: ${acceptedFileExtensions.join(' ')}`);
-
-    setResumeFile(file);
   };
 
   //   if (!allowedRegistrations) {
@@ -215,11 +172,11 @@ export default function EditApplication() {
         <meta name="description" content="Register for HackUTD 2024" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <section className="pl-4 relative mb-4">
-        <Link href="/" passHref>
-          <div className="cursor-pointer items-center inline-flex text-white font-bold bg-[#40B7BA] rounded-lg px-3 py-2">
+      <section className="pl-4 relative mb-4 z-[9999]">
+        <Link href="/profile">
+          <div className="items-center inline-flex text-white font-bold bg-[#40B7BA] rounded-[30px] pr-4 pl-1 py-2 border-2 border-white">
             <ChevronLeftIcon className="text-white" fontSize={'large'} />
-            Home
+            Back to profile
           </div>
         </Link>
       </section>
@@ -274,7 +231,6 @@ export default function EditApplication() {
             github: profile?.github || '',
             linkedin: profile?.linkedin || '',
             website: profile?.website || '',
-            resume: profile?.resume || '',
             teammate1: profile?.teammate1 || '',
             teammate2: profile?.teammate2 || '',
             teammate3: profile?.teammate3 || '',
@@ -495,62 +451,6 @@ export default function EditApplication() {
                       <DisplayQuestion key={idx} obj={obj} />
                     ))}
                   </div>
-                  {/* Resume Upload */}
-                  <div className="mt-8 md:px-4 poppins-regular">
-                    <div className="flex items-center">
-                      Upload your resume{' '}
-                      <span className="text-gray-600 ml-2 text-[8px]">optional</span>
-                    </div>
-                    <br />
-                    <input
-                      onChange={(e) => handleResumeFileChange(e)}
-                      name="resume"
-                      ref={resumeFileRef}
-                      type="file"
-                      id="resume"
-                      formEncType="multipart/form-data"
-                      accept=".pdf, .doc, .docx, image/png, image/jpeg, .txt, .tex, .rtf"
-                      className="hidden poppins-regular cursor-pointer w-full text-[#4C4950] border border-[#40B7BA] rounded-md file:md:p-2 file:p-1 file:bg-[#40B7BA] file:text-white file:cursor-pointer file:h-full file:rounded-l-md file:border-none"
-                    />
-                    {profile.resume && resumeFile === null && (
-                      <label className="cursor-pointer underline text-[#40B7BA]" htmlFor="resume">
-                        Replace resume
-                      </label>
-                    )}
-                    <div
-                      style={{
-                        display: !profile.resume || resumeFile !== null ? 'flex' : 'none',
-                      }}
-                      className="items-center gap-x-3 poppins-regular w-full border border-[#40B7BA] rounded-md"
-                    >
-                      <button
-                        className="md:p-2 p-1 bg-[#40B7BA] text-white h-full rounded-l-md border-none"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          resumeFileRef.current?.click();
-                        }}
-                      >
-                        Browse...
-                      </button>
-                      <p className="text-[#4C4950]">
-                        {resumeFile ? resumeFile.name : 'No file selected.'}
-                      </p>
-                    </div>
-
-                    <br />
-                    {profile.resume && (
-                      <a
-                        href={profile.resume}
-                        target="_blank"
-                        className="text-[#40B7BA] underline cursor-pointer"
-                      >
-                        View current resume
-                      </a>
-                    )}
-                    <p className="poppins-regular text-xs text-[#40B7BA]">
-                      Accepted file types: .pdf, .doc, .docx, .png, .jpeg, .txt, .tex, .rtf
-                    </p>
-                  </div>
                 </section>
               )}
               {/* Teammate Questions */}
@@ -651,9 +551,9 @@ export default function EditApplication() {
             >
               <div
                 style={{ width: 'fit-content' }}
-                className="cursor-pointer select-none bg-[#40B7BA] text-white rounded-xl py-3 pl-2 pr-4 text-xs md:text-lg"
+                className="cursor-pointer select-none bg-white text-[#40B7BA] rounded-[30px] py-3 pl-2 pr-4 text-xs md:text-lg border-2 border-[#40B7BA]"
               >
-                <ChevronLeftIcon className="text-white" />
+                <ChevronLeftIcon className="text-[#40B7BA]" />
                 prev page
               </div>
             </div>
@@ -680,7 +580,7 @@ export default function EditApplication() {
             >
               <div
                 style={{ width: 'fit-content' }}
-                className="cursor-pointer select-none bg-[#40B7BA] text-white text-xs md:text-lg rounded-xl py-3 pr-2 pl-4"
+                className="cursor-pointer select-none bg-white text-[#40B7BA] text-xs md:text-lg rounded-[30px] py-3 pr-2 pl-4 border-2 border-[#40B7BA]"
               >
                 next page
                 <ChevronRightIcon />
