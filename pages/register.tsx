@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import LoadIcon from '../components/LoadIcon';
 import { RequestHelper } from '../lib/request-helper';
 import { useAuthContext } from '../lib/user/AuthContext';
@@ -40,6 +40,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
 
   const { user, hasProfile, updateProfile } = useAuthContext();
   const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const resumeFileRef = useRef(null);
   // update this to false for testing
   const [loading, setLoading] = useState(false);
   const [registrationSection, setRegistrationSection] = useState(0);
@@ -493,13 +494,27 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                     <br />
                     <input
                       onChange={(e) => handleResumeFileChange(e)}
+                      ref={resumeFileRef}
                       name="resume"
                       type="file"
                       formEncType="multipart/form-data"
                       accept=".pdf, .doc, .docx, image/png, image/jpeg, .txt, .tex, .rtf"
-                      className="poppins-regular cursor-pointer w-full text-[#4C4950] border border-[#40B7BA] rounded-md file:md:p-2 file:p-1 file:bg-[#40B7BA] file:text-white file:cursor-pointer file:h-full file:rounded-l-md file:border-none"
+                      className="hidden"
                     />
-                    <br />
+                    <div className="flex items-center gap-x-3 poppins-regular w-full border border-[#40B7BA] rounded-md">
+                      <button
+                        className="md:p-2 p-1 bg-[#40B7BA] text-white h-full rounded-l-md border-none"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          resumeFileRef.current?.click();
+                        }}
+                      >
+                        Browse...
+                      </button>
+                      <p className="text-[#4C4950]">
+                        {resumeFile ? resumeFile.name : 'No file selected.'}
+                      </p>
+                    </div>
                     <p className="poppins-regular text-xs text-[#40B7BA]">
                       Accepted file types: .pdf, .doc, .docx, .png, .jpeg, .txt, .tex, .rtf
                     </p>
