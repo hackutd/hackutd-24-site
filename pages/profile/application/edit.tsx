@@ -18,7 +18,11 @@ import majorsList from 'public/majors.json';
  *
  */
 
-export default function EditApplication() {
+interface EditApplicationPageProps {
+  allowedRegistrations: boolean;
+}
+
+export default function EditApplication({ allowedRegistrations }: EditApplicationPageProps) {
   const router = useRouter();
 
   const {
@@ -97,13 +101,13 @@ export default function EditApplication() {
     }
   };
 
-  //   if (!allowedRegistrations) {
-  //     return (
-  //       <h1 className="mx-auto text-2xl mt-4 font-bold">
-  //         Registrations is closed and no longer allowed
-  //       </h1>
-  //     );
-  //   }
+  if (!allowedRegistrations) {
+    return (
+      <h1 className="mx-auto text-2xl mt-4 font-bold">
+        Registrations is closed and no longer allowed
+      </h1>
+    );
+  }
 
   if (!user) {
     // If user haven't signed in, redirect them to login page
