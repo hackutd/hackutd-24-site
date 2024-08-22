@@ -201,7 +201,12 @@ function AuthProvider({ children }: React.PropsWithChildren<Record<string, any>>
   };
 
   const isSignedIn = user !== null;
-  const hasProfile = profile !== null;
+  const hasProfile =
+    profile !== null &&
+    (profile === undefined || profile === null
+      ? true
+      : profile.currentRegistrationPage === undefined ||
+        profile.currentRegistrationPage >= 1000000000);
 
   const authContextValue: AuthContextState = {
     user,
