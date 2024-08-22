@@ -114,6 +114,18 @@ type Registration = {
   teammate1: string;
   teammate2: string;
   teammate3: string;
+  phoneNumber: string;
+  country: string;
+  whyAttend: string;
+  hackathonNumber: string;
+  hackathonFirstTimer: string;
+  lookingForward: string;
+
+  updatedAt: string;
+  createdAt: string;
+
+  disclaimer: string[];
+  codeOfConduct: string[];
 };
 
 /**
