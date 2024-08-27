@@ -202,7 +202,7 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
             hackathonExperience: profile?.hackathonExperience || 0,
             studyLevel: profile?.studyLevel || '',
             major:
-              (profile?.university &&
+              (profile?.major &&
                 majorsList.filter((major) => major.major == profile.major).length > 0 &&
                 profile?.major) ||
               'Other',
