@@ -41,6 +41,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
 
   const { user, profile, hasProfile, updateProfile } = useAuthContext();
   const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [resumeFileUpdated, setResumeFileUpdated] = useState(false);
   const resumeFileRef = useRef(null);
   const [displayProfileSavedToaster, setDisplayProfileSavedToaster] = useState(false);
   // update this to false for testing
@@ -93,7 +94,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
     delete registrationData.universityManual;
     delete registrationData.majorManual;
     delete registrationData.heardFromManual;
-    let resumeUrl: string = '';
+    let resumeUrl: string = profile?.resume || '';
     try {
       if (resumeFile) {
         const formData = new FormData();
@@ -107,6 +108,24 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
           body: formData,
         });
         resumeUrl = (await res.json()).url;
+      } else if (resumeUrl !== '') {
+        const { data } = await RequestHelper.post<
+          { major: string; studyLevel: string; resumeUrl: string },
+          { url: string }
+        >(
+          '/api/resume/move',
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+          {
+            major: registrationData.major,
+            studyLevel: registrationData.studyLevel,
+            resumeUrl,
+          },
+        );
+        resumeUrl = data.url;
       }
       const { data } = await RequestHelper.put<
         Registration,
@@ -150,32 +169,60 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
     resetForm: (param: { values: any }) => void,
   ) => {
     const cleanedData = cleanData(registrationData);
-    return RequestHelper.put<any, { msg: string; registrationData: Registration }>(
-      '/api/applications/save',
-      {},
-      {
-        ...cleanedData,
-        id: cleanedData.id || user.id,
-        user: {
-          ...cleanedData.user,
-          id: cleanedData.user.id || user.id,
-        },
-        currentRegistrationPage: nextPage,
-      },
-    )
-      .then(() => {
-        setDisplayProfileSavedToaster(true);
-        resetForm({ values: registrationData });
-        updateProfile({
-          ...cleanedData,
-          user: {
-            ...cleanedData.user,
-            permissions: ['hacker'],
-          },
-          currentRegistrationPage: nextPage,
+    return (async () => {
+      if (resumeFile && resumeFileUpdated) {
+        const formData = new FormData();
+        formData.append('resume', resumeFile);
+        formData.append('fileName', `${user.id}${getFileExtension(resumeFile.name)}`);
+        formData.append('studyLevel', registrationData['studyLevel']);
+        formData.append('major', registrationData['major']);
+        formData.append('isPartialProfile', 'true');
+
+        const res = await fetch('/api/resume/upload', {
+          method: 'post',
+          body: formData,
         });
+        const resumeUrl = (await res.json()).url;
+        return resumeUrl;
+      } else {
+        return profile?.resume || '';
+      }
+    })()
+      .then((resumeUrl: string) => {
+        return RequestHelper.put<any, { msg: string; registrationData: Registration }>(
+          '/api/applications/save',
+          {},
+          {
+            ...cleanedData,
+            id: cleanedData.id || user.id,
+            user: {
+              ...cleanedData.user,
+              id: cleanedData.user.id || user.id,
+            },
+            currentRegistrationPage: nextPage,
+            resume: resumeUrl,
+          },
+        )
+          .then(() => {
+            setDisplayProfileSavedToaster(true);
+            resetForm({ values: registrationData });
+            setResumeFileUpdated(false);
+            updateProfile({
+              ...cleanedData,
+              user: {
+                ...cleanedData.user,
+                permissions: ['hacker'],
+              },
+              currentRegistrationPage: nextPage,
+              resume: resumeUrl,
+            });
+          })
+          .catch((err) => {
+            console.error(err);
+          });
       })
       .catch((err) => {
+        alert('something is wrong with saving profile');
         console.error(err);
       });
   };
@@ -203,6 +250,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
       return alert(`Accepted file types: ${acceptedFileExtensions.join(' ')}`);
 
     setResumeFile(file);
+    setResumeFileUpdated(true);
   };
 
   if (!allowedRegistrations) {
@@ -302,6 +350,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
             majorManual: profile?.majorManual || '',
             universityManual: profile?.universityManual || '',
             heardFromManual: profile?.heardFromManual || '',
+            resume: profile?.resume || '',
           }}
           validateOnBlur={false}
           validateOnChange={false}
@@ -619,7 +668,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                             resumeFileRef.current?.click();
                           }}
                         >
-                          Browse...
+                          Upload new resume...
                         </button>
                         <p className="text-[#4C4950]">
                           {resumeFile ? resumeFile.name : 'No file selected.'}
@@ -628,10 +677,19 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                       <p className="poppins-regular text-xs text-[#40B7BA]">
                         Accepted file types: .pdf, .doc, .docx, .png, .jpeg, .txt, .tex, .rtf
                       </p>
+                      {profile?.resume && (
+                        <div className="my-4 w-fit">
+                          <Link href={profile.resume} target="_blank">
+                            <div className="bg-[#40B7BA] md:p-2 p-1 text-white rounded-lg">
+                              Click to view your current resume
+                            </div>
+                          </Link>
+                        </div>
+                      )}
                     </div>
                     <div className="flex justify-end my-4">
                       <button
-                        disabled={!dirty}
+                        disabled={!dirty && !resumeFileUpdated}
                         onClick={(e) => {
                           e.preventDefault();
                           handleSaveProfile(values, registrationSection, resetForm);
