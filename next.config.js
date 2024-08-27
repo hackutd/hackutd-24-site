@@ -18,6 +18,11 @@ const withPWA = require('next-pwa')({
           'https://hackutd.notion.site/HackUTD-Ripple-Effect-fab1d9efcfd0468fbaee0ba4010caec7?pvs=4',
         permanent: true,
       },
+      {
+        source: '/devday',
+        destination: 'https://acmutd.typeform.com/to/PAZpIiVf',
+        permanent: true,
+      },
     ];
   },
 
