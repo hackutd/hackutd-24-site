@@ -2,6 +2,7 @@ import FilePlusIcon from '@/public/icons/file-plus.svg';
 import CalendarIcon from '@/public/icons/calendar.svg';
 import TrophyIcon from '@/public/icons/trophy.svg';
 import QuestionIcon from '@/public/icons/question.svg';
+import HomeIcon from '@/public/icons/home.svg';
 import AdminIcon from '@/public/icons/admin.svg';
 import clsx from 'clsx';
 import Link from 'next/link';
@@ -23,8 +24,23 @@ export default function AppNavbarBottom() {
         'p-4 rounded-xl',
       )}
     >
-      {/* <FilePlusIcon /> */}
+      {/* Home Icon */}
+      <button
+        onClick={() => {
+          if (router.pathname === '/') {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          } else {
+            router.push('/').then(() => {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+          }
+        }}
+      >
+        <HomeIcon />
+      </button>
 
+      {/* <FilePlusIcon /> */}
+      {/* Calendar Icon */}
       <button
         onClick={() => {
           if (router.pathname === '/')
@@ -41,6 +57,7 @@ export default function AppNavbarBottom() {
       {/*   <TrophyIcon /> */}
       {/* </Link> */}
 
+      {/* Question Icon */}
       <button
         onClick={() => {
           if (router.pathname === '/')
@@ -53,6 +70,7 @@ export default function AppNavbarBottom() {
         <QuestionIcon />
       </button>
 
+      {/* Admin/Profile Icon */}
       <Link href={hasProfile ? '/profile' : '/auth'}>
         <AdminIcon />
       </Link>
