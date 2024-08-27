@@ -156,7 +156,7 @@ export default function ProfilePage() {
               >
                 {profile?.status ? profile?.status : 'In Review'}
               </h1>
-              <div className="text-sm flex">
+              <div className="text-sm md:flex pt-2 md:pt-0">
                 {profile?.updatedAt && (
                   <p className="text-nowrap mr-4">
                     Application last worked on {new Date(profile?.updatedAt).toLocaleDateString()}
@@ -166,7 +166,7 @@ export default function ProfilePage() {
                   href="/profile/application/edit"
                   className="text-[#40B7BA] font-bold underline text-nowrap"
                 >
-                  Edit Application
+                  <p className="">Edit Application</p>
                 </Link>
               </div>
             </div>
