@@ -234,28 +234,28 @@ export default function ProfilePage() {
 
             <div className="w-full grid gap-8 grid-cols-1 md:grid-cols-2 mt-8">
               <TextField
-                className="col-span-1"
+                className="col-span-2 md:col-span-1"
                 disabled
                 label="University"
                 value={profile?.university}
                 {...textFieldOverrides}
               />
               <TextField
-                className="col-span-1"
+                className="col-span-2 md:col-span-1"
                 disabled
                 label="Major"
                 value={profile?.major}
                 {...textFieldOverrides}
               />
               <TextField
-                className="col-span-1"
+                className="col-span-2 md:col-span-1"
                 disabled
                 label="Role"
                 value={profile && formatRole(profile?.user.permissions[0])}
                 {...textFieldOverrides}
               />
               <TextField
-                className="col-span-1"
+                className="col-span-2 md:col-span-1"
                 disabled
                 label="Number of hackathons attended"
                 value={profile?.hackathonExperience}
