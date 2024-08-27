@@ -1,29 +1,28 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
-import LoadIcon from '../components/LoadIcon';
-import { RequestHelper } from '../lib/request-helper';
-import { useAuthContext } from '../lib/user/AuthContext';
 import { Formik, Form } from 'formik';
-import { hackPortalConfig, formInitialValues } from '../hackportal.config';
-import DisplayQuestion from '../components/registerComponents/DisplayQuestion';
-import { getFileExtension } from '../lib/util';
 import Link from 'next/link';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { GetServerSideProps } from 'next';
+import { formInitialValues, hackPortalConfig } from '@/hackportal.config';
+import { useAuthContext } from '@/lib/user/AuthContext';
+import { RequestHelper } from '@/lib/request-helper';
+import LoadIcon from '@/components/LoadIcon';
+import DisplayQuestion from '@/components/registerComponents/DisplayQuestion';
+import schoolsList from 'public/schools.json';
+import majorsList from 'public/majors.json';
+/**
+ * The edit application page.
+ *
+ */
 
-interface RegisterPageProps {
+interface EditApplicationPageProps {
   allowedRegistrations: boolean;
 }
 
-/**
- * The registration page.
- *
- * Registration: /
- */
-
-export default function Register({ allowedRegistrations }: RegisterPageProps) {
+export default function EditApplication({ allowedRegistrations }: EditApplicationPageProps) {
   const router = useRouter();
 
   const {
@@ -38,31 +37,12 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
     },
   } = hackPortalConfig;
 
-  const { user, hasProfile, updateProfile } = useAuthContext();
-  const [resumeFile, setResumeFile] = useState<File | null>(null);
-  const resumeFileRef = useRef(null);
+  const { user, hasProfile, updateProfile, profile } = useAuthContext();
   // update this to false for testing
   const [loading, setLoading] = useState(false);
   const [registrationSection, setRegistrationSection] = useState(0);
-  const checkRedirect = async () => {
-    if (!allowedRegistrations) return;
-    if (hasProfile) router.push('/profile');
-    if (user) setLoading(false);
-  };
 
-  useEffect(() => {
-    //setting user specific initial values
-    formInitialValues['id'] = user?.id || '';
-    formInitialValues['preferredEmail'] = user?.preferredEmail || '';
-    formInitialValues['firstName'] = user?.firstName?.split(' ')[0] || '';
-    formInitialValues['lastName'] = user?.lastName || '';
-    formInitialValues['permissions'] = user?.permissions || ['hacker'];
-  }, []);
-
-  // disable this for testing
-  useEffect(() => {
-    checkRedirect();
-  }, [user]);
+  // TODO: do some auth check
 
   const handleSubmit = async (registrationData) => {
     let finalValues: any = registrationData;
@@ -96,22 +76,8 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
     delete registrationData.universityManual;
     delete registrationData.majorManual;
     delete registrationData.heardFromManual;
-    let resumeUrl: string = '';
     try {
-      if (resumeFile) {
-        const formData = new FormData();
-        formData.append('resume', resumeFile);
-        formData.append('fileName', `${user.id}${getFileExtension(resumeFile.name)}`);
-        formData.append('studyLevel', registrationData['studyLevel']);
-        formData.append('major', registrationData['major']);
-
-        const res = await fetch('/api/resume/upload', {
-          method: 'post',
-          body: formData,
-        });
-        resumeUrl = (await res.json()).url;
-      }
-      const { data } = await RequestHelper.post<
+      const { data } = await RequestHelper.put<
         Registration,
         { msg: string; registrationData: Registration }
       >(
@@ -124,41 +90,15 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
             ...registrationData.user,
             id: registrationData.user.id || user.id,
           },
-          resume: resumeUrl,
         },
       );
-      alert('Application Submitted');
+      alert('Application Updated Successfully');
       updateProfile(data.registrationData);
       router.push('/profile');
     } catch (error) {
       console.error(error);
       console.log('Request creation error');
     }
-  };
-
-  const handleResumeFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files.length !== 1) return alert('Must submit one file');
-
-    const file = e.target.files[0];
-
-    const fileExtension = getFileExtension(file.name);
-
-    const acceptedFileExtensions = [
-      '.pdf',
-      '.doc',
-      '.docx',
-      '.png',
-      '.jpg',
-      '.jpeg',
-      '.txt',
-      '.tex',
-      '.rtf',
-    ];
-
-    if (!acceptedFileExtensions.includes(fileExtension))
-      return alert(`Accepted file types: ${acceptedFileExtensions.join(' ')}`);
-
-    setResumeFile(file);
   };
 
   if (!allowedRegistrations) {
@@ -169,7 +109,6 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
     );
   }
 
-  // disable this for testing
   if (!user) {
     // If user haven't signed in, redirect them to login page
     router.push('/auth');
@@ -211,8 +150,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
     if (obj.checkboxQuestions)
       for (let inputObj of obj.checkboxQuestions) {
         if (inputObj.required) {
-          if (!values[inputObj.name] || values[inputObj.name].length === 0)
-            errors[inputObj.name] = 'Required';
+          if (!values[inputObj.name]) errors[inputObj.name] = 'Required';
         }
       }
     if (obj.datalistQuestions)
@@ -239,10 +177,10 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <section className="pl-4 relative mb-4 z-[9999]">
-        <Link href="/" passHref>
-          <div className="mt-2 cursor-pointer items-center inline-flex text-white font-bold bg-[#40B7BA] rounded-[30px] pr-4 pl-1 py-2 border-2 border-white">
+        <Link href="/profile">
+          <div className="items-center inline-flex text-white font-bold bg-[#40B7BA] rounded-[30px] pr-4 pl-1 py-2 border-2 border-white">
             <ChevronLeftIcon className="text-white" fontSize={'large'} />
-            Home
+            Back to profile
           </div>
         </Link>
       </section>
@@ -251,10 +189,57 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
         <Formik
           initialValues={{
             ...formInitialValues,
-            majorManual: '',
-            universityManual: '',
-            heardFromManual: '',
-            preferredEmail: formInitialValues.preferredEmail || user?.preferredEmail || '',
+            majorManual: profile?.major || '',
+            heardFromManual: profile?.heardFrom || '',
+            // have no idea why this works, but need to hard code it for the form values to overwrite the default
+            preferredEmail: profile?.user?.preferredEmail || '',
+            // have no idea why we need formInitialValues but we need to add it for it to works
+            firstName: profile?.user?.firstName || '',
+            lastName: profile?.user?.lastName || '',
+            phoneNumber: profile?.phoneNumber || '',
+            age: profile?.age || '',
+            country: profile?.country || '',
+            hackathonExperience: profile?.hackathonExperience || 0,
+            studyLevel: profile?.studyLevel || '',
+            major:
+              (profile?.major &&
+                majorsList.filter((major) => major.major == profile.major).length > 0 &&
+                profile?.major) ||
+              'Other',
+            // check if university is in our university list if not set to other
+            university:
+              (profile?.university &&
+                schoolsList.filter((school) => school.university == profile.university).length >
+                  0 &&
+                profile?.university) ||
+              'Other',
+            universityManual: profile?.university || '',
+            heardFrom:
+              (profile?.heardFrom &&
+                ['Instagram', 'Twitter', 'Event Site', 'Friend', 'TikTok'].includes(
+                  profile.heardFrom,
+                ) &&
+                profile.heardFrom) ||
+              'Other',
+            gender: profile?.gender || '',
+            race: profile?.race || '',
+            ethnicity: profile?.ethnicity || '',
+            softwareExperience: profile?.softwareExperience || '',
+            whyAttend: profile?.whyAttend || '',
+            hackathonNumber: profile?.hackathonNumber || '',
+            hackathonFirstTimer: profile?.hackathonFirstTimer || '',
+            lookingForward: profile?.lookingForward || '',
+            size: profile?.size || '',
+            dietary: profile?.dietary || [],
+            accomodations: profile?.accomodations || '',
+            github: profile?.github || '',
+            linkedin: profile?.linkedin || '',
+            website: profile?.website || '',
+            teammate1: profile?.teammate1 || '',
+            teammate2: profile?.teammate2 || '',
+            teammate3: profile?.teammate3 || '',
+            codeOfConduct: profile?.codeOfConduct || ['Yes'],
+            disclaimer: profile?.disclaimer || ['Yes'],
           }}
           validateOnBlur={false}
           validateOnChange={false}
@@ -341,29 +326,14 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                 <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-4 py-10 px-8 mb-8 text-[#4C4950]">
                   <header>
                     <h1 className="text-[#40B7BA] lg:text-4xl sm:text-3xl text-2xl font-bold text-center mt-2 md:mt-8 mb-4 poppins-bold">
-                      Hacker Appplication
+                      Edit Hacker Appplication
                     </h1>
-                    <div
-                      style={{ color: '#A6A4A8' }}
-                      className="poppins-regular text-center text-md mb-4 font-light"
-                    >
-                      Please fill out the following fields. The application should take
-                      approximately 10 minutes.
-                    </div>
                   </header>
                   <div className="md:px-10">
                     <div className="flex flex-col">
                       {generalQuestions.map((obj, idx) => (
                         <DisplayQuestion key={idx} obj={obj} />
                       ))}
-                    </div>
-                    <div className="text-[#00000080] poppins-regular mt-4 font-semibold mb-2">
-                      Applying for travel reimbursement?
-                      <a href="https://acmutd.typeform.com/to/RxlL9v8R" target="_blank">
-                        <span className="ml-2 text-[#40B7BA] underline cursor-pointer">
-                          Click here!
-                        </span>
-                      </a>
                     </div>
                   </div>
                 </section>
@@ -485,57 +455,60 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                       <DisplayQuestion key={idx} obj={obj} />
                     ))}
                   </div>
-                  {/* Resume Upload */}
-                  <div className="mt-8 md:px-4 poppins-regular">
-                    <div className="flex items-center">
-                      Upload your resume{' '}
-                      <span className="text-gray-600 ml-2 text-[8px]">optional</span>
-                    </div>
-                    <br />
-                    <input
-                      onChange={(e) => handleResumeFileChange(e)}
-                      ref={resumeFileRef}
-                      name="resume"
-                      type="file"
-                      formEncType="multipart/form-data"
-                      accept=".pdf, .doc, .docx, image/png, image/jpeg, .txt, .tex, .rtf"
-                      className="hidden"
-                    />
-                    <div className="flex items-center gap-x-3 poppins-regular w-full border border-[#40B7BA] rounded-md">
-                      <button
-                        className="md:p-2 p-1 bg-[#40B7BA] text-white h-full rounded-l-md border-none"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          resumeFileRef.current?.click();
-                        }}
-                      >
-                        Browse...
-                      </button>
-                      <p className="text-[#4C4950]">
-                        {resumeFile ? resumeFile.name : 'No file selected.'}
-                      </p>
-                    </div>
-                    <p className="poppins-regular text-xs text-[#40B7BA]">
-                      Accepted file types: .pdf, .doc, .docx, .png, .jpeg, .txt, .tex, .rtf
-                    </p>
-                  </div>
                 </section>
               )}
               {/* Teammate Questions */}
               {registrationSection == 6 && (
                 <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
                   <h2 className="sm:text-2xl text-xl font-semibold sm:mb-3 mb-1">
-                    Teammate Questions
+                    Current Teammate
                   </h2>
+                  {profile && !profile.teammate1 && !profile.teammate2 && !profile.teammate3 && (
+                    <div className="flex flex-col poppins-regular">
+                      You currently have no teammates.
+                    </div>
+                  )}
+                  {/* show teammate 1 if exists */}
+                  {profile?.teammate1 && (
+                    <div className="flex flex-col poppins-regular md:px-4">
+                      <div className="flex items-center">
+                        <label className="font-semibold">Teammate 1:</label>
+                        <span className="ml-2">{profile.teammate1}</span>
+                      </div>
+                    </div>
+                  )}
+                  {/* show teammate 2 if exists */}
+                  {profile?.teammate2 && (
+                    <div className="flex flex-col poppins-regular md:px-4">
+                      <div className="flex items-center">
+                        <label className="font-semibold">Teammate 2:</label>
+                        <span className="ml-2">{profile.teammate2}</span>
+                      </div>
+                    </div>
+                  )}
+                  {/* show teammate 3 if exists */}
+                  {profile?.teammate3 && (
+                    <div className="flex flex-col poppins-regular md:px-4">
+                      <div className="flex items-center">
+                        <label className="font-semibold">Teammate 3:</label>
+                        <span className="ml-2">{profile.teammate3}</span>
+                      </div>
+                    </div>
+                  )}
                   <p className="text-md my-6 font-bold">
-                    Emails of teammates should be the same as the email they registered with!
+                    Want to request a teammate change? Email us at{' '}
+                    <Link className="underline" href="mailto:hello@hackutd.co" target="__blank__">
+                      hello@hackutd.co
+                    </Link>
                   </p>
-                  <div className="flex flex-col">
-                    {teammateQuestions.map((obj, idx) => (
-                      <DisplayQuestion key={idx} obj={obj} />
-                    ))}
-                  </div>
-
+                  {
+                    <div className="flex flex-col poppins-regular md:px-4">
+                      {teammateQuestions.map(
+                        (obj, idx) =>
+                          obj.checkboxQuestions && <DisplayQuestion key={idx} obj={obj} />,
+                      )}
+                    </div>
+                  }
                   {/* Submit */}
                   <div className="mt-8 text-white">
                     <button
@@ -543,7 +516,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                       type="submit"
                       className="mr-auto cursor-pointer px-4 py-2 rounded-lg bg-[#40B7BA] hover:brightness-90"
                     >
-                      Submit
+                      Update Application
                     </button>
                     {!isValid && (
                       <div className="text-red-600 poppins-regular">
@@ -582,7 +555,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
             >
               <div
                 style={{ width: 'fit-content' }}
-                className="cursor-pointer select-none bg-white text-[#40B7BA] rounded-[30px] py-2 md:py-3 pr-2 md:pr-4 md:pl-2 text-xs md:text-lg border-2 border-[#40B7BA]"
+                className="cursor-pointer select-none bg-white text-[#40B7BA] rounded-[30px] py-3 pl-2 pr-4 text-xs md:text-lg border-2 border-[#40B7BA]"
               >
                 <ChevronLeftIcon className="text-[#40B7BA]" />
                 prev page
@@ -611,7 +584,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
             >
               <div
                 style={{ width: 'fit-content' }}
-                className="cursor-pointer select-none bg-white text-[#40B7BA] text-xs md:text-lg rounded-[30px] py-2 md:py-3 pl-2 md:pr-2 md:pl-4 border-2 border-[#40B7BA]"
+                className="cursor-pointer select-none bg-white text-[#40B7BA] text-xs md:text-lg rounded-[30px] py-3 pr-2 pl-4 border-2 border-[#40B7BA]"
               >
                 next page
                 <ChevronRightIcon />

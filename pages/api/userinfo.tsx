@@ -90,6 +90,8 @@ async function handleUserInfo(req: NextApiRequest, res: NextApiResponse) {
     return res.status(200).json({
       ...snapshot.data(),
       status: applicationStatus,
+      createdAt: snapshot.createTime.toDate(),
+      updatedAt: snapshot.updateTime.toDate(),
     });
   } catch (error) {
     console.error('Error when fetching applications', error);

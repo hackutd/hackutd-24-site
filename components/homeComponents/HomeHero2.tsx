@@ -116,7 +116,7 @@ export default function HomeHero2() {
           </div>
         </div>
       </div>
-      <div className="absolute bottom-[30%] left-0 lg:left-[5%] lg:bottom-[25%] z-20">
+      <div className="absolute bottom-[30%] left-0 lg:left-[2%] lg:bottom-[25%] z-20">
         <div className="w-[10rem] md:w-[20rem] lg:w-[25rem]">
           <Image
             src={MascotMoving.src}
