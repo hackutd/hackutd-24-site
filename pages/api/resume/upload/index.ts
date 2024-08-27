@@ -4,10 +4,6 @@ import 'firebase/compat/storage';
 import 'firebase/compat/auth';
 import nc from 'next-connect';
 import multer from 'multer';
-import { storage } from 'firebase-admin';
-import initializeApi from '@/lib/admin/init';
-
-initializeApi();
 
 interface NCNextApiRequest extends NextApiRequest {
   file: Express.Multer.File;
@@ -26,23 +22,6 @@ const handler = nc<NCNextApiRequest, NextApiResponse>({
     });
   },
 });
-
-async function getPartialProfileResumeRef(body: { fileName: string }) {
-  const storageRef = firebase.storage().ref();
-  const partialResumeRef = storageRef.child('resumes/pending');
-  const fileRef = partialResumeRef.child(body.fileName);
-  try {
-    await fileRef.getDownloadURL();
-    return fileRef;
-  } catch (err) {
-    if (err.code === 'storage/object-not-found') {
-      return null;
-    } else {
-      console.error(err);
-      throw err;
-    }
-  }
-}
 
 handler.use(multer().single('resume'));
 handler.post(async (req, res) => {
@@ -73,35 +52,7 @@ handler.post(async (req, res) => {
     });
   }
 
-  const partialProfileResumeRef = await getPartialProfileResumeRef(req.body);
-  // NOTE: This case will happen if user already saved their resume but still managed to retain file object in react state when submit application (submit application & save resume in the same sitting)
-  if (partialProfileResumeRef !== null) {
-    const moveDestination = storage()
-      .bucket(process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET)
-      .file('resumes/' + req.body.studyLevel + '/' + req.body.major + '/' + req.body.fileName);
-
-    const moveOptions = {
-      preconditionOpts: {
-        ifGenerationMatch: 0,
-      },
-    };
-
-    // Move the file to different location
-    await storage()
-      .bucket(process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET)
-      .file('resumes/pending/' + req.body.fileName)
-      .move(moveDestination, moveOptions);
-
-    const studyLevelRef = storageRef.child('resumes/' + req.body.studyLevel);
-    const majorRef = studyLevelRef.child(req.body.major);
-    const fileRef = majorRef.child(req.body.fileName);
-    const url = await fileRef.getDownloadURL();
-    return res.status(200).json({
-      url,
-    });
-  }
-
-  // NOTE: This section will be reached only if user submits resume without saving it prior
+  // NOTE: This section will be reached only if user manages to retain resume file in react object state
   const studyLevelRef = storageRef.child('resumes/' + req.body.studyLevel);
   const majorRef = studyLevelRef.child(req.body.major);
   const fileRef = majorRef.child(req.body.fileName);
