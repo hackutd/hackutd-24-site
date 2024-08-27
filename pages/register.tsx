@@ -41,6 +41,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
 
   const { user, profile, hasProfile, updateProfile } = useAuthContext();
   const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [isSavingApplication, setIsSavingApplication] = useState(false);
   const [resumeFileUpdated, setResumeFileUpdated] = useState(false);
   const resumeFileRef = useRef(null);
   const [displayProfileSavedToaster, setDisplayProfileSavedToaster] = useState(false);
@@ -465,10 +466,10 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                     </div>
                     <div className="flex justify-end">
                       <button
-                        disabled={!dirty}
-                        onClick={(e) => {
+                        disabled={!dirty || !resumeFileUpdated}
+                        onClick={async (e) => {
                           e.preventDefault();
-                          handleSaveProfile(values, registrationSection, resetForm);
+                          await handleSaveProfile(values, registrationSection, resetForm);
                         }}
                         className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
                       >
@@ -689,10 +690,12 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                     </div>
                     <div className="flex justify-end my-4">
                       <button
-                        disabled={!dirty && !resumeFileUpdated}
-                        onClick={(e) => {
+                        disabled={(!dirty && !resumeFileUpdated) || isSavingApplication}
+                        onClick={async (e) => {
                           e.preventDefault();
-                          handleSaveProfile(values, registrationSection, resetForm);
+                          setIsSavingApplication(true);
+                          await handleSaveProfile(values, registrationSection, resetForm);
+                          setIsSavingApplication(false);
                         }}
                         className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
                       >
@@ -787,8 +790,14 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                   {Array.from({ length: 7 }).map((_, i) => (
                     <div
                       key={i}
-                      onClick={() => {
-                        if (dirty) handleSaveProfile(values, registrationSection, resetForm);
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        if (isSavingApplication) return;
+                        if (dirty || resumeFileUpdated) {
+                          setIsSavingApplication(true);
+                          await handleSaveProfile(values, registrationSection, resetForm);
+                          setIsSavingApplication(false);
+                        }
                         setRegistrationSection(i);
                       }}
                       style={{ backgroundColor: registrationSection == i ? '#4C4950' : '#9F9EA7' }}
@@ -801,9 +810,16 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                   <div
                     className="flex justify-end "
                     style={{ gridArea: '1 / 3 / 2 / 4' }}
-                    onClick={(e) => {
+                    onClick={async (e) => {
                       e.preventDefault();
-                      if (dirty) handleSaveProfile(values, registrationSection, resetForm);
+                      if (isSavingApplication) {
+                        return;
+                      }
+                      if (dirty || resumeFileUpdated) {
+                        setIsSavingApplication(true);
+                        await handleSaveProfile(values, registrationSection, resetForm);
+                        setIsSavingApplication(false);
+                      }
                       setRegistrationSection(registrationSection + 1);
                     }}
                   >
