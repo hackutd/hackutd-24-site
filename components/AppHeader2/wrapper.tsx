@@ -115,18 +115,20 @@ export default function AppHeader2_Wrapper() {
           {user ? 'Sign Out' : 'Sign In'}
         </button>
       </div>
-      <button
-        className="md:hidden mt-2 absolute right-[2rem] lg:right-[10rem] py-3 px-5 rounded-[30px] bg-[#40B7BA] font-bold text-white ml-3 border-2 border-white"
-        onClick={async () => {
-          if (user) {
-            await signOut();
-          } else {
-            await router.push('/auth');
-          }
-        }}
-      >
-        {user ? 'Sign Out' : 'Sign In'}
-      </button>
+      {(router.pathname === '/auth' || router.pathname === '/profile') && (
+        <button
+          className="md:hidden mt-4 md:mt-2 absolute right-[2rem] lg:right-[10rem] py-3 px-5 rounded-[30px] bg-[#40B7BA] font-bold text-white ml-3 border-2 border-white"
+          onClick={async () => {
+            if (user) {
+              await signOut();
+            } else {
+              await router.push('/auth');
+            }
+          }}
+        >
+          {user ? 'Sign Out' : 'Sign In'}
+        </button>
+      )}
     </header>
   );
 }
