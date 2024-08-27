@@ -698,42 +698,66 @@ const setInitialValues = (obj, finalValues, savedValues) => {
   if (obj.textInputQuestions)
     for (let inputObj of obj.textInputQuestions) {
       finalValues[inputObj.name] = inputObj.initialValue;
-      if (savedValues && savedValues[inputObj.name]) {
+      if (
+        savedValues &&
+        savedValues[inputObj.name] !== undefined &&
+        savedValues[inputObj.name] !== null
+      ) {
         finalValues[inputObj.name] = savedValues[inputObj.name];
       }
     }
   if (obj.numberInputQuestions)
     for (let inputObj of obj.numberInputQuestions) {
       finalValues[inputObj.name] = inputObj.initialValue;
-      if (savedValues && savedValues[inputObj.name]) {
+      if (
+        savedValues &&
+        savedValues[inputObj.name] !== undefined &&
+        savedValues[inputObj.name] !== null
+      ) {
         finalValues[inputObj.name] = savedValues[inputObj.name];
       }
     }
   if (obj.dropdownQuestions)
     for (let inputObj of obj.dropdownQuestions) {
       finalValues[inputObj.name] = inputObj.initialValue;
-      if (savedValues && savedValues[inputObj.name]) {
+      if (
+        savedValues &&
+        savedValues[inputObj.name] !== undefined &&
+        savedValues[inputObj.name] !== null
+      ) {
         finalValues[inputObj.name] = savedValues[inputObj.name];
       }
     }
   if (obj.checkboxQuestions)
     for (let inputObj of obj.checkboxQuestions) {
       finalValues[inputObj.name] = inputObj.initialValue;
-      if (savedValues && savedValues[inputObj.name]) {
+      if (
+        savedValues &&
+        savedValues[inputObj.name] !== undefined &&
+        savedValues[inputObj.name] !== null
+      ) {
         finalValues[inputObj.name] = savedValues[inputObj.name];
       }
     }
   if (obj.datalistQuestions)
     for (let inputObj of obj.datalistQuestions) {
       finalValues[inputObj.name] = inputObj.initialValue;
-      if (savedValues && savedValues[inputObj.name]) {
+      if (
+        savedValues &&
+        savedValues[inputObj.name] !== undefined &&
+        savedValues[inputObj.name] !== null
+      ) {
         finalValues[inputObj.name] = savedValues[inputObj.name];
       }
     }
   if (obj.textAreaQuestions)
     for (let inputObj of obj.textAreaQuestions) {
       finalValues[inputObj.name] = inputObj.initialValue;
-      if (savedValues && savedValues[inputObj.name]) {
+      if (
+        savedValues &&
+        savedValues[inputObj.name] !== undefined &&
+        savedValues[inputObj.name] !== null
+      ) {
         finalValues[inputObj.name] = savedValues[inputObj.name];
       }
     }
