@@ -166,6 +166,14 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
       .then(() => {
         setDisplayProfileSavedToaster(true);
         resetForm({ values: registrationData });
+        updateProfile({
+          ...cleanedData,
+          user: {
+            ...cleanedData.user,
+            permissions: ['hacker'],
+          },
+          currentRegistrationPage: nextPage,
+        });
       })
       .catch((err) => {
         console.error(err);
