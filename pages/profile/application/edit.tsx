@@ -41,18 +41,19 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
   // update this to false for testing
   const [loading, setLoading] = useState(false);
   const [registrationSection, setRegistrationSection] = useState(0);
+  const [allowManualSave, setAllowManualSave] = useState(true);
 
   // TODO: do some auth check
 
-  const handleSubmit = async (registrationData) => {
-    let finalValues: any = registrationData;
+  const handleSubmit = async (registrationData, enableRedirect = true) => {
+    let finalValues: any = { ...registrationData };
     //add user object
     const userValues: any = {
-      id: registrationData.id,
-      firstName: registrationData.firstName,
-      lastName: registrationData.lastName,
-      preferredEmail: registrationData.preferredEmail,
-      permissions: registrationData.permissions,
+      id: finalValues.id,
+      firstName: finalValues.firstName,
+      lastName: finalValues.lastName,
+      preferredEmail: finalValues.preferredEmail,
+      permissions: finalValues.permissions,
     };
     finalValues['user'] = userValues;
     //delete unnecessary values
@@ -61,21 +62,21 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
     delete finalValues.permissions;
     delete finalValues.preferredEmail;
 
-    if (registrationData['university'] === 'Other') {
-      registrationData['university'] = registrationData['universityManual'];
+    if (finalValues['university'] === 'Other') {
+      finalValues['university'] = finalValues['universityManual'];
     }
 
-    if (registrationData['major'] === 'Other') {
-      registrationData['major'] = registrationData['majorManual'];
+    if (finalValues['major'] === 'Other') {
+      finalValues['major'] = finalValues['majorManual'];
     }
 
-    if (registrationData['heardFrom'] === 'Other') {
-      registrationData['heardFrom'] = registrationData['heardFromManual'];
+    if (finalValues['heardFrom'] === 'Other') {
+      finalValues['heardFrom'] = finalValues['heardFromManual'];
     }
 
-    delete registrationData.universityManual;
-    delete registrationData.majorManual;
-    delete registrationData.heardFromManual;
+    delete finalValues.universityManual;
+    delete finalValues.majorManual;
+    delete finalValues.heardFromManual;
     try {
       const { data } = await RequestHelper.put<
         Registration,
@@ -84,17 +85,17 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
         '/api/applications',
         {},
         {
-          ...registrationData,
-          id: registrationData.id || user.id,
+          ...finalValues,
+          id: finalValues.id || user.id,
           user: {
-            ...registrationData.user,
-            id: registrationData.user.id || user.id,
+            ...finalValues.user,
+            id: finalValues.user.id || user.id,
           },
         },
       );
       alert('Application Updated Successfully');
       updateProfile(data.registrationData);
-      router.push('/profile');
+      if (enableRedirect) router.push('/profile');
     } catch (error) {
       console.error(error);
       console.log('Request creation error');
@@ -325,7 +326,7 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
             // alert(JSON.stringify(values, null, 2)); //Displays form results on submit for testing purposes
           }}
         >
-          {({ values, isValid, isSubmitting }) => (
+          {({ values, isValid, isSubmitting, resetForm, dirty }) => (
             // Field component automatically hooks input to form values. Use name attribute to match corresponding value
             // ErrorMessage component automatically displays error based on validation above. Use name attribute to match corresponding value
             <Form
@@ -346,6 +347,27 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
                         <DisplayQuestion key={idx} obj={obj} />
                       ))}
                     </div>
+                  </div>
+                  <div className="flex justify-end mt-4">
+                    <button
+                      disabled={!dirty || !allowManualSave}
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        try {
+                          setAllowManualSave(false);
+                          await handleSubmit(values, false);
+                          resetForm({ values });
+                        } catch (err) {
+                          alert('Error saving form. Please try again later...');
+                          console.error(err);
+                        } finally {
+                          setAllowManualSave(true);
+                        }
+                      }}
+                      className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
+                    >
+                      Save Application
+                    </button>
                   </div>
                 </section>
               )}
@@ -393,6 +415,27 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
                       />
                     )}
                   </div>
+                  <div className="flex justify-end mt-4">
+                    <button
+                      disabled={!dirty || !allowManualSave}
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        try {
+                          setAllowManualSave(false);
+                          await handleSubmit(values, false);
+                          resetForm({ values });
+                        } catch (err) {
+                          alert('Error saving form. Please try again later...');
+                          console.error(err);
+                        } finally {
+                          setAllowManualSave(true);
+                        }
+                      }}
+                      className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
+                    >
+                      Save Application
+                    </button>
+                  </div>
                 </section>
               )}
 
@@ -423,6 +466,27 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
                       />
                     )}
                   </div>
+                  <div className="flex justify-end mt-4">
+                    <button
+                      disabled={!dirty || !allowManualSave}
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        try {
+                          setAllowManualSave(false);
+                          await handleSubmit(values, false);
+                          resetForm({ values });
+                        } catch (err) {
+                          alert('Error saving form. Please try again later...');
+                          console.error(err);
+                        } finally {
+                          setAllowManualSave(true);
+                        }
+                      }}
+                      className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
+                    >
+                      Save Application
+                    </button>
+                  </div>
                 </section>
               )}
 
@@ -436,6 +500,27 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
                     {shortAnswerQuestions.map((obj, idx) => (
                       <DisplayQuestion key={idx} obj={obj} />
                     ))}
+                  </div>
+                  <div className="flex justify-end mt-4">
+                    <button
+                      disabled={!dirty || !allowManualSave}
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        try {
+                          setAllowManualSave(false);
+                          await handleSubmit(values, false);
+                          resetForm({ values });
+                        } catch (err) {
+                          alert('Error saving form. Please try again later...');
+                          console.error(err);
+                        } finally {
+                          setAllowManualSave(true);
+                        }
+                      }}
+                      className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
+                    >
+                      Save Application
+                    </button>
                   </div>
                 </section>
               )}
@@ -452,6 +537,27 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
                       return <DisplayQuestion key={idx} obj={obj} />;
                     })}
                   </div>
+                  <div className="flex justify-end mt-4">
+                    <button
+                      disabled={!dirty || !allowManualSave}
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        try {
+                          setAllowManualSave(false);
+                          await handleSubmit(values, false);
+                          resetForm({ values });
+                        } catch (err) {
+                          alert('Error saving form. Please try again later...');
+                          console.error(err);
+                        } finally {
+                          setAllowManualSave(true);
+                        }
+                      }}
+                      className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
+                    >
+                      Save Application
+                    </button>
+                  </div>
                 </section>
               )}
 
@@ -465,6 +571,27 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
                     {sponsorInfoQuestions.map((obj, idx) => (
                       <DisplayQuestion key={idx} obj={obj} />
                     ))}
+                  </div>
+                  <div className="flex justify-end mt-4">
+                    <button
+                      disabled={!dirty || !allowManualSave}
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        try {
+                          setAllowManualSave(false);
+                          await handleSubmit(values, false);
+                          resetForm({ values });
+                        } catch (err) {
+                          alert('Error saving form. Please try again later...');
+                          console.error(err);
+                        } finally {
+                          setAllowManualSave(true);
+                        }
+                      }}
+                      className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
+                    >
+                      Save Application
+                    </button>
                   </div>
                 </section>
               )}
