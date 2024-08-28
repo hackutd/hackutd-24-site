@@ -172,26 +172,32 @@ export default function ProfilePage() {
             </div>
 
             <div className="flex gap-x-4">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full">
-                <a href={profile?.linkedin} target="_blank" rel="noreferrer">
-                  <Image
-                    alt="LinkedIn"
-                    src={LinkedInImage.src}
-                    width={LinkedInImage.width}
-                    height={LinkedInImage.height}
-                  />
-                </a>
-              </div>
-              <div className="flex items-center justify-center w-10 h-10 rounded-full">
-                <a href={profile?.github} target="_blank" rel="noreferrer">
-                  <GitHubIcon className="!w-10 !h-10" />
-                </a>
-              </div>
-              <div className="flex items-center justify-center w-10 h-10 rounded-full">
-                <a href={profile?.website} target="_blank" rel="noreferrer">
-                  <LanguageRoundedIcon className="text-[#5C67C9] !w-10 !h-10" />
-                </a>
-              </div>
+              {profile?.linkedin && profile.linkedin !== '' && (
+                <div className="flex items-center justify-center w-10 h-10 rounded-full">
+                  <a href={profile?.linkedin} target="_blank" rel="noreferrer">
+                    <Image
+                      alt="LinkedIn"
+                      src={LinkedInImage.src}
+                      width={LinkedInImage.width}
+                      height={LinkedInImage.height}
+                    />
+                  </a>
+                </div>
+              )}
+              {profile?.github && profile.github !== '' && (
+                <div className="flex items-center justify-center w-10 h-10 rounded-full">
+                  <a href={profile?.github} target="_blank" rel="noreferrer">
+                    <GitHubIcon className="!w-10 !h-10" />
+                  </a>
+                </div>
+              )}
+              {profile?.website && profile.website !== '' && (
+                <div className="flex items-center justify-center w-10 h-10 rounded-full">
+                  <a href={profile?.website} target="_blank" rel="noreferrer">
+                    <LanguageRoundedIcon className="text-[#5C67C9] !w-10 !h-10" />
+                  </a>
+                </div>
+              )}
 
               <div className="my-2">
                 {!uploading ? (
