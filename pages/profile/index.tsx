@@ -24,6 +24,33 @@ export default function ProfilePage() {
   const [uploading, setUploading] = useState<boolean>(false);
   const resumeRef = useRef(null);
 
+  const isValidUrl = (s: string) => {
+    try {
+      new URL(s);
+      return true;
+    } catch (err) {
+      return false;
+    }
+  };
+
+  const isValidGithub = (s: string) => {
+    return s !== '' && s != 'N/A' && s != 'None';
+  };
+
+  const prettyPrintLinkedIn = (linkedIn: string) => {
+    if (isValidUrl(linkedIn)) return linkedIn;
+    if (linkedIn.startsWith('linkedin.com') || linkedIn.startsWith('www.'))
+      return 'https://' + linkedIn;
+    if (linkedIn.startsWith('in/')) return 'https://linkedin.com/' + linkedIn;
+    return 'https://linkedin.com/in/' + linkedIn;
+  };
+
+  const prettyPrintGithub = (github: string) => {
+    if (isValidUrl(github)) return github;
+    if (github.startsWith('github.com') || github.startsWith('www.')) return 'https://' + github;
+    return 'https://github.com/' + github;
+  };
+
   useEffect(() => {
     if (hasProfile && !profile) window.location.reload();
   }, [profile]);
@@ -174,7 +201,7 @@ export default function ProfilePage() {
             <div className="flex gap-x-4">
               {profile?.linkedin && profile.linkedin !== '' && (
                 <div className="flex items-center justify-center w-10 h-10 rounded-full">
-                  <a href={profile?.linkedin} target="_blank" rel="noreferrer">
+                  <a href={prettyPrintLinkedIn(profile.linkedin)} target="_blank" rel="noreferrer">
                     <Image
                       alt="LinkedIn"
                       src={LinkedInImage.src}
@@ -184,16 +211,16 @@ export default function ProfilePage() {
                   </a>
                 </div>
               )}
-              {profile?.github && profile.github !== '' && (
+              {profile?.github && isValidGithub(profile.github) && (
                 <div className="flex items-center justify-center w-10 h-10 rounded-full">
-                  <a href={profile?.github} target="_blank" rel="noreferrer">
+                  <a href={prettyPrintGithub(profile.github)} target="_blank" rel="noreferrer">
                     <GitHubIcon className="!w-10 !h-10" />
                   </a>
                 </div>
               )}
               {profile?.website && profile.website !== '' && (
                 <div className="flex items-center justify-center w-10 h-10 rounded-full">
-                  <a href={profile?.website} target="_blank" rel="noreferrer">
+                  <a href={profile.website} target="_blank" rel="noreferrer">
                     <LanguageRoundedIcon className="text-[#5C67C9] !w-10 !h-10" />
                   </a>
                 </div>
