@@ -183,7 +183,7 @@ export default function ProfilePage() {
               >
                 {profile?.status ? profile?.status : 'In Review'}
               </h1>
-              <div className="text-sm flex">
+              <div className="text-sm md:flex pt-2 md:pt-0">
                 {profile?.updatedAt && (
                   <p className="text-nowrap mr-4">
                     Application last worked on {new Date(profile?.updatedAt).toLocaleDateString()}
@@ -193,38 +193,44 @@ export default function ProfilePage() {
                   href="/profile/application/edit"
                   className="text-[#40B7BA] font-bold underline text-nowrap"
                 >
-                  Edit Application
+                  <p className="">Edit Application</p>
                 </Link>
               </div>
             </div>
 
-            <div className="flex gap-x-4">
-              {profile?.linkedin && profile.linkedin !== '' && (
-                <div className="flex items-center justify-center w-10 h-10 rounded-full">
-                  <a href={prettyPrintLinkedIn(profile.linkedin)} target="_blank" rel="noreferrer">
-                    <Image
-                      alt="LinkedIn"
-                      src={LinkedInImage.src}
-                      width={LinkedInImage.width}
-                      height={LinkedInImage.height}
-                    />
-                  </a>
-                </div>
-              )}
-              {profile?.github && isValidGithub(profile.github) && (
-                <div className="flex items-center justify-center w-10 h-10 rounded-full">
-                  <a href={prettyPrintGithub(profile.github)} target="_blank" rel="noreferrer">
-                    <GitHubIcon className="!w-10 !h-10" />
-                  </a>
-                </div>
-              )}
-              {profile?.website && profile.website !== '' && (
-                <div className="flex items-center justify-center w-10 h-10 rounded-full">
-                  <a href={profile.website} target="_blank" rel="noreferrer">
-                    <LanguageRoundedIcon className="text-[#5C67C9] !w-10 !h-10" />
-                  </a>
-                </div>
-              )}
+            <div className="flex gap-x-4 flex-col md:flex-row">
+              <div className="mb-4 flex gap-x-4 flex-row">
+                {profile?.linkedin && profile.linkedin !== '' && (
+                  <div className="flex items-center justify-center w-10 h-10 rounded-full">
+                    <a
+                      href={prettyPrintLinkedIn(profile.linkedin)}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <Image
+                        alt="LinkedIn"
+                        src={LinkedInImage.src}
+                        width={LinkedInImage.width}
+                        height={LinkedInImage.height}
+                      />
+                    </a>
+                  </div>
+                )}
+                {profile?.github && isValidGithub(profile.github) && (
+                  <div className="flex items-center justify-center w-10 h-10 rounded-full">
+                    <a href={prettyPrintGithub(profile.github)} target="_blank" rel="noreferrer">
+                      <GitHubIcon className="!w-10 !h-10" />
+                    </a>
+                  </div>
+                )}
+                {profile?.website && profile.website !== '' && (
+                  <div className="flex items-center justify-center w-10 h-10 rounded-full">
+                    <a href={profile.website} target="_blank" rel="noreferrer">
+                      <LanguageRoundedIcon className="text-[#5C67C9] !w-10 !h-10" />
+                    </a>
+                  </div>
+                )}
+              </div>
 
               <div className="my-2">
                 {!uploading ? (
@@ -267,28 +273,28 @@ export default function ProfilePage() {
 
             <div className="w-full grid gap-8 grid-cols-1 md:grid-cols-2 mt-8">
               <TextField
-                className="col-span-1"
+                className="col-span-2 md:col-span-1"
                 disabled
                 label="University"
                 value={profile?.university}
                 {...textFieldOverrides}
               />
               <TextField
-                className="col-span-1"
+                className="col-span-2 md:col-span-1"
                 disabled
                 label="Major"
                 value={profile?.major}
                 {...textFieldOverrides}
               />
               <TextField
-                className="col-span-1"
+                className="col-span-2 md:col-span-1"
                 disabled
                 label="Role"
                 value={profile && formatRole(profile?.user.permissions[0])}
                 {...textFieldOverrides}
               />
               <TextField
-                className="col-span-1"
+                className="col-span-2 md:col-span-1"
                 disabled
                 label="Number of hackathons attended"
                 value={profile?.hackathonExperience}
