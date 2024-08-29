@@ -121,7 +121,7 @@ export default function AuthPage() {
   return (
     <>
       <section className="min-h-screen">
-        <div className="p-4">
+        <div className="hidden md:flex p-4">
           <Link href="/" passHref legacyBehavior>
             <div className="cursor-pointer items-center inline-flex text-white font-bold bg-[#40B7BA] rounded-[30px] pr-5 pl-2 py-3 border-2 border-white">
               <ChevronLeftIcon />
@@ -129,7 +129,7 @@ export default function AuthPage() {
             </div>
           </Link>
         </div>
-        <div className="py-2 md:px-16 px-0 flex items-center justify-center flex-wrap">
+        <div className="mt-24 md:mt-0 py-2 md:px-16 px-0 flex items-center justify-center flex-wrap">
           <div className="xl:w-1/2 lg:w-2/3 w-5/6 my-4">
             <section
               id="signInSection"
