@@ -232,15 +232,15 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
   };
 
   return (
-    <div className="flex flex-col flex-grow">
+    <div className="flex flex-col flex-grow mt-28 md:mt-0 ">
       <Head>
         <title>Hacker Application</title>
         <meta name="description" content="Register for HackUTD 2024" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <section className="pl-4 relative mb-4 z-[9999]">
+      <section className="pl-4 relative mb-4 z-[9999] hidden md:flex">
         <Link href="/" passHref>
-          <div className="cursor-pointer items-center inline-flex text-white font-bold bg-[#40B7BA] rounded-[30px] pr-4 pl-1 py-2 border-2 border-white">
+          <div className="mt-2 cursor-pointer items-center inline-flex text-white font-bold bg-[#40B7BA] rounded-[30px] pr-4 pl-1 py-2 border-2 border-white">
             <ChevronLeftIcon className="text-white" fontSize={'large'} />
             Home
           </div>
@@ -582,7 +582,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
             >
               <div
                 style={{ width: 'fit-content' }}
-                className="cursor-pointer select-none bg-white text-[#40B7BA] rounded-[30px] py-3 pl-2 pr-4 text-xs md:text-lg border-2 border-[#40B7BA]"
+                className="cursor-pointer select-none bg-white text-[#40B7BA] rounded-[30px] py-2 md:py-3 pr-2 md:pr-4 md:pl-2 text-xs md:text-lg border-2 border-[#40B7BA]"
               >
                 <ChevronLeftIcon className="text-[#40B7BA]" />
                 prev page
@@ -611,7 +611,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
             >
               <div
                 style={{ width: 'fit-content' }}
-                className="cursor-pointer select-none bg-white text-[#40B7BA] text-xs md:text-lg rounded-[30px] py-3 pr-2 pl-4 border-2 border-[#40B7BA]"
+                className="cursor-pointer select-none bg-white text-[#40B7BA] text-xs md:text-lg rounded-[30px] py-2 md:py-3 pl-2 md:pr-2 md:pl-4 border-2 border-[#40B7BA]"
               >
                 next page
                 <ChevronRightIcon />
