@@ -91,7 +91,7 @@ export default function ProfilePage() {
 
   if (!isSignedIn) {
     return (
-      <div className="p-20 md:p-10 flex-grow text-center text-white text-xl">
+      <div className="mt-12 md:mt-0 p-20 md:p-10 flex-grow text-center text-white text-xl">
         Sign in to see your profile!
       </div>
     );
@@ -105,7 +105,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="md:py-16 py-12 text-black flex justify-center">
+    <div className="md:py-12 py-28 text-black flex justify-center">
       <div className="bg-white min-w-3/4 py-12 px-16 rounded-xl flex flex-col md:flex-row 2xl:gap-x-14 gap-x-12 2xl:justify-center">
         {/* QR Code */}
         <div className="">
