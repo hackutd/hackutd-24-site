@@ -41,7 +41,7 @@ async function updateUserRole(
       permissions: [newRole],
     },
   });
-  await updateAllUserDoc(userId, newRole);
+  // await updateAllUserDoc(userId, newRole);
   return {
     statusCode: 200,
     msg: 'Update completed',

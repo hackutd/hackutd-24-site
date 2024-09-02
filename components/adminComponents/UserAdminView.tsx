@@ -48,7 +48,7 @@ export default function UserAdminView({
     ['Software Experience', currentUser.softwareExperience],
     [
       'Resume',
-      currentUser.resume === '' ? (
+      !currentUser.resume || currentUser.resume === '' ? (
         <p>No resume found</p>
       ) : (
         <Link passHref href={currentUser.resume} target="_blank" rel="noopener noreferrer">
@@ -81,7 +81,6 @@ export default function UserAdminView({
     const h = Math.max(60, ref.current.offsetHeight);
     setHeight(h);
     setCurrentPage(Math.floor(currentUserIndex / Math.floor(h / 60) + 1));
-    console.log(h, currentUserIndex);
   }, [windowHeight, currentUserIndex]);
 
   const updateRole = async () => {
