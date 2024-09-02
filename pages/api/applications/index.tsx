@@ -265,7 +265,7 @@ async function handlePutApplications(req: NextApiRequest, res: NextApiResponse) 
   };
 
   await db.collection(APPLICATIONS_COLLECTION).doc(body.user.id).update(completedRegistrationInfo);
-
+  await db.collection(PARTIAL_APPLICATIONS_COLLECTION).doc(body.user.id).delete();
   // temporarily disable this
   // const { eligible, teamMembers } = await checkAutoAcceptEligibility(body);
   // if (eligible) {

@@ -13,6 +13,7 @@ import LoadIcon from '@/components/LoadIcon';
 import DisplayQuestion from '@/components/registerComponents/DisplayQuestion';
 import schoolsList from 'public/schools.json';
 import majorsList from 'public/majors.json';
+import { Snackbar } from '@mui/material';
 /**
  * The edit application page.
  *
@@ -37,13 +38,38 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
     },
   } = hackPortalConfig;
 
-  const { user, hasProfile, updateProfile, profile } = useAuthContext();
+  const { user, updatePartialProfile, updateProfile, profile, partialProfile } = useAuthContext();
   // update this to false for testing
   const [loading, setLoading] = useState(false);
   const [registrationSection, setRegistrationSection] = useState(0);
   const [allowManualSave, setAllowManualSave] = useState(true);
+  const [displayProfileSavedToaster, setDisplayProfileSavedToaster] = useState(false);
 
   // TODO: do some auth check
+
+  const handleSaveProfile = (
+    registrationData: PartialRegistration,
+    nextPage: number,
+    resetForm: (param: { values: any }) => void,
+  ) => {
+    return RequestHelper.put<any, { msg: string; registrationData: PartialRegistration }>(
+      '/api/applications/save',
+      {},
+      {
+        ...registrationData,
+        id: registrationData.id || user.id,
+        currentRegistrationPage: nextPage,
+      },
+    )
+      .then(() => {
+        setDisplayProfileSavedToaster(true);
+        resetForm({ values: registrationData });
+        updatePartialProfile(registrationData);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
 
   const handleSubmit = async (registrationData, enableRedirect = true) => {
     let finalValues: any = { ...registrationData };
@@ -201,57 +227,73 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
         <Formik
           initialValues={{
             ...generateInitialValues(profile),
-            majorManual: profile?.major || '',
-            heardFromManual: profile?.heardFrom || '',
+            majorManual: partialProfile?.major || profile?.major || '',
+            heardFromManual: partialProfile?.heardFrom || profile?.heardFrom || '',
             // have no idea why this works, but need to hard code it for the form values to overwrite the default
-            preferredEmail: profile?.user?.preferredEmail || '',
+            preferredEmail: partialProfile?.preferredEmail || profile?.user?.preferredEmail || '',
             // have no idea why we need formInitialValues but we need to add it for it to works
-            firstName: profile?.user?.firstName || '',
-            lastName: profile?.user?.lastName || '',
-            phoneNumber: profile?.phoneNumber || '',
-            age: profile?.age || '',
-            country: profile?.country || '',
-            hackathonExperience: profile?.hackathonExperience || 0,
-            studyLevel: profile?.studyLevel || '',
+            firstName: partialProfile?.firstName || profile?.user?.firstName || '',
+            lastName: partialProfile?.lastName || profile?.user?.lastName || '',
+            phoneNumber: partialProfile?.phoneNumber || profile?.phoneNumber || '',
+            age: partialProfile?.age || profile?.age || '',
+            country: partialProfile?.country || profile?.country || '',
+            hackathonExperience:
+              partialProfile?.hackathonExperience || profile?.hackathonExperience || 0,
+            studyLevel: partialProfile?.studyLevel || profile?.studyLevel || '',
             major:
+              (partialProfile?.major &&
+                majorsList.filter((major) => major.major == partialProfile.major).length > 0 &&
+                partialProfile?.major) ||
               (profile?.major &&
                 majorsList.filter((major) => major.major == profile.major).length > 0 &&
                 profile?.major) ||
               'Other',
             // check if university is in our university list if not set to other
             university:
+              (partialProfile?.university &&
+                schoolsList.filter((school) => school.university == partialProfile.university)
+                  .length > 0 &&
+                partialProfile?.university) ||
               (profile?.university &&
                 schoolsList.filter((school) => school.university == profile.university).length >
                   0 &&
                 profile?.university) ||
               'Other',
-            universityManual: profile?.university || '',
+            universityManual: partialProfile?.university || profile?.university || '',
             heardFrom:
+              (partialProfile?.heardFrom &&
+                ['Instagram', 'Twitter', 'Event Site', 'Friend', 'TikTok'].includes(
+                  partialProfile.heardFrom,
+                ) &&
+                partialProfile.heardFrom) ||
               (profile?.heardFrom &&
                 ['Instagram', 'Twitter', 'Event Site', 'Friend', 'TikTok'].includes(
                   profile.heardFrom,
                 ) &&
                 profile.heardFrom) ||
               'Other',
-            gender: profile?.gender || '',
-            race: profile?.race || '',
-            ethnicity: profile?.ethnicity || '',
-            softwareExperience: profile?.softwareExperience || '',
-            whyAttend: profile?.whyAttend || '',
-            hackathonNumber: profile?.hackathonNumber || '',
-            hackathonFirstTimer: profile?.hackathonFirstTimer || '',
-            lookingForward: profile?.lookingForward || '',
-            size: profile?.size || '',
-            dietary: profile?.dietary || [],
-            accomodations: profile?.accomodations || '',
-            github: profile?.github || '',
-            linkedin: profile?.linkedin || '',
-            website: profile?.website || '',
-            teammate1: profile?.teammate1 || '',
-            teammate2: profile?.teammate2 || '',
-            teammate3: profile?.teammate3 || '',
-            codeOfConduct: profile?.codeOfConduct || ['Yes'],
-            disclaimer: profile?.disclaimer || ['Yes'],
+            gender: partialProfile?.gender || profile?.gender || '',
+            race: partialProfile?.race || profile?.race || '',
+            ethnicity: partialProfile?.ethnicity || profile?.ethnicity || '',
+            softwareExperience:
+              partialProfile?.softwareExperience || profile?.softwareExperience || '',
+            whyAttend: partialProfile?.whyAttend || profile?.whyAttend || '',
+            hackathonNumber: partialProfile?.hackathonNumber || profile?.hackathonNumber || '',
+            hackathonFirstTimer:
+              partialProfile?.hackathonFirstTimer || profile?.hackathonFirstTimer || '',
+            lookingForward: partialProfile?.lookingForward || profile?.lookingForward || '',
+            size: partialProfile?.size || profile?.size || '',
+            dietary: partialProfile?.dietary || profile?.dietary || [],
+            accomodations: partialProfile?.accomodations || profile?.accomodations || '',
+            github: partialProfile?.github || profile?.github || '',
+            linkedin: partialProfile?.linkedin || profile?.linkedin || '',
+            website: partialProfile?.website || profile?.website || '',
+            teammate1: partialProfile?.teammate1 || profile?.teammate1 || '',
+            teammate2: partialProfile?.teammate2 || profile?.teammate2 || '',
+            teammate3: partialProfile?.teammate3 || profile?.teammate3 || '',
+            codeOfConduct: partialProfile?.codeOfConduct || profile?.codeOfConduct || ['Yes'],
+            disclaimer: partialProfile?.disclaimer || profile?.disclaimer || ['Yes'],
+            resume: partialProfile?.resume || profile?.resume || '',
           }}
           validateOnBlur={false}
           validateOnChange={false}
@@ -329,407 +371,418 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
           {({ values, isValid, isSubmitting, resetForm, dirty }) => (
             // Field component automatically hooks input to form values. Use name attribute to match corresponding value
             // ErrorMessage component automatically displays error based on validation above. Use name attribute to match corresponding value
-            <Form
-              onKeyDown={onKeyDown}
-              className="registrationForm px-4 md:px-24 w-full sm:text-base text-sm"
-            >
-              {/* General Questions */}
-              {registrationSection == 0 && (
-                <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-4 py-10 px-8 mb-8 text-[#4C4950]">
-                  <header>
-                    <h1 className="text-[#40B7BA] lg:text-4xl sm:text-3xl text-2xl font-bold text-center mt-2 md:mt-8 mb-4 poppins-bold">
-                      Edit Hacker Appplication
-                    </h1>
-                  </header>
-                  <div className="md:px-10">
-                    <div className="flex flex-col">
-                      {generalQuestions.map((obj, idx) => (
+            <>
+              <Form
+                onKeyDown={onKeyDown}
+                className="registrationForm px-4 md:px-24 w-full sm:text-base text-sm"
+              >
+                {/* General Questions */}
+                {registrationSection == 0 && (
+                  <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-4 py-10 px-8 mb-8 text-[#4C4950]">
+                    <header>
+                      <h1 className="text-[#40B7BA] lg:text-4xl sm:text-3xl text-2xl font-bold text-center mt-2 md:mt-8 mb-4 poppins-bold">
+                        Edit Hacker Appplication
+                      </h1>
+                    </header>
+                    <div className="md:px-10">
+                      <div className="flex flex-col">
+                        {generalQuestions.map((obj, idx) => (
+                          <DisplayQuestion key={idx} obj={obj} />
+                        ))}
+                      </div>
+                    </div>
+                    <div className="flex justify-end mt-4">
+                      <button
+                        disabled={!dirty || !allowManualSave}
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          try {
+                            setAllowManualSave(false);
+                            await handleSaveProfile(values, registrationSection, resetForm);
+                          } catch (err) {
+                            alert('Error saving form. Please try again later...');
+                            console.error(err);
+                          } finally {
+                            setAllowManualSave(true);
+                          }
+                        }}
+                        className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
+                      >
+                        Save Application
+                      </button>
+                    </div>
+                  </section>
+                )}
+
+                {/* School Questions */}
+                {registrationSection == 1 && (
+                  <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
+                    <h2 className="sm:text-2xl text-xl sm:mb-3 mb-1 poppins-bold mt-2">
+                      School Info
+                    </h2>
+                    <div className="flex flex-col md:px-4 poppins-regular ">
+                      {schoolQuestions.map((obj, idx) => (
+                        <DisplayQuestion key={idx} obj={obj} />
+                      ))}
+                      {values['major'] === 'Other' && (
+                        <DisplayQuestion
+                          key={1000}
+                          obj={{
+                            textInputQuestions: [
+                              {
+                                id: 'majorManual',
+                                name: 'majorManual',
+                                question: 'What is your major?',
+                                required: values['major'] === 'Other',
+                                initialValue: '',
+                              },
+                            ],
+                          }}
+                        />
+                      )}
+                      {values['university'] === 'Other' && (
+                        <DisplayQuestion
+                          key={1000}
+                          obj={{
+                            textInputQuestions: [
+                              {
+                                id: 'universityManual',
+                                name: 'universityManual',
+                                question: 'What is your university?',
+                                required: values['university'] === 'Other',
+                                initialValue: '',
+                              },
+                            ],
+                          }}
+                        />
+                      )}
+                    </div>
+                    <div className="flex justify-end mt-4">
+                      <button
+                        disabled={!dirty || !allowManualSave}
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          try {
+                            setAllowManualSave(false);
+                            await handleSaveProfile(values, registrationSection, resetForm);
+                          } catch (err) {
+                            alert('Error saving form. Please try again later...');
+                            console.error(err);
+                          } finally {
+                            setAllowManualSave(true);
+                          }
+                        }}
+                        className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
+                      >
+                        Save Application
+                      </button>
+                    </div>
+                  </section>
+                )}
+
+                {/* Hackathon Questions */}
+                {registrationSection == 2 && (
+                  <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
+                    <h2 className="sm:text-2xl text-xl poppins-bold sm:mb-3 mb-1 mt-2">
+                      Hackathon Experience
+                    </h2>
+                    <div className="flex flex-col poppins-regular md:px-4">
+                      {hackathonExperienceQuestions.map((obj, idx) => (
+                        <DisplayQuestion key={idx} obj={obj} />
+                      ))}
+                      {values['heardFrom'] === 'Other' && (
+                        <DisplayQuestion
+                          key={1000}
+                          obj={{
+                            textInputQuestions: [
+                              {
+                                id: 'heardFromManual',
+                                name: 'heardFromManual',
+                                question: 'Where did you hear about HackUTD Ripple Effect?',
+                                required: values['heardFrom'] === 'Other',
+                                initialValue: '',
+                              },
+                            ],
+                          }}
+                        />
+                      )}
+                    </div>
+                    <div className="flex justify-end mt-4">
+                      <button
+                        disabled={!dirty || !allowManualSave}
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          try {
+                            setAllowManualSave(false);
+                            await handleSaveProfile(values, registrationSection, resetForm);
+                          } catch (err) {
+                            alert('Error saving form. Please try again later...');
+                            console.error(err);
+                          } finally {
+                            setAllowManualSave(true);
+                          }
+                        }}
+                        className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
+                      >
+                        Save Application
+                      </button>
+                    </div>
+                  </section>
+                )}
+
+                {/* Short Answer Questions */}
+                {registrationSection == 3 && (
+                  <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
+                    <h2 className="sm:text-2xl text-xl poppins-bold sm:mb-3 mb-1 mt-2">
+                      Short Answer Questions
+                    </h2>
+                    <div className="flex flex-col poppins-regular md:px-4">
+                      {shortAnswerQuestions.map((obj, idx) => (
                         <DisplayQuestion key={idx} obj={obj} />
                       ))}
                     </div>
-                  </div>
-                  <div className="flex justify-end mt-4">
-                    <button
-                      disabled={!dirty || !allowManualSave}
-                      onClick={async (e) => {
-                        e.preventDefault();
-                        try {
-                          setAllowManualSave(false);
-                          await handleSubmit(values, false);
-                          resetForm({ values });
-                        } catch (err) {
-                          alert('Error saving form. Please try again later...');
-                          console.error(err);
-                        } finally {
-                          setAllowManualSave(true);
-                        }
-                      }}
-                      className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
-                    >
-                      Save Application
-                    </button>
-                  </div>
-                </section>
-              )}
-
-              {/* School Questions */}
-              {registrationSection == 1 && (
-                <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
-                  <h2 className="sm:text-2xl text-xl sm:mb-3 mb-1 poppins-bold mt-2">
-                    School Info
-                  </h2>
-                  <div className="flex flex-col md:px-4 poppins-regular ">
-                    {schoolQuestions.map((obj, idx) => (
-                      <DisplayQuestion key={idx} obj={obj} />
-                    ))}
-                    {values['major'] === 'Other' && (
-                      <DisplayQuestion
-                        key={1000}
-                        obj={{
-                          textInputQuestions: [
-                            {
-                              id: 'majorManual',
-                              name: 'majorManual',
-                              question: 'What is your major?',
-                              required: values['major'] === 'Other',
-                              initialValue: '',
-                            },
-                          ],
+                    <div className="flex justify-end mt-4">
+                      <button
+                        disabled={!dirty || !allowManualSave}
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          try {
+                            setAllowManualSave(false);
+                            await handleSaveProfile(values, registrationSection, resetForm);
+                          } catch (err) {
+                            alert('Error saving form. Please try again later...');
+                            console.error(err);
+                          } finally {
+                            setAllowManualSave(true);
+                          }
                         }}
-                      />
-                    )}
-                    {values['university'] === 'Other' && (
-                      <DisplayQuestion
-                        key={1000}
-                        obj={{
-                          textInputQuestions: [
-                            {
-                              id: 'universityManual',
-                              name: 'universityManual',
-                              question: 'What is your university?',
-                              required: values['university'] === 'Other',
-                              initialValue: '',
-                            },
-                          ],
+                        className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
+                      >
+                        Save Application
+                      </button>
+                    </div>
+                  </section>
+                )}
+
+                {/* Event Questions */}
+                {registrationSection == 4 && (
+                  <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
+                    <h2 className="sm:text-2xl text-xl poppins-bold sm:mb-3 mb-1 mt-2">
+                      Event Info
+                    </h2>
+                    <div className="flex flex-col poppins-regular md:px-4">
+                      {/* apply styling issue fix, it's an ugly fix but this solve the styling issue */}
+                      {eventInfoQuestions.map((obj, idx) => {
+                        // if (idx !== 0) return <DisplayQuestion key={idx} obj={obj} />;
+
+                        return <DisplayQuestion key={idx} obj={obj} />;
+                      })}
+                    </div>
+                    <div className="flex justify-end mt-4">
+                      <button
+                        disabled={!dirty || !allowManualSave}
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          try {
+                            setAllowManualSave(false);
+                            await handleSaveProfile(values, registrationSection, resetForm);
+                          } catch (err) {
+                            alert('Error saving form. Please try again later...');
+                            console.error(err);
+                          } finally {
+                            setAllowManualSave(true);
+                          }
                         }}
-                      />
-                    )}
-                  </div>
-                  <div className="flex justify-end mt-4">
-                    <button
-                      disabled={!dirty || !allowManualSave}
-                      onClick={async (e) => {
-                        e.preventDefault();
-                        try {
-                          setAllowManualSave(false);
-                          await handleSubmit(values, false);
-                          resetForm({ values });
-                        } catch (err) {
-                          alert('Error saving form. Please try again later...');
-                          console.error(err);
-                        } finally {
-                          setAllowManualSave(true);
-                        }
-                      }}
-                      className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
-                    >
-                      Save Application
-                    </button>
-                  </div>
-                </section>
-              )}
+                        className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
+                      >
+                        Save Application
+                      </button>
+                    </div>
+                  </section>
+                )}
 
-              {/* Hackathon Questions */}
-              {registrationSection == 2 && (
-                <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
-                  <h2 className="sm:text-2xl text-xl poppins-bold sm:mb-3 mb-1 mt-2">
-                    Hackathon Experience
-                  </h2>
-                  <div className="flex flex-col poppins-regular md:px-4">
-                    {hackathonExperienceQuestions.map((obj, idx) => (
-                      <DisplayQuestion key={idx} obj={obj} />
-                    ))}
-                    {values['heardFrom'] === 'Other' && (
-                      <DisplayQuestion
-                        key={1000}
-                        obj={{
-                          textInputQuestions: [
-                            {
-                              id: 'heardFromManual',
-                              name: 'heardFromManual',
-                              question: 'Where did you hear about HackUTD Ripple Effect?',
-                              required: values['heardFrom'] === 'Other',
-                              initialValue: '',
-                            },
-                          ],
+                {/* Sponsor Questions */}
+                {registrationSection == 5 && (
+                  <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950] relative">
+                    <h2 className="sm:text-2xl text-xl poppins-bold sm:mb-3 mb-1 mt-2">
+                      Sponsor Info
+                    </h2>
+                    <div className="flex flex-col poppins-regular md:px-4">
+                      {sponsorInfoQuestions.map((obj, idx) => (
+                        <DisplayQuestion key={idx} obj={obj} />
+                      ))}
+                    </div>
+                    <div className="flex justify-end mt-4">
+                      <button
+                        disabled={!dirty || !allowManualSave}
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          try {
+                            setAllowManualSave(false);
+                            await handleSaveProfile(values, registrationSection, resetForm);
+                          } catch (err) {
+                            alert('Error saving form. Please try again later...');
+                            console.error(err);
+                          } finally {
+                            setAllowManualSave(true);
+                          }
                         }}
-                      />
+                        className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
+                      >
+                        Save Application
+                      </button>
+                    </div>
+                  </section>
+                )}
+                {/* Teammate Questions */}
+                {registrationSection == 6 && (
+                  <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
+                    <h2 className="sm:text-2xl text-xl font-semibold sm:mb-3 mb-1">
+                      Current Teammate
+                    </h2>
+                    {profile && !profile.teammate1 && !profile.teammate2 && !profile.teammate3 && (
+                      <div className="flex flex-col poppins-regular">
+                        You currently have no teammates.
+                      </div>
                     )}
-                  </div>
-                  <div className="flex justify-end mt-4">
-                    <button
-                      disabled={!dirty || !allowManualSave}
-                      onClick={async (e) => {
-                        e.preventDefault();
-                        try {
-                          setAllowManualSave(false);
-                          await handleSubmit(values, false);
-                          resetForm({ values });
-                        } catch (err) {
-                          alert('Error saving form. Please try again later...');
-                          console.error(err);
-                        } finally {
-                          setAllowManualSave(true);
-                        }
-                      }}
-                      className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
-                    >
-                      Save Application
-                    </button>
-                  </div>
-                </section>
-              )}
-
-              {/* Short Answer Questions */}
-              {registrationSection == 3 && (
-                <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
-                  <h2 className="sm:text-2xl text-xl poppins-bold sm:mb-3 mb-1 mt-2">
-                    Short Answer Questions
-                  </h2>
-                  <div className="flex flex-col poppins-regular md:px-4">
-                    {shortAnswerQuestions.map((obj, idx) => (
-                      <DisplayQuestion key={idx} obj={obj} />
-                    ))}
-                  </div>
-                  <div className="flex justify-end mt-4">
-                    <button
-                      disabled={!dirty || !allowManualSave}
-                      onClick={async (e) => {
-                        e.preventDefault();
-                        try {
-                          setAllowManualSave(false);
-                          await handleSubmit(values, false);
-                          resetForm({ values });
-                        } catch (err) {
-                          alert('Error saving form. Please try again later...');
-                          console.error(err);
-                        } finally {
-                          setAllowManualSave(true);
-                        }
-                      }}
-                      className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
-                    >
-                      Save Application
-                    </button>
-                  </div>
-                </section>
-              )}
-
-              {/* Event Questions */}
-              {registrationSection == 4 && (
-                <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
-                  <h2 className="sm:text-2xl text-xl poppins-bold sm:mb-3 mb-1 mt-2">Event Info</h2>
-                  <div className="flex flex-col poppins-regular md:px-4">
-                    {/* apply styling issue fix, it's an ugly fix but this solve the styling issue */}
-                    {eventInfoQuestions.map((obj, idx) => {
-                      // if (idx !== 0) return <DisplayQuestion key={idx} obj={obj} />;
-
-                      return <DisplayQuestion key={idx} obj={obj} />;
-                    })}
-                  </div>
-                  <div className="flex justify-end mt-4">
-                    <button
-                      disabled={!dirty || !allowManualSave}
-                      onClick={async (e) => {
-                        e.preventDefault();
-                        try {
-                          setAllowManualSave(false);
-                          await handleSubmit(values, false);
-                          resetForm({ values });
-                        } catch (err) {
-                          alert('Error saving form. Please try again later...');
-                          console.error(err);
-                        } finally {
-                          setAllowManualSave(true);
-                        }
-                      }}
-                      className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
-                    >
-                      Save Application
-                    </button>
-                  </div>
-                </section>
-              )}
-
-              {/* Sponsor Questions */}
-              {registrationSection == 5 && (
-                <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950] relative">
-                  <h2 className="sm:text-2xl text-xl poppins-bold sm:mb-3 mb-1 mt-2">
-                    Sponsor Info
-                  </h2>
-                  <div className="flex flex-col poppins-regular md:px-4">
-                    {sponsorInfoQuestions.map((obj, idx) => (
-                      <DisplayQuestion key={idx} obj={obj} />
-                    ))}
-                  </div>
-                  <div className="flex justify-end mt-4">
-                    <button
-                      disabled={!dirty || !allowManualSave}
-                      onClick={async (e) => {
-                        e.preventDefault();
-                        try {
-                          setAllowManualSave(false);
-                          await handleSubmit(values, false);
-                          resetForm({ values });
-                        } catch (err) {
-                          alert('Error saving form. Please try again later...');
-                          console.error(err);
-                        } finally {
-                          setAllowManualSave(true);
-                        }
-                      }}
-                      className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
-                    >
-                      Save Application
-                    </button>
-                  </div>
-                </section>
-              )}
-              {/* Teammate Questions */}
-              {registrationSection == 6 && (
-                <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
-                  <h2 className="sm:text-2xl text-xl font-semibold sm:mb-3 mb-1">
-                    Current Teammate
-                  </h2>
-                  {profile && !profile.teammate1 && !profile.teammate2 && !profile.teammate3 && (
-                    <div className="flex flex-col poppins-regular">
-                      You currently have no teammates.
-                    </div>
-                  )}
-                  {/* show teammate 1 if exists */}
-                  {profile?.teammate1 && (
-                    <div className="flex flex-col poppins-regular md:px-4">
-                      <div className="flex items-center">
-                        <label className="font-semibold">Teammate 1:</label>
-                        <span className="ml-2">{profile.teammate1}</span>
+                    {/* show teammate 1 if exists */}
+                    {profile?.teammate1 && (
+                      <div className="flex flex-col poppins-regular md:px-4">
+                        <div className="flex items-center">
+                          <label className="font-semibold">Teammate 1:</label>
+                          <span className="ml-2">{profile.teammate1}</span>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                  {/* show teammate 2 if exists */}
-                  {profile?.teammate2 && (
-                    <div className="flex flex-col poppins-regular md:px-4">
-                      <div className="flex items-center">
-                        <label className="font-semibold">Teammate 2:</label>
-                        <span className="ml-2">{profile.teammate2}</span>
+                    )}
+                    {/* show teammate 2 if exists */}
+                    {profile?.teammate2 && (
+                      <div className="flex flex-col poppins-regular md:px-4">
+                        <div className="flex items-center">
+                          <label className="font-semibold">Teammate 2:</label>
+                          <span className="ml-2">{profile.teammate2}</span>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                  {/* show teammate 3 if exists */}
-                  {profile?.teammate3 && (
-                    <div className="flex flex-col poppins-regular md:px-4">
-                      <div className="flex items-center">
-                        <label className="font-semibold">Teammate 3:</label>
-                        <span className="ml-2">{profile.teammate3}</span>
+                    )}
+                    {/* show teammate 3 if exists */}
+                    {profile?.teammate3 && (
+                      <div className="flex flex-col poppins-regular md:px-4">
+                        <div className="flex items-center">
+                          <label className="font-semibold">Teammate 3:</label>
+                          <span className="ml-2">{profile.teammate3}</span>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                  <p className="text-md my-6 font-bold">
-                    Want to request a teammate change? Email us at{' '}
-                    <Link className="underline" href="mailto:hello@hackutd.co" target="__blank__">
-                      hello@hackutd.co
-                    </Link>
-                  </p>
-                  {
-                    <div className="flex flex-col poppins-regular md:px-4">
-                      {teammateQuestions.map(
-                        (obj, idx) =>
-                          obj.checkboxQuestions && <DisplayQuestion key={idx} obj={obj} />,
+                    )}
+                    <p className="text-md my-6 font-bold">
+                      Want to request a teammate change? Email us at{' '}
+                      <Link className="underline" href="mailto:hello@hackutd.co" target="__blank__">
+                        hello@hackutd.co
+                      </Link>
+                    </p>
+                    {
+                      <div className="flex flex-col poppins-regular md:px-4">
+                        {teammateQuestions.map(
+                          (obj, idx) =>
+                            obj.checkboxQuestions && <DisplayQuestion key={idx} obj={obj} />,
+                        )}
+                      </div>
+                    }
+                    {/* Submit */}
+                    <div className="mt-8 text-white">
+                      <button
+                        disabled={isSubmitting}
+                        type="submit"
+                        className="mr-auto cursor-pointer px-4 py-2 rounded-lg bg-[#40B7BA] hover:brightness-90"
+                      >
+                        Update Application
+                      </button>
+                      {!isValid && (
+                        <div className="text-red-600 poppins-regular">
+                          Error: The form has invalid fields. Please go through the form again to
+                          make sure that every required fields are filled out.
+                        </div>
                       )}
                     </div>
-                  }
-                  {/* Submit */}
-                  <div className="mt-8 text-white">
-                    <button
-                      disabled={isSubmitting}
-                      type="submit"
-                      className="mr-auto cursor-pointer px-4 py-2 rounded-lg bg-[#40B7BA] hover:brightness-90"
+                  </section>
+                )}
+              </Form>
+
+              {/* Pagniation buttons */}
+              <section
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr 1fr',
+                }}
+                className={`lg:block ${
+                  registrationSection == 0
+                    ? 'justify-end'
+                    : registrationSection >= 6
+                    ? 'justify-start'
+                    : 'justify-between'
+                } lg:pb-4 pb-8 lg:px-4 sm:px-8 px-6 text-primaryDark font-semibold text-primaryDark font-semibold text-md`}
+              >
+                {registrationSection > 0 && (
+                  <div
+                    style={{ gridArea: '1 / 1 / 2 / 2' }}
+                    // className="lg:fixed 2xl:bottom-8 2xl:left-8 bottom-6 left-6 inline cursor-pointer select-none"
+                    onClick={() => {
+                      setRegistrationSection(registrationSection - 1);
+                    }}
+                  >
+                    <div
+                      style={{ width: 'fit-content' }}
+                      className="cursor-pointer select-none bg-white text-[#40B7BA] rounded-[30px] py-3 pl-2 pr-4 text-xs md:text-lg border-2 border-[#40B7BA]"
                     >
-                      Update Application
-                    </button>
-                    {!isValid && (
-                      <div className="text-red-600 poppins-regular">
-                        Error: The form has invalid fields. Please go through the form again to make
-                        sure that every required fields are filled out.
-                      </div>
-                    )}
+                      <ChevronLeftIcon className="text-[#40B7BA]" />
+                      prev page
+                    </div>
                   </div>
-                </section>
-              )}
-            </Form>
+                )}
+
+                <div
+                  className="flex justify-center items-center"
+                  style={{ gridArea: '1 / 2 / 2 / 3' }}
+                >
+                  {Array.from({ length: 7 }).map((_, i) => (
+                    <div
+                      key={i}
+                      onClick={async () => {
+                        if (dirty) await handleSaveProfile(values, registrationSection, resetForm);
+                        setRegistrationSection(i);
+                      }}
+                      style={{ backgroundColor: registrationSection == i ? '#4C4950' : '#9F9EA7' }}
+                      className="rounded-full w-3 h-3 mr-2"
+                    />
+                  ))}
+                </div>
+
+                {registrationSection < 6 && (
+                  <div
+                    className="flex justify-end "
+                    style={{ gridArea: '1 / 3 / 2 / 4' }}
+                    onClick={async () => {
+                      if (dirty) await handleSaveProfile(values, registrationSection, resetForm);
+                      setRegistrationSection(registrationSection + 1);
+                    }}
+                  >
+                    <div
+                      style={{ width: 'fit-content' }}
+                      className="cursor-pointer select-none bg-white text-[#40B7BA] text-xs md:text-lg rounded-[30px] py-3 pr-2 pl-4 border-2 border-[#40B7BA]"
+                    >
+                      next page
+                      <ChevronRightIcon />
+                    </div>
+                  </div>
+                )}
+              </section>
+              <Snackbar
+                open={displayProfileSavedToaster}
+                autoHideDuration={5000}
+                onClose={() => setDisplayProfileSavedToaster(false)}
+                message="Profile saved"
+              />
+            </>
           )}
         </Formik>
-
-        {/* Pagniation buttons */}
-        <section
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr 1fr',
-          }}
-          className={`lg:block ${
-            registrationSection == 0
-              ? 'justify-end'
-              : registrationSection >= 6
-              ? 'justify-start'
-              : 'justify-between'
-          } lg:pb-4 pb-8 lg:px-4 sm:px-8 px-6 text-primaryDark font-semibold text-primaryDark font-semibold text-md`}
-        >
-          {registrationSection > 0 && (
-            <div
-              style={{ gridArea: '1 / 1 / 2 / 2' }}
-              // className="lg:fixed 2xl:bottom-8 2xl:left-8 bottom-6 left-6 inline cursor-pointer select-none"
-              onClick={() => {
-                setRegistrationSection(registrationSection - 1);
-              }}
-            >
-              <div
-                style={{ width: 'fit-content' }}
-                className="cursor-pointer select-none bg-white text-[#40B7BA] rounded-[30px] py-3 pl-2 pr-4 text-xs md:text-lg border-2 border-[#40B7BA]"
-              >
-                <ChevronLeftIcon className="text-[#40B7BA]" />
-                prev page
-              </div>
-            </div>
-          )}
-
-          <div className="flex justify-center items-center" style={{ gridArea: '1 / 2 / 2 / 3' }}>
-            {Array.from({ length: 7 }).map((_, i) => (
-              <div
-                key={i}
-                onClick={() => setRegistrationSection(i)}
-                style={{ backgroundColor: registrationSection == i ? '#4C4950' : '#9F9EA7' }}
-                className="rounded-full w-3 h-3 mr-2"
-              />
-            ))}
-          </div>
-
-          {registrationSection < 6 && (
-            <div
-              className="flex justify-end "
-              style={{ gridArea: '1 / 3 / 2 / 4' }}
-              onClick={() => {
-                setRegistrationSection(registrationSection + 1);
-              }}
-            >
-              <div
-                style={{ width: 'fit-content' }}
-                className="cursor-pointer select-none bg-white text-[#40B7BA] text-xs md:text-lg rounded-[30px] py-3 pr-2 pl-4 border-2 border-[#40B7BA]"
-              >
-                next page
-                <ChevronRightIcon />
-              </div>
-            </div>
-          )}
-        </section>
       </section>
     </div>
   );
