@@ -9,6 +9,7 @@ const db = firestore();
 
 const APPLICATIONS_COLLECTION = '/registrations';
 const MISC_COLLECTION = '/miscellaneous';
+const PARTIAL_APPLICATIONS_COLLECTION = '/partial-registrations';
 const AUTO_ACCEPT_ELIGIBLE_TEAM_SIZE = 4;
 
 async function checkRegistrationAllowed() {
@@ -199,6 +200,7 @@ async function handlePostApplications(req: NextApiRequest, res: NextApiResponse)
       .get();
     await autoAcceptTeam([...teamMembers, snapshot.docs[0].ref]);
   }
+  await db.collection(PARTIAL_APPLICATIONS_COLLECTION).doc(body.user.id).delete();
   // await updateAllUsersDoc(body.user.id, body);
   res.status(200).json({
     msg: 'Operation completed',

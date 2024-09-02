@@ -5,7 +5,7 @@ import initializeApi from '../../../lib/admin/init';
 
 initializeApi();
 
-const APPLICATIONS_COLLECTION = '/registrations';
+const PARTIAL_APPLICATIONS_COLLECTION = '/partial-registrations';
 const db = firestore();
 
 async function checkRegistrationAllowed() {
@@ -21,7 +21,7 @@ async function handlePutRequest(req: NextApiRequest, res: NextApiResponse) {
     });
   }
 
-  let body: Registration;
+  let body: PartialRegistration;
   try {
     body = JSON.parse(req.body);
   } catch (error) {
@@ -31,17 +31,10 @@ async function handlePutRequest(req: NextApiRequest, res: NextApiResponse) {
       message: '',
     });
   }
-  const completedRegistrationData = {
-    ...body,
-    user: {
-      ...body.user,
-      ...(body.currentRegistrationPage === 1000000000 ? { permissions: ['hacker'] } : {}),
-    },
-  };
-  await db.collection(APPLICATIONS_COLLECTION).doc(body.user.id).set(completedRegistrationData);
+  await db.collection(PARTIAL_APPLICATIONS_COLLECTION).doc(body.id).set(body);
   res.status(200).json({
     msg: 'Operation completed',
-    registrationData: completedRegistrationData,
+    registrationData: body,
   });
 }
 

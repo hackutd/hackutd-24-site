@@ -39,7 +39,8 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
     },
   } = hackPortalConfig;
 
-  const { user, profile, hasProfile, updateProfile } = useAuthContext();
+  const { user, profile, partialProfile, hasProfile, updateProfile, updatePartialProfile } =
+    useAuthContext();
   const [resumeFile, setResumeFile] = useState<File | null>(null);
   const [isSavingApplication, setIsSavingApplication] = useState(false);
   const [resumeFileUpdated, setResumeFileUpdated] = useState(false);
@@ -48,7 +49,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
   // update this to false for testing
   const [loading, setLoading] = useState(false);
   const [registrationSection, setRegistrationSection] = useState(
-    profile?.currentRegistrationPage || 0,
+    partialProfile?.currentRegistrationPage || 0,
   );
   const checkRedirect = async () => {
     if (!allowedRegistrations) return;
@@ -61,7 +62,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
     checkRedirect();
   }, [user]);
 
-  const cleanData = (registrationData) => {
+  const cleanData = (registrationData: PartialRegistration): Registration => {
     let cleanedValues = { ...registrationData };
     const userValues = {
       id: registrationData.id,
@@ -70,12 +71,14 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
       preferredEmail: registrationData.preferredEmail,
       permissions: registrationData.permissions,
     };
-    cleanedValues['user'] = userValues;
     delete cleanedValues.firstName;
     delete cleanedValues.lastName;
     delete cleanedValues.permissions;
     delete cleanedValues.preferredEmail;
-    return cleanedValues;
+    return {
+      ...cleanedValues,
+      user: userValues,
+    };
   };
 
   const handleSubmit = async (registrationData) => {
@@ -128,11 +131,11 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
         );
         resumeUrl = data.url;
       }
-      const { data } = await RequestHelper.put<
+      const { data } = await RequestHelper.post<
         Registration,
         { msg: string; registrationData: Registration }
       >(
-        '/api/applications/save',
+        '/api/applications',
         {},
         {
           ...registrationData,
@@ -142,7 +145,6 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
             id: registrationData.user.id || user.id,
           },
           resume: resumeUrl,
-          currentRegistrationPage: 1000000000,
         },
       );
       alert('Application Submitted');
@@ -165,11 +167,11 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
   };
 
   const handleSaveProfile = (
-    registrationData: any,
+    registrationData: PartialRegistration,
     nextPage: number,
     resetForm: (param: { values: any }) => void,
   ) => {
-    const cleanedData = cleanData(registrationData);
+    // const cleanedData = cleanData(registrationData);
     return (async () => {
       if (resumeFile && resumeFileUpdated) {
         const formData = new FormData();
@@ -190,16 +192,12 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
       }
     })()
       .then((resumeUrl: string) => {
-        return RequestHelper.put<any, { msg: string; registrationData: Registration }>(
+        return RequestHelper.put<any, { msg: string; registrationData: PartialRegistration }>(
           '/api/applications/save',
           {},
           {
-            ...cleanedData,
-            id: cleanedData.id || user.id,
-            user: {
-              ...cleanedData.user,
-              id: cleanedData.user.id || user.id,
-            },
+            ...registrationData,
+            id: registrationData.id || user.id,
             currentRegistrationPage: nextPage,
             resume: resumeUrl,
           },
@@ -208,15 +206,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
             setDisplayProfileSavedToaster(true);
             resetForm({ values: registrationData });
             setResumeFileUpdated(false);
-            updateProfile({
-              ...cleanedData,
-              user: {
-                ...cleanedData.user,
-                permissions: ['hacker'],
-              },
-              currentRegistrationPage: nextPage,
-              resume: resumeUrl,
-            });
+            updatePartialProfile(registrationData);
           })
           .catch((err) => {
             console.error(err);
@@ -339,19 +329,18 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
           </div>
         </Link>
       </section>
-
       <section className="relative">
         <Formik
           initialValues={{
-            ...generateInitialValues(profile),
-            id: profile?.user.id || '',
-            firstName: profile?.user?.firstName || '',
-            lastName: profile?.user?.lastName || '',
-            preferredEmail: profile?.user?.preferredEmail || user?.preferredEmail || '',
-            majorManual: profile?.majorManual || '',
-            universityManual: profile?.universityManual || '',
-            heardFromManual: profile?.heardFromManual || '',
-            resume: profile?.resume || '',
+            ...generateInitialValues(partialProfile),
+            id: partialProfile?.id || '',
+            firstName: partialProfile?.firstName || '',
+            lastName: partialProfile?.lastName || '',
+            preferredEmail: partialProfile?.preferredEmail || user?.preferredEmail || '',
+            majorManual: partialProfile?.majorManual || '',
+            universityManual: partialProfile?.universityManual || '',
+            heardFromManual: partialProfile?.heardFromManual || '',
+            resume: partialProfile?.resume || '',
           }}
           validateOnBlur={false}
           validateOnChange={false}
@@ -466,7 +455,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                     </div>
                     <div className="flex justify-end">
                       <button
-                        disabled={!dirty || !resumeFileUpdated}
+                        disabled={!dirty}
                         onClick={async (e) => {
                           e.preventDefault();
                           await handleSaveProfile(values, registrationSection, resetForm);
