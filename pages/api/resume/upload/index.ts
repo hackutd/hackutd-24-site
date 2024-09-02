@@ -41,6 +41,18 @@ handler.post(async (req, res) => {
     );
 
   const storageRef = firebase.storage().ref();
+  // NOTE: This case will happen if user wants to save resume as part of partially completed profile
+  if (req.body.isPartialProfile === 'true') {
+    const partialResumeRef = storageRef.child('resumes/pending');
+    const fileRef = partialResumeRef.child(req.body.fileName);
+    await fileRef.put(req.file.buffer);
+    const fileUrl = await fileRef.getDownloadURL();
+    return res.status(200).json({
+      url: fileUrl,
+    });
+  }
+
+  // NOTE: This section will be reached only if user manages to retain resume file in react object state
   const studyLevelRef = storageRef.child('resumes/' + req.body.studyLevel);
   const majorRef = studyLevelRef.child(req.body.major);
   const fileRef = majorRef.child(req.body.fileName);
@@ -50,6 +62,8 @@ handler.post(async (req, res) => {
   res.status(200).json({
     url: fileUrl,
   });
+
+  // NOTE: In case user saved resume as part of partial profile but failed to retain file in react state, /api/resume/move will be used instead
 });
 
 export const config = {

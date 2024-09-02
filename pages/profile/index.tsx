@@ -20,7 +20,8 @@ import { RequestHelper } from '@/lib/request-helper';
  */
 export default function ProfilePage() {
   const router = useRouter();
-  const { isSignedIn, hasProfile, user, profile, updateProfile } = useAuthContext();
+  const { isSignedIn, hasPartialProfile, hasProfile, user, profile, updateProfile } =
+    useAuthContext();
   const [uploading, setUploading] = useState<boolean>(false);
   const resumeRef = useRef(null);
 
@@ -193,7 +194,9 @@ export default function ProfilePage() {
                   href="/profile/application/edit"
                   className="text-[#40B7BA] font-bold underline text-nowrap"
                 >
-                  <p className="">Edit Application</p>
+                  <p className="">
+                    {hasPartialProfile ? 'Continue Editing Application' : 'Edit Application'}
+                  </p>
                 </Link>
               </div>
             </div>
