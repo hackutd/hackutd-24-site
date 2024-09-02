@@ -38,7 +38,8 @@ export const hackPortalConfig: HackPortalConfig = {
             initialValue: '',
           },
           {
-            question: 'Phone number',
+            question:
+              "Phone number (make sure to add country code and '+' prefix if you do not use US phone number)",
             id: 'phoneNumber',
             name: 'phoneNumber',
             required: true,
