@@ -76,7 +76,7 @@ a.link {
 }
 
 .text-stroke {
-  text-shadow: -1px -1px 0 #AC5A1F, 1px -1px 0 #AC5A1F, -1px 1px 0 #AC5A1F, 1px 1px 0 #AC5A1F;
+  text-shadow: -2px -2px 0 #AC5A1F, 2px -2px 0 #AC5A1F, -2px 2px 0 #AC5A1F, 2px 2px 0 #AC5A1F, -2px 0px 0 #AC5A1F, 2px 0px 0 #AC5A1F, 0px -2px 0 #AC5A1F, 0px 2px 0 #AC5A1F;
 }
 
 .element {
