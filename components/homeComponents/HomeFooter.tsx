@@ -74,7 +74,7 @@ export default function HomeFooter() {
               onClick={async () => {
                 await handleSubmitEmail(userEmail);
               }}
-              className="rounded-lg text-white px-6 py-2 my-4 bg-complementary"
+              className="mb-20 md:mb-0 rounded-lg text-white px-6 py-2 my-4 bg-complementary"
             >
               Subscribe
             </button>
