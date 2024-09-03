@@ -34,7 +34,10 @@ async function handlePutRequest(req: NextApiRequest, res: NextApiResponse) {
   await db.collection(PARTIAL_APPLICATIONS_COLLECTION).doc(body.id).set(body);
   res.status(200).json({
     msg: 'Operation completed',
-    registrationData: body,
+    registrationData: {
+      ...body,
+      updatedAt: new Date(),
+    },
   });
 }
 
