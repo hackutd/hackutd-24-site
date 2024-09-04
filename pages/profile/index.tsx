@@ -196,7 +196,7 @@ export default function ProfilePage() {
                   <p className="text-nowrap mr-4">
                     Application {hasPartialProfile ? 'last worked on' : 'last submitted on'}{' '}
                     {hasPartialProfile
-                      ? new Date(partialProfile?.updatedAt).toLocaleString()
+                      ? new Date(partialProfile?.updatedAt).toLocaleDateString()
                       : new Date(profile?.updatedAt).toLocaleDateString()}
                   </p>
                 )}
