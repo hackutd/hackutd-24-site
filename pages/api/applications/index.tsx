@@ -10,74 +10,10 @@ const db = firestore();
 const APPLICATIONS_COLLECTION = '/registrations';
 const MISC_COLLECTION = '/miscellaneous';
 const PARTIAL_APPLICATIONS_COLLECTION = '/partial-registrations';
-const AUTO_ACCEPT_ELIGIBLE_TEAM_SIZE = 4;
 
 async function checkRegistrationAllowed() {
   const preferenceDoc = await db.collection('miscellaneous').doc('preferences').get();
   return preferenceDoc.data().allowRegistrations ?? false;
-}
-
-// Check if the team in which a user belongs to is eligible for auto accept
-async function checkAutoAcceptEligibility(
-  userData: Registration,
-): Promise<{ eligible: boolean; teamMembers: FirebaseFirestore.DocumentReference[] }> {
-  // Filter out empty emails
-  const teammates: string[] = [userData.teammate1, userData.teammate2, userData.teammate3].filter(
-    (email) => email && email !== '',
-  );
-  const teammateDocRef = [];
-
-  // There are not enough members for auto acceptance
-  if (teammates.length !== AUTO_ACCEPT_ELIGIBLE_TEAM_SIZE - 1)
-    return { eligible: false, teamMembers: [] };
-  const teammateCounter: Map<string, number> = new Map();
-  await Promise.all(
-    teammates.map(async (teammate) => {
-      const snapshot = await db
-        .collection(APPLICATIONS_COLLECTION)
-        .where('user.preferredEmail', '==', teammate)
-        .get();
-
-      // Teammates may not have created account yet or wrong email
-      if (snapshot.empty) return;
-
-      // Get info provided by current teammate
-      teammateDocRef.push(snapshot.docs[0].ref);
-      const teammateDoc = snapshot.docs[0].data();
-
-      [teammateDoc.teammate1, teammateDoc.teammate2, teammateDoc.teammate3].forEach(
-        (friend: string | undefined) => {
-          if (!friend || friend === '') return;
-          if (!teammateCounter.has(friend)) teammateCounter.set(friend, 0);
-          teammateCounter.set(friend, teammateCounter.get(friend) + 1);
-        },
-      );
-    }),
-  );
-
-  // Team has more than 4 members
-  if (teammateCounter.size > AUTO_ACCEPT_ELIGIBLE_TEAM_SIZE) {
-    return { eligible: false, teamMembers: [] };
-  }
-
-  // Team is only eligible for auto accept if every team member is "vouched" by their other 3 members
-  for (const [_, count] of Object.entries(teammateCounter)) {
-    if (count !== AUTO_ACCEPT_ELIGIBLE_TEAM_SIZE - 1) return { eligible: false, teamMembers: [] };
-  }
-  return { eligible: true, teamMembers: teammateDocRef };
-}
-
-async function autoAcceptTeam(teamMembers: FirebaseFirestore.DocumentReference[]) {
-  const userIds = teamMembers.map((member) => member.id);
-  await Promise.all(
-    userIds.map(async (userId) => {
-      await db.collection('/acceptreject').doc(userId).set({
-        adminId: 'admin',
-        hackerId: userId,
-        status: 'Accepted',
-      });
-    }),
-  );
 }
 
 async function updateAllUsersDoc(userId: string, profile: any) {
@@ -192,14 +128,6 @@ async function handlePostApplications(req: NextApiRequest, res: NextApiResponse)
     },
   };
   await db.collection(APPLICATIONS_COLLECTION).doc(body.user.id).set(completedRegistrationInfo);
-  const { eligible, teamMembers } = await checkAutoAcceptEligibility(body);
-  if (eligible) {
-    snapshot = await db
-      .collection(APPLICATIONS_COLLECTION)
-      .where('user.id', '==', body.user.id)
-      .get();
-    await autoAcceptTeam([...teamMembers, snapshot.docs[0].ref]);
-  }
   await db.collection(PARTIAL_APPLICATIONS_COLLECTION).doc(body.user.id).delete();
   // await updateAllUsersDoc(body.user.id, body);
   res.status(200).json({
@@ -254,9 +182,6 @@ async function handlePutApplications(req: NextApiRequest, res: NextApiResponse) 
   // TODO: could expand on this to allow admin to update teammate
   const completedRegistrationInfo = {
     ...body,
-    teammate1: snapshot.docs[0].data().teammate1,
-    teammate2: snapshot.docs[0].data().teammate2,
-    teammate3: snapshot.docs[0].data().teammate3,
     user: {
       ...body.user,
       // update permissions according to original permission
@@ -266,15 +191,6 @@ async function handlePutApplications(req: NextApiRequest, res: NextApiResponse) 
 
   await db.collection(APPLICATIONS_COLLECTION).doc(body.user.id).update(completedRegistrationInfo);
   await db.collection(PARTIAL_APPLICATIONS_COLLECTION).doc(body.user.id).delete();
-  // temporarily disable this
-  // const { eligible, teamMembers } = await checkAutoAcceptEligibility(body);
-  // if (eligible) {
-  //   const updatedSnapshot = await db
-  //     .collection(APPLICATIONS_COLLECTION)
-  //     .where('user.id', '==', body.user.id)
-  //     .get();
-  //   await autoAcceptTeam([...teamMembers, updatedSnapshot.docs[0].ref]);
-  // }
 
   res.status(200).json({
     msg: 'Application updated successfully',
