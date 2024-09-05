@@ -61,10 +61,10 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
         currentRegistrationPage: nextPage,
       },
     )
-      .then(() => {
+      .then(({ data }) => {
         setDisplayProfileSavedToaster(true);
         resetForm({ values: registrationData });
-        updatePartialProfile(registrationData);
+        updatePartialProfile(data.registrationData);
       })
       .catch((err) => {
         console.error(err);

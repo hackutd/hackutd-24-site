@@ -27,7 +27,10 @@ async function handleGetRequest(req: NextApiRequest, res: NextApiResponse) {
     });
   }
   return res.json({
-    registrationData: snapshot.docs[0].data(),
+    registrationData: {
+      ...snapshot.docs[0].data(),
+      updatedAt: snapshot.docs[0].updateTime.toDate(),
+    },
   });
 }
 

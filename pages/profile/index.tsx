@@ -20,8 +20,15 @@ import { RequestHelper } from '@/lib/request-helper';
  */
 export default function ProfilePage() {
   const router = useRouter();
-  const { isSignedIn, hasPartialProfile, hasProfile, user, profile, updateProfile } =
-    useAuthContext();
+  const {
+    isSignedIn,
+    hasPartialProfile,
+    partialProfile,
+    hasProfile,
+    user,
+    profile,
+    updateProfile,
+  } = useAuthContext();
   const [uploading, setUploading] = useState<boolean>(false);
   const resumeRef = useRef(null);
 
@@ -187,7 +194,10 @@ export default function ProfilePage() {
               <div className="text-sm md:flex pt-2 md:pt-0">
                 {profile?.updatedAt && (
                   <p className="text-nowrap mr-4">
-                    Application last worked on {new Date(profile?.updatedAt).toLocaleDateString()}
+                    Application {hasPartialProfile ? 'last worked on' : 'last submitted on'}{' '}
+                    {hasPartialProfile
+                      ? new Date(partialProfile?.updatedAt).toLocaleDateString()
+                      : new Date(profile?.updatedAt).toLocaleDateString()}
                   </p>
                 )}
                 <Link
