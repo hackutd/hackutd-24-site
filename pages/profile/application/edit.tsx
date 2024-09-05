@@ -208,7 +208,7 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
   };
 
   return (
-    <div className="flex flex-col flex-grow">
+    <div className="flex flex-col flex-grow mb-10">
       <Head>
         <title>Hacker Application</title>
         <meta name="description" content="Register for HackUTD 2024" />
@@ -216,7 +216,7 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
       </Head>
       <section className="pl-4 relative mb-4 z-[9999]">
         <Link href="/profile">
-          <div className="hidden md:inline-flex items-center inline-flex text-white font-bold bg-[#40B7BA] rounded-[30px] pr-4 pl-1 py-2 border-2 border-white">
+          <div className="mt-9 md:mt-0 items-center inline-flex text-white font-bold bg-[#40B7BA] rounded-[30px] pr-4 pl-1 py-2 border-2 border-white">
             <ChevronLeftIcon className="text-white" fontSize={'large'} />
             Back to profile
           </div>
@@ -378,7 +378,7 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
               >
                 {/* General Questions */}
                 {registrationSection == 0 && (
-                  <section className="mt-24 md:mt-0 bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-4 py-10 px-8 mb-8 text-[#4C4950]">
+                  <section className="mt-12 md:mt-0 bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-4 py-10 px-8 mb-8 text-[#4C4950]">
                     <header>
                       <h1 className="text-[#40B7BA] lg:text-4xl sm:text-3xl text-2xl font-bold text-center mt-2 md:mt-8 mb-4 poppins-bold">
                         Edit Hacker Appplication
@@ -416,7 +416,7 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
 
                 {/* School Questions */}
                 {registrationSection == 1 && (
-                  <section className="mt-24 md:mt-0 bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
+                  <section className="mt-12 md:mt-0 bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
                     <h2 className="sm:text-2xl text-xl sm:mb-3 mb-1 poppins-bold mt-2">
                       School Info
                     </h2>
@@ -482,7 +482,7 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
 
                 {/* Hackathon Questions */}
                 {registrationSection == 2 && (
-                  <section className="mt-24 md:mt-0 bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
+                  <section className="mt-12 md:mt-0 bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
                     <h2 className="sm:text-2xl text-xl poppins-bold sm:mb-3 mb-1 mt-2">
                       Hackathon Experience
                     </h2>
@@ -532,7 +532,7 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
 
                 {/* Short Answer Questions */}
                 {registrationSection == 3 && (
-                  <section className="mt-24 md:mt-0 bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
+                  <section className="mt-12 md:mt-0 bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
                     <h2 className="sm:text-2xl text-xl poppins-bold sm:mb-3 mb-1 mt-2">
                       Short Answer Questions
                     </h2>
@@ -566,7 +566,7 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
 
                 {/* Event Questions */}
                 {registrationSection == 4 && (
-                  <section className="mt-24 md:mt-0 bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
+                  <section className="mt-12 md:mt-0 bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
                     <h2 className="sm:text-2xl text-xl poppins-bold sm:mb-3 mb-1 mt-2">
                       Event Info
                     </h2>
@@ -603,7 +603,7 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
 
                 {/* Sponsor Questions */}
                 {registrationSection == 5 && (
-                  <section className="mt-24 md:mt-0 bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950] relative">
+                  <section className="mt-12 md:mt-0 bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950] relative">
                     <h2 className="sm:text-2xl text-xl poppins-bold sm:mb-3 mb-1 mt-2">
                       Sponsor Info
                     </h2>
@@ -636,7 +636,7 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
                 )}
                 {/* Teammate Questions */}
                 {registrationSection == 6 && (
-                  <section className="mt-24 md:mt-0 bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
+                  <section className="mt-12 md:mt-0 bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
                     <h2 className="sm:text-2xl text-xl font-semibold sm:mb-3 mb-1">
                       Current Teammate
                     </h2>
