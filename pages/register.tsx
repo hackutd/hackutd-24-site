@@ -1,10 +1,10 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import LoadIcon from '../components/LoadIcon';
 import { RequestHelper } from '../lib/request-helper';
 import { useAuthContext } from '../lib/user/AuthContext';
-import { Formik, Form } from 'formik';
+import { Formik, Form, useFormikContext } from 'formik';
 import { hackPortalConfig, generateInitialValues } from '../hackportal.config';
 import DisplayQuestion from '../components/registerComponents/DisplayQuestion';
 import { getFileExtension } from '../lib/util';
@@ -13,11 +13,72 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { GetServerSideProps } from 'next';
 import { Snackbar } from '@mui/material';
+import { NavbarCallbackRegistryContext } from '@/lib/context/navbar';
 
 interface RegisterPageProps {
   allowedRegistrations: boolean;
 }
 
+function ApplicationAutosaveHandler({
+  currentPage,
+  updatePartialProfile,
+  resumeFile,
+  defaultResumeUrl,
+}: {
+  currentPage: number;
+  updatePartialProfile: (p: PartialRegistration) => void;
+  resumeFile: File | null;
+  defaultResumeUrl: string;
+}) {
+  const { values, dirty, resetForm } = useFormikContext<PartialRegistration>();
+  const { setCallback, removeCallback } = useContext(NavbarCallbackRegistryContext);
+  const { user } = useAuthContext();
+  const router = useRouter();
+  useEffect(() => {
+    if (dirty || resumeFile) {
+      setCallback(router.pathname, async () => {
+        let resumeUrl = defaultResumeUrl;
+        if (resumeFile) {
+          const formData = new FormData();
+          formData.append('resume', resumeFile);
+          formData.append('fileName', `${user.id}${getFileExtension(resumeFile.name)}`);
+          formData.append('studyLevel', values['studyLevel']);
+          formData.append('major', values['major']);
+          formData.append('isPartialProfile', 'true');
+
+          const res = await fetch('/api/resume/upload', {
+            method: 'post',
+            body: formData,
+          });
+          resumeUrl = (await res.json()).url;
+        }
+        return RequestHelper.put<any, { msg: string; registrationData: PartialRegistration }>(
+          '/api/applications/save',
+          {},
+          {
+            ...values,
+            id: values.id || user.id,
+            currentRegistrationPage: currentPage,
+            resume: resumeUrl,
+          },
+        )
+          .then(({ data }) => {
+            resetForm({ values });
+            updatePartialProfile(data.registrationData);
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      });
+    } else {
+      removeCallback(router.pathname);
+    }
+    return () => {
+      removeCallback(router.pathname);
+    };
+  }, [dirty, values, resumeFile]);
+  return null;
+}
 /**
  * The registration page.
  *
@@ -98,7 +159,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
     delete registrationData.universityManual;
     delete registrationData.majorManual;
     delete registrationData.heardFromManual;
-    let resumeUrl: string = profile?.resume || '';
+    let resumeUrl: string = partialProfile?.resume || '';
     try {
       if (resumeFile) {
         const formData = new FormData();
@@ -188,7 +249,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
         const resumeUrl = (await res.json()).url;
         return resumeUrl;
       } else {
-        return profile?.resume || '';
+        return partialProfile?.resume || '';
       }
     })()
       .then((resumeUrl: string) => {
@@ -321,102 +382,108 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
         <meta name="description" content="Register for HackUTD 2024" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <section className="pl-4 relative mb-4 z-[9999] hidden md:flex">
-        <Link href="/" passHref>
-          <div className="mt-2 cursor-pointer items-center inline-flex text-white font-bold bg-[#40B7BA] rounded-[30px] pr-4 pl-1 py-2 border-2 border-white">
-            <ChevronLeftIcon className="text-white" fontSize={'large'} />
-            Home
-          </div>
-        </Link>
-      </section>
-      <section className="relative">
-        <Formik
-          initialValues={{
-            ...generateInitialValues(partialProfile),
-            id: partialProfile?.id || '',
-            firstName: partialProfile?.firstName || '',
-            lastName: partialProfile?.lastName || '',
-            preferredEmail: partialProfile?.preferredEmail || user?.preferredEmail || '',
-            majorManual: partialProfile?.majorManual || '',
-            universityManual: partialProfile?.universityManual || '',
-            heardFromManual: partialProfile?.heardFromManual || '',
-            resume: partialProfile?.resume || '',
-          }}
-          validateOnBlur={false}
-          validateOnChange={false}
-          //validation
-          //Get condition in which values.[value] is invalid and set error message in errors.[value]. Value is a value from the form(look at initialValues)
-          validate={(values) => {
-            var errors: any = {};
-            for (let obj of generalQuestions) {
-              errors = setErrors(obj, values, errors);
-            }
-            for (let obj of schoolQuestions) {
-              errors = setErrors(obj, values, errors);
-            }
-            for (let obj of hackathonExperienceQuestions) {
-              errors = setErrors(obj, values, errors);
-            }
-            for (let obj of shortAnswerQuestions) {
-              errors = setErrors(obj, values, errors);
-            }
-            for (let obj of eventInfoQuestions) {
-              errors = setErrors(obj, values, errors);
-            }
-            for (let obj of sponsorInfoQuestions) {
-              errors = setErrors(obj, values, errors);
-            }
-            for (let obj of teammateQuestions) {
-              errors = setErrors(obj, values, errors);
-            }
+      <Formik
+        initialValues={{
+          ...generateInitialValues(partialProfile),
+          id: partialProfile?.id || '',
+          firstName: partialProfile?.firstName || '',
+          lastName: partialProfile?.lastName || '',
+          preferredEmail: partialProfile?.preferredEmail || user?.preferredEmail || '',
+          majorManual: partialProfile?.majorManual || '',
+          universityManual: partialProfile?.universityManual || '',
+          heardFromManual: partialProfile?.heardFromManual || '',
+          resume: partialProfile?.resume || '',
+        }}
+        validateOnBlur={false}
+        validateOnChange={false}
+        //validation
+        //Get condition in which values.[value] is invalid and set error message in errors.[value]. Value is a value from the form(look at initialValues)
+        validate={(values) => {
+          var errors: any = {};
+          for (let obj of generalQuestions) {
+            errors = setErrors(obj, values, errors);
+          }
+          for (let obj of schoolQuestions) {
+            errors = setErrors(obj, values, errors);
+          }
+          for (let obj of hackathonExperienceQuestions) {
+            errors = setErrors(obj, values, errors);
+          }
+          for (let obj of shortAnswerQuestions) {
+            errors = setErrors(obj, values, errors);
+          }
+          for (let obj of eventInfoQuestions) {
+            errors = setErrors(obj, values, errors);
+          }
+          for (let obj of sponsorInfoQuestions) {
+            errors = setErrors(obj, values, errors);
+          }
+          for (let obj of teammateQuestions) {
+            errors = setErrors(obj, values, errors);
+          }
 
-            if (
-              !isValidUSPhoneNumber(values['phoneNumber']) &&
-              !isValidInternationalPhoneNumber(values['phoneNumber'])
-            ) {
-              errors.phoneNumber = 'Invalid phone number';
-            }
+          if (
+            !isValidUSPhoneNumber(values['phoneNumber']) &&
+            !isValidInternationalPhoneNumber(values['phoneNumber'])
+          ) {
+            errors.phoneNumber = 'Invalid phone number';
+          }
 
-            //additional custom error validation
-            if (
-              values.preferredEmail &&
-              !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.preferredEmail)
-            ) {
-              //regex matches characters before @, characters after @, and 2 or more characters after . (domain)
-              errors.preferredEmail = 'Invalid email address';
-            }
-            if ((values.age && values.age < 1) || values.age > 100) {
-              errors.age = 'Not a valid age';
-            }
-            if (
-              (values.hackathonExperience && values.hackathonExperience < 0) ||
-              values.hackathonExperience > 100
-            ) {
-              errors.hackathonExperience = 'Not a valid number';
-            }
+          //additional custom error validation
+          if (
+            values.preferredEmail &&
+            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.preferredEmail)
+          ) {
+            //regex matches characters before @, characters after @, and 2 or more characters after . (domain)
+            errors.preferredEmail = 'Invalid email address';
+          }
+          if ((values.age && values.age < 1) || values.age > 100) {
+            errors.age = 'Not a valid age';
+          }
+          if (
+            (values.hackathonExperience && values.hackathonExperience < 0) ||
+            values.hackathonExperience > 100
+          ) {
+            errors.hackathonExperience = 'Not a valid number';
+          }
 
-            if (values['major'] === 'Other' && values['majorManual'] === '') {
-              errors['majorManual'] = 'Required';
-            }
+          if (values['major'] === 'Other' && values['majorManual'] === '') {
+            errors['majorManual'] = 'Required';
+          }
 
-            if (values['university'] === 'Other' && values['universityManual'] === '') {
-              errors['universityManual'] = 'Required';
-            }
+          if (values['university'] === 'Other' && values['universityManual'] === '') {
+            errors['universityManual'] = 'Required';
+          }
 
-            if (values['heardFrom'] === 'Other' && values['heardFromManual'] === '') {
-              errors['heardFromManual'] = 'Required';
-            }
-            return errors;
-          }}
-          onSubmit={async (values, { setSubmitting }) => {
-            //submitting
-            await handleSubmit(values);
-            setSubmitting(false);
-            // alert(JSON.stringify(values, null, 2)); //Displays form results on submit for testing purposes
-          }}
-        >
-          {({ values, isValid, isSubmitting, dirty, resetForm }) => (
-            <>
+          if (values['heardFrom'] === 'Other' && values['heardFromManual'] === '') {
+            errors['heardFromManual'] = 'Required';
+          }
+          return errors;
+        }}
+        onSubmit={async (values, { setSubmitting }) => {
+          //submitting
+          await handleSubmit(values);
+          setSubmitting(false);
+          // alert(JSON.stringify(values, null, 2)); //Displays form results on submit for testing purposes
+        }}
+      >
+        {({ values, isValid, isSubmitting, dirty, resetForm }) => (
+          <>
+            <section className="pl-4 relative mb-4 z-[9999] hidden md:flex">
+              <button
+                onClick={async (e) => {
+                  e.preventDefault();
+                  if (dirty) await handleSaveProfile(values, registrationSection, resetForm);
+                  await router.push('/');
+                }}
+              >
+                <div className="mt-2 cursor-pointer items-center inline-flex text-white font-bold bg-[#40B7BA] rounded-[30px] pr-4 pl-1 py-2 border-2 border-white">
+                  <ChevronLeftIcon className="text-white" fontSize={'large'} />
+                  Home
+                </div>
+              </button>
+            </section>
+            <section className="relative">
               {/* Field component automatically hooks input to form values. Use name attribute to match corresponding value */}
               {/* ErrorMessage component automatically displays error based on validation above. Use name attribute to match corresponding value */}
               <Form
@@ -667,9 +734,9 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                       <p className="poppins-regular text-xs text-[#40B7BA]">
                         Accepted file types: .pdf, .doc, .docx, .png, .jpeg, .txt, .tex, .rtf
                       </p>
-                      {profile?.resume && (
+                      {partialProfile?.resume && (
                         <div className="my-4 w-fit">
-                          <Link href={profile.resume} target="_blank">
+                          <Link href={partialProfile.resume} target="_blank">
                             <div className="bg-[#40B7BA] md:p-2 p-1 text-white rounded-lg">
                               Click to view your current resume
                             </div>
@@ -790,7 +857,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                         setRegistrationSection(i);
                       }}
                       style={{ backgroundColor: registrationSection == i ? '#4C4950' : '#9F9EA7' }}
-                      className="rounded-full w-3 h-3 mr-2"
+                      className="rounded-full w-3 h-3 mr-2 cursor-pointer"
                     />
                   ))}
                 </div>
@@ -828,10 +895,16 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                 onClose={() => setDisplayProfileSavedToaster(false)}
                 message="Profile saved"
               />
-            </>
-          )}
-        </Formik>
-      </section>
+            </section>
+            <ApplicationAutosaveHandler
+              currentPage={registrationSection}
+              defaultResumeUrl={partialProfile?.resume || ''}
+              resumeFile={resumeFileUpdated ? resumeFile : null}
+              updatePartialProfile={updatePartialProfile}
+            />
+          </>
+        )}
+      </Formik>
     </div>
   );
 }
