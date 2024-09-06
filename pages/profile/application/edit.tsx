@@ -51,6 +51,7 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
     registrationData: PartialRegistration,
     nextPage: number,
     resetForm: (param: { values: any }) => void,
+    enableDisplayToaster: boolean = true,
   ) => {
     return RequestHelper.put<any, { msg: string; registrationData: PartialRegistration }>(
       '/api/applications/save',
@@ -62,7 +63,9 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
       },
     )
       .then(({ data }) => {
-        setDisplayProfileSavedToaster(true);
+        if (enableDisplayToaster) {
+          setDisplayProfileSavedToaster(true);
+        }
         resetForm({ values: registrationData });
         updatePartialProfile(data.registrationData);
       })
@@ -214,164 +217,168 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
         <meta name="description" content="Register for HackUTD 2024" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <section className="pl-4 relative mb-4 z-[9999]">
-        <Link href="/profile">
-          <div className="mt-9 md:mt-0 items-center inline-flex text-white font-bold bg-[#40B7BA] rounded-[30px] pr-4 pl-1 py-2 border-2 border-white">
-            <ChevronLeftIcon className="text-white" fontSize={'large'} />
-            Back to profile
-          </div>
-        </Link>
-      </section>
+      <Formik
+        initialValues={{
+          ...generateInitialValues(profile),
+          majorManual: partialProfile?.major || profile?.major || '',
+          heardFromManual: partialProfile?.heardFrom || profile?.heardFrom || '',
+          // have no idea why this works, but need to hard code it for the form values to overwrite the default
+          preferredEmail: partialProfile?.preferredEmail || profile?.user?.preferredEmail || '',
+          // have no idea why we need formInitialValues but we need to add it for it to works
+          firstName: partialProfile?.firstName || profile?.user?.firstName || '',
+          lastName: partialProfile?.lastName || profile?.user?.lastName || '',
+          phoneNumber: partialProfile?.phoneNumber || profile?.phoneNumber || '',
+          age: partialProfile?.age || profile?.age || '',
+          country: partialProfile?.country || profile?.country || '',
+          hackathonExperience:
+            partialProfile?.hackathonExperience || profile?.hackathonExperience || 0,
+          studyLevel: partialProfile?.studyLevel || profile?.studyLevel || '',
+          major:
+            (partialProfile?.major &&
+              majorsList.filter((major) => major.major == partialProfile.major).length > 0 &&
+              partialProfile?.major) ||
+            (profile?.major &&
+              majorsList.filter((major) => major.major == profile.major).length > 0 &&
+              profile?.major) ||
+            'Other',
+          // check if university is in our university list if not set to other
+          university:
+            (partialProfile?.university &&
+              schoolsList.filter((school) => school.university == partialProfile.university)
+                .length > 0 &&
+              partialProfile?.university) ||
+            (profile?.university &&
+              schoolsList.filter((school) => school.university == profile.university).length > 0 &&
+              profile?.university) ||
+            'Other',
+          universityManual: partialProfile?.university || profile?.university || '',
+          heardFrom:
+            (partialProfile?.heardFrom &&
+              ['Instagram', 'Twitter', 'Event Site', 'Friend', 'TikTok'].includes(
+                partialProfile.heardFrom,
+              ) &&
+              partialProfile.heardFrom) ||
+            (profile?.heardFrom &&
+              ['Instagram', 'Twitter', 'Event Site', 'Friend', 'TikTok'].includes(
+                profile.heardFrom,
+              ) &&
+              profile.heardFrom) ||
+            'Other',
+          gender: partialProfile?.gender || profile?.gender || '',
+          race: partialProfile?.race || profile?.race || '',
+          ethnicity: partialProfile?.ethnicity || profile?.ethnicity || '',
+          softwareExperience:
+            partialProfile?.softwareExperience || profile?.softwareExperience || '',
+          whyAttend: partialProfile?.whyAttend || profile?.whyAttend || '',
+          hackathonNumber: partialProfile?.hackathonNumber || profile?.hackathonNumber || '',
+          hackathonFirstTimer:
+            partialProfile?.hackathonFirstTimer || profile?.hackathonFirstTimer || '',
+          lookingForward: partialProfile?.lookingForward || profile?.lookingForward || '',
+          size: partialProfile?.size || profile?.size || '',
+          dietary: partialProfile?.dietary || profile?.dietary || [],
+          accomodations: partialProfile?.accomodations || profile?.accomodations || '',
+          github: partialProfile?.github || profile?.github || '',
+          linkedin: partialProfile?.linkedin || profile?.linkedin || '',
+          website: partialProfile?.website || profile?.website || '',
+          teammate1: partialProfile?.teammate1 || profile?.teammate1 || '',
+          teammate2: partialProfile?.teammate2 || profile?.teammate2 || '',
+          teammate3: partialProfile?.teammate3 || profile?.teammate3 || '',
+          codeOfConduct: partialProfile?.codeOfConduct || profile?.codeOfConduct || ['Yes'],
+          disclaimer: partialProfile?.disclaimer || profile?.disclaimer || ['Yes'],
+          resume: partialProfile?.resume || profile?.resume || '',
+        }}
+        validateOnBlur={false}
+        validateOnChange={false}
+        //validation
+        //Get condition in which values.[value] is invalid and set error message in errors.[value]. Value is a value from the form(look at initialValues)
+        validate={(values) => {
+          var errors: any = {};
+          for (let obj of generalQuestions) {
+            errors = setErrors(obj, values, errors);
+          }
+          for (let obj of schoolQuestions) {
+            errors = setErrors(obj, values, errors);
+          }
+          for (let obj of hackathonExperienceQuestions) {
+            errors = setErrors(obj, values, errors);
+          }
+          for (let obj of shortAnswerQuestions) {
+            errors = setErrors(obj, values, errors);
+          }
+          for (let obj of eventInfoQuestions) {
+            errors = setErrors(obj, values, errors);
+          }
+          for (let obj of sponsorInfoQuestions) {
+            errors = setErrors(obj, values, errors);
+          }
+          for (let obj of teammateQuestions) {
+            errors = setErrors(obj, values, errors);
+          }
 
-      <section className="relative">
-        <Formik
-          initialValues={{
-            ...generateInitialValues(profile),
-            majorManual: partialProfile?.major || profile?.major || '',
-            heardFromManual: partialProfile?.heardFrom || profile?.heardFrom || '',
-            // have no idea why this works, but need to hard code it for the form values to overwrite the default
-            preferredEmail: partialProfile?.preferredEmail || profile?.user?.preferredEmail || '',
-            // have no idea why we need formInitialValues but we need to add it for it to works
-            firstName: partialProfile?.firstName || profile?.user?.firstName || '',
-            lastName: partialProfile?.lastName || profile?.user?.lastName || '',
-            phoneNumber: partialProfile?.phoneNumber || profile?.phoneNumber || '',
-            age: partialProfile?.age || profile?.age || '',
-            country: partialProfile?.country || profile?.country || '',
-            hackathonExperience:
-              partialProfile?.hackathonExperience || profile?.hackathonExperience || 0,
-            studyLevel: partialProfile?.studyLevel || profile?.studyLevel || '',
-            major:
-              (partialProfile?.major &&
-                majorsList.filter((major) => major.major == partialProfile.major).length > 0 &&
-                partialProfile?.major) ||
-              (profile?.major &&
-                majorsList.filter((major) => major.major == profile.major).length > 0 &&
-                profile?.major) ||
-              'Other',
-            // check if university is in our university list if not set to other
-            university:
-              (partialProfile?.university &&
-                schoolsList.filter((school) => school.university == partialProfile.university)
-                  .length > 0 &&
-                partialProfile?.university) ||
-              (profile?.university &&
-                schoolsList.filter((school) => school.university == profile.university).length >
-                  0 &&
-                profile?.university) ||
-              'Other',
-            universityManual: partialProfile?.university || profile?.university || '',
-            heardFrom:
-              (partialProfile?.heardFrom &&
-                ['Instagram', 'Twitter', 'Event Site', 'Friend', 'TikTok'].includes(
-                  partialProfile.heardFrom,
-                ) &&
-                partialProfile.heardFrom) ||
-              (profile?.heardFrom &&
-                ['Instagram', 'Twitter', 'Event Site', 'Friend', 'TikTok'].includes(
-                  profile.heardFrom,
-                ) &&
-                profile.heardFrom) ||
-              'Other',
-            gender: partialProfile?.gender || profile?.gender || '',
-            race: partialProfile?.race || profile?.race || '',
-            ethnicity: partialProfile?.ethnicity || profile?.ethnicity || '',
-            softwareExperience:
-              partialProfile?.softwareExperience || profile?.softwareExperience || '',
-            whyAttend: partialProfile?.whyAttend || profile?.whyAttend || '',
-            hackathonNumber: partialProfile?.hackathonNumber || profile?.hackathonNumber || '',
-            hackathonFirstTimer:
-              partialProfile?.hackathonFirstTimer || profile?.hackathonFirstTimer || '',
-            lookingForward: partialProfile?.lookingForward || profile?.lookingForward || '',
-            size: partialProfile?.size || profile?.size || '',
-            dietary: partialProfile?.dietary || profile?.dietary || [],
-            accomodations: partialProfile?.accomodations || profile?.accomodations || '',
-            github: partialProfile?.github || profile?.github || '',
-            linkedin: partialProfile?.linkedin || profile?.linkedin || '',
-            website: partialProfile?.website || profile?.website || '',
-            teammate1: partialProfile?.teammate1 || profile?.teammate1 || '',
-            teammate2: partialProfile?.teammate2 || profile?.teammate2 || '',
-            teammate3: partialProfile?.teammate3 || profile?.teammate3 || '',
-            codeOfConduct: partialProfile?.codeOfConduct || profile?.codeOfConduct || ['Yes'],
-            disclaimer: partialProfile?.disclaimer || profile?.disclaimer || ['Yes'],
-            resume: partialProfile?.resume || profile?.resume || '',
-          }}
-          validateOnBlur={false}
-          validateOnChange={false}
-          //validation
-          //Get condition in which values.[value] is invalid and set error message in errors.[value]. Value is a value from the form(look at initialValues)
-          validate={(values) => {
-            var errors: any = {};
-            for (let obj of generalQuestions) {
-              errors = setErrors(obj, values, errors);
-            }
-            for (let obj of schoolQuestions) {
-              errors = setErrors(obj, values, errors);
-            }
-            for (let obj of hackathonExperienceQuestions) {
-              errors = setErrors(obj, values, errors);
-            }
-            for (let obj of shortAnswerQuestions) {
-              errors = setErrors(obj, values, errors);
-            }
-            for (let obj of eventInfoQuestions) {
-              errors = setErrors(obj, values, errors);
-            }
-            for (let obj of sponsorInfoQuestions) {
-              errors = setErrors(obj, values, errors);
-            }
-            for (let obj of teammateQuestions) {
-              errors = setErrors(obj, values, errors);
-            }
+          if (
+            !isValidUSPhoneNumber(values['phoneNumber']) &&
+            !isValidInternationalPhoneNumber(values['phoneNumber'])
+          ) {
+            errors.phoneNumber = 'Invalid phone number';
+          }
 
-            if (
-              !isValidUSPhoneNumber(values['phoneNumber']) &&
-              !isValidInternationalPhoneNumber(values['phoneNumber'])
-            ) {
-              errors.phoneNumber = 'Invalid phone number';
-            }
+          //additional custom error validation
+          if (
+            values.preferredEmail &&
+            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.preferredEmail)
+          ) {
+            //regex matches characters before @, characters after @, and 2 or more characters after . (domain)
+            errors.preferredEmail = 'Invalid email address';
+          }
+          if ((values.age && values.age < 1) || values.age > 100) {
+            errors.age = 'Not a valid age';
+          }
+          if (
+            (values.hackathonExperience && values.hackathonExperience < 0) ||
+            values.hackathonExperience > 100
+          ) {
+            errors.hackathonExperience = 'Not a valid number';
+          }
 
-            //additional custom error validation
-            if (
-              values.preferredEmail &&
-              !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.preferredEmail)
-            ) {
-              //regex matches characters before @, characters after @, and 2 or more characters after . (domain)
-              errors.preferredEmail = 'Invalid email address';
-            }
-            if ((values.age && values.age < 1) || values.age > 100) {
-              errors.age = 'Not a valid age';
-            }
-            if (
-              (values.hackathonExperience && values.hackathonExperience < 0) ||
-              values.hackathonExperience > 100
-            ) {
-              errors.hackathonExperience = 'Not a valid number';
-            }
+          if (values['major'] === 'Other' && values['majorManual'] === '') {
+            errors['majorManual'] = 'Required';
+          }
 
-            if (values['major'] === 'Other' && values['majorManual'] === '') {
-              errors['majorManual'] = 'Required';
-            }
+          if (values['university'] === 'Other' && values['universityManual'] === '') {
+            errors['universityManual'] = 'Required';
+          }
 
-            if (values['university'] === 'Other' && values['universityManual'] === '') {
-              errors['universityManual'] = 'Required';
-            }
-
-            if (values['heardFrom'] === 'Other' && values['heardFromManual'] === '') {
-              errors['heardFromManual'] = 'Required';
-            }
-            return errors;
-          }}
-          onSubmit={async (values, { setSubmitting }) => {
-            //submitting
-            await handleSubmit(values);
-            setSubmitting(false);
-            // alert(JSON.stringify(values, null, 2)); //Displays form results on submit for testing purposes
-          }}
-        >
-          {({ values, isValid, isSubmitting, resetForm, dirty }) => (
-            // Field component automatically hooks input to form values. Use name attribute to match corresponding value
-            // ErrorMessage component automatically displays error based on validation above. Use name attribute to match corresponding value
-            <>
+          if (values['heardFrom'] === 'Other' && values['heardFromManual'] === '') {
+            errors['heardFromManual'] = 'Required';
+          }
+          return errors;
+        }}
+        onSubmit={async (values, { setSubmitting }) => {
+          //submitting
+          await handleSubmit(values);
+          setSubmitting(false);
+          // alert(JSON.stringify(values, null, 2)); //Displays form results on submit for testing purposes
+        }}
+      >
+        {({ values, isValid, isSubmitting, resetForm, dirty }) => (
+          // Field component automatically hooks input to form values. Use name attribute to match corresponding value
+          // ErrorMessage component automatically displays error based on validation above. Use name attribute to match corresponding value
+          <>
+            <section className="pl-4 relative mb-4 z-[9999]">
+              <button
+                onClick={async (e) => {
+                  e.preventDefault();
+                  if (dirty) await handleSaveProfile(values, registrationSection, resetForm, false);
+                  await router.push('/profile');
+                }}
+              >
+                <div className="mt-9 md:mt-0 items-center inline-flex text-white font-bold bg-[#40B7BA] rounded-[30px] pr-4 pl-1 py-2 border-2 border-white">
+                  <ChevronLeftIcon className="text-white" fontSize={'large'} />
+                  Back to profile
+                </div>
+              </button>
+            </section>
+            <section className="relative">
               <Form
                 onKeyDown={onKeyDown}
                 className="registrationForm px-4 md:px-24 w-full sm:text-base text-sm"
@@ -777,10 +784,10 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
                 onClose={() => setDisplayProfileSavedToaster(false)}
                 message="Profile saved"
               />
-            </>
-          )}
-        </Formik>
-      </section>
+            </section>
+          </>
+        )}
+      </Formik>
     </div>
   );
 }
