@@ -116,7 +116,9 @@ export default function AppHeader2_Wrapper() {
         </button>
       </div>
       <button
-        className="md:hidden mt-10 absolute left-[1rem] py-3 px-5 rounded-[30px] bg-[#40B7BA] font-bold text-white ml-3 border-2 border-white"
+        className={`md:hidden ${
+          location.pathname === '/' ? 'left-[1rem]' : 'right-[1rem]'
+        } mt-10 absolute py-3 px-5 rounded-[30px] bg-[#40B7BA] font-bold text-white ml-3 border-2 border-white`}
         onClick={async () => {
           if (user) {
             await signOut();
