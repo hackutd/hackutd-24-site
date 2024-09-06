@@ -638,54 +638,17 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
                 {registrationSection == 6 && (
                   <section className="mt-12 md:mt-0 bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-10 py-6 px-8 mb-8 text-[#4C4950]">
                     <h2 className="sm:text-2xl text-xl font-semibold sm:mb-3 mb-1">
-                      Current Teammate
+                      Teammate Questions
                     </h2>
-                    {profile && !profile.teammate1 && !profile.teammate2 && !profile.teammate3 && (
-                      <div className="flex flex-col poppins-regular">
-                        You currently have no teammates.
-                      </div>
-                    )}
-                    {/* show teammate 1 if exists */}
-                    {profile?.teammate1 && (
-                      <div className="flex flex-col poppins-regular md:px-4">
-                        <div className="flex items-center">
-                          <label className="font-semibold">Teammate 1:</label>
-                          <span className="ml-2">{profile.teammate1}</span>
-                        </div>
-                      </div>
-                    )}
-                    {/* show teammate 2 if exists */}
-                    {profile?.teammate2 && (
-                      <div className="flex flex-col poppins-regular md:px-4">
-                        <div className="flex items-center">
-                          <label className="font-semibold">Teammate 2:</label>
-                          <span className="ml-2">{profile.teammate2}</span>
-                        </div>
-                      </div>
-                    )}
-                    {/* show teammate 3 if exists */}
-                    {profile?.teammate3 && (
-                      <div className="flex flex-col poppins-regular md:px-4">
-                        <div className="flex items-center">
-                          <label className="font-semibold">Teammate 3:</label>
-                          <span className="ml-2">{profile.teammate3}</span>
-                        </div>
-                      </div>
-                    )}
                     <p className="text-md my-6 font-bold">
-                      Want to request a teammate change? Email us at{' '}
-                      <Link className="underline" href="mailto:hello@hackutd.co" target="__blank__">
-                        hello@hackutd.co
-                      </Link>
+                      Emails of teammates should be the same as the email they registered with!
                     </p>
-                    {
-                      <div className="flex flex-col poppins-regular md:px-4">
-                        {teammateQuestions.map(
-                          (obj, idx) =>
-                            obj.checkboxQuestions && <DisplayQuestion key={idx} obj={obj} />,
-                        )}
-                      </div>
-                    }
+                    <div className="flex flex-col">
+                      {teammateQuestions.map((obj, idx) => (
+                        <DisplayQuestion key={idx} obj={obj} />
+                      ))}
+                    </div>
+
                     {/* Submit */}
                     <div className="mt-8 text-white">
                       <button
@@ -701,6 +664,26 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
                           make sure that every required fields are filled out.
                         </div>
                       )}
+                    </div>
+                    <div className="flex justify-end my-4">
+                      <button
+                        disabled={!dirty || !allowManualSave}
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          try {
+                            setAllowManualSave(false);
+                            await handleSaveProfile(values, registrationSection, resetForm);
+                          } catch (err) {
+                            alert('Error saving form. Please try again later...');
+                            console.error(err);
+                          } finally {
+                            setAllowManualSave(true);
+                          }
+                        }}
+                        className="bg-[#40B7BA] rounded-lg p-3 text-white font-bold"
+                      >
+                        Save Application
+                      </button>
                     </div>
                   </section>
                 )}
