@@ -30,29 +30,46 @@ export default function HomeFooter() {
         <div className="flex-1 p-4">
           <h1 className="font-bold text-2xl">HackUTD</h1>
           <Link href="mailto:hello@hackutd.co">
-            <p className="underline underline-offset-8 mt-1 font-medium">Contact Us</p>
+            <p
+              className="underline mt-1 font-medium"
+              style={{ whiteSpace: 'nowrap', wordBreak: 'keep-all', textUnderlineOffset: '2px' }}
+            >
+              Contact Us
+            </p>
           </Link>
         </div>
 
         {/* Other Hackathons Section */}
         <div className="flex-1 p-4">
           <h1 className="font-bold text-2xl">Other Hackathons</h1>
-          <p className="underline underline-offset-8 mt-1 font-medium">
+          <p
+            className="underline mt-1 font-medium"
+            style={{ whiteSpace: 'nowrap', wordBreak: 'keep-all', textUnderlineOffset: '2px' }}
+          >
             <Link href="https://hacktx.com" passHref>
               HackTX
             </Link>
           </p>
-          <p className="underline underline-offset-8 mt-1 font-medium">
+          <p
+            className="underline mt-1 font-medium"
+            style={{ whiteSpace: 'nowrap', wordBreak: 'keep-all', textUnderlineOffset: '2px' }}
+          >
             <Link href="https://tamuhack.org" passHref>
               TAMUHack
             </Link>
           </p>
-          <p className="underline underline-offset-8 mt-1 font-medium">
+          <p
+            className="underline mt-1 font-medium"
+            style={{ whiteSpace: 'nowrap', wordBreak: 'keep-all', textUnderlineOffset: '2px' }}
+          >
             <Link href="https://www.hackuta.org" passHref>
               HackUTA
             </Link>
           </p>
-          <p className="underline underline-offset-8 mt-1 font-medium">
+          <p
+            className="underline mt-1 font-medium"
+            style={{ whiteSpace: 'nowrap', wordBreak: 'keep-all', textUnderlineOffset: '2px' }}
+          >
             <Link href="https://www.unthackathon.com" passHref>
               HackUNT
             </Link>
@@ -63,23 +80,52 @@ export default function HomeFooter() {
         <div className="flex-1 p-4">
           <h1 className="font-semibold text-xl mb-3">Learn more</h1>
           <div className="font-light">
-            <p className="mb-2">
+            <p
+              className="mb-2"
+              style={{ whiteSpace: 'nowrap', wordBreak: 'keep-all', textUnderlineOffset: '2px' }}
+            >
               Check out HackUTD’s{' '}
-              <span className="font-semibold cursor-pointer underline underline-offset-8">
+              <span
+                className="font-semibold cursor-pointer underline"
+                style={{ textUnderlineOffset: '2px' }}
+              >
                 <Link href="https://hackutd.co/" target="_blank">
                   organizer website
                 </Link>
               </span>
             </p>
             <p className="mb-2">
-              Designed by <span className="font-semibold">HackUTD</span>
+              Designed by{' '}
+              <span
+                className="font-semibold"
+                style={{ whiteSpace: 'nowrap', wordBreak: 'keep-all', textUnderlineOffset: '2px' }}
+              >
+                HackUTD
+              </span>
             </p>
             <p className="mb-2">
-              HackPortal developed with {'<3'} <span className="font-semibold">HackUTD </span>
-              and <span className="font-semibold">ACM Development</span>
+              HackPortal developed with {'<3'}{' '}
+              <span
+                className="font-semibold"
+                style={{ whiteSpace: 'nowrap', wordBreak: 'keep-all', textUnderlineOffset: '2px' }}
+              >
+                HackUTD{' '}
+              </span>
+              and{' '}
+              <span
+                className="font-semibold"
+                style={{ whiteSpace: 'nowrap', wordBreak: 'keep-all', textUnderlineOffset: '2px' }}
+              >
+                ACM Development
+              </span>
             </p>
             <Link target="_blank" href="https://github.com/acmutd/hackportal">
-              <p className="cursor-pointer mb-2 underline underline-offset-8">Source Code</p>
+              <p
+                className="cursor-pointer mb-2 underline"
+                style={{ whiteSpace: 'nowrap', wordBreak: 'keep-all', textUnderlineOffset: '2px' }}
+              >
+                Source Code
+              </p>
             </Link>
           </div>
         </div>
