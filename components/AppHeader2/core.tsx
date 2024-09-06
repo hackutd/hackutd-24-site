@@ -44,7 +44,7 @@ export default function AppHeader2_Core() {
   return (
     <div className="flex justify-center py-2 w-full">
       {/* Real navbar */}
-      <div className="relative font-dmSans gap-4 border-[3px] border-[rgba(30,30,30,0.60)] rounded-xl px-20 bg-white opacity-70 p-1 text-[#40B7BA] cursor-pointer w-[60%] lg:w-[45%]">
+      <div className="relative font-dmSans gap-4 border-[3px] border-[rgba(30,30,30,0.60)] rounded-xl px-20 bg-white opacity-90 p-1 text-[#40B7BA] cursor-pointer w-[60%] lg:w-[45%]">
         <div className="mx-auto w-[70%] flex items-center justify-around">
           <button
             className="p-2 text-[#40B7BA] cursor-pointer"
