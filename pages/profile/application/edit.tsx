@@ -747,7 +747,7 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
                         setRegistrationSection(i);
                       }}
                       style={{ backgroundColor: registrationSection == i ? '#4C4950' : '#9F9EA7' }}
-                      className="rounded-full w-3 h-3 mr-2"
+                      className="rounded-full w-3 h-3 mr-2 cursor-pointer"
                     />
                   ))}
                 </div>
