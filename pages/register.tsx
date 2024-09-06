@@ -1,10 +1,10 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import LoadIcon from '../components/LoadIcon';
 import { RequestHelper } from '../lib/request-helper';
 import { useAuthContext } from '../lib/user/AuthContext';
-import { Formik, Form } from 'formik';
+import { Formik, Form, useFormikContext } from 'formik';
 import { hackPortalConfig, generateInitialValues } from '../hackportal.config';
 import DisplayQuestion from '../components/registerComponents/DisplayQuestion';
 import { getFileExtension } from '../lib/util';
@@ -13,11 +13,72 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { GetServerSideProps } from 'next';
 import { Snackbar } from '@mui/material';
+import { NavbarCallbackRegistryContext } from '@/lib/context/navbar';
 
 interface RegisterPageProps {
   allowedRegistrations: boolean;
 }
 
+function ApplicationAutosaveHandler({
+  currentPage,
+  updatePartialProfile,
+  resumeFile,
+  defaultResumeUrl,
+}: {
+  currentPage: number;
+  updatePartialProfile: (p: PartialRegistration) => void;
+  resumeFile: File | null;
+  defaultResumeUrl: string;
+}) {
+  const { values, dirty, resetForm } = useFormikContext<PartialRegistration>();
+  const { setCallback, removeCallback } = useContext(NavbarCallbackRegistryContext);
+  const { user } = useAuthContext();
+  const router = useRouter();
+  useEffect(() => {
+    if (dirty || resumeFile) {
+      setCallback(router.pathname, async () => {
+        let resumeUrl = defaultResumeUrl;
+        if (resumeFile) {
+          const formData = new FormData();
+          formData.append('resume', resumeFile);
+          formData.append('fileName', `${user.id}${getFileExtension(resumeFile.name)}`);
+          formData.append('studyLevel', values['studyLevel']);
+          formData.append('major', values['major']);
+          formData.append('isPartialProfile', 'true');
+
+          const res = await fetch('/api/resume/upload', {
+            method: 'post',
+            body: formData,
+          });
+          resumeUrl = (await res.json()).url;
+        }
+        return RequestHelper.put<any, { msg: string; registrationData: PartialRegistration }>(
+          '/api/applications/save',
+          {},
+          {
+            ...values,
+            id: values.id || user.id,
+            currentRegistrationPage: currentPage,
+            resume: resumeUrl,
+          },
+        )
+          .then(({ data }) => {
+            resetForm({ values });
+            updatePartialProfile(data.registrationData);
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      });
+    } else {
+      removeCallback(router.pathname);
+    }
+    return () => {
+      removeCallback(router.pathname);
+    };
+  }, [dirty, values, resumeFile]);
+  return null;
+}
 /**
  * The registration page.
  *
@@ -98,7 +159,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
     delete registrationData.universityManual;
     delete registrationData.majorManual;
     delete registrationData.heardFromManual;
-    let resumeUrl: string = profile?.resume || '';
+    let resumeUrl: string = partialProfile?.resume || '';
     try {
       if (resumeFile) {
         const formData = new FormData();
@@ -188,7 +249,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
         const resumeUrl = (await res.json()).url;
         return resumeUrl;
       } else {
-        return profile?.resume || '';
+        return partialProfile?.resume || '';
       }
     })()
       .then((resumeUrl: string) => {
@@ -673,9 +734,9 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                       <p className="poppins-regular text-xs text-[#40B7BA]">
                         Accepted file types: .pdf, .doc, .docx, .png, .jpeg, .txt, .tex, .rtf
                       </p>
-                      {profile?.resume && (
+                      {partialProfile?.resume && (
                         <div className="my-4 w-fit">
-                          <Link href={profile.resume} target="_blank">
+                          <Link href={partialProfile.resume} target="_blank">
                             <div className="bg-[#40B7BA] md:p-2 p-1 text-white rounded-lg">
                               Click to view your current resume
                             </div>
@@ -835,6 +896,12 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                 message="Profile saved"
               />
             </section>
+            <ApplicationAutosaveHandler
+              currentPage={registrationSection}
+              defaultResumeUrl={partialProfile?.resume || ''}
+              resumeFile={resumeFileUpdated ? resumeFile : null}
+              updatePartialProfile={updatePartialProfile}
+            />
           </>
         )}
       </Formik>

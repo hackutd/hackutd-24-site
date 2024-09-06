@@ -30,6 +30,7 @@ import AppNavbarBottom from '@/components/AppNavbarBottom/AppNavbarBottom';
 import { useRouter } from 'next/router';
 import { useUrlHash } from '@/lib/hooks';
 import { SectionReferenceContext } from '@/lib/context/section';
+import { NavbarCallbackRegistryContext } from '@/lib/context/navbar';
 
 initFirebase();
 
@@ -48,6 +49,9 @@ function PortalApp({ Component, pageProps }: AppProps) {
   const faqRef = useRef<HTMLDivElement | null>(null);
   const aboutRef = useRef<HTMLDivElement | null>(null);
   const scheduleRef = useRef<HTMLDivElement | null>(null);
+  const [callbackRegistry, setCallbackRegistry] = useState<Record<string, () => Promise<unknown>>>(
+    {},
+  );
 
   useEffect(() => {
     const el = document.getElementById(hash);
@@ -123,29 +127,48 @@ function PortalApp({ Component, pageProps }: AppProps) {
                   scheduleRef,
                 }}
               >
-                <AppHeader2_Wrapper />
+                <NavbarCallbackRegistryContext.Provider
+                  value={{
+                    callbackRegistry,
+                    setCallback: (pathname, cb) => {
+                      setCallbackRegistry((prev) => ({ ...prev, [pathname]: cb }));
+                    },
+                    removeCallback: (pathname) => {
+                      setCallbackRegistry((prev) => {
+                        if (!Object.hasOwn(prev, pathname)) {
+                          return prev;
+                        }
+                        const newRegistry = { ...prev };
+                        delete newRegistry[pathname];
+                        return newRegistry;
+                      });
+                    },
+                  }}
+                >
+                  <AppHeader2_Wrapper />
 
-                {registerBackgroundPathnames.includes(router.pathname) && (
-                  <div className="fixed top-0 left-0 w-screen h-screen -z-10">
-                    <Image
-                      className="w-screen h-screen object-cover"
-                      alt="Register background"
-                      src={RegisterBackgroundImage.src}
-                      width={RegisterBackgroundImage.width}
-                      height={RegisterBackgroundImage.height}
-                    />
-                  </div>
-                )}
+                  {registerBackgroundPathnames.includes(router.pathname) && (
+                    <div className="fixed top-0 left-0 w-screen h-screen -z-10">
+                      <Image
+                        className="w-screen h-screen object-cover"
+                        alt="Register background"
+                        src={RegisterBackgroundImage.src}
+                        width={RegisterBackgroundImage.width}
+                        height={RegisterBackgroundImage.height}
+                      />
+                    </div>
+                  )}
 
-                {/* Spacer at the top of the page so that content won't be covered by the navbar */}
-                {router.pathname !== '/' && <div className="hidden md:block h-[86px] shrink-0" />}
+                  {/* Spacer at the top of the page so that content won't be covered by the navbar */}
+                  {router.pathname !== '/' && <div className="hidden md:block h-[86px] shrink-0" />}
 
-                <Component {...pageProps} />
+                  <Component {...pageProps} />
 
-                {/* Spacer at the bottom of the page for navbar bottom on mobile, so that content won't be covered by the navbar */}
-                {/*<div className="md:hidden h-[80px] shrink-0" />*/}
+                  {/* Spacer at the bottom of the page for navbar bottom on mobile, so that content won't be covered by the navbar */}
+                  {/*<div className="md:hidden h-[80px] shrink-0" />*/}
 
-                <AppNavbarBottom />
+                  <AppNavbarBottom />
+                </NavbarCallbackRegistryContext.Provider>
               </SectionReferenceContext.Provider>
             </div>
           </ParticlesContext.Provider>

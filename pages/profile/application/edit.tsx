@@ -1,8 +1,7 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect, useRef, useState } from 'react';
-import { Formik, Form } from 'formik';
-import Link from 'next/link';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { Formik, Form, useFormikContext } from 'formik';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { GetServerSideProps } from 'next';
@@ -14,6 +13,7 @@ import DisplayQuestion from '@/components/registerComponents/DisplayQuestion';
 import schoolsList from 'public/schools.json';
 import majorsList from 'public/majors.json';
 import { Snackbar } from '@mui/material';
+import { NavbarCallbackRegistryContext } from '@/lib/context/navbar';
 /**
  * The edit application page.
  *
@@ -21,6 +21,47 @@ import { Snackbar } from '@mui/material';
 
 interface EditApplicationPageProps {
   allowedRegistrations: boolean;
+}
+
+function ApplicationAutosaveHandler({
+  currentPage,
+  updatePartialProfile,
+}: {
+  currentPage: number;
+  updatePartialProfile: (p: PartialRegistration) => void;
+}) {
+  const { values, dirty, resetForm } = useFormikContext<PartialRegistration>();
+  const { setCallback, removeCallback } = useContext(NavbarCallbackRegistryContext);
+  const { user } = useAuthContext();
+  const router = useRouter();
+  useEffect(() => {
+    if (dirty) {
+      setCallback(router.pathname, async () => {
+        return RequestHelper.put<any, { msg: string; registrationData: PartialRegistration }>(
+          '/api/applications/save',
+          {},
+          {
+            ...values,
+            id: values.id || user.id,
+            currentRegistrationPage: currentPage,
+          },
+        )
+          .then(({ data }) => {
+            resetForm({ values });
+            updatePartialProfile(data.registrationData);
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      });
+    } else {
+      removeCallback(router.pathname);
+    }
+    return () => {
+      removeCallback(router.pathname);
+    };
+  }, [dirty, values]);
+  return null;
 }
 
 export default function EditApplication({ allowedRegistrations }: EditApplicationPageProps) {
@@ -785,6 +826,10 @@ export default function EditApplication({ allowedRegistrations }: EditApplicatio
                 message="Profile saved"
               />
             </section>
+            <ApplicationAutosaveHandler
+              updatePartialProfile={updatePartialProfile}
+              currentPage={registrationSection}
+            />
           </>
         )}
       </Formik>

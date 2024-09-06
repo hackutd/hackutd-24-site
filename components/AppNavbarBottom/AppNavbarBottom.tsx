@@ -5,16 +5,17 @@ import QuestionIcon from '@/public/icons/question.svg';
 import HomeIcon from '@/public/icons/home.svg';
 import AdminIcon from '@/public/icons/admin.svg';
 import clsx from 'clsx';
-import Link from 'next/link';
 import { useAuthContext } from '@/lib/user/AuthContext';
 import { useContext } from 'react';
 import { SectionReferenceContext } from '@/lib/context/section';
 import { useRouter } from 'next/router';
+import { NavbarCallbackRegistryContext } from '@/lib/context/navbar';
 
 export default function AppNavbarBottom() {
   const { hasProfile } = useAuthContext();
   const { faqRef, scheduleRef } = useContext(SectionReferenceContext);
   const router = useRouter();
+  const { callbackRegistry } = useContext(NavbarCallbackRegistryContext);
 
   return (
     <div
@@ -26,7 +27,10 @@ export default function AppNavbarBottom() {
     >
       {/* Home Icon */}
       <button
-        onClick={() => {
+        onClick={async () => {
+          if (Object.hasOwn(callbackRegistry, router.pathname)) {
+            await callbackRegistry[router.pathname]();
+          }
           if (router.pathname === '/') {
             window.scrollTo({ top: 0, behavior: 'smooth' });
           } else {
@@ -42,7 +46,10 @@ export default function AppNavbarBottom() {
       {/* <FilePlusIcon /> */}
       {/* Calendar Icon */}
       <button
-        onClick={() => {
+        onClick={async () => {
+          if (Object.hasOwn(callbackRegistry, router.pathname)) {
+            await callbackRegistry[router.pathname]();
+          }
           if (router.pathname === '/')
             scheduleRef.current?.scrollIntoView({
               behavior: 'smooth',
@@ -59,7 +66,10 @@ export default function AppNavbarBottom() {
 
       {/* Question Icon */}
       <button
-        onClick={() => {
+        onClick={async () => {
+          if (Object.hasOwn(callbackRegistry, router.pathname)) {
+            await callbackRegistry[router.pathname]();
+          }
           if (router.pathname === '/')
             faqRef.current?.scrollIntoView({
               behavior: 'smooth',
@@ -71,9 +81,16 @@ export default function AppNavbarBottom() {
       </button>
 
       {/* Admin/Profile Icon */}
-      <Link href={hasProfile ? '/profile' : '/auth'}>
+      <button
+        onClick={async () => {
+          if (Object.hasOwn(callbackRegistry, router.pathname)) {
+            await callbackRegistry[router.pathname]();
+          }
+          await router.push(hasProfile ? '/profile' : '/auth');
+        }}
+      >
         <AdminIcon />
-      </Link>
+      </button>
     </div>
   );
 }

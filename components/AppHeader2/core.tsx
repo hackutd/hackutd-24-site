@@ -8,6 +8,7 @@ import AdminNavbarGrid from './AdminNavbarGrid';
 import { RequestHelper } from '@/lib/request-helper';
 import QRScanDialog from './QRScanDialog';
 import { SectionReferenceContext } from '@/lib/context/section';
+import { NavbarCallbackRegistryContext } from '@/lib/context/navbar';
 
 type Scan = {
   precendence: number;
@@ -26,6 +27,7 @@ export default function AppHeader2_Core() {
   const [scanList, setScanList] = useState<Scan[]>([]);
   const [currentScan, setCurrentScan] = useState<Scan | null>(null);
   const { faqRef, scheduleRef } = useContext(SectionReferenceContext);
+  const { callbackRegistry } = useContext(NavbarCallbackRegistryContext);
   useEffect(() => {
     async function getScanData() {
       const scans = await RequestHelper.get<Scan[]>('/api/scantypes', {
@@ -48,7 +50,10 @@ export default function AppHeader2_Core() {
         <div className="mx-auto w-[70%] flex items-center justify-around">
           <button
             className="p-2 text-[#40B7BA] cursor-pointer"
-            onClick={() => {
+            onClick={async () => {
+              if (Object.hasOwn(callbackRegistry, router.pathname)) {
+                await callbackRegistry[router.pathname]();
+              }
               if (router.pathname === '/')
                 window.scroll({
                   top: 0,
@@ -72,7 +77,10 @@ export default function AppHeader2_Core() {
         </Link> 
         </Link>*/}
           <button
-            onClick={() => {
+            onClick={async () => {
+              if (Object.hasOwn(callbackRegistry, router.pathname)) {
+                await callbackRegistry[router.pathname]();
+              }
               if (router.pathname === '/')
                 scheduleRef.current?.scrollIntoView({
                   behavior: 'smooth',
@@ -88,7 +96,10 @@ export default function AppHeader2_Core() {
 
           <button
             className="p-2 text-[#40B7BA] cursor-pointer"
-            onClick={() => {
+            onClick={async () => {
+              if (Object.hasOwn(callbackRegistry, router.pathname)) {
+                await callbackRegistry[router.pathname]();
+              }
               if (router.pathname === '/')
                 faqRef.current?.scrollIntoView({
                   behavior: 'smooth',
@@ -181,9 +192,16 @@ export default function AppHeader2_Core() {
           {/*TODO: Readd after applications open*/}
           <div className="p-2 text-white cursor-pointer">
             {user && hasProfile ? (
-              <Link href="/profile">
+              <button
+                onClick={async () => {
+                  if (Object.hasOwn(callbackRegistry, router.pathname)) {
+                    await callbackRegistry[router.pathname]();
+                  }
+                  await router.push('/profile');
+                }}
+              >
                 <div className="py-3 px-5 rounded-[30px] bg-[#40B7BA] font-bold">Profile</div>
-              </Link>
+              </button>
             ) : (
               <Link href="/register">
                 <div className="py-3 px-5 rounded-[30px] bg-[#40B7BA] font-bold">Apply</div>
