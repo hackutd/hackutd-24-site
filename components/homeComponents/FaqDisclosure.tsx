@@ -1,5 +1,6 @@
 import { Disclosure, Transition } from '@headlessui/react';
 import { PlusIcon, MinusIcon } from '@heroicons/react/solid';
+import Markdown from 'react-markdown';
 
 /**
  *
@@ -75,7 +76,16 @@ export default function FaqDisclosure({
             className={`my-2 py-2  p-2 text-left text-sm`}
             static
           >
-            {answer}
+            <Markdown
+              components={{
+                a(props) {
+                  const { node, ...rest } = props;
+                  return <a className="underline underline-offset-8" {...rest} />;
+                },
+              }}
+            >
+              {answer}
+            </Markdown>
           </Disclosure.Panel>
         </Transition>
         {/* )} */}
