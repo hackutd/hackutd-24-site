@@ -321,102 +321,108 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
         <meta name="description" content="Register for HackUTD 2024" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <section className="pl-4 relative mb-4 z-[9999] hidden md:flex">
-        <Link href="/" passHref>
-          <div className="mt-2 cursor-pointer items-center inline-flex text-white font-bold bg-[#40B7BA] rounded-[30px] pr-4 pl-1 py-2 border-2 border-white">
-            <ChevronLeftIcon className="text-white" fontSize={'large'} />
-            Home
-          </div>
-        </Link>
-      </section>
-      <section className="relative">
-        <Formik
-          initialValues={{
-            ...generateInitialValues(partialProfile),
-            id: partialProfile?.id || '',
-            firstName: partialProfile?.firstName || '',
-            lastName: partialProfile?.lastName || '',
-            preferredEmail: partialProfile?.preferredEmail || user?.preferredEmail || '',
-            majorManual: partialProfile?.majorManual || '',
-            universityManual: partialProfile?.universityManual || '',
-            heardFromManual: partialProfile?.heardFromManual || '',
-            resume: partialProfile?.resume || '',
-          }}
-          validateOnBlur={false}
-          validateOnChange={false}
-          //validation
-          //Get condition in which values.[value] is invalid and set error message in errors.[value]. Value is a value from the form(look at initialValues)
-          validate={(values) => {
-            var errors: any = {};
-            for (let obj of generalQuestions) {
-              errors = setErrors(obj, values, errors);
-            }
-            for (let obj of schoolQuestions) {
-              errors = setErrors(obj, values, errors);
-            }
-            for (let obj of hackathonExperienceQuestions) {
-              errors = setErrors(obj, values, errors);
-            }
-            for (let obj of shortAnswerQuestions) {
-              errors = setErrors(obj, values, errors);
-            }
-            for (let obj of eventInfoQuestions) {
-              errors = setErrors(obj, values, errors);
-            }
-            for (let obj of sponsorInfoQuestions) {
-              errors = setErrors(obj, values, errors);
-            }
-            for (let obj of teammateQuestions) {
-              errors = setErrors(obj, values, errors);
-            }
+      <Formik
+        initialValues={{
+          ...generateInitialValues(partialProfile),
+          id: partialProfile?.id || '',
+          firstName: partialProfile?.firstName || '',
+          lastName: partialProfile?.lastName || '',
+          preferredEmail: partialProfile?.preferredEmail || user?.preferredEmail || '',
+          majorManual: partialProfile?.majorManual || '',
+          universityManual: partialProfile?.universityManual || '',
+          heardFromManual: partialProfile?.heardFromManual || '',
+          resume: partialProfile?.resume || '',
+        }}
+        validateOnBlur={false}
+        validateOnChange={false}
+        //validation
+        //Get condition in which values.[value] is invalid and set error message in errors.[value]. Value is a value from the form(look at initialValues)
+        validate={(values) => {
+          var errors: any = {};
+          for (let obj of generalQuestions) {
+            errors = setErrors(obj, values, errors);
+          }
+          for (let obj of schoolQuestions) {
+            errors = setErrors(obj, values, errors);
+          }
+          for (let obj of hackathonExperienceQuestions) {
+            errors = setErrors(obj, values, errors);
+          }
+          for (let obj of shortAnswerQuestions) {
+            errors = setErrors(obj, values, errors);
+          }
+          for (let obj of eventInfoQuestions) {
+            errors = setErrors(obj, values, errors);
+          }
+          for (let obj of sponsorInfoQuestions) {
+            errors = setErrors(obj, values, errors);
+          }
+          for (let obj of teammateQuestions) {
+            errors = setErrors(obj, values, errors);
+          }
 
-            if (
-              !isValidUSPhoneNumber(values['phoneNumber']) &&
-              !isValidInternationalPhoneNumber(values['phoneNumber'])
-            ) {
-              errors.phoneNumber = 'Invalid phone number';
-            }
+          if (
+            !isValidUSPhoneNumber(values['phoneNumber']) &&
+            !isValidInternationalPhoneNumber(values['phoneNumber'])
+          ) {
+            errors.phoneNumber = 'Invalid phone number';
+          }
 
-            //additional custom error validation
-            if (
-              values.preferredEmail &&
-              !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.preferredEmail)
-            ) {
-              //regex matches characters before @, characters after @, and 2 or more characters after . (domain)
-              errors.preferredEmail = 'Invalid email address';
-            }
-            if ((values.age && values.age < 1) || values.age > 100) {
-              errors.age = 'Not a valid age';
-            }
-            if (
-              (values.hackathonExperience && values.hackathonExperience < 0) ||
-              values.hackathonExperience > 100
-            ) {
-              errors.hackathonExperience = 'Not a valid number';
-            }
+          //additional custom error validation
+          if (
+            values.preferredEmail &&
+            !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.preferredEmail)
+          ) {
+            //regex matches characters before @, characters after @, and 2 or more characters after . (domain)
+            errors.preferredEmail = 'Invalid email address';
+          }
+          if ((values.age && values.age < 1) || values.age > 100) {
+            errors.age = 'Not a valid age';
+          }
+          if (
+            (values.hackathonExperience && values.hackathonExperience < 0) ||
+            values.hackathonExperience > 100
+          ) {
+            errors.hackathonExperience = 'Not a valid number';
+          }
 
-            if (values['major'] === 'Other' && values['majorManual'] === '') {
-              errors['majorManual'] = 'Required';
-            }
+          if (values['major'] === 'Other' && values['majorManual'] === '') {
+            errors['majorManual'] = 'Required';
+          }
 
-            if (values['university'] === 'Other' && values['universityManual'] === '') {
-              errors['universityManual'] = 'Required';
-            }
+          if (values['university'] === 'Other' && values['universityManual'] === '') {
+            errors['universityManual'] = 'Required';
+          }
 
-            if (values['heardFrom'] === 'Other' && values['heardFromManual'] === '') {
-              errors['heardFromManual'] = 'Required';
-            }
-            return errors;
-          }}
-          onSubmit={async (values, { setSubmitting }) => {
-            //submitting
-            await handleSubmit(values);
-            setSubmitting(false);
-            // alert(JSON.stringify(values, null, 2)); //Displays form results on submit for testing purposes
-          }}
-        >
-          {({ values, isValid, isSubmitting, dirty, resetForm }) => (
-            <>
+          if (values['heardFrom'] === 'Other' && values['heardFromManual'] === '') {
+            errors['heardFromManual'] = 'Required';
+          }
+          return errors;
+        }}
+        onSubmit={async (values, { setSubmitting }) => {
+          //submitting
+          await handleSubmit(values);
+          setSubmitting(false);
+          // alert(JSON.stringify(values, null, 2)); //Displays form results on submit for testing purposes
+        }}
+      >
+        {({ values, isValid, isSubmitting, dirty, resetForm }) => (
+          <>
+            <section className="pl-4 relative mb-4 z-[9999] hidden md:flex">
+              <button
+                onClick={async (e) => {
+                  e.preventDefault();
+                  if (dirty) await handleSaveProfile(values, registrationSection, resetForm);
+                  await router.push('/');
+                }}
+              >
+                <div className="mt-2 cursor-pointer items-center inline-flex text-white font-bold bg-[#40B7BA] rounded-[30px] pr-4 pl-1 py-2 border-2 border-white">
+                  <ChevronLeftIcon className="text-white" fontSize={'large'} />
+                  Home
+                </div>
+              </button>
+            </section>
+            <section className="relative">
               {/* Field component automatically hooks input to form values. Use name attribute to match corresponding value */}
               {/* ErrorMessage component automatically displays error based on validation above. Use name attribute to match corresponding value */}
               <Form
@@ -828,10 +834,10 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                 onClose={() => setDisplayProfileSavedToaster(false)}
                 message="Profile saved"
               />
-            </>
-          )}
-        </Formik>
-      </section>
+            </section>
+          </>
+        )}
+      </Formik>
     </div>
   );
 }
