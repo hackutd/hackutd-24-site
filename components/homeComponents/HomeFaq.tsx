@@ -3,13 +3,14 @@ import styles from './HomeFaq.module.css';
 import Wave2 from '../assets/Wave2';
 import { useContext } from 'react';
 import { SectionReferenceContext } from '@/lib/context/section';
-import BoulderLeft from '../assets/BoulderLeft';
-import BoulderRight from '../assets/BoulderRight';
+import BoulderLeft from 'public/assets/boulderLeft.png';
+import BoulderRight from 'public/assets/boulderRight.png';
 import Image from 'next/image';
 import corgi from 'public/assets/corgi_on_boat.png';
 
 export default function HomeFaq(props: { answeredQuestion: AnsweredQuestion[] }) {
   const { scheduleRef } = useContext(SectionReferenceContext);
+
   return (
     props.answeredQuestion.length != 0 && (
       <section
@@ -21,32 +22,16 @@ export default function HomeFaq(props: { answeredQuestion: AnsweredQuestion[] })
       >
         {/*****************Delete boulders and corgi once schedule page is back up*****************/}
         {/* Boulder Left */}
-        <BoulderLeft
-          style={{
-            position: 'absolute',
-            top: '-75px', // Move the boulder higher up
-            left: '0px', // Adjust from the left edge
-            zIndex: 3,
-            width: '600px', // Set the width to make the boulder less wide
-          }}
-        />
+        <img src={BoulderLeft.src} className={styles.boulderLeft} />
 
         {/* Boulder Right */}
-        <BoulderRight
-          style={{
-            position: 'absolute',
-            top: '-65px', // Move the boulder higher up
-            right: '0px', // Adjust from the right edge
-            zIndex: 3,
-            width: '600px', // Set the width to make the boulder less wide
-          }}
-        />
+        <img src={BoulderRight.src} className={styles.boulderRight} />
 
         {/* Corgi Image with Bobbing Animation */}
         <div
           style={{
             position: 'absolute',
-            top: '5px', // Adjust this value as needed to position the corgi below the boulders
+            top: '-10px', // Adjust this value as needed to position the corgi below the boulders
             left: '50%',
             transform: 'translateX(-50%)', // Center the image horizontally
             zIndex: 4, // Ensure it is above the boulders and below the text
@@ -70,7 +55,7 @@ export default function HomeFaq(props: { answeredQuestion: AnsweredQuestion[] })
 
         {/* placeholder text */}
         <div id="schedule-section" ref={scheduleRef}>
-          <h1 className="text-stroke text-6xl md:text-6xl sm:text-md xs:text-small font-bold text-[#F7CE79] font-jua text-center pb-10 pt-[10rem] uppercase">
+          <h1 className="text-stroke text-6xl md:text-6xl sm:text-md xs:text-small font-bold text-[#F7CE79] font-jua text-center pb-10 pt-[14rem] uppercase">
             Schedule coming soon...
           </h1>
         </div>

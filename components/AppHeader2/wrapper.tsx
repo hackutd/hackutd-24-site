@@ -80,8 +80,8 @@ export default function AppHeader2_Wrapper() {
   return (
     <header
       className={clsx(
-        'hidden md:flex flex-col w-full',
-        'fixed top-0 z-[1000]', // NOTE: Comment line below for special hiding effect
+        'md:flex flex-col w-full',
+        'md:fixed top-0 z-[1000]', // NOTE: Comment line below for special hiding effect
 
         // NOTE: Uncomment line below for special hiding effect
         // 'relative z-[1000]',
@@ -93,7 +93,7 @@ export default function AppHeader2_Wrapper() {
       {/* App header core */}
       <div
         ref={appHeaderRef}
-        className={'w-full bg-transparent relative flex items-center'} // NOTE: Comment this line for special hiding effect
+        className={'hidden md:flex w-full bg-transparent relative flex items-center'} // NOTE: Comment this line for special hiding effect
 
         // NOTE: Uncomment this block for special hiding effect
         // className={clsx('sticky top-0 w-full bg-transparent')}
@@ -115,6 +115,20 @@ export default function AppHeader2_Wrapper() {
           {user ? 'Sign Out' : 'Sign In'}
         </button>
       </div>
+      <button
+        className={`md:hidden ${
+          location.pathname === '/' ? 'left-[1rem]' : 'right-[1rem]'
+        } mt-10 absolute py-3 px-5 rounded-[30px] bg-[#40B7BA] font-bold text-white ml-3 border-2 border-white`}
+        onClick={async () => {
+          if (user) {
+            await signOut();
+          } else {
+            await router.push('/auth');
+          }
+        }}
+      >
+        {user ? 'Sign Out' : 'Sign In'}
+      </button>
     </header>
   );
 }

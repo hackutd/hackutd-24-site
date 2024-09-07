@@ -3,9 +3,11 @@ import Image from 'next/image';
 import MLH_Sticker from '../../public/assets/mlh-2025.png';
 import HackUTDTitle from '../../public/assets/HackUTD 2024 Title.png';
 import DuckMoving from '../../public/assets/duck-moving.gif';
+import MascotMoving from '../../public/assets/mascot-moving.gif';
 import mascotLifeRing from '../../public/assets/mascot_life_ring.png';
 import styles from './HomeHero2.module.css';
 import { SectionReferenceContext } from '@/lib/context/section';
+import Link from 'next/link';
 
 export default function HomeHero2() {
   const [isShort, setIsShort] = useState(false);
@@ -59,7 +61,7 @@ export default function HomeHero2() {
             {/* Container to manage the positioning of welcome, title, and date */}
             <div
               className="relative flex flex-col items-center gap-2"
-              style={{ paddingTop: isShort ? '30vh' : '0' }}
+              style={{ paddingTop: isShort ? '30vh' : '8vh' }}
             >
               {!isShort && (
                 <p
@@ -100,18 +102,28 @@ export default function HomeHero2() {
                   NOV 16 - 17
                 </p>
               )}
+
+              {!isShort && (
+                <div>
+                  <Link href="/register">
+                    <div className="py-2 px-4 rounded-[30px] text-white bg-[#F7CE79] font-jua text-xl">
+                      Apply
+                    </div>
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
-      <div className="absolute bottom-[35%] left-0 lg:left-[5%] lg:bottom-[30%] z-20">
+      <div className="absolute bottom-[30%] left-0 lg:left-[2%] lg:bottom-[25%] z-20">
         <div className="w-[10rem] md:w-[20rem] lg:w-[25rem]">
           <Image
-            src={mascotLifeRing.src}
-            alt="Mascot Life Ring"
+            src={MascotMoving.src}
+            alt="Mascot Moving"
             layout="responsive"
-            width={mascotLifeRing.width}
-            height={mascotLifeRing.height}
+            width={MascotMoving.width}
+            height={MascotMoving.height}
           />
         </div>
       </div>

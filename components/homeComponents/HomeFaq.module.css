@@ -8,3 +8,29 @@
     padding-top: 35rem;
   }
 } */
+
+.boulderLeft {
+  position: absolute;
+  top: -125px;
+  left: 0px;
+  z-index: 3;
+  width: 700px;
+}
+
+.boulderRight {
+  position: absolute;
+  top: -125px;
+  right: 0px;
+  z-index: 3;
+  width: 700px;
+}
+
+@media (max-width: 768px) {
+  .boulderLeft {
+    top: -80px;
+  }
+
+  .boulderRight {
+    top: -70px;
+  }
+}

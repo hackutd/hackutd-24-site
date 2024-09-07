@@ -35,6 +35,7 @@ async function getStatsData() {
     adminCount: 0,
     scans: {},
     timestamp: {},
+    codeOfConduct: {},
     ...statRecords,
   };
 

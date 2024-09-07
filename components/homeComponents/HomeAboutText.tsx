@@ -5,11 +5,11 @@ import { SectionReferenceContext } from '@/lib/context/section';
 
 const HomeAboutText = () => {
   const fish1HoverStyle = {
-    animation: 'moveLeft 100s linear infinite',
+    animation: 'moveLeft 80s linear infinite',
   };
 
   const fish2HoverStyle = {
-    animation: 'moveRight 100s linear infinite',
+    animation: 'moveRight 80s linear infinite',
   };
 
   const { aboutRef } = useContext(SectionReferenceContext);
@@ -33,8 +33,8 @@ const HomeAboutText = () => {
             13% { transform: translate(-25vw, -6vw) rotate(-20deg); }
             25% { transform: translate(-48vw, -6vw) rotate(-90deg); }
             38% { transform: translate(-55vw, 5vw) rotate(-120deg); }
-            50% { transform: translate(-48vw, 13vw) rotate(-180deg); }
-            63% { transform: translate(-25vw, 17vw) rotate(-210deg); }
+            50% { transform: translate(-48vw, 15vw) rotate(-180deg); }
+            63% { transform: translate(-35vw, 17vw) rotate(-210deg); }
             75% { transform: translate(-4vw, 16vw) rotate(-270deg); }
             88% { transform: translate(3vw, 5vw) rotate(-300deg); }
             100% { transform: translate(0, 0) rotate(-360deg); }
@@ -42,13 +42,13 @@ const HomeAboutText = () => {
 
           @keyframes moveRight {
             0% { transform: translate(0, 0) rotate(-180deg); }
-            13% { transform: translate(25vw, 6vw) rotate(-210deg); }
+            13% { transform: translate(25vw, 2vw) rotate(-210deg); }
             25% { transform: translate(50vw, 0) rotate(-270deg); }
             38% { transform: translate(55vw, -6vw) rotate(-300deg); }
-            50% { transform: translate(50vw, -16vw) rotate(-360deg); }
-            63% { transform: translate(15vw, -20vw) rotate(-380deg); }
-            75% { transform: translate(5vw, -10vw) rotate(-450deg); }
-            88% { transform: translate(-2vw, -5vw) rotate(-480deg); }
+            50% { transform: translate(50vw, -18vw) rotate(-360deg); }
+            63% { transform: translate(20vw, -22vw) rotate(-380deg); }
+            75% { transform: translate(5vw, -12vw) rotate(-450deg); }
+            88% { transform: translate(-1vw, -5vw) rotate(-480deg); }
             100% { transform: translate(0, 0) rotate(-510deg); }
           }
 
@@ -58,7 +58,7 @@ const HomeAboutText = () => {
         What is HackUTD?
       </h1>
       <div className="relative w-full flex justify-center items-center z-10">
-        <p className="text-xl text-center text-[#616161] max-w-2xl mb-16 font-fredoka relative z-10">
+        <p className="text-xl text-center text-[#616161] max-w-2xl mb-16 font-fredoka relative z-10 px-6 md:px-0">
           HackUTD, the largest university hackathon in Texas, is a weekend-long event where students
           build apps, hardware, and more. HackUTD provides a venue for self-expression and
           creativity through technology. People with varying technical backgrounds from universities
