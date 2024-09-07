@@ -376,7 +376,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
   };
 
   return (
-    <div className="flex flex-col flex-grow mt-28 md:mt-0 ">
+    <div className="flex flex-col flex-grow mt-28 md:mt-0 mb-10 ">
       <Head>
         <title>Hacker Application</title>
         <meta name="description" content="Register for HackUTD 2024" />
@@ -831,10 +831,17 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                   >
                     <div
                       style={{ width: 'fit-content' }}
-                      className="cursor-pointer select-none bg-white text-[#40B7BA] rounded-[30px] py-3 pl-2 pr-4 text-xs md:text-lg border-2 border-[#40B7BA]"
+                      className="hidden md:inline-flex cursor-pointer select-none bg-white text-[#40B7BA] rounded-[30px] py-3 pl-2 pr-4 text-xs md:text-lg border-2 border-[#40B7BA]"
                     >
                       <ChevronLeftIcon className="text-[#40B7BA]" />
                       prev page
+                    </div>
+                    <div
+                      style={{ width: 'fit-content' }}
+                      className="md:hidden cursor-pointer select-none bg-white text-[#40B7BA] rounded-[30px] py-3 pl-2 pr-4 text-xs md:text-lg border-2 border-[#40B7BA]"
+                    >
+                      <ChevronLeftIcon className="text-[#40B7BA]" />
+                      prev
                     </div>
                   </div>
                 )}
@@ -881,9 +888,16 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                   >
                     <div
                       style={{ width: 'fit-content' }}
-                      className="cursor-pointer select-none bg-white text-[#40B7BA] text-xs md:text-lg rounded-[30px] py-3 pr-2 pl-4 border-2 border-[#40B7BA]"
+                      className="hidden md:inline-flex cursor-pointer select-none bg-white text-[#40B7BA] text-xs md:text-lg rounded-[30px] py-3 pr-2 pl-4 border-2 border-[#40B7BA]"
                     >
                       next page
+                      <ChevronRightIcon />
+                    </div>
+                    <div
+                      style={{ width: 'fit-content' }}
+                      className="md:hidden cursor-pointer select-none bg-white text-[#40B7BA] text-xs md:text-lg rounded-[30px] py-3 pr-2 pl-4 border-2 border-[#40B7BA]"
+                    >
+                      next
                       <ChevronRightIcon />
                     </div>
                   </div>
