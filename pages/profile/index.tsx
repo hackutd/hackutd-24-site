@@ -159,7 +159,7 @@ export default function ProfilePage() {
 
   if (profile)
     return (
-      <div className="mt-16 md:mt-0 md:py-16 py-12 text-black flex justify-center">
+      <div className="mb-10 mt-16 md:mt-0 md:py-16 py-12 text-black flex justify-center">
         <div className="bg-white min-w-3/4 py-12 px-16 rounded-xl flex flex-col md:flex-row 2xl:gap-x-14 gap-x-12 2xl:justify-center">
           {/* QR Code */}
           <div className="">

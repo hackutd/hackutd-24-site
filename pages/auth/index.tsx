@@ -120,7 +120,7 @@ export default function AuthPage() {
 
   return (
     <>
-      <section className="min-h-screen">
+      <section className="min-h-screen mb-16">
         <div className="hidden md:flex p-4">
           <Link href="/" passHref legacyBehavior>
             <div className="cursor-pointer items-center inline-flex text-white font-bold bg-[#40B7BA] rounded-[30px] pr-5 pl-2 py-3 border-2 border-white">
