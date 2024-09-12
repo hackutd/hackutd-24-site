@@ -495,7 +495,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                   <section className="bg-white lg:w-3/5 md:w-3/4 w-full min-h-[35rem] mx-auto rounded-2xl md:py-4 py-10 px-8 mb-8 text-[#4C4950]">
                     <header>
                       <h1 className="text-[#40B7BA] lg:text-4xl sm:text-3xl text-2xl font-bold text-center mt-2 md:mt-8 mb-4 poppins-bold">
-                        Hacker Appplication
+                        Hacker Application
                       </h1>
                       <div
                         style={{ color: '#A6A4A8' }}
