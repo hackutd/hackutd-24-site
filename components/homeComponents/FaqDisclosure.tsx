@@ -34,6 +34,7 @@ export default function FaqDisclosure({
   const [maxHeight, setMaxHeight] = useState('0px');
   const contentRef = useRef<HTMLDivElement>(null);
 
+  // Dynamically adjust the max-height for smooth transition
   useEffect(() => {
     if (isOpen) {
       setMaxHeight(`${contentRef.current?.scrollHeight}px`);
@@ -48,8 +49,9 @@ export default function FaqDisclosure({
         style={{
           boxShadow: '0 5px 16px 0 rgb(8,52,15,0.06)',
         }}
-        className="transition duration-500 ease-in-out bg-white rounded-md p-4 mx-5"
+        className="transition duration-500 ease-in-out bg-white rounded-md p-4"
       >
+        {/* Button to toggle the FAQ */}
         <Disclosure.Button as="div">
           <button
             className="w-full flex justify-between items-center p-2 text-[#6F6C90] font-medium"
@@ -59,6 +61,7 @@ export default function FaqDisclosure({
               {question}
             </h1>
 
+            {/* Plus/Minus icon with background transition */}
             <div
               style={{ backgroundColor: !isOpen ? '#F7F7FB' : '#54DDE8' }}
               className="p-3 rounded-md transition duration-500 ease-in-out"
@@ -72,17 +75,18 @@ export default function FaqDisclosure({
           </button>
         </Disclosure.Button>
 
+        {/* Smooth scroll effect for the FAQ content */}
         <div
           ref={contentRef}
           style={{
             maxHeight: maxHeight,
-            transition: 'max-height 0.5s ease',
-            overflow: 'hidden',
+            transition: 'max-height 0.5s ease', // Smooth height transition
+            overflow: 'hidden', // Hide the content when it's not fully expanded
           }}
         >
           <Disclosure.Panel
             style={{ color: '#6F6C90' }}
-            className="my-2 py-2 p-2 text-left text-sm"
+            className="my-2 py-2 px-2 text-left text-sm"
             static
           >
             <Markdown
