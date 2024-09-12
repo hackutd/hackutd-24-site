@@ -48,7 +48,7 @@ export default function HomeHero2() {
           {/* Big welcome */}
           <div className="w-full flex flex-col gap-2 justify-center items-center h-full">
             {/* Duck image */}
-            <div className="w-[10rem] absolute top-[20%] md:top-[10%] right-[25%] md:w-[20rem] lg:w-[25rem] mb-4">
+            <div className="w-[10rem] absolute top-[20%] md:top-[10%] right-[25%] md:w-[15rem] lg:w-[20rem] mb-4">
               <Image
                 src={DuckMoving.src}
                 alt="Duck"
@@ -58,9 +58,8 @@ export default function HomeHero2() {
               />
             </div>
 
-            {/* Container to manage the positioning of welcome, title, and date */}
             <div
-              className="relative flex flex-col items-center gap-2"
+              className="relative flex flex-col items-center gap-4"
               style={{ paddingTop: isShort ? '30vh' : '8vh' }}
             >
               {!isShort && (
@@ -77,9 +76,9 @@ export default function HomeHero2() {
 
               {/* Title */}
               <div
-                className="w-[60vw] md:w-[40vw] lg:w-[30vw]"
+                className="w-[80vw] md:w-[60vw] lg:w-[50vw]"
                 style={{
-                  maxWidth: '600px',
+                  maxWidth: '800px',
                 }}
               >
                 <Image
@@ -93,7 +92,7 @@ export default function HomeHero2() {
 
               {!isShort && (
                 <p
-                  className="font-montserrat text-[#FFFFFF] text-xs sm:text-sm md:text-md lg:text-lg xl:text-xl font-semibold"
+                  className="font-montserrat text-[#FFFFFF] text-xs sm:text-sm md:text-md lg:text-lg xl:text-xl font-semibold mt-4"
                   style={{
                     lineHeight: '24.38px',
                     letterSpacing: '0.3em',
@@ -104,9 +103,9 @@ export default function HomeHero2() {
               )}
 
               {!isShort && (
-                <div>
+                <div className="mt-4">
                   <Link href="/register">
-                    <div className="py-2 px-4 rounded-[30px] text-white bg-[#F7CE79] font-jua text-xl">
+                    <div className="rounded-[30px] text-white bg-[#F7CE79] font-jua md:py-2 px-3 text-xl lg:py-4 px-8 text-3xl">
                       Apply
                     </div>
                   </Link>
@@ -116,8 +115,9 @@ export default function HomeHero2() {
           </div>
         </div>
       </div>
-      <div className="absolute bottom-[30%] left-0 lg:left-[2%] lg:bottom-[25%] z-20">
-        <div className="w-[10rem] md:w-[20rem] lg:w-[25rem]">
+
+      <div className="absolute bottom-[20%] left-0 lg:left-[2%] lg:bottom-[25%] z-20">
+        <div className="w-[10rem] md:w-[15rem] lg:w-[20rem]">
           <Image
             src={MascotMoving.src}
             alt="Mascot Moving"
