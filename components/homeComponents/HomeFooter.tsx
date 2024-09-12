@@ -29,14 +29,26 @@ export default function HomeFooter() {
         {/* HackUTD Section */}
         <div className="flex-1 p-4">
           <h1 className="font-bold text-2xl">HackUTD</h1>
-          <Link href="mailto:hello@hackutd.co">
-            <p
-              className="underline mt-1 font-medium"
-              style={{ whiteSpace: 'nowrap', wordBreak: 'keep-all', textUnderlineOffset: '2px' }}
+          <p style={{ whiteSpace: 'nowrap', wordBreak: 'keep-all', textUnderlineOffset: '2px' }}>
+            Contact Us
+          </p>
+
+          {/* Social Media Links */}
+          <div className="flex space-x-4 mt-4">
+            <a href="https://instagram.com/hackutd" target="_blank" rel="noopener noreferrer">
+              <img src="/assets/logo-instagram.png" alt="Instagram" className="w-10 h-10" />
+            </a>
+            <a
+              href="https://linkedin.com/company/hackutd"
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              Contact Us
-            </p>
-          </Link>
+              <img src="/assets/logo-linkedin.png" alt="LinkedIn" className="w-10 h-10" />
+            </a>
+            <a href="mailto:hello@hackutd.co">
+              <img src="/assets/email-logo.png" alt="Email" className="w-10 h-10" />
+            </a>
+          </div>
         </div>
 
         {/* Other Hackathons Section */}
@@ -136,7 +148,7 @@ export default function HomeFooter() {
           {/* Wrap input and button in a container */}
           <div className="flex flex-col gap-4">
             <input
-              style={{ backgroundColor: '#E2E2E2' }}
+              style={{ backgroundColor: '#E2E2E2', color: 'black' }}
               className="border-0 rounded p-2"
               placeholder="Email"
               type="text"
@@ -155,6 +167,10 @@ export default function HomeFooter() {
             </button>
           </div>
         </div>
+      </div>
+      {/* Copyright Notice */}
+      <div className="absolute bottom-0 w-full text-center py-2">
+        <p>All Copyrights are reserved by HackUTD &lt;3</p>
       </div>
     </section>
   );
