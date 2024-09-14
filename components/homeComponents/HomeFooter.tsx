@@ -137,7 +137,7 @@ export default function HomeFooter() {
           <div className="flex flex-col gap-4">
             <input
               style={{ backgroundColor: '#E2E2E2' }}
-              className="border-0 rounded p-2"
+              className="border-0 rounded p-2 text-[#170f49]"
               placeholder="Email"
               type="text"
               name="email"
