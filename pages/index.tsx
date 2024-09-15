@@ -21,7 +21,7 @@ import Wave from '../components/homeComponents/Wave';
 import themedBackground from '../public/assets/hackutd-bg.png';
 import countdownClouds from '../public/assets/countdown_clouds.png';
 import cloud from '../public/assets/cloud.png';
-
+import topBg from '../public/assets/topBg.png';
 import Image from 'next/image';
 
 export default function Home(props: {
@@ -72,19 +72,20 @@ export default function Home(props: {
             backgroundRepeat: 'no-repeat',
           }}
         /> */}
-        <Wave />
         <div style={{ position: 'relative', zIndex: 1 }}>
           <div
             style={{
               position: 'relative',
               zIndex: 1,
-              backgroundImage: `url(${countdownClouds.src})`,
+              backgroundImage: `url(${countdownClouds.src}), url(${topBg.src})`,
               backgroundSize: 'cover',
-              backgroundPosition: 'center 100px',
+              backgroundPosition: 'center',
               backgroundRepeat: 'no-repeat',
             }}
           >
+            <Wave />
             <HomeAboutPhotos />
+            <HomeVideoStats />
             <HackCountdown />
           </div>
           <Image
