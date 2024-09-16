@@ -19,8 +19,8 @@ const withPWA = require('next-pwa')({
         permanent: true,
       },
       {
-        source: '/devday',
-        destination: 'https://acmutd.typeform.com/to/PAZpIiVf',
+        source: '/devday-rsvp',
+        destination: 'https://acmutd.typeform.com/to/q1FIwqqq',
         permanent: true,
       },
     ];
