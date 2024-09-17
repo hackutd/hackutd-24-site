@@ -2,22 +2,22 @@ import { stats } from '../../lib/data';
 
 export default function HomeVideoStats() {
   return (
-    <section className="z-0 relative md:h-[560px] py-[3rem]">
+    <section className="z-10 relative md:h-[400px] py-[5rem]">
       <div className="flex flex-col justify-center items-center md:flex-row">
         {/* Video */}
         {/* !change */}
         <iframe
           className="video border-0"
-          width="700"
-          height="400"
-          src="https://www.youtube.com/embed/niFBblrblqo"
+          width="880"
+          height="495"
+          src="https://www.youtube.com/embed/dMVtL2OmB60?si=ZKpc1VRAM6i-XmQQ"
           title="YouTube video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
         ></iframe>
 
         {/* Stats */}
-        <div>
+        {/* <div>
           {stats.map((stat, index) => (
             <div
               key={stat.data}
@@ -29,7 +29,7 @@ export default function HomeVideoStats() {
               <p className="font-medium text-lg lg:text-3xl">{stat.object}</p>
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
     </section>
   );
