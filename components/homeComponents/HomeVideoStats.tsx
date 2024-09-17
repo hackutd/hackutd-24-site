@@ -2,17 +2,19 @@ import { stats } from '../../lib/data';
 
 export default function HomeVideoStats() {
   return (
-    <section className="z-10 relative md:h-[370px] py-[3rem]">
-      <div className="flex flex-col justify-center items-center md:flex-row">
+    <section className="z-10 relative md:h-[370px]">
+      <div className="flex flex-col justify-center items-center md:flex-row mx-auto py-[3rem]">
         {/* Video */}
         {/* !change */}
-        <iframe
-          className="video border-0 min-w-full aspect-video md:w-[800px]"
-          src="https://www.youtube.com/embed/dMVtL2OmB60?si=ZKpc1VRAM6i-XmQQ"
-          title="YouTube video player"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
+        <div className="w-full aspect-video flex justify-center">
+          <iframe
+            className="w-7/8 md:w-[800px] md:h-[450px]"
+            src="https://www.youtube.com/embed/dMVtL2OmB60?si=ZKpc1VRAM6i-XmQQ"
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+        </div>
 
         {/* Stats */}
         {/* <div>
