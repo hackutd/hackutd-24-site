@@ -2,12 +2,12 @@ import { stats } from '../../lib/data';
 
 export default function HomeVideoStats() {
   return (
-    <section className="z-10 relative h-[250px] md:h-[370px] py-[3rem]">
+    <section className="z-10 relative md:h-[370px] py-[3rem]">
       <div className="flex flex-col justify-center items-center md:flex-row">
         {/* Video */}
         {/* !change */}
         <iframe
-          className="video border-0 min-h-[350px] aspect-video md:w-[880px] md:h-[495px]"
+          className="video border-0 min-w-full aspect-video md:w-[800px]"
           src="https://www.youtube.com/embed/dMVtL2OmB60?si=ZKpc1VRAM6i-XmQQ"
           title="YouTube video player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
