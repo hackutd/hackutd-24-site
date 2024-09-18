@@ -1,0 +1,128 @@
+import initializeApi from '@/lib/admin/init';
+import { extractUserDataFromToken } from '@/lib/authorization/check-authorization';
+import { firestore } from 'firebase-admin';
+import { NextApiRequest, NextApiResponse } from 'next';
+
+initializeApi();
+const db = firestore();
+const SCORING_COLLECTION = '/scoring';
+const REGISTRATION_COLLECTION = '/registrations';
+
+export interface ScoringDataType {
+  adminId: string;
+  hackerId: string;
+  score: number;
+  note: string;
+}
+
+const SCORING_NO = 1;
+const SCORING_MAYBE_NO = 2;
+const SCORING_MAYBE_YES = 3;
+const SCORING_YES = 4;
+
+async function getAppAssignee(hackerId: string): Promise<string[]> {
+  // TODO: wait for #79 to be resolved
+  // NOTE: should return list of IDs of organizers that are assigned the app
+  return [];
+}
+
+async function checkAppShouldEnterCommonPool(hackerId: string) {
+  const hackerApplication = await db.collection(REGISTRATION_COLLECTION).doc(hackerId).get();
+  // NOTE: if app already had `inCommonPool` flag, there's no reason to move it to common pool again
+  if (!!hackerApplication.data().inCommonPool) {
+    return false;
+  }
+  const scoring = await db
+    .collection(SCORING_COLLECTION)
+    .where('hackerId', '==', hackerId)
+    .where('appIsAssigned', '==', true)
+    .get();
+  if (scoring.docs.length > 2) {
+    // NOTE: if this happens, something is very wrong here :)
+    console.error('App is assigned to 2 more than 2 officers.');
+  }
+  const hasMaybeVerdict = scoring.docs.some(
+    (doc) => doc.data().score === SCORING_MAYBE_YES || doc.data().score === SCORING_MAYBE_NO,
+  );
+  if (hasMaybeVerdict) return true;
+  // NOTE: appScore can only be either -2, 0, or 2
+  const appScore = scoring.docs.reduce((acc, curr) => {
+    const currentScore = curr.data().score;
+    if (currentScore === SCORING_NO) return acc - 1;
+    if (currentScore !== SCORING_YES) {
+      console.error('got a different score. something is wrong :)');
+    }
+    return acc + 1;
+  }, 0);
+  return appScore === 0;
+}
+
+async function moveAppToCommonPool(hackerId: string) {
+  await db.collection(REGISTRATION_COLLECTION).doc(hackerId).set(
+    {
+      inCommonPool: true,
+    },
+    {
+      merge: true,
+    },
+  );
+}
+
+async function handlePostRequest(req: NextApiRequest, res: NextApiResponse) {
+  const { headers } = req;
+  const userToken = headers['authorization'];
+  const reviewerData = await extractUserDataFromToken(userToken);
+  if (!reviewerData) {
+    return res.status(403).json({
+      msg: 'Request is not authorized to perform admin functionality',
+    });
+  }
+  // check if adminId === reviewerData.id
+  if ((req.body.scores as ScoringDataType[]).some((score) => score.adminId !== reviewerData.id)) {
+    return res.status(403).json({
+      msg: 'Request is not authorized to perform admin functionality',
+    });
+  }
+
+  // NOTE: req.body will be of type { scores: ScoringDataType[] }
+  try {
+    await Promise.all(
+      (req.body.scores as ScoringDataType[]).map(async (scoring) => {
+        // TODO: maybe check if hackerId is valid
+
+        //  store scoring into database
+        const appAssignee = await getAppAssignee(scoring.hackerId);
+        // checking whether organizer is reviewing an app assigned to them or an app from common pool
+        const appIsAssigned = appAssignee.some((assigneeId) => assigneeId === scoring.adminId);
+        await db.collection(SCORING_COLLECTION).add({
+          ...scoring,
+          appIsAssigned,
+        });
+        //  check if application should be moved into common pool.
+        const appShouldBeMovedToCommonPool = await checkAppShouldEnterCommonPool(scoring.hackerId);
+        if (appShouldBeMovedToCommonPool) {
+          await moveAppToCommonPool(scoring.hackerId);
+        }
+      }),
+    );
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({
+      msg: 'Internal server error',
+    });
+  }
+}
+
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  const { method } = req;
+  switch (method) {
+    case 'POST': {
+      return handlePostRequest(req, res);
+    }
+    default: {
+      return res.status(404).json({
+        msg: 'Route not found',
+      });
+    }
+  }
+}
