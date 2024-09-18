@@ -46,6 +46,14 @@ export default function HomeFooter() {
             className="underline mt-1 font-medium"
             style={{ whiteSpace: 'nowrap', wordBreak: 'keep-all', textUnderlineOffset: '2px' }}
           >
+            <Link href="https://www.wehackutd.com" passHref>
+              WEHack
+            </Link>
+          </p>
+          <p
+            className="underline mt-1 font-medium"
+            style={{ whiteSpace: 'nowrap', wordBreak: 'keep-all', textUnderlineOffset: '2px' }}
+          >
             <Link href="https://hacktx.com" passHref>
               HackTX
             </Link>
@@ -72,6 +80,14 @@ export default function HomeFooter() {
           >
             <Link href="https://www.unthackathon.com" passHref>
               HackUNT
+            </Link>
+          </p>
+          <p
+            className="underline mt-1 font-medium"
+            style={{ whiteSpace: 'nowrap', wordBreak: 'keep-all', textUnderlineOffset: '2px' }}
+          >
+            <Link href="https://rowdyhacks.org" passHref>
+              RowdyHacks
             </Link>
           </p>
         </div>
