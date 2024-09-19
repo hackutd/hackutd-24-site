@@ -74,7 +74,7 @@ async function handleAssignReviewers(req: NextApiRequest, res: NextApiResponse) 
     // shuffle the applications to avoid bias
     shuffle(applications);
 
-    // get all organizers (collections: member)
+    // get all organizers
     const organizers = applications.filter((application) =>
       ['super_admin', 'admin'].some((allowedPermission) =>
         application.permission.includes(allowedPermission),
