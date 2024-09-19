@@ -23,6 +23,12 @@ const withPWA = require('next-pwa')({
         destination: 'https://acmutd.typeform.com/to/q1FIwqqq',
         permanent: true,
       },
+      {
+        source: '/devday-schedule',
+        destination:
+          'https://docs.google.com/document/d/1bBuz6PGMjwtoCdb8miUZB0n3xR6Bi1teRjGOaHuFuIY/edit',
+        permanent: true,
+      },
     ];
   },
 
