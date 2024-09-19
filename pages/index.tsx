@@ -103,7 +103,7 @@ export default function Home(props: {
           {/* <HomeSpeakers keynoteSpeakers={props.keynoteSpeakers} /> */}
           {/* <HomeChallenges challenges={props.challenges} /> */}
           {/* include HomePrizes in HomeChallenges */}
-          <HomePrizes prizes={props.prizeData} />
+          {/* <HomePrizes prizes={props.prizeData} /> */}
           <HomeFaq answeredQuestion={props.answeredQuestion} />
           <HomeSponsors sponsorCard={props.sponsorCard} />
           <HomeFooter />
@@ -123,10 +123,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   //   `${protocol}://${context.req.headers.host}/api/challenges/`,
   //   {},
   // );
-  const { data: prizeData } = await RequestHelper.get<Array<{ rank: number; prizeName: string }>>(
-    `${protocol}://${context.req.headers.host}/api/prizes`,
-    {},
-  );
+  // const { data: prizeData } = await RequestHelper.get<Array<{ rank: number; prizeName: string }>>(
+  //   `${protocol}://${context.req.headers.host}/api/prizes`,
+  //   {},
+  // );
   const { data: answeredQuestion } = await RequestHelper.get<AnsweredQuestion[]>(
     `${protocol}://${context.req.headers.host}/api/questions/faq`,
     {},
@@ -156,7 +156,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       sponsorCard: sponsorData,
       // scheduleCard: scheduleData,
       dateCard: dateData,
-      prizeData: prizeData,
+      // prizeData: prizeData,
     },
   };
 };
