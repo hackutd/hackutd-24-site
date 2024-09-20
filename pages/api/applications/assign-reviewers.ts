@@ -7,8 +7,7 @@ initializeApi();
 
 const db = firestore();
 
-const APPLICATIONS_COLLECTION = '/registrations';
-const ORGANIZERS_COLLECTION = '/member';
+const REGISTRATION_COLLECTIONS = '/registrations';
 
 /**
  * Reference: https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
@@ -53,7 +52,6 @@ async function handleAssignReviewers(req: NextApiRequest, res: NextApiResponse) 
   // Probably not safe
   const isAuthorized = await userIsAuthorized(userToken, ['super_admin']);
 
-  // TODO: enable this section
   if (!isAuthorized) {
     return res.status(401).send({
       type: 'request-unauthorized',
@@ -64,46 +62,40 @@ async function handleAssignReviewers(req: NextApiRequest, res: NextApiResponse) 
   try {
     //  get all non-reviewed applications, no reviewer properties (collections: registration,)
     // assumption made here: each time this api is called, it will assign 2 reviewers to all non-reviewed applications
-    const applicationsSnapshot = await db
-      .collection(APPLICATIONS_COLLECTION)
-      .where('reviewer', '==', null)
-      .get();
+    const applicationsSnapshot = await db.collection(REGISTRATION_COLLECTIONS).get();
 
-    // Convert the QuerySnapshot to an array of application objects
-    const applications = applicationsSnapshot.docs.map((doc) => doc.data());
+    // get all applications that need review and have role of hacker
+    const applicationsNeededForReview = applicationsSnapshot.docs
+      .filter((doc) => !doc.data().reviewer && doc.data().user.permissions.includes('hacker'))
+      .map((doc) => doc.data());
+
     // shuffle the applications to avoid bias
-    shuffle(applications);
+    shuffle(applicationsNeededForReview);
 
     // get all organizers
-    const organizers = applications.filter((application) =>
-      ['super_admin', 'admin'].some((allowedPermission) =>
-        application.permission.includes(allowedPermission),
-      ),
-    );
+    const organizers: any[] = applicationsSnapshot.docs
+      .filter((doc) =>
+        ['super_admin', 'admin'].some((allowedPermission) =>
+          doc.data().user.permissions.includes(allowedPermission),
+        ),
+      )
+      .map((doc) => ({ ...doc.data(), reviewCount: doc.data().reviewCount || 0 }));
 
     // sort organizers by review count ascending order
     organizers.sort((a, b) => a.reviewCount - b.reviewCount);
 
     // do while there is a non-reviewed application, pick an organizer form top of min heap and assign it to them
-    while (applications.length > 0) {
+    while (applicationsNeededForReview.length > 0) {
       // if application registration has permission as organizer skipp loop
       // get organizer 0
       // get organizer 1
       const reviewer1 = organizers[0];
       const reviewer2 = organizers[1];
-      const application = applications.pop();
-
-      if (
-        ['super_admin', 'admin'].some((allowedPermission) =>
-          application.permission.includes(allowedPermission),
-        )
-      ) {
-        continue;
-      }
+      const application = applicationsNeededForReview.pop();
 
       // update database for registration collection
       await db
-        .collection(APPLICATIONS_COLLECTION)
+        .collection(REGISTRATION_COLLECTIONS)
         .doc(application.id)
         .update({
           reviewer: [reviewer1.id, reviewer2.id],
@@ -115,12 +107,16 @@ async function handleAssignReviewers(req: NextApiRequest, res: NextApiResponse) 
       organizers.sort((a, b) => a.reviewCount - b.reviewCount);
     }
 
+    // update organiers review count
     const batch = db.batch();
     organizers.forEach((organizer) => {
-      const organizerRef = db.collection(ORGANIZERS_COLLECTION).doc(organizer.id);
+      const organizerRef = db.collection(REGISTRATION_COLLECTIONS).doc(organizer.id);
       batch.update(organizerRef, { reviewCount: organizer.reviewCount });
     });
     await batch.commit(); // Commit all updates in a single batch
+    res.status(200).json({
+      message: 'Reviewers assigned successfully',
+    });
   } catch (error) {
     console.error('Error when fetching applications', error);
     res.status(500).json({
@@ -146,7 +142,7 @@ export default async function handleApplications(
   if (method === 'POST') {
     return handleAssignReviewers(req, res);
   } else {
-    res.setHeader('Allow', ['GET', 'POST', 'PUT']);
+    res.setHeader('Allow', ['POST']);
     res.status(405).end(`Method ${method} Not Allowed`);
   }
 }
