@@ -5,19 +5,30 @@ import AppHeader2_Core from './core';
 import { useAuthContext } from '@/lib/user/AuthContext';
 import { useRouter } from 'next/router';
 
-export const APP_HEADER_HEIGHT = 86;
-const INITIAL_HEADER_HEIGHT = APP_HEADER_HEIGHT;
-const TOP_OFFSET = 0; // Can be set to APP_HEADER_HEIGHT if want to app bar to be separated from the Hero part
-
 export default function AppHeader2_Wrapper() {
-  // Handle scrolling state
-
-  const [height, setHeight] = useState(INITIAL_HEADER_HEIGHT);
   const { user, signOut } = useAuthContext();
   const router = useRouter();
 
+  // Handle scrolling state
+
   const prevScrollY = useRef(0);
-  const appHeaderRef = useRef<HTMLDivElement | null>(null);
+  const headerCoreRef = useRef<HTMLDivElement | null>(null);
+
+  const defaultHeaderHeight = 94;
+  const appHeaderHeight = useRef(0);
+  const initialHeaderHeight = useRef(0);
+  const topOffset = useRef(0); // Can be set to APP_HEADER_HEIGHT if want app bar to be separated from the Hero part
+
+  const [height, setHeight] = useState<number>(initialHeaderHeight.current);
+
+  useEffect(() => {
+    const height = headerCoreRef.current?.clientHeight;
+    appHeaderHeight.current = (height ?? 0) === 0 ? defaultHeaderHeight : height;
+    initialHeaderHeight.current = appHeaderHeight.current;
+    topOffset.current = 0;
+
+    console.log(appHeaderHeight.current);
+  }, [headerCoreRef.current?.clientHeight]);
 
   // Handle scrolling effect
 
@@ -25,16 +36,16 @@ export default function AppHeader2_Wrapper() {
     const handleUp = () => {
       // Reset
       if (window.scrollY <= 0) {
-        setHeight(INITIAL_HEADER_HEIGHT);
+        setHeight(initialHeaderHeight.current);
         return;
       }
 
-      const appHeaderTop = appHeaderRef.current?.getBoundingClientRect().top ?? 0;
+      const appHeaderTop = headerCoreRef.current?.getBoundingClientRect().top ?? 0;
 
-      if (appHeaderTop < -APP_HEADER_HEIGHT) {
+      if (appHeaderTop < -appHeaderHeight.current) {
         // App header is not near viewport?
         // -> Set new height to make menu near viewport
-        if (window.scrollY > INITIAL_HEADER_HEIGHT) {
+        if (window.scrollY > initialHeaderHeight.current) {
           setHeight(window.scrollY);
         }
       }
@@ -43,16 +54,16 @@ export default function AppHeader2_Wrapper() {
     const handleDown = () => {
       // Reset
       if (window.scrollY <= 0) {
-        setHeight(INITIAL_HEADER_HEIGHT);
+        setHeight(initialHeaderHeight.current);
         return;
       }
 
-      const appHeaderTop = appHeaderRef.current?.getBoundingClientRect().top ?? 0;
+      const appHeaderTop = headerCoreRef.current?.getBoundingClientRect().top ?? 0;
 
       if (appHeaderTop >= 0) {
         // App header is at top of viewport?
         // -> Set new height to make menu disappear gradually
-        setHeight(window.scrollY + APP_HEADER_HEIGHT);
+        setHeight(window.scrollY + appHeaderHeight.current);
       }
     };
 
@@ -81,27 +92,29 @@ export default function AppHeader2_Wrapper() {
     <header
       className={clsx(
         'hidden md:flex flex-col w-full',
-        'fixed top-0 z-[1000]', // NOTE: Comment line below for special hiding effect
-
+        // 'fixed top-0 z-[1000]', // NOTE: Comment line below for special hiding effect
         // NOTE: Uncomment line below for special hiding effect
-        // 'relative z-[1000]',
+        'relative z-[1000]',
       )}
-
       // NOTE: Uncomment line below for special hiding effect
-      // style={{ height, marginBottom: -(height - TOP_OFFSET) }}
+      style={{
+        height,
+        marginBottom: -(height - topOffset.current),
+        pointerEvents: 'none', // allow click through
+      }}
     >
       {/* App header core */}
       <div
-        ref={appHeaderRef}
-        className={'w-full bg-transparent relative flex items-center'} // NOTE: Comment this line for special hiding effect
-
+        ref={headerCoreRef}
+        // className={'w-full bg-transparent relative flex items-center'} // NOTE: Comment this line for special hiding effect
         // NOTE: Uncomment this block for special hiding effect
-        // className={clsx('sticky top-0 w-full bg-transparent')}
-        // style={{
-        //   height: APP_HEADER_HEIGHT,
-        // }}
+        className={clsx('sticky top-0 w-full bg-transparent flex items-center')} // Known issue for sticky: https://stackoverflow.com/questions/45530235/the-property-position-sticky-is-not-working
+        style={{
+          pointerEvents: 'auto',
+        }}
       >
         <AppHeader2_Core />
+
         <button
           className="absolute left-[0rem] lg:left-[0rem] py-3 px-5 rounded-[30px] bg-[#40B7BA] font-bold text-white ml-3 border-2 border-white"
           onClick={async () => {

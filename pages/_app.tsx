@@ -85,44 +85,45 @@ function PortalApp({ Component, pageProps }: AppProps) {
           <ParticlesContext.Provider
             value={{ state: { init: particlesInit }, actions: { setInit: setParticlesInit } }}
           >
-            <Head>
-              <meta charSet="utf-8" />
-              <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-              <meta
-                name="viewport"
-                content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
-              />
-              <title>HackUTD 2024</title> {/* !change */}
-              <meta name="description" content="Your all-in-one guide to this hackathon." />
-              {process.env.ENABLE_PWA ||
-                (process.env.NODE_ENV !== 'development' && (
-                  <link rel="manifest" href="/manifest.json" />
-                ))}
-              <link href="/icons/favicon-16x16.png" rel="icon" type="image/png" sizes="16x16" />
-              <link href="/icons/favicon-32x32.png" rel="icon" type="image/png" sizes="32x32" />
-              <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
-              <meta name="theme-color" content="#5D5FEF" />
-            </Head>
+            <SectionReferenceContext.Provider
+              value={{
+                faqRef,
+                aboutRef,
+                scheduleRef,
+              }}
+            >
+              <Head>
+                <meta charSet="utf-8" />
+                <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+                <meta
+                  name="viewport"
+                  content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
+                />
+                <title>HackUTD 2024</title> {/* !change */}
+                <meta name="description" content="Your all-in-one guide to this hackathon." />
+                {process.env.ENABLE_PWA ||
+                  (process.env.NODE_ENV !== 'development' && (
+                    <link rel="manifest" href="/manifest.json" />
+                  ))}
+                <link href="/icons/favicon-16x16.png" rel="icon" type="image/png" sizes="16x16" />
+                <link href="/icons/favicon-32x32.png" rel="icon" type="image/png" sizes="32x32" />
+                <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+                <meta name="theme-color" content="#5D5FEF" />
+              </Head>
 
-            <div className="min-h-screen flex flex-col">
-              {duckBackgroundPathnames.includes(router.pathname) && (
-                <div className="fixed top-0 left-0 w-screen h-screen -z-10">
-                  <Image
-                    className="w-screen h-screen object-cover"
-                    alt="Pond Background"
-                    src={PondBackgroundImage.src}
-                    width={PondBackgroundImage.width}
-                    height={PondBackgroundImage.height}
-                  />
-                </div>
-              )}
-              <SectionReferenceContext.Provider
-                value={{
-                  faqRef,
-                  aboutRef,
-                  scheduleRef,
-                }}
-              >
+              <div className="min-h-screen flex flex-col">
+                {duckBackgroundPathnames.includes(router.pathname) && (
+                  <div className="fixed top-0 left-0 w-screen h-screen -z-10">
+                    <Image
+                      className="w-screen h-screen object-cover"
+                      alt="Pond Background"
+                      src={PondBackgroundImage.src}
+                      width={PondBackgroundImage.width}
+                      height={PondBackgroundImage.height}
+                    />
+                  </div>
+                )}
+
                 <AppHeader2_Wrapper />
 
                 {registerBackgroundPathnames.includes(router.pathname) && (
@@ -137,7 +138,6 @@ function PortalApp({ Component, pageProps }: AppProps) {
                   </div>
                 )}
 
-                <AppHeader2_Wrapper />
                 {/* Spacer at the top of the page so that content won't be covered by the navbar */}
                 {router.pathname !== '/' && <div className="hidden md:block h-[86px] shrink-0" />}
 
@@ -147,8 +147,8 @@ function PortalApp({ Component, pageProps }: AppProps) {
                 <div className="md:hidden h-[80px] shrink-0" />
 
                 <AppNavbarBottom />
-              </SectionReferenceContext.Provider>
-            </div>
+              </div>
+            </SectionReferenceContext.Provider>
           </ParticlesContext.Provider>
         </FCMProvider>
       </AuthProvider>

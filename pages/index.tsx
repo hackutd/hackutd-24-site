@@ -54,9 +54,11 @@ export default function Home(props: {
         <meta name="description" content="A default HackPortal instance" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       {/* <HomeNotif /> */}
       <HomeHero2 />
       <HomeAboutText />
+
       <div style={{ position: 'relative', zIndex: 0 }}>
         {/* TODO: enable this when UI is finalized */}
         {/* <div
@@ -73,7 +75,7 @@ export default function Home(props: {
           }}
         /> */}
         <Wave />
-        <div style={{ position: 'relative', zIndex: 1 }}>
+        <div className="relative z-[1] overflow-x-hidden">
           <div
             style={{
               position: 'relative',

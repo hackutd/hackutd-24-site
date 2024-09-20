@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useAuthContext } from '@/lib/user/AuthContext';
@@ -7,9 +7,14 @@ import { Menu, Transition } from '@headlessui/react';
 import { RequestHelper } from '@/lib/request-helper';
 import { Fragment, useContext } from 'react';
 import { SectionReferenceContext } from '@/lib/context/section';
-import NavItem from './NavItem';
 import AdminNavbarColumn from './AdminNavbarColumn';
 import AdminNavbarGrid from './AdminNavbarGrid';
+import FloatingDockWrapper from './FloatingDock/wrapper';
+import clsx from 'clsx';
+
+type Props = {
+  dockItemIdRoot?: string;
+};
 
 type Scan = {
   precendence: number;
@@ -20,16 +25,17 @@ type Scan = {
   isPermanentScan: boolean;
 };
 
-export default function AppHeader2_Core() {
+export default function AppHeader2_Core(props: Props) {
   const { user, hasProfile } = useAuthContext();
+  const { faqRef, scheduleRef } = useContext(SectionReferenceContext);
+
   const router = useRouter();
+
   const isSuperAdmin = user ? user.permissions.indexOf('super_admin') !== -1 : false;
   const isAdmin = isSuperAdmin || (user ? user.permissions.indexOf('admin') !== -1 : false);
+
   const [scanList, setScanList] = useState<Scan[]>([]);
   const [currentScan, setCurrentScan] = useState<Scan | null>(null);
-  const { faqRef, scheduleRef } = useContext(SectionReferenceContext);
-  const [diffs, setDiffs] = useState<number[]>([0, 0, 0, 0]);
-  const navBarRef = useRef<HTMLDivElement>(null);
 
   const navItems = [
     {
@@ -90,55 +96,63 @@ export default function AppHeader2_Core() {
     }
   }, [user, isAdmin]);
 
-  const handleMouseMove = (e: MouseEvent) => {
-    const navBar = navBarRef.current;
-    if (!navBar) return;
+  const floatingDockItems = (): JSX.Element[] => {
+    const items: JSX.Element[] = [];
+    const itemIdRoot: string = (props.dockItemIdRoot ?? 'AppHeader2-Core-floating-dock-item') + '_';
+    let itemIdx = 0;
 
-    const { x, y, width, height } = navBar.getBoundingClientRect();
-    const isMouseInsideNavBar =
-      e.clientX >= x && e.clientX <= x + width && e.clientY >= y && e.clientY <= y + height;
+    navItems.map((item, idx) => {
+      items.push(
+        <button
+          id={itemIdRoot + idx}
+          onClick={item.onClick}
+          className={clsx(
+            'py-2 px-4 text-[#40B7BA] cursor-pointer flex justify-center font-bold',
+            'hover:bg-[#DFFEFF] transition-[background] duration-300 ease-in-out',
+            'rounded-[20px]',
+          )}
+        >
+          {item.text}
+        </button>,
+      );
 
-    if (isMouseInsideNavBar) {
-      const children = navBar.children;
-      const newDiffs = [...diffs];
-      for (let i = 0; i < children.length; ++i) {
-        const child = children[i];
-        const rect = child.getBoundingClientRect();
-        const center = rect.x + rect.width / 2;
-        const diff = e.clientX - center;
-        newDiffs[i] = diff;
-      }
-      setDiffs(newDiffs);
-    } else {
-      setDiffs([0, 0, 0, 0]); // Reset diffs when mouse is outside navbar
-    }
+      itemIdx += 1;
+    });
+
+    // Profile/Apply button
+    items.push(
+      <div id={itemIdRoot + itemIdx} className="p-2 text-white cursor-pointer">
+        {user && hasProfile ? (
+          <Link href="/profile">
+            <div className="py-3 px-5 rounded-[30px] bg-[#40B7BA] font-bold">Profile</div>
+          </Link>
+        ) : (
+          <Link href="/register">
+            <div className="py-3 px-5 rounded-[30px] bg-[#40B7BA] font-bold">Apply</div>
+          </Link>
+        )}
+      </div>,
+    );
+
+    return items;
   };
-
-  useEffect(() => {
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, [diffs]);
 
   return (
     <div className="flex justify-center py-2 w-full">
       <div
-        ref={navBarRef}
         id="nav-bar"
-        className="relative font-dmSans border-[3px] border-[rgba(30,30,30,0.60)] rounded-xl px-20 bg-white opacity-70 p-1 text-[#40B7BA] cursor-pointer w-[72.5%] lg:w-[60%] flex justify-evenly items-center"
+        className="relative font-dmSans border-[3px] border-[rgba(30,30,30,0.60)] rounded-xl px-16 p-1 bg-white opacity-95 text-[#40B7BA] cursor-pointer w-[60%] lg:w-[50%]"
       >
-        {navItems.map((item, index) => (
-          <NavItem
-            key={item.text}
-            text={item.text}
-            href={item.href}
-            diff={diffs[index]}
-            onClick={item.onClick}
-          />
-        ))}
+        <FloatingDockWrapper
+          classes={{
+            wrapperDiv: clsx('gap-6 flex items-center justify-center'),
+          }}
+          items={floatingDockItems()}
+        />
+
         <QRScanDialog scan={currentScan} onModalClose={() => setCurrentScan(null)} />
 
+        {/* Admin menu */}
         {isAdmin && (
           <Menu as="div" className="relative">
             <div>
@@ -160,6 +174,7 @@ export default function AppHeader2_Core() {
                 </svg>
               </Menu.Button>
             </div>
+
             <Transition
               as={Fragment}
               enter="transition ease-out duration-100"
@@ -214,18 +229,6 @@ export default function AppHeader2_Core() {
             </Transition>
           </Menu>
         )}
-
-        <div className="p-2 text-white cursor-pointer">
-          {user && hasProfile ? (
-            <Link href="/profile">
-              <div className="py-3 px-5 rounded-[30px] bg-[#40B7BA] font-bold">Profile</div>
-            </Link>
-          ) : (
-            <Link href="/register">
-              <div className="py-3 px-5 rounded-[30px] bg-[#40B7BA] font-bold">Apply</div>
-            </Link>
-          )}
-        </div>
       </div>
     </div>
   );

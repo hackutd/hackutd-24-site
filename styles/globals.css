@@ -25,7 +25,7 @@ body {
   padding: 0;
   margin: 0;
   font-family: sans-serif;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
 }
 
 @font-face {
@@ -76,7 +76,7 @@ a.link {
 }
 
 .text-stroke {
-  text-shadow: -1px -1px 0 #AC5A1F, 1px -1px 0 #AC5A1F, -1px 1px 0 #AC5A1F, 1px 1px 0 #AC5A1F;
+  text-shadow: -1px -1px 0 #ac5a1f, 1px -1px 0 #ac5a1f, -1px 1px 0 #ac5a1f, 1px 1px 0 #ac5a1f;
 }
 
 .element {
