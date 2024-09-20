@@ -26,8 +26,6 @@ export default function AppHeader2_Wrapper() {
     appHeaderHeight.current = (height ?? 0) === 0 ? defaultHeaderHeight : height;
     initialHeaderHeight.current = appHeaderHeight.current;
     topOffset.current = 0;
-
-    console.log(appHeaderHeight.current);
   }, [headerCoreRef.current?.clientHeight]);
 
   // Handle scrolling effect

@@ -33,7 +33,7 @@ export default function BoxItem(props: PropsWithChildren<Props>) {
   return (
     <motion.div
       style={{ width, height: props.originalHeight }}
-      className={props.className ?? 'shrink-0 flex justify-center items-center'}
+      className={props.className ?? 'shrink-0 flex justify-center items-center min-h-fit min-w-fit'}
     >
       {props.children}
     </motion.div>
