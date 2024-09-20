@@ -36,17 +36,17 @@ export default function HomeFooter() {
           {/* Social Media Links */}
           <div className="flex space-x-4 mt-4">
             <a href="https://instagram.com/hackutd" target="_blank" rel="noopener noreferrer">
-              <img src="/assets/logo-instagram.png" alt="Instagram" className="w-10 h-10" />
+              <img src="/assets/instagram.png" alt="Instagram" className="w-7 h-7" />
             </a>
             <a
               href="https://linkedin.com/company/hackutd"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img src="/assets/logo-linkedin.png" alt="LinkedIn" className="w-10 h-10" />
+              <img src="/assets/linkedin.png" alt="LinkedIn" className="w-7 h-7" />
             </a>
             <a href="mailto:hello@hackutd.co">
-              <img src="/assets/email-logo.png" alt="Email" className="w-10 h-10" />
+              <img src="/assets/gmail.png" alt="Email" className="w-7 h-7" />
             </a>
           </div>
         </div>
