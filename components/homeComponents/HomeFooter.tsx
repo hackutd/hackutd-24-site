@@ -43,7 +43,7 @@ export default function HomeFooter() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img src="/assets/linkedin.png" alt="LinkedIn" className="w-7 h-7" />
+              <img src="/assets/linkedin.png" alt="LinkedIn" className="w-6 h-6" />
             </a>
             <a href="mailto:hello@hackutd.co">
               <img src="/assets/gmail.png" alt="Email" className="w-7 h-7" />
