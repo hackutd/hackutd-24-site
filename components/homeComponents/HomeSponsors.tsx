@@ -41,7 +41,7 @@ export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
           </div>
         </div>
         <div className="flex flex-col flex-grow">
-          <h4 className="text-white font-bold md:text-5xl text-2xl my-4 text-center uppercase font-fredoka pt-32">
+          <h4 className="text-white font-bold md:text-5xl text-2xl my-4 text-center uppercase font-fredoka pt-32 pb-12">
             Sponsorship
           </h4>
           <h2 className="uppercase text-center text-white text-3xl">interested in sponsoring?</h2>
