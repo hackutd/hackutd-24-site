@@ -57,7 +57,7 @@ export default function FaqDisclosure({
             className="w-full flex justify-between items-center p-2 text-[#6F6C90] font-medium"
             onClick={toggleDisclosure}
           >
-            <h1 style={{ fontFamily: 'Fredoka', color: '#170F49' }} className="text-left text-xl">
+            <h1 style={{ fontFamily: 'Fredoka', color: '#170F49' }} className="text-left text-lg">
               {question}
             </h1>
 
