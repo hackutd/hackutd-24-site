@@ -12,6 +12,7 @@ import Link from 'next/link';
 export default function HomeHero2() {
   const [isShort, setIsShort] = useState(false);
   const { aboutRef } = useContext(SectionReferenceContext);
+
   return (
     <section
       className={`bg-[url('/assets/hero.png')] md:bg-[url('/assets/hero-desktop.png')] lg:bg-[url('/assets/hero-xl.png')] ${styles.container} min-h-screen bg-center relative bg-white flex flex-col-reverse md:flex-col`}
@@ -19,7 +20,7 @@ export default function HomeHero2() {
         backgroundSize: '100% 100%',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        width: '100vw',
+        width: '100%',
         height: '100vh',
         minHeight: '100vh',
       }}
