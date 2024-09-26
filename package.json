@@ -40,6 +40,7 @@
     "firebase-admin": "^12.0.0",
     "formik": "^2.2.9",
     "github-slugger": "^1.4.0",
+    "gsap": "^3.12.5",
     "jsqr": "^1.4.0",
     "localforage": "^1.10.0",
     "multer": "^1.4.3",
@@ -59,6 +60,8 @@
     "react-select": "^5.8.0",
     "rehype-slug": "^5.0.1",
     "remark-gfm": "^3.0.1",
+    "split-type": "^0.3.4",
+    "styled-components": "^6.1.13",
     "swiper": "^11.1.1",
     "webpack": "^5.89.0"
   },
