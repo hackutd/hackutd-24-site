@@ -1,7 +1,13 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { firestore } from 'firebase-admin';
 import initializeApi from '../../../lib/admin/init';
-import { userIsAuthorized } from '../../../lib/authorization/check-authorization';
+import {
+  extractUserDataFromToken,
+  userIsAuthorized,
+} from '../../../lib/authorization/check-authorization';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/storage';
+import 'firebase/compat/auth';
 
 initializeApi();
 
@@ -14,6 +20,16 @@ const PARTIAL_APPLICATIONS_COLLECTION = '/partial-registrations';
 async function checkRegistrationAllowed() {
   const preferenceDoc = await db.collection('miscellaneous').doc('preferences').get();
   return preferenceDoc.data().allowRegistrations ?? false;
+}
+
+async function deleteResumeFromStorage(fileUrl: string) {
+  await firebase
+    .auth()
+    .signInWithEmailAndPassword(
+      process.env.NEXT_PUBLIC_RESUME_UPLOAD_SERVICE_ACCOUNT,
+      process.env.NEXT_PUBLIC_RESUME_UPLOAD_PASSWORD,
+    );
+  return firebase.storage().refFromURL(fileUrl).delete();
 }
 
 async function updateAllUsersDoc(userId: string, profile: any) {
@@ -198,6 +214,24 @@ async function handlePutApplications(req: NextApiRequest, res: NextApiResponse) 
   });
 }
 
+async function handleDeleteApplication(req: NextApiRequest, res: NextApiResponse) {
+  const { headers } = req;
+  const userToken = headers['authorization'] as string | undefined;
+  const userData = await extractUserDataFromToken(userToken);
+  if (!userData) {
+    return res.status(200).json({ msg: 'Delete successfully' });
+  }
+  try {
+    if (userData.resume && userData.resume !== '') {
+      await deleteResumeFromStorage(userData.resume);
+    }
+    await db.collection(APPLICATIONS_COLLECTION).doc(userData.id).delete();
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ msg: 'Internal server error' });
+  }
+}
+
 type ApplicationsResponse = {};
 
 /**
@@ -217,6 +251,8 @@ export default async function handleApplications(
     return handlePostApplications(req, res);
   } else if (method == 'PUT') {
     return handlePutApplications(req, res);
+  } else if (method === 'DELETE') {
+    return handleDeleteApplication(req, res);
   } else {
     res.setHeader('Allow', ['GET', 'POST', 'PUT']);
     res.status(405).end(`Method ${method} Not Allowed`);
