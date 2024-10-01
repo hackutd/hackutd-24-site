@@ -63,3 +63,18 @@
     transform: translateY(-10px);
   }
 }
+
+/* Duck Animation: Move left to right endlessly */
+@keyframes moveLeftToRight {
+  0% {
+    transform: translateX(-150%); /* Start off-screen to the left */
+  }
+  100% {
+    transform: translateX(160%); /* Move completely off-screen to the right */
+  }
+}
+
+.duckAnimation {
+  position: relative;
+  animation: moveLeftToRight 20s linear infinite; /* Extended duration to 20s for smoother movement */
+}

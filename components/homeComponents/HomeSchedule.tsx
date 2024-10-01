@@ -236,8 +236,10 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
           </div>
         </div> */}
         <div className="flex justify-center px-[3rem]">
-          {/* insert duck here */}
-          <Image width={700} height={400} src={ducks.src} alt="ducks.png" />
+          {/* Ducks moving left to right */}
+          <div className={styles.duckAnimation}>
+            <Image width={700} height={400} src={ducks.src} alt="ducks.png" />
+          </div>
         </div>
       </div>
     </div>
