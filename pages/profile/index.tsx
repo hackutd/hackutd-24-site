@@ -12,6 +12,7 @@ import ChickenImage from '@/public/assets/profile-chicken-egg.png';
 import { TextField, TextFieldProps } from '@mui/material';
 import Link from 'next/link';
 import { RequestHelper } from '@/lib/request-helper';
+import DeleteProfileDialog from '@/components/profileComponents/DeleteProfileDialog';
 
 /**
  * A page that allows a user to modify app or profile settings and see their data.
@@ -28,8 +29,10 @@ export default function ProfilePage() {
     user,
     profile,
     updateProfile,
+    signOut,
   } = useAuthContext();
   const [uploading, setUploading] = useState<boolean>(false);
+  const [showAppDeleteModal, setShowAppDeleteModal] = useState<boolean>(false);
   const resumeRef = useRef(null);
 
   const isValidUrl = (s: string) => {
@@ -87,6 +90,25 @@ export default function ProfilePage() {
         notchedOutline: '!border-[#79747E]',
       },
     },
+  };
+
+  const deleteApplicationHandler = async () => {
+    try {
+      const { data, status } = await RequestHelper.delete<unknown, { msg: string }>(
+        '/api/applications/',
+        {
+          headers: {
+            Authorization: user.token,
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      alert(data.msg);
+      await signOut();
+    } catch (err) {
+      alert('Error deleting application. Please try again later...');
+      console.error(err);
+    }
   };
 
   const handleResumeUpload = async (profile) => {
@@ -160,6 +182,11 @@ export default function ProfilePage() {
   if (profile)
     return (
       <div className="mb-10 mt-16 md:mt-0 md:py-16 py-12 text-black flex justify-center">
+        <DeleteProfileDialog
+          closeModalHandler={() => setShowAppDeleteModal(false)}
+          showDialog={showAppDeleteModal}
+          confirmDeletionHandler={deleteApplicationHandler}
+        />
         <div className="bg-white min-w-3/4 py-12 px-16 rounded-xl flex flex-col md:flex-row 2xl:gap-x-14 gap-x-12 2xl:justify-center">
           {/* QR Code */}
           <div className="">
@@ -211,7 +238,7 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            <div className="flex gap-x-4 flex-col md:flex-row">
+            <div className="flex gap-x-4 flex-col md:flex-row items-center">
               <div className="mb-4 flex gap-x-4 flex-row">
                 {profile?.linkedin && profile.linkedin !== '' && (
                   <div className="flex items-center justify-center w-10 h-10 rounded-full">
@@ -276,6 +303,14 @@ export default function ProfilePage() {
                 ) : (
                   <LoadIcon width={16} height={16} />
                 )}
+              </div>
+              <div className="my-2">
+                <button
+                  className="font-fredoka transition py-3 font-semibold px-6 text-sm text-center whitespace-nowrap text-white w-min bg-red-400 rounded-full cursor-pointer hover:brightness-110"
+                  onClick={() => setShowAppDeleteModal(true)}
+                >
+                  Delete Application
+                </button>
               </div>
             </div>
           </div>
