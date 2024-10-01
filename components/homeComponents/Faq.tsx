@@ -1,6 +1,6 @@
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import FaqDisclosure from './FaqDisclosure';
 import { RequestHelper } from '../../lib/request-helper';
 
@@ -9,6 +9,7 @@ import Fish2 from '../../public/assets/fish_2.png';
 import Image from 'next/image';
 import { SectionReferenceContext } from '@/lib/context/section';
 import Link from 'next/link';
+import gsap from 'gsap';
 
 /**
  * The FAQ page.
@@ -23,6 +24,7 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
     fetchedFaqs.map(() => false),
   );
   const { faqRef } = useContext(SectionReferenceContext);
+  const faqContainerRef = useRef(null); // Ref for the FAQ container
 
   const fish1HoverStyle = {
     animation: 'moveLeftRight 2s infinite alternate',
@@ -35,6 +37,34 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
   const fish3HoverStyle = {
     animation: 'moveUpDown 2s infinite alternate',
   };
+
+  useEffect(() => {
+    const handleIntersection = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          // Animate FAQ boxes using GSAP when they come into view
+          gsap.to('.faq-box', {
+            opacity: 1,
+            y: 0,
+            stagger: 0.1,
+            duration: 1,
+            ease: 'power3.out',
+          });
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(handleIntersection, { threshold: 0.1 });
+    if (faqContainerRef.current) {
+      observer.observe(faqContainerRef.current);
+    }
+
+    return () => {
+      if (faqContainerRef.current) {
+        observer.unobserve(faqContainerRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="flex flex-col flex-grow relative">
@@ -106,41 +136,42 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
           </div>
           {/* FAQ for lg-md */}
           {/* Uses different section for mobile because using 2 columns is buggy when expanding FAQs */}
-          <div className="md:flex hidden justify-between p-6">
-            {/* TODO: add faq header card */}
+          <div className="md:flex hidden justify-between p-6" ref={faqContainerRef}>
             <div className="w-[49%] my-3 space-y-4 > * + *">
               {faqs.map(
                 ({ question, answer }, idx) =>
-                  idx % 2 == 0 && (
-                    <FaqDisclosure
-                      key={idx}
-                      question={question}
-                      answer={answer}
-                      isOpen={disclosuresStatus[idx]}
-                      toggleDisclosure={() => {
-                        const currDisclosure = [...disclosuresStatus];
-                        currDisclosure[idx] = !currDisclosure[idx];
-                        setDisclosureStatus(currDisclosure);
-                      }}
-                    />
+                  idx % 2 === 0 && (
+                    <div className="faq-box opacity-0 translate-y-10" key={idx}>
+                      <FaqDisclosure
+                        question={question}
+                        answer={answer}
+                        isOpen={disclosuresStatus[idx]}
+                        toggleDisclosure={() => {
+                          const currDisclosure = [...disclosuresStatus];
+                          currDisclosure[idx] = !currDisclosure[idx];
+                          setDisclosureStatus(currDisclosure);
+                        }}
+                      />
+                    </div>
                   ),
               )}
             </div>
             <div className="w-[49%] my-3 space-y-4 > * + *">
               {faqs.map(
                 ({ question, answer }, idx) =>
-                  idx % 2 != 0 && (
-                    <FaqDisclosure
-                      key={idx}
-                      question={question}
-                      answer={answer}
-                      isOpen={disclosuresStatus[idx]}
-                      toggleDisclosure={() => {
-                        const currDisclosure = [...disclosuresStatus];
-                        currDisclosure[idx] = !currDisclosure[idx];
-                        setDisclosureStatus(currDisclosure);
-                      }}
-                    />
+                  idx % 2 !== 0 && (
+                    <div className="faq-box opacity-0 translate-y-10" key={idx}>
+                      <FaqDisclosure
+                        question={question}
+                        answer={answer}
+                        isOpen={disclosuresStatus[idx]}
+                        toggleDisclosure={() => {
+                          const currDisclosure = [...disclosuresStatus];
+                          currDisclosure[idx] = !currDisclosure[idx];
+                          setDisclosureStatus(currDisclosure);
+                        }}
+                      />
+                    </div>
                   ),
               )}
             </div>
@@ -149,17 +180,18 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
           <div className="md:hidden">
             <div className="w-full my-3 space-y-4 > * + *">
               {faqs.map(({ question, answer }, idx) => (
-                <FaqDisclosure
-                  key={idx}
-                  question={question}
-                  answer={answer}
-                  isOpen={disclosuresStatus[idx]}
-                  toggleDisclosure={() => {
-                    const currDisclosure = [...disclosuresStatus];
-                    currDisclosure[idx] = !currDisclosure[idx];
-                    setDisclosureStatus(currDisclosure);
-                  }}
-                />
+                <div className="faq-box opacity-0 translate-y-10" key={idx}>
+                  <FaqDisclosure
+                    question={question}
+                    answer={answer}
+                    isOpen={disclosuresStatus[idx]}
+                    toggleDisclosure={() => {
+                      const currDisclosure = [...disclosuresStatus];
+                      currDisclosure[idx] = !currDisclosure[idx];
+                      setDisclosureStatus(currDisclosure);
+                    }}
+                  />
+                </div>
               ))}
             </div>
           </div>
