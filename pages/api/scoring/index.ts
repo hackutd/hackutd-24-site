@@ -20,12 +20,6 @@ const SCORING_MAYBE_NO = 2;
 const SCORING_MAYBE_YES = 3;
 const SCORING_YES = 4;
 
-async function getAppAssignee(hackerId: string): Promise<string[]> {
-  // TODO: wait for #79 to be resolved
-  // NOTE: should return list of IDs of organizers that are assigned the app
-  return [];
-}
-
 async function checkAppShouldEnterCommonPool(hackerId: string) {
   const hackerApplication = await db.collection(REGISTRATION_COLLECTION).doc(hackerId).get();
   // NOTE: if app already had `inCommonPool` flag, there's no reason to move it to common pool again
@@ -88,10 +82,19 @@ async function handlePostRequest(req: NextApiRequest, res: NextApiResponse) {
   try {
     await Promise.all(
       (req.body.scores as ScoringDataType[]).map(async (scoring) => {
-        // TODO: maybe check if hackerId is valid
+        // check if hackerId is valid
+        const hackerDoc = await db.collection(REGISTRATION_COLLECTION).doc(scoring.hackerId).get();
+        if (!hackerDoc.exists) {
+          // if hacker data does not exist, then do nothing
+          return;
+        }
 
         //  store scoring into database
-        const appAssignee = await getAppAssignee(scoring.hackerId);
+        const appAssignee: string[] = hackerDoc.data().reviewer;
+        if (appAssignee.length === 0) {
+          console.error('Hacker is not assigned a reviewer. Something is wrong :D');
+          return;
+        }
         // checking whether organizer is reviewing an app assigned to them or an app from common pool
         const appIsAssigned = appAssignee.some((assigneeId) => assigneeId === scoring.adminId);
         await db.collection(SCORING_COLLECTION).add({
