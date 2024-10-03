@@ -21,11 +21,11 @@ const HomeAboutPhotos = () => {
   };
 
   const cloudLeftScroll = {
-    transform: `translateX(${windowScroll * 0.6}px)`,
+    transform: `translateX(${windowScroll * 0.42}px)`,
   };
 
   const cloudRightScroll = {
-    transform: `translateX(${-1 * windowScroll * 0.6}px)`,
+    transform: `translateX(${-1 * windowScroll * 0.42}px)`,
   };
 
   const balloonHoverStyle = {
@@ -89,25 +89,25 @@ const HomeAboutPhotos = () => {
 
       {/* Left Cloud */}
       <div
-        className="absolute top-[50%] left-[20%] transform -translate-x-[50%] z-50"
+        className="absolute top-[50%] lg:top-[15%] left-[5%] lg:left-[30%] transform -translate-x-[30%] z-50"
         style={{ ...cloudStyle, ...cloudLeftScroll }}
       >
         <img
           src="/assets/cloud.png"
           alt="Cloud Background"
-          className="w-48 sm:w-64 md:w-72 lg:w-80 cloud-hover"
+          className="w-48 sm:w-64 md:w-[45rem] lg:w-[50rem] cloud-hover"
         />
       </div>
 
       {/* Right Cloud */}
       <div
-        className="absolute top-[50%] right-[20%] transform translate-x-[50%] z-50"
+        className="absolute top-[50%] lg:top-[15%] right-[5%] lg:right-[30%] transform translate-x-[30%] z-50"
         style={{ ...cloudStyle, ...cloudRightScroll }}
       >
         <img
           src="/assets/cloud.png"
           alt="Cloud Background"
-          className="w-48 sm:w-64 md:w-72 lg:w-80 cloud-hover"
+          className="w-48 sm:w-64 md:w-[45rem] lg:w-[50rem] cloud-hover"
         />
       </div>
     </div>
