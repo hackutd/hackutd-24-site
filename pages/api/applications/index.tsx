@@ -228,6 +228,9 @@ async function handleDeleteApplication(req: NextApiRequest, res: NextApiResponse
       await deleteResumeFromStorage(userData.resume);
     }
     await db.collection(APPLICATIONS_COLLECTION).doc(userData.id).delete();
+    return res.status(200).json({
+      msg: 'Delete successfully',
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ msg: 'Internal server error' });
