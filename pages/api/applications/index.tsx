@@ -29,7 +29,9 @@ async function deleteResumeFromStorage(fileUrl: string) {
       process.env.NEXT_PUBLIC_RESUME_UPLOAD_SERVICE_ACCOUNT,
       process.env.NEXT_PUBLIC_RESUME_UPLOAD_PASSWORD,
     );
-  return firebase.storage().refFromURL(fileUrl).delete();
+  const resumeRef = firebase.storage().refFromURL(fileUrl);
+  const files = await resumeRef.list();
+  await Promise.all(files.items.map((file) => file.delete()));
 }
 
 async function updateAllUsersDoc(userId: string, profile: any) {
