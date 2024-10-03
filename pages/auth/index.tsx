@@ -65,18 +65,15 @@ export default function AuthPage() {
       });
   };
 
-  const sendResetEmail = () => {
-    firebase
-      .auth()
-      .sendPasswordResetEmail(currentEmail)
-      .then(() => {
-        alert('Password reset email sent');
-      })
-      .catch((error) => {
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        setErrorMsg(errorMessage);
-      });
+  const sendResetEmail = async () => {
+    try {
+      await firebase.auth().sendPasswordResetEmail(currentEmail);
+      alert('Password reset email sent');
+    } catch (error) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      setErrorMsg(errorMessage);
+    }
   };
 
   const sendVerificationEmail = () => {
@@ -254,8 +251,9 @@ export default function AuthPage() {
                     <button
                       type="button"
                       className="rounded-full text-base w-full text-white bg-[#40B7BA] hover:brightness-90 px-4 py-2"
-                      onClick={() => {
-                        sendResetEmail();
+                      onClick={async (e) => {
+                        e.preventDefault();
+                        await sendResetEmail();
                         setErrorMsg('');
                       }}
                     >
