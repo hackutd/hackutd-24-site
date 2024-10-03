@@ -177,38 +177,42 @@ export default function ProfilePage() {
                 {profile?.user.group ? profile?.user.group : 'Group TBD'}
               </div>
             </div>
-            <div className="border-y-[1.2px] border-primaryDark/20 py-4 md:my-8 my-6">
+            <div className="border-y-[1.2px] border-primaryDark/20 py-4 md:my-8 my-6 flex flex-col gap-y-3">
               <div className="font-fredoka font-semibold text-lg">Application Status</div>
-
-              <h1
-                className={`font-fredoka text-xl font-semibold ${
-                  profile?.status === 'Accepted'
-                    ? 'text-[#5DC55B]'
-                    : profile?.status === 'Rejected'
-                    ? 'text-[#DE3163]'
-                    : 'text-[#5C67C9]'
-                }`}
-              >
-                {profile?.status ? profile?.status : 'In Review'}
-              </h1>
-              <div className="text-sm md:flex pt-2 md:pt-0">
-                {profile?.updatedAt && (
-                  <p className="text-nowrap mr-4">
-                    Application {hasPartialProfile ? 'last worked on' : 'last submitted on'}{' '}
-                    {hasPartialProfile
-                      ? new Date(partialProfile?.updatedAt).toLocaleDateString()
-                      : new Date(profile?.updatedAt).toLocaleDateString()}
-                  </p>
-                )}
-                <Link
-                  href="/profile/application/edit"
-                  className="text-[#40B7BA] font-bold underline text-nowrap"
+              <div>
+                <h1
+                  className={`font-fredoka text-xl font-semibold ${
+                    profile?.status === 'Accepted'
+                      ? 'text-[#5DC55B]'
+                      : profile?.status === 'Rejected'
+                      ? 'text-[#DE3163]'
+                      : 'text-[#5C67C9]'
+                  }`}
                 >
-                  <p className="">
-                    {hasPartialProfile ? 'Continue Editing Application' : 'Edit Application'}
-                  </p>
-                </Link>
+                  {profile?.status ? profile?.status : 'In Review'}
+                </h1>
+                <div className="text-sm md:flex pt-2 md:pt-0">
+                  {profile?.updatedAt && (
+                    <p className="text-nowrap mr-4 text-[#4A5156] font-semibold">
+                      Application {hasPartialProfile ? 'last worked on' : 'last submitted on'}{' '}
+                      {hasPartialProfile
+                        ? new Date(partialProfile?.updatedAt).toLocaleDateString()
+                        : new Date(profile?.updatedAt).toLocaleDateString()}
+                    </p>
+                  )}
+                  <Link
+                    href="/profile/application/edit"
+                    className="text-[#40B7BA] font-bold underline text-nowrap"
+                  >
+                    <p className="">
+                      {hasPartialProfile ? 'Continue Editing Application' : 'Edit Application'}
+                    </p>
+                  </Link>
+                </div>
               </div>
+              <p className="text-sm text-nowrap mr-4 text-[#79838A]">
+                Decisions will be out by 11/08/2024
+              </p>
             </div>
 
             <div className="flex gap-x-4 flex-col md:flex-row">
