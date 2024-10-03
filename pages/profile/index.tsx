@@ -239,7 +239,7 @@ export default function ProfilePage() {
             </div>
 
             <div className="flex gap-x-4 flex-col md:flex-row items-center">
-              <div className="mb-4 flex gap-x-4 flex-row">
+              <div className="mb-4 md:mb-0 flex gap-x-4 flex-row">
                 {profile?.linkedin && profile.linkedin !== '' && (
                   <div className="flex items-center justify-center w-10 h-10 rounded-full">
                     <a
