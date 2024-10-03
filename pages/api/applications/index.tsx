@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { firestore } from 'firebase-admin';
+import { firestore, auth } from 'firebase-admin';
 import initializeApi from '../../../lib/admin/init';
 import {
   extractUserDataFromToken,
@@ -219,15 +219,25 @@ async function handlePutApplications(req: NextApiRequest, res: NextApiResponse) 
 async function handleDeleteApplication(req: NextApiRequest, res: NextApiResponse) {
   const { headers } = req;
   const userToken = headers['authorization'] as string | undefined;
-  const userData = await extractUserDataFromToken(userToken);
-  if (!userData) {
-    return res.status(200).json({ msg: 'Delete successfully' });
-  }
+  const userAuthData = await auth().verifyIdToken(userToken);
   try {
-    if (userData.resume && userData.resume !== '') {
-      await deleteResumeFromStorage(userData.resume);
+    const userPartialApp = await db
+      .collection(PARTIAL_APPLICATIONS_COLLECTION)
+      .doc(userAuthData.uid)
+      .get();
+    if (userPartialApp.exists) {
+      if (userPartialApp.data().resume && userPartialApp.data().resume !== '') {
+        await deleteResumeFromStorage(userPartialApp.data().resume);
+      }
+      await db.collection(PARTIAL_APPLICATIONS_COLLECTION).doc(userAuthData.uid).delete();
     }
-    await db.collection(APPLICATIONS_COLLECTION).doc(userData.id).delete();
+    const userAppData = await db.collection(APPLICATIONS_COLLECTION).doc(userAuthData.uid).get();
+    if (userAppData.exists) {
+      if (userAppData.data().resume && userAppData.data().resume !== '') {
+        await deleteResumeFromStorage(userAppData.data().resume);
+      }
+      await db.collection(APPLICATIONS_COLLECTION).doc(userAppData.data().id).delete();
+    }
     return res.status(200).json({
       msg: 'Delete successfully',
     });
