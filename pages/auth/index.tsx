@@ -52,17 +52,11 @@ export default function AuthPage() {
       .createUserWithEmailAndPassword(currentEmail, currentPassword)
       .then((userCredential) => {
         // Signed in
-        var user = userCredential.user;
         //send email verification
-        firebase
-          .auth()
-          .currentUser.sendEmailVerification()
-          .then(() => {
-            router.push('/auth');
-            alert(
-              'Account created! Check your email/spam folder to verify your account and log in.',
-            );
-          });
+        userCredential.user.sendEmailVerification().then(() => {
+          alert('Account created! Check your email/spam folder to verify your account and log in.');
+          router.push('/auth');
+        });
       })
       .catch((error) => {
         var errorCode = error.code;
@@ -92,8 +86,8 @@ export default function AuthPage() {
         .auth()
         .currentUser.sendEmailVerification()
         .then(() => {
-          router.push('/auth');
           alert('Verification email sent, check your email to verify your account and log in');
+          router.push('/auth');
         });
     } catch (error) {
       alert(
