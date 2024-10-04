@@ -210,6 +210,7 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
       );
       alert('Application Submitted');
       updateProfile(data.registrationData);
+      updatePartialProfile(null);
       router.push('/profile');
     } catch (error) {
       console.error(error);
