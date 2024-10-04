@@ -238,8 +238,8 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            <div className="flex gap-x-4 flex-col md:flex-row items-center">
-              <div className="mb-4 md:mb-0 flex gap-x-4 flex-row">
+            <div className="flex flex-col">
+              <div className="mb-4 flex gap-x-4 flex-row">
                 {profile?.linkedin && profile.linkedin !== '' && (
                   <div className="flex items-center justify-center w-10 h-10 rounded-full">
                     <a
@@ -272,7 +272,7 @@ export default function ProfilePage() {
                 )}
               </div>
 
-              <div className="my-2">
+              <div className="my-2 flex flex-col md:flex-row items-center gap-4 mx-auto">
                 {!uploading ? (
                   <>
                     <input
@@ -285,7 +285,7 @@ export default function ProfilePage() {
                     />
                     <label
                       id="resume_label"
-                      className="font-fredoka transition py-3 font-semibold px-6 text-sm text-center whitespace-nowrap text-white w-min bg-[#40B7BA] rounded-full cursor-pointer hover:brightness-110 mr-4"
+                      className="font-fredoka transition py-3 font-semibold px-6 text-sm text-center whitespace-nowrap text-white w-min bg-[#40B7BA] rounded-full cursor-pointer hover:brightness-110"
                       htmlFor="resume"
                     >
                       {profile.resume ? 'Update' : 'Add'} Resume
@@ -299,18 +299,16 @@ export default function ProfilePage() {
                         View Resume
                       </Link>
                     )}
+                    <button
+                      className="font-fredoka transition py-3 font-semibold px-6 text-sm text-center whitespace-nowrap text-white w-min bg-red-400 rounded-full cursor-pointer hover:brightness-110"
+                      onClick={() => setShowAppDeleteModal(true)}
+                    >
+                      Delete Application
+                    </button>
                   </>
                 ) : (
                   <LoadIcon width={16} height={16} />
                 )}
-              </div>
-              <div className="my-2">
-                <button
-                  className="font-fredoka transition py-3 font-semibold px-6 text-sm text-center whitespace-nowrap text-white w-min bg-red-400 rounded-full cursor-pointer hover:brightness-110"
-                  onClick={() => setShowAppDeleteModal(true)}
-                >
-                  Delete Application
-                </button>
               </div>
             </div>
           </div>
