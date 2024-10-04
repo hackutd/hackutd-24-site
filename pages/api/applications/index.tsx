@@ -150,7 +150,10 @@ async function handlePostApplications(req: NextApiRequest, res: NextApiResponse)
   // await updateAllUsersDoc(body.user.id, body);
   res.status(200).json({
     msg: 'Operation completed',
-    registrationData: completedRegistrationInfo,
+    registrationData: {
+      ...completedRegistrationInfo,
+      updatedAt: new Date(),
+    },
   });
 }
 
