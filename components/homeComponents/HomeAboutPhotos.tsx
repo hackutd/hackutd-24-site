@@ -17,7 +17,7 @@ const HomeAboutPhotos = () => {
   }, []);
 
   const cloudStyle = {
-    transition: 'transform 1s ease-out',
+    transition: 'transform 0.3s ease-out',
   };
 
   const cloudLeftScroll = {
