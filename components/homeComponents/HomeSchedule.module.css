@@ -78,3 +78,23 @@
   position: relative;
   animation: moveLeftToRight 20s linear infinite; /* Extended duration to 20s for smoother movement */
 }
+
+.boulderLeft, .boulderRight {
+  position: absolute;
+  width: 80vh;
+  height: auto; 
+  top: -15vh; 
+  z-index: 2; 
+}
+
+.boulderLeft {
+  left: 0;
+}
+
+.boulderRight {
+  right: 0;
+}
+
+
+
+

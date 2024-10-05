@@ -11,8 +11,8 @@ import topLilypad from '../../public/assets/top_lilypads.png';
 // import leftLilypad from '../../public/assets/left_lilypads.png';
 import ducks from '../../public/assets/ducks.png';
 
-import BoulderLeft from '../assets/BoulderLeft';
-import BoulderRight from '../assets/BoulderRight';
+import BoulderLeft from 'public/assets/boulderLeft.png';
+import BoulderRight from 'public/assets/boulderRight.png';
 
 /* Calendar */
 export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dateCard: Dates }) {
@@ -65,7 +65,6 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
     dateValues['endTime'],
     0,
   );
-
   /* Filter Functionality */
   const [filter, setFilter] = useState('All');
 
@@ -218,7 +217,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
             >
               Day 1: Saturday
             </div>
-            <div className="bg-white mb-8 mx-2 p-2 border-2 rounded-2xl border-[#05149C] border-opacity-20">
+            <div className="bg-white mb-8 mx-2 p-2 border-2 rounded-lg border-[#05149C] border-opacity-20">
               {day1Events}
             </div>
           </div>
@@ -230,7 +229,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
             >
               Day 2: Sunday
             </div>
-            <div className="bg-white mb-8 mx-2 p-2 border-2 rounded-2xl border-[#05149C] border-opacity-20">
+            <div className="bg-white mb-8 mx-2 p-2 border-2 rounded-lg border-[#05149C] border-opacity-20">
               {day2Events}
             </div>
           </div>
@@ -246,59 +245,23 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
   );
 }
 
+/* Background Assets */
 const BackgroundAssets = () => {
   return (
     <>
-      <BoulderLeft
-        className={styles.boulderLeft}
-        style={{
-          width: '50%',
-          position: 'absolute',
-          zIndex: 2,
-          left: '0',
-          top: '-14px',
-        }}
-      />
-      <BoulderRight
-        className={styles.boulderRight}
-        style={{
-          width: '50%',
-          position: 'absolute',
-          right: '0',
-          zIndex: 2,
-          top: '-4px',
-        }}
+      {/* Boulder Left */}
+      <img
+        src={BoulderLeft.src}
+        className={`${styles.boulderLeft} boulderLeft`}
+        alt="Boulder Left"
       />
 
-      {/* TODO: make this dynamic */}
-      {/* NOTE: remove this for now since it clutter the UI */}
-      {/* <Image
-        style={{
-          position: 'absolute',
-          top: '70%',
-          right: '0',
-          zIndex: 3,
-        }}
-        width={400}
-        height={170}
-        src={rightLilypad.src}
-        alt="right_lilypads.png"
-      /> */}
-
-      {/* TODO: make this dynamic */}
-      {/* NOTE: remove this for now since it clutter the UI */}
-      {/* <Image
-        style={{
-          position: 'absolute',
-          top: '30%',
-          left: '0',
-          zIndex: 3,
-        }}
-        width={300}
-        height={170}
-        src={leftLilypad.src}
-        alt="left_lilypads.png"
-      /> */}
+      {/* Boulder Right */}
+      <img
+        src={BoulderRight.src}
+        className={`${styles.boulderRight} boulderRight`}
+        alt="Boulder Right"
+      />
 
       <Image
         style={{
@@ -314,20 +277,19 @@ const BackgroundAssets = () => {
         src={topLilypad.src}
         alt="top_lilypads.png"
       />
-
-      <Image
-        style={{
-          position: 'absolute',
-          top: '0',
-          left: '45%',
-          zIndex: 3,
-        }}
-        width={170}
-        height={170}
-        src={corgiOnBoat.src}
-        className={styles.mascot}
-        alt="corgi_on_boat.png"
-      />
+      <div
+        className="image-container"
+        style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}
+      >
+        <Image
+          width={400}
+          height={400}
+          src={corgiOnBoat.src}
+          className={styles.mascot}
+          alt="corgi_on_boat.png"
+          style={{ position: 'relative', top: '-250px', zIndex: 3 }}
+        />
+      </div>
     </>
   );
 };
