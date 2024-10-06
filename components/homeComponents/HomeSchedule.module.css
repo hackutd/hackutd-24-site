@@ -67,10 +67,10 @@
 /* Duck Animation: Move left to right endlessly */
 @keyframes moveLeftToRight {
   0% {
-    transform: translateX(-150%); /* Start off-screen to the left */
+    transform: translateX(-160%); /* Start off-screen to the left */
   }
   100% {
-    transform: translateX(160%); /* Move completely off-screen to the right */
+    transform: translateX(180%); /* Move completely off-screen to the right */
   }
 }
 
@@ -83,7 +83,7 @@
   position: absolute;
   width: 80vh;
   height: auto; 
-  top: -15vh; 
+  top: -13.5vh; 
   z-index: 2; 
 }
 
