@@ -5,12 +5,14 @@ import QRCodeReader from '../../../components/dashboardComponents/QRCodeReader';
 import { RequestHelper } from '../../../lib/request-helper';
 import { useAuthContext } from '../../../lib/user/AuthContext';
 import { isAuthorized } from '..';
+import WaitlistCheckInNotificationDialog from '@/components/adminComponents/WaitlistCheckInNotificationDialog';
 
 const SCAN_STATUS = {
   successful: 'Check-in successful...',
   invalidUser: 'Invalid user...',
   unexpectedError: 'Unexpected error...',
   invalidFormat: 'Invalid hacker tag format...',
+  scanCancelled: 'Scan cancelled...',
 };
 
 type ApiResponseType = {
@@ -24,6 +26,7 @@ type ApiRequestType = {
 
 export default function WaitlistCheckinPage() {
   const [scanStatus, setScanStatus] = useState<ApiResponseType | undefined>(undefined);
+  const [showNotifyDialog, setShowNotifyDialog] = useState(false);
   const { user, isSignedIn } = useAuthContext();
   const [upperBoundValue, setUpperBoundValue] = useState<number>(0);
 
@@ -53,13 +56,7 @@ export default function WaitlistCheckinPage() {
     }
   };
 
-  const handleScan = async (data: string) => {
-    if (!data.startsWith('hack:')) {
-      setScanStatus({
-        statusCode: 400,
-        msg: SCAN_STATUS.invalidFormat,
-      });
-    }
+  const updateWaitListHandler = async (data: string) => {
     try {
       const { data: resData } = await RequestHelper.post<ApiRequestType, ApiResponseType>(
         '/api/waitlist',
@@ -83,11 +80,35 @@ export default function WaitlistCheckinPage() {
     }
   };
 
+  const handleScan = (data: string) => {
+    if (!data.startsWith('hack:')) {
+      setScanStatus({
+        statusCode: 400,
+        msg: SCAN_STATUS.invalidFormat,
+      });
+    } else {
+      setShowNotifyDialog(true);
+    }
+  };
+
   if (!isSignedIn || !isAuthorized(user))
     return <div className="text-2xl font-black text-center">Unauthorized</div>;
 
   return (
     <div className="flex flex-col flex-grow">
+      <WaitlistCheckInNotificationDialog
+        isOpen={showNotifyDialog}
+        closeModal={() => {
+          setShowNotifyDialog(false);
+          setScanStatus({
+            statusCode: 200,
+            msg: SCAN_STATUS.scanCancelled,
+          });
+        }}
+        onFormSubmit={async (optInType, contactInfo) => {
+          // TODO: send this info to backend
+        }}
+      />
       <Head>
         <title>HackPortal - Admin</title>
         <meta name="description" content="HackPortal's Admin Page" />
