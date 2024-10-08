@@ -13,6 +13,7 @@ import PlaceholderMascot from '../../public/assets/Reveal.gif';
 
 import Image from 'next/image';
 import LogoContext from '@/lib/context/logo';
+import SponsorAlternateCard from './SponsorAlternateCard';
 
 export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
   const [sponsor, setSponsor] = useState<Sponsor[]>([]);
@@ -63,9 +64,18 @@ export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
           <section className="flex flex-wrap justify-center p-4">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
               <LogoContext.Provider value={{ currentHoveredLogo, setCurrentHoveredLogo }}>
-                {sponsor.map(({ link, reference }, idx) => (
-                  <SponsorCard key={idx} link={link} reference={reference} />
-                ))}
+                {sponsor.map(({ link, reference, alternativeReference }, idx) =>
+                  alternativeReference ? (
+                    <SponsorAlternateCard
+                      alternativeReference={alternativeReference}
+                      reference={reference}
+                      key={idx}
+                      link={link}
+                    />
+                  ) : (
+                    <SponsorCard key={idx} link={link} reference={reference} />
+                  ),
+                )}
               </LogoContext.Provider>
             </div>
           </section>

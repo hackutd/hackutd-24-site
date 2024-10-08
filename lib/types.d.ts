@@ -280,6 +280,7 @@ type Dates = {
 type Sponsor = {
   link: string;
   reference: string;
+  alternativeReference?: string;
 };
 
 type GeneralStats = {
