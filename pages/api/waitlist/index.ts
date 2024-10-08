@@ -22,7 +22,11 @@ async function getUserDocRef(
   return null;
 }
 
-async function assignNewCheckInNumberToUser(userDocRef: FirebaseDocumentRefType): Promise<number> {
+async function assignNewCheckInNumberToUser(
+  userDocRef: FirebaseDocumentRefType,
+  optInMethod: string,
+  contactInfo: string,
+): Promise<number> {
   const snapshot = await db.collection('/miscellaneous').doc('lateCheckInManager').get();
   if (snapshot && snapshot.exists) {
     const { nextAvailableNumber } = snapshot.data();
@@ -32,7 +36,11 @@ async function assignNewCheckInNumberToUser(userDocRef: FirebaseDocumentRefType)
     for (let iter = 0; iter < MAX_ASSIGN_ATTEMPT; iter++) {
       try {
         await userDocRef.update({
-          waitlistNumber: nextAvailableNumber,
+          waitListInfo: {
+            waitlistNumber: nextAvailableNumber,
+            notificationMethod: optInMethod,
+            contactInfo,
+          },
         });
         assignSuccessful = true;
         break;
@@ -52,17 +60,24 @@ async function assignNewCheckInNumberToUser(userDocRef: FirebaseDocumentRefType)
     // First assignable number will be 1.
     await snapshot.ref.set(
       {
-        nextAvailableNumber: 1,
+        nextAvailableNumber: 2,
         allowedCheckInUpperBound: 0,
       },
       { merge: true },
     );
-    return 1;
+    await userDocRef.update({
+      waitListInfo: {
+        waitlistNumber: 1,
+        notificationMethod: optInMethod,
+        contactInfo,
+      },
+    });
+    return 2;
   }
 }
 
 function alreadyHasCheckInNumber(userData: Registration) {
-  return Object.hasOwn(userData, 'waitlistNumber');
+  return Object.hasOwn(userData, 'waitlistInfo');
 }
 
 async function handlePostRequest(req: NextApiRequest, res: NextApiResponse) {
@@ -90,7 +105,11 @@ async function handlePostRequest(req: NextApiRequest, res: NextApiResponse) {
         msg: 'User already had check-in number...',
       });
     }
-    const checkInNumber = await assignNewCheckInNumberToUser(userDocRef);
+    const checkInNumber = await assignNewCheckInNumberToUser(
+      userDocRef,
+      req.body.optInMethod,
+      req.body.contactInfo,
+    );
     return res.status(200).json({
       statusCode: 200,
       msg: `User's check in number is ${checkInNumber}`,

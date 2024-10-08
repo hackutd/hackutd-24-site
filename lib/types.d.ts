@@ -133,7 +133,11 @@ type Registration = {
   majorManual?: string;
   universityManual?: string;
   heardFromManual?: string;
-  waitlistNumber?: number;
+  waitlistInfo?: {
+    waitlistNumber: number;
+    notificationMethod: string;
+    contactInfo: string;
+  };
 };
 
 /**
