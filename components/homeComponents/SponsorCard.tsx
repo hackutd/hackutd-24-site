@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/storage';
 import LoadIcon from '../LoadIcon';
 import Image from 'next/image';
+import LogoContext from '@/lib/context/logo';
 
 interface SponsorCardProps {
   link: string;
@@ -15,6 +16,7 @@ interface SponsorCardProps {
 export default function SponsorCard(props: SponsorCardProps) {
   const [imgSrc, setImgSrc] = useState<string | undefined>();
   const [loading, setLoading] = useState(true);
+  const { setCurrentHoveredLogo, currentHoveredLogo } = useContext(LogoContext);
 
   useEffect(() => {
     if (props.reference !== undefined) {
@@ -38,7 +40,19 @@ export default function SponsorCard(props: SponsorCardProps) {
   return (
     <>
       {imgSrc !== undefined && (
-        <div className="flex justify-center items-center">
+        <div
+          className={`flex justify-center items-center hover:scale-110 hover:duration-300 ${
+            currentHoveredLogo !== '' && currentHoveredLogo !== props.reference
+              ? 'opacity-30'
+              : 'opacity-100'
+          } duration-500`}
+          onMouseOver={() => {
+            setCurrentHoveredLogo(props.reference);
+          }}
+          onMouseOut={() => {
+            setCurrentHoveredLogo('');
+          }}
+        >
           <a href={props.link} target="_blank" className="" rel="noreferrer">
             <Image
               alt={`Sponsor Image ${props.reference}`}
