@@ -22,6 +22,8 @@ type ApiResponseType = {
 
 type ApiRequestType = {
   userId: string;
+  optInMethod: string;
+  contactInfo: string;
 };
 
 export default function WaitlistCheckinPage() {
@@ -29,6 +31,7 @@ export default function WaitlistCheckinPage() {
   const [showNotifyDialog, setShowNotifyDialog] = useState(false);
   const { user, isSignedIn } = useAuthContext();
   const [upperBoundValue, setUpperBoundValue] = useState<number>(0);
+  const [currentUserData, setCurrentUserData] = useState<string | undefined>(undefined);
 
   const handleUpdateLateCheckInUpperBound = async (value: number) => {
     try {
@@ -56,7 +59,11 @@ export default function WaitlistCheckinPage() {
     }
   };
 
-  const updateWaitListHandler = async (data: string) => {
+  const updateWaitListHandler = async (
+    hackerData: string,
+    optInMethod: string,
+    contactInfo: string,
+  ) => {
     try {
       const { data: resData } = await RequestHelper.post<ApiRequestType, ApiResponseType>(
         '/api/waitlist',
@@ -67,10 +74,13 @@ export default function WaitlistCheckinPage() {
           },
         },
         {
-          userId: data.replaceAll('hack:', ''),
+          userId: hackerData.replaceAll('hack:', ''),
+          optInMethod,
+          contactInfo,
         },
       );
       setScanStatus(resData);
+      setShowNotifyDialog(false);
     } catch (error) {
       setScanStatus({
         statusCode: 500,
@@ -88,6 +98,7 @@ export default function WaitlistCheckinPage() {
       });
     } else {
       setShowNotifyDialog(true);
+      setCurrentUserData(data);
     }
   };
 
@@ -100,13 +111,24 @@ export default function WaitlistCheckinPage() {
         isOpen={showNotifyDialog}
         closeModal={() => {
           setShowNotifyDialog(false);
+          setCurrentUserData(undefined);
           setScanStatus({
             statusCode: 200,
             msg: SCAN_STATUS.scanCancelled,
           });
         }}
         onFormSubmit={async (optInType, contactInfo) => {
-          // TODO: send this info to backend
+          try {
+            await updateWaitListHandler(currentUserData, optInType, contactInfo);
+          } catch (error) {
+            setScanStatus({
+              statusCode: 500,
+              msg: SCAN_STATUS.unexpectedError,
+            });
+            console.error(error);
+          } finally {
+            setCurrentUserData(undefined);
+          }
         }}
       />
       <Head>
