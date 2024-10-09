@@ -64,6 +64,13 @@ export default function SponsorAlternateCard(props: SponsorCardProps) {
           ? 'opacity-30'
           : 'opacity-100'
       } duration-500`}
+      onTouchStart={() => {
+        if (currentHoveredLogo === props.alternativeReference) {
+          setCurrentHoveredLogo('');
+        } else {
+          setCurrentHoveredLogo(props.alternativeReference);
+        }
+      }}
       onMouseOver={() => {
         setCurrentHoveredLogo(props.alternativeReference);
         setUseAlternativeImg(true);

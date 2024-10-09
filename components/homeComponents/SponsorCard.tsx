@@ -46,6 +46,13 @@ export default function SponsorCard(props: SponsorCardProps) {
               ? 'opacity-30'
               : 'opacity-100'
           } duration-500`}
+          onTouchStart={() => {
+            if (currentHoveredLogo === props.reference) {
+              setCurrentHoveredLogo('');
+            } else {
+              setCurrentHoveredLogo(props.reference);
+            }
+          }}
           onMouseOver={() => {
             setCurrentHoveredLogo(props.reference);
           }}
