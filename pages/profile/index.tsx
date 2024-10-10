@@ -62,6 +62,11 @@ export default function ProfilePage() {
     return 'https://github.com/' + github;
   };
 
+  const prettyPrintWebsite = (website: string) => {
+    if (isValidUrl(website)) return website;
+    return 'https://' + website;
+  };
+
   useEffect(() => {
     if (hasProfile && !profile) window.location.reload();
   }, [profile]);
@@ -269,7 +274,7 @@ export default function ProfilePage() {
                 )}
                 {profile?.website && profile.website !== '' && (
                   <div className="flex items-center justify-center w-10 h-10 rounded-full">
-                    <a href={profile.website} target="_blank" rel="noreferrer">
+                    <a href={prettyPrintWebsite(profile.website)} target="_blank" rel="noreferrer">
                       <LanguageRoundedIcon className="text-[#5C67C9] !w-10 !h-10" />
                     </a>
                   </div>
