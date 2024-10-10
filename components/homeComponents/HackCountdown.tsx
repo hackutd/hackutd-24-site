@@ -11,6 +11,8 @@ const Countdown = () => {
   });
 
   const countdownRef = useRef(null); // Reference to countdown container
+  const cloudRef = useRef(null); // Reference to cloud
+  const countdownTitleRef = useRef(null); // Reference to countdown title
   const cloudHoverStyle = {
     animation: 'moveUpDown 2s infinite alternate',
   };
@@ -37,19 +39,28 @@ const Countdown = () => {
     const handleIntersection = (entries, observer) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
+          console.log('Countdown in view'); // Debugging statement
+
           // Trigger GSAP animations when countdown is in view
           const tl = gsap.timeline({
             defaults: { duration: 1, ease: 'power3.out' },
           });
-          tl.to(countdownRef.current, { opacity: 1, duration: 1 })
-            .fromTo('.countdown-title', { opacity: 0, y: -50 }, { opacity: 1, y: 0, stagger: 0.2 })
+          // Cloud animation first
+          tl.fromTo(cloudRef.current, { x: -200, opacity: 0 }, { x: 0, opacity: 1, duration: 1.5 })
+            // Countdown title animation next
+            .fromTo(
+              countdownTitleRef.current,
+              { opacity: 0, y: -50 },
+              { opacity: 1, y: 0 },
+              '+=0.5', // Delay after cloud finishes
+            )
+            // Timer boxes last
             .fromTo(
               '.countdown-box',
               { scale: 0, opacity: 0 },
               { scale: 1, opacity: 1, stagger: 0.1 },
-              '-=0.5',
-            )
-            .fromTo('.cloud', { x: -200, opacity: 0 }, { x: 0, opacity: 1, duration: 1.5 });
+              '+=0.5', // Delay after title animation finishes
+            );
 
           // Unobserve the element once the animation is triggered
           observer.unobserve(entry.target);
@@ -93,6 +104,7 @@ const Countdown = () => {
             <div
               key={index}
               className={`font-fredoka bg-white rounded-md flex items-center justify-center ${styles['countdown-box']} countdown-box`}
+              style={{ opacity: 0 }} // Initially hidden
             >
               {digit}
             </div>
@@ -110,7 +122,7 @@ const Countdown = () => {
       <div
         ref={countdownRef} // Apply the ref to the countdown container
         className="relative min-h-screen flex flex-col items-center justify-center font-jua"
-        style={{ position: 'relative', minHeight: '100vh', opacity: 0 }} // Initially hidden
+        style={{ position: 'relative', minHeight: '100vh' }} // Fully visible initially
       >
         <div className="relative flex justify-center items-center w-full " style={cloudHoverStyle}>
           <div
@@ -120,11 +132,13 @@ const Countdown = () => {
             <img
               src="/assets/bigCloud.png"
               alt="Cloud"
+              ref={cloudRef} // Cloud ref
               className={`w-full h-auto ${styles.cloud} cloud`}
-              style={{ opacity: 0 }} // Initially hidden
+              style={{ opacity: 0 }} // Initially hidden, controlled by GSAP
             />
             <div className="absolute flex flex-col items-center justify-center w-full h-full p-4 text-center">
               <h1
+                ref={countdownTitleRef} // Title ref
                 className="text-6xl md:text-6xl sm:text-md xs:text-small font-bold text-[#F7CE79] text-stroke countdown-title"
                 style={{ opacity: 0 }} // Initially hidden
               >
