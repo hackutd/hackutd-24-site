@@ -69,7 +69,7 @@ function Preloader({ setIsHeroLoaded }) {
     // Text animation
     const splitText = new SplitType(textRef.current.children, { types: 'words,chars' });
     tl.fromTo(
-      splitText.chars,
+      splitText.chars.slice(0, 12), // "Start a ripple" is 12 characters including spaces
       {
         opacity: 0,
         y: 50,
@@ -84,7 +84,24 @@ function Preloader({ setIsHeroLoaded }) {
         ease: 'power3.out',
       },
       0.5,
-    );
+    )
+      .to({}, { duration: 1 }) // 1-second pause
+      .fromTo(
+        splitText.chars.slice(13), // Start the next part after the pause
+        {
+          opacity: 0,
+          y: 50,
+          rotationX: -90,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          rotationX: 0,
+          stagger: 0.02,
+          duration: 0.5,
+          ease: 'power3.out',
+        },
+      );
 
     // Bubble animation
     createBubbles();
@@ -154,7 +171,7 @@ function Preloader({ setIsHeroLoaded }) {
     <div
       ref={preloaderRef}
       className="fixed inset-0 z-50 flex items-center justify-center overflow-hidden"
-      style={{ background: 'linear-gradient(to bottom, #66ccff, #3399ff)' }}
+      style={{ background: 'linear-gradient(to bottom, #A1F7F1, #54DDE8)' }}
     >
       {/* Multiple ripple layers */}
       <div
@@ -188,10 +205,10 @@ function Preloader({ setIsHeroLoaded }) {
       {/* Preloader text */}
       <div ref={textRef} className="text-center relative z-10">
         <h2 className="font-fredoka text-white text-4xl font-bold mb-4 drop-shadow-lg">
-          To Bring Forth
+          Start a ripple,
         </h2>
         <h2 className="font-fredoka text-white text-4xl font-bold drop-shadow-lg">
-          A Ripple of Change
+          shape the future
         </h2>
       </div>
     </div>
