@@ -1,6 +1,7 @@
 import React from 'react';
 import { Field, ErrorMessage, FieldProps } from 'formik';
 import { MenuItem, TextField, Autocomplete } from '@mui/material';
+import Markdown from 'react-markdown';
 import {
   CheckboxQuestion,
   datalistQuestion,
@@ -172,7 +173,7 @@ function Question(props: QuestionProps) {
           {(props.question as CheckboxQuestion).options.map((option) => (
             <label
               key={option.value}
-              className={`text-[#313131] text-sm ml-2 ${
+              className={`flex items-center gap-x-2 text-[#313131] text-sm ml-2 ${
                 props.question.id === 'codeOfConduct' || 'disclaimer'
                   ? 'poppins-semibold'
                   : 'poppins-regular'
@@ -184,7 +185,16 @@ function Question(props: QuestionProps) {
                 value={option.value}
                 className="rounded border-[#313131] border-2 cursor-pointer"
               />
-              &nbsp;{option.title}
+              <Markdown
+                components={{
+                  a(props) {
+                    const { node, ...rest } = props;
+                    return <a className="text-[#40B7BA] hover:underline" {...rest} />;
+                  },
+                }}
+              >
+                {option.title}
+              </Markdown>
               {option.link && option.linkText && (
                 <a href={option.link} target="_blank" className="text-[#40B7BA] hover:underline">
                   {option.linkText}

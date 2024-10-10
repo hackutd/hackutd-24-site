@@ -89,6 +89,7 @@ export default function Home(props: {
             }}
           >
             <HomeAboutPhotos />
+            <HomeVideoStats />
             <HackCountdown />
           </div>
 
