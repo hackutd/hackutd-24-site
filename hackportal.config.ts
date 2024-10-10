@@ -538,10 +538,38 @@ export const hackPortalConfig: HackPortalConfig = {
             initialValue: [],
             options: [
               {
-                title: 'I have read and agree to the ',
+                title: 'I have read and agree to the',
                 value: 'Yes',
                 link: 'https://static.mlh.io/docs/mlh-code-of-conduct.pdf',
                 linkText: 'MLH Code of Conduct',
+              },
+            ],
+          },
+          {
+            question: 'Privacy Policy',
+            required: true,
+            id: 'mlhPrivacyPolicy',
+            name: 'mlhPrivacyPolicy',
+            initialValue: [],
+            options: [
+              {
+                title:
+                  'I authorize you to share my application/registration information with Major League Hacking for event administration, ranking, and MLH administration in-line with the [MLH Privacy Policy](https://github.com/MLH/mlh-policies/blob/main/privacy-policy.md). I further agree to the terms of both the [MLH Contest Terms and Conditions](https://github.com/MLH/mlh-policies/blob/main/contest-terms.md) and the [MLH Privacy Policy](https://github.com/MLH/mlh-policies/blob/main/privacy-policy.md)',
+                value: 'Yes',
+              },
+            ],
+          },
+          {
+            question: 'Notifications',
+            required: false,
+            id: 'mlhNotifications',
+            name: 'mlhNotifications',
+            initialValue: [],
+            options: [
+              {
+                title:
+                  'I authorize MLH to send me occasional emails about relevant events, career opportunities, and community announcements.',
+                value: 'Yes',
               },
             ],
           },

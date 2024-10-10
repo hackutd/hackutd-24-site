@@ -2,6 +2,7 @@ import React from 'react';
 import 'firebase/compat/auth';
 import firebase from 'firebase/compat/app';
 import { RequestHelper } from '../request-helper';
+import { useProfileStore } from './ProfileStore';
 
 /**
  * Utility attributes and functions used to handle user auth state within an AuthContext.
@@ -67,8 +68,12 @@ function useAuthContext(): AuthContextState {
 function AuthProvider({ children }: React.PropsWithChildren<Record<string, any>>): JSX.Element {
   const [user, setUser] = React.useState<User>(null);
   const [loading, setLoading] = React.useState(true);
-  const [profile, setProfile] = React.useState(null);
-  const [partialProfile, setPartialProfile] = React.useState<PartialRegistration | null>(null);
+  const profile: Registration | null = useProfileStore((state) => state.profile);
+  const setProfile = useProfileStore((state) => state.setProfile);
+  const partialProfile: PartialRegistration | null = useProfileStore(
+    (state) => state.partialProfile,
+  );
+  const setPartialProfile = useProfileStore((state) => state.setPartialProfile);
 
   const updateProfile = (profile: Registration) => {
     setProfile(profile);
