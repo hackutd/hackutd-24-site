@@ -1,0 +1,25 @@
+name: Assign Reviewers to Applications
+
+on:
+  schedule:
+    - cron: '0 0 * * *' # run cron job at midnight utc everyday
+  workflow_dispatch:
+
+jobs:
+  assign_reviewers:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      
+      - name: Install dependencies
+        run: npm install --silent
+
+      - name: Run Reviewer Assignment Script
+        run: node scripts/assign-reviewers.js
