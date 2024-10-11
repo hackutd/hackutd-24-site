@@ -21,6 +21,7 @@ import Wave from '../components/homeComponents/Wave';
 import themedBackground from '../public/assets/hackutd-bg.png';
 import countdownClouds from '../public/assets/countdown_clouds.png';
 import cloud from '../public/assets/cloud.png';
+import topBg from '../public/assets/topBg.png';
 
 import Image from 'next/image';
 
@@ -54,11 +55,9 @@ export default function Home(props: {
         <meta name="description" content="A default HackPortal instance" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
       {/* <HomeNotif /> */}
       <HomeHero2 />
       <HomeAboutText />
-
       <div style={{ position: 'relative', zIndex: 0 }}>
         {/* TODO: enable this when UI is finalized */}
         {/* <div
@@ -74,25 +73,22 @@ export default function Home(props: {
             backgroundRepeat: 'no-repeat',
           }}
         /> */}
-
-        <Wave />
-
-        <div className="relative z-[1] overflow-x-hidden">
+        <div style={{ position: 'relative', zIndex: 1 }}>
           <div
             style={{
               position: 'relative',
               zIndex: 1,
-              backgroundImage: `url(${countdownClouds.src})`,
+              backgroundImage: `url(${countdownClouds.src}), url(${topBg.src})`,
               backgroundSize: 'cover',
-              backgroundPosition: 'center 100px',
+              backgroundPosition: 'center 50px',
               backgroundRepeat: 'no-repeat',
             }}
           >
+            <Wave />
             <HomeAboutPhotos />
             <HomeVideoStats />
             <HackCountdown />
           </div>
-
           <Image
             style={{
               position: 'absolute',
@@ -105,13 +101,11 @@ export default function Home(props: {
             height={300}
             alt="cloud.png"
           />
-
           {/* <HomeSchedule scheduleCard={props.scheduleCard} dateCard={props.dateCard} /> */}
           {/* <HomeSpeakers keynoteSpeakers={props.keynoteSpeakers} /> */}
           {/* <HomeChallenges challenges={props.challenges} /> */}
           {/* include HomePrizes in HomeChallenges */}
           {/* <HomePrizes prizes={props.prizeData} /> */}
-
           <HomeFaq answeredQuestion={props.answeredQuestion} />
           <HomeSponsors sponsorCard={props.sponsorCard} />
           <HomeFooter />

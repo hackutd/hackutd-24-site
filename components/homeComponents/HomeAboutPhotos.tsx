@@ -71,6 +71,7 @@ const HomeAboutPhotos = () => {
           backgroundSize: 'contain',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
+          minHeight: '75vh',
         }}
       >
         <div
