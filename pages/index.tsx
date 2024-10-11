@@ -80,7 +80,7 @@ export default function Home(props: {
               zIndex: 1,
               backgroundImage: `url(${countdownClouds.src}), url(${topBg.src})`,
               backgroundSize: 'cover',
-              backgroundPosition: 'center',
+              backgroundPosition: 'center 50px',
               backgroundRepeat: 'no-repeat',
             }}
           >
