@@ -46,10 +46,10 @@ async function postHackerStatus(req: NextApiRequest, res: NextApiResponse) {
       msg: 'Request is not authorized to perform admin functionality.',
     });
   }
-  const { adminId, hackerIds, status } = JSON.parse(req.body);
+  const { adminId, selectedUsers, status, notes } = JSON.parse(req.body);
 
   const jobs = [];
-  for (const hackerId of hackerIds) {
+  for (const hackerId of selectedUsers) {
     const docRef = db.collection('acceptreject').doc(`${hackerId}-${adminId}`);
 
     jobs.push([
@@ -59,6 +59,7 @@ async function postHackerStatus(req: NextApiRequest, res: NextApiResponse) {
           adminId,
           hackerId,
           status,
+          notes,
         },
         { merge: true },
       ),

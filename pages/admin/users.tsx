@@ -184,19 +184,16 @@ export default function UserPage() {
     setSelectedUsers([...selectedUsers, id]);
   };
 
-  const postHackersStatus = (status: string) => {
-    const hackerIds = selectedUsers.filter(
-      (id) => users.find((user) => user.id == id).status !== status,
-    );
-
-    if (hackerIds.length === 0) return;
+  const postHackersStatus = (status: string, notes: string) => {
+    if (selectedUsers.length === 0) return;
 
     fetch('/api/acceptreject', {
       method: 'post',
       body: JSON.stringify({
         adminId: user.id,
-        hackerIds,
+        selectedUsers,
         status,
+        notes,
       }),
       headers: {
         Authorization: user.token,
@@ -209,7 +206,7 @@ export default function UserPage() {
           setUsers((prev) =>
             prev.map((user) => ({
               ...user,
-              status: hackerIds.includes(user.id) ? status : user.status,
+              status: selectedUsers.includes(user.id) ? status : user.status,
               selected: false,
             })),
           );
@@ -217,7 +214,7 @@ export default function UserPage() {
             prev.map((user) => ({
               ...user,
               selected: false,
-              status: hackerIds.includes(user.id) ? status : user.status,
+              status: selectedUsers.includes(user.id) ? status : user.status,
             })),
           );
           alert('Hackers update success');
@@ -225,9 +222,6 @@ export default function UserPage() {
       })
       .catch((err) => {
         alert(err);
-      })
-      .finally(() => {
-        setSelectedUsers([]);
       });
   };
 
@@ -360,7 +354,7 @@ export default function UserPage() {
               setNextRegistrationStatus(newState);
             }}
             onUserSelect={(id) => handleUserSelect(id)}
-            onAcceptReject={(status) => postHackersStatus(status)}
+            onAcceptReject={(status) => postHackersStatus(status, '')}
             searchQuery={searchQuery}
             onSearchQueryUpdate={(searchQuery) => {
               setSearchQuery(searchQuery);
@@ -376,7 +370,7 @@ export default function UserPage() {
               setSelectedUsers([id]);
               setCurrentUser(id);
             }}
-            onAcceptReject={(status) => postHackersStatus(status)}
+            onAcceptReject={(status, notes) => postHackersStatus(status, notes)}
             onUpdateRole={(newRole) => {
               setUsers((users) =>
                 users.map((user) =>
