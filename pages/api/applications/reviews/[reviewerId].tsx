@@ -26,7 +26,7 @@ const SCORING_COLLECTION = '/scoring';
 async function handleGetApplicationForReview(req: NextApiRequest, res: NextApiResponse) {
   // TODO: Handle user authorization
   const {
-    query: { token, id },
+    query: { token, reviewerId: id },
     headers,
   } = req;
 
