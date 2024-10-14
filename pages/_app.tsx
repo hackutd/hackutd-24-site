@@ -132,7 +132,7 @@ function PortalApp({ Component, pageProps }: AppProps) {
                   <meta name="theme-color" content="#5D5FEF" />
                 </Head>
 
-                <div className="min-h-screen flex flex-col">
+                <div className="min-h-screen flex flex-col overflow-hidden">
                   {duckBackgroundPathnames.includes(router.pathname) && (
                     <div className="fixed top-0 left-0 w-screen h-screen -z-10">
                       <Image
