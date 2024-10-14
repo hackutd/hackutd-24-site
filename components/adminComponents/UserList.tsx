@@ -38,7 +38,7 @@ export default function UserList({
         */}
 
         <div
-          className={`flex w-1/2 md:w-2/12 h-full py-3 pr-6 justify-center items-center text-[rgb(19,19,19)] text-base`}
+          className={`flex w-1/2 md:w-2/12 h-full py-3 justify-center items-center text-[rgb(19,19,19)] text-base`}
           onClick={(e) => {
             e.stopPropagation();
             // onUserSelect(user.id);
@@ -67,7 +67,7 @@ export default function UserList({
           </div> */}
         </div>
 
-        <div className="flex items-center justify-center w-1/2 md:w-2/12 h-full py-3 pr-6 whitespace-nowrap overflow-hidden text-ellipsis max-w-[100%]">
+        <div className="flex items-center justify-center w-1/2 md:w-2/12 h-full py-3 whitespace-nowrap overflow-hidden text-ellipsis max-w-[100%]">
           <span
             className={`
               py-1 px-6 rounded-full 
@@ -80,15 +80,15 @@ export default function UserList({
           </span>
         </div>
 
-        <div className="hidden md:flex items-center justify-center text-base text-[rgb(19,19,19)] w-4/12 h-full py-3 pr-6 whitespace-nowrap overflow-hidden text-ellipsis max-w-[100%]">
+        <div className="hidden md:flex items-center justify-center text-base text-[rgb(19,19,19)] w-4/12 h-full py-3 whitespace-nowrap overflow-hidden text-ellipsis max-w-[100%]">
           {user.university}
         </div>
 
-        <div className="hidden md:flex items-center justify-center text-base text-[rgb(19,19,19)] w-2/12 h-full py-3 pr-6 whitespace-nowrap overflow-hidden text-ellipsis max-w-[100%]">
+        <div className="hidden md:flex items-center justify-center text-base text-[rgb(19,19,19)] w-2/12 h-full py-3 whitespace-nowrap overflow-hidden text-ellipsis max-w-[100%]">
           {user.major}
         </div>
 
-        <div className="hidden md:flex items-center justify-center text-base text-[rgb(19,19,19)] w-2/12 h-full py-3 pr-6 whitespace-nowrap overflow-hidden text-ellipsis max-w-[100%]">
+        <div className="hidden md:flex items-center justify-center text-base text-[rgb(19,19,19)] w-2/12 h-full py-3 whitespace-nowrap overflow-hidden text-ellipsis max-w-[100%]">
           {user.studyLevel}
         </div>
       </div>,
