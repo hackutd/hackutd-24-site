@@ -94,7 +94,7 @@ export default function HomeHero2() {
               {!isShort && (
                 <div className="mt-4">
                   <Link href="/register">
-                    <div className="rounded-[30px] text-white bg-[#F7CE79] font-jua md:py-2 px-3 text-xl lg:py-4 px-8 text-3xl">
+                    <div className="rounded-[30px] text-white bg-[#F7CE79] font-jua md:py-2 px-3 text-xl lg:py-4 px-8 text-3xl hover:bg-[#f6b42b] duration-300">
                       Apply
                     </div>
                   </Link>
