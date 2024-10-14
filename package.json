@@ -39,6 +39,7 @@
     "firebase": "^10.7.1",
     "firebase-admin": "^12.0.0",
     "formik": "^2.2.9",
+    "framer-motion": "^11.5.6",
     "github-slugger": "^1.4.0",
     "jsqr": "^1.4.0",
     "localforage": "^1.10.0",
@@ -60,7 +61,8 @@
     "rehype-slug": "^5.0.1",
     "remark-gfm": "^3.0.1",
     "swiper": "^11.1.1",
-    "webpack": "^5.89.0"
+    "webpack": "^5.89.0",
+    "zustand": "^4.5.5"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.3.0",

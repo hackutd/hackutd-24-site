@@ -7,6 +7,7 @@ const Countdown = () => {
     days: 20,
     hours: 22,
     minutes: 56,
+    seconds: 0, // Add seconds to the initial state
   });
 
   const cloudHoverStyle = {
@@ -22,8 +23,9 @@ const Countdown = () => {
       const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
       const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000); // Calculate the seconds
 
-      setTimeLeft({ days, hours, minutes });
+      setTimeLeft({ days, hours, minutes, seconds });
     }, 1000);
 
     return () => clearInterval(intervalId);
@@ -54,7 +56,7 @@ const Countdown = () => {
     <>
       <div
         className="relative min-h-screen flex flex-col items-center justify-center font-jua"
-        style={{ position: 'relative', minHeight: '100vh' }}
+        style={{ position: 'relative', minHeight: '150vh' }}
       >
         <div className="relative flex justify-center items-center w-full " style={cloudHoverStyle}>
           <div
@@ -74,6 +76,7 @@ const Countdown = () => {
                 {renderTimeBox(timeLeft.days, 'DAYS')}
                 {renderTimeBox(timeLeft.hours, 'HOURS')}
                 {renderTimeBox(timeLeft.minutes, 'MINUTES')}
+                {renderTimeBox(timeLeft.seconds, 'SECONDS')} {/* Render the seconds */}
               </div>
               {/* <p className="mt-4 text-lg md:text-md sm:text-sm xs:text-xs text-[#05149C] font-poppins">
                 We&apos;ll let you know when we are hatching
