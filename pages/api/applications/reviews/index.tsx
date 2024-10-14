@@ -7,7 +7,10 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { auth, firestore } from 'firebase-admin';
 import initializeApi from '../../../../lib/admin/init';
-import { userIsAuthorized } from '../../../../lib/authorization/check-authorization';
+import {
+  extractUserDataFromToken,
+  userIsAuthorized,
+} from '../../../../lib/authorization/check-authorization';
 
 initializeApi();
 
@@ -30,7 +33,7 @@ async function handleGetApplicationForReviewFromCommonPool(
 ) {
   // TODO: Handle user authorization
   const {
-    query: { token, id },
+    query: { token },
     headers,
   } = req;
 
@@ -51,7 +54,9 @@ async function handleGetApplicationForReviewFromCommonPool(
     });
   }
 
-  const userID = id as string;
+  const userData = await extractUserDataFromToken(userToken);
+
+  const userID = userData.user.id as string;
 
   try {
     const applicationsSnapshot = await db
@@ -59,6 +64,10 @@ async function handleGetApplicationForReviewFromCommonPool(
       .where('inCommonPool', '==', true)
       .get();
 
+    /**
+     * currently we are fetching all applications from common pool including the one that contains the reviewer
+     * firebase does not contain array-does-not-contain query, if there is any other way to do this, feel free to update this code
+     */
     const applications = await Promise.all(
       applicationsSnapshot.docs.map(async (doc) => {
         const data: Registration & { reviewer?: string[] } = {
