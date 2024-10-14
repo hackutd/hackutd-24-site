@@ -15,17 +15,17 @@ export default function UserList({
   const userList = [];
 
   users.forEach((user, idx) => {
-    const bgColor = idx % 2 ? 'bg-white' : 'bg-gray-100';
+    const bgColor = idx % 2 == 0 ? 'bg-[rgba(227,227,227,0.8)]' : 'bg-[rgba(255,255,255,0.6)]';
+    const blur = 'backdrop-blur-lg';
 
     userList.push(
       <div
         key={user.id}
         className={`
           flex flex-row justify-between px-6
-          cursor-pointer hover:bg-gray-200 items-center 
+          cursor-pointer hover:bg-[rgb(255,255,255,0.7)] items-center 
           ${bgColor}
-
-          
+          ${blur}
         `}
         onClick={() => onUserClick(user.id)}
       >
@@ -36,8 +36,9 @@ export default function UserList({
           Major
           Year
         */}
+
         <div
-          className={`flex w-1/2 md:w-2/12 h-full py-3 pr-6 items-center text-complementary text-base`}
+          className={`flex w-1/2 md:w-2/12 h-full py-3 pr-6 justify-center items-center text-[rgb(19,19,19)] text-base`}
           onClick={(e) => {
             e.stopPropagation();
             // onUserSelect(user.id);
@@ -51,10 +52,11 @@ export default function UserList({
               }}
               checked={user.selected}
               type="checkbox"
-              className="w-4 h-4 mr-2 rounded-sm border-[1px] border-complementary bg-transparent text-primaryDark"
+              className="w-4 h-4 mr-2 rounded-sm border-[1px] border-[rgb(19,19,19)] bg-transparent text-[rgb(19,19,19)] !ring-[rgb(19,19,19)]"
             />
           </div>
-          <div
+
+          {/* <div
             className="whitespace-nowrap overflow-hidden text-ellipsis max-w-[70%]"
             onClick={(e) => {
               e.stopPropagation();
@@ -62,25 +64,31 @@ export default function UserList({
             }}
           >
             {`${user.user.firstName} ${user.user.lastName}`}
-          </div>
+          </div> */}
         </div>
-        <div className="w-1/2 md:w-2/12 h-full py-3 pr-6 whitespace-nowrap overflow-hidden text-ellipsis max-w-[100%]">
+
+        <div className="flex items-center justify-center w-1/2 md:w-2/12 h-full py-3 pr-6 whitespace-nowrap overflow-hidden text-ellipsis max-w-[100%]">
           <span
-            className={` py-1 px-6 rounded-md ${
-              user.status === 'Accepted' ? 'text-[#409019] bg-[#84DF58]/25' : ''
-            } ${user.status === 'Rejected' ? 'text-[#872852] bg-[#EA609C]/25' : ''}
-                  ${user.status === 'In Review' ? 'text-[#F59E0B] bg-[#FDE68A]/25' : ''}`}
+            className={`
+              py-1 px-6 rounded-full 
+              ${user.status === 'Accepted' ? 'bg-[rgb(242,253,226)] text-[rgb(27,111,19)]' : ''}
+              ${user.status === 'Rejected' ? 'bg-[rgb(255,233,218)] text-[rgb(122,15,39)]' : ''}
+              ${user.status === 'In Review' ? 'bg-[rgb(213,244,255)] text-[rgb(9,45,122)]' : ''}
+            `}
           >
             {user.status}
           </span>
         </div>
-        <div className="hidden md:block text-base text-complementary w-4/12 h-full py-3 pr-6 whitespace-nowrap overflow-hidden text-ellipsis max-w-[100%]">
+
+        <div className="hidden md:flex items-center justify-center text-base text-[rgb(19,19,19)] w-4/12 h-full py-3 pr-6 whitespace-nowrap overflow-hidden text-ellipsis max-w-[100%]">
           {user.university}
         </div>
-        <div className="hidden md:block text-base text-complementary w-2/12 h-full py-3 pr-6 whitespace-nowrap overflow-hidden text-ellipsis max-w-[100%]">
+
+        <div className="hidden md:flex items-center justify-center text-base text-[rgb(19,19,19)] w-2/12 h-full py-3 pr-6 whitespace-nowrap overflow-hidden text-ellipsis max-w-[100%]">
           {user.major}
         </div>
-        <div className="hidden md:block text-base text-complementary w-2/12 h-full py-3 pr-6 whitespace-nowrap overflow-hidden text-ellipsis max-w-[100%]">
+
+        <div className="hidden md:flex items-center justify-center text-base text-[rgb(19,19,19)] w-2/12 h-full py-3 pr-6 whitespace-nowrap overflow-hidden text-ellipsis max-w-[100%]">
           {user.studyLevel}
         </div>
       </div>,
