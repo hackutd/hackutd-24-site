@@ -63,18 +63,6 @@ export default function HomeHero2() {
               className="relative flex flex-col items-center gap-4"
               style={{ paddingTop: isShort ? '30vh' : '8vh' }}
             >
-              {!isShort && (
-                <p
-                  className="font-montserrat mx-auto lg:ml-[5rem] text-[#FFFFFF] text-xs sm:text-sm md:text-md lg:text-lg xl:text-xl font-semibold"
-                  style={{
-                    lineHeight: '24.38px',
-                    letterSpacing: '0.3em',
-                  }}
-                >
-                  WELCOME TO
-                </p>
-              )}
-
               {/* Title */}
               <div
                 className="w-[80vw] md:w-[60vw] lg:w-[50vw]"

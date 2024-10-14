@@ -41,7 +41,7 @@ export default function SponsorCard(props: SponsorCardProps) {
     <>
       {imgSrc !== undefined && (
         <div
-          className={`w-[200px] h-[100px] lg:h-[200px] flex justify-center items-center hover:scale-110 hover:duration-300 ${
+          className={`p-3 w-[200px] h-[100px] lg:h-[200px] flex justify-center items-center hover:scale-110 hover:duration-300 ${
             currentHoveredLogo !== '' && currentHoveredLogo !== props.reference
               ? 'opacity-30'
               : 'opacity-100'
