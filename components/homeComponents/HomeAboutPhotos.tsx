@@ -81,7 +81,7 @@ const HomeAboutPhotos = () => {
         >
           <img src="/assets/frog-balloon.png" alt="Balloon" className="w-80 h-auto object-cover" />
         </div>
-        <div className="order-1 lg:order-2 text-center lg:text-left text-[#F7CE79] text-stroke lg:ml-8">
+        <div className="w-[600px] order-1 lg:order-2 text-center lg:text-left text-[#F7CE79] text-stroke lg:ml-8">
           <p className="text-5xl font-bold stroke-rose-700">
             <NumberTicker value={1000} />+ Hackers
           </p>
