@@ -19,13 +19,17 @@ async function sendNotificationsToWalkIns(
     process.env.TWILIO_ACCOUNT_SID,
     process.env.TWILIO_AUTH_TOKEN,
   );
+  const sendgridClient = require('@sendgrid/mail');
+  sendgridClient.setApiKey(process.env.SENDGRID_APIKEY!);
+  // TODO: change message into something works better
+  const messageContent =
+    'Hey there, we are ready to check you into HackUTD! Please come to ECSW so that we can kick start the process!!!';
   try {
     await Promise.all(
       snapshot.docs.map((doc) => {
         if (doc.data().waitListInfo.notificationMethod === 'sms') {
           return twilioClient.messages.create({
-            // TODO: change message into something works better
-            body: 'Hey there, we are ready to check you into HackUTD! Please come to ECSW so that we can kick start the process!!!',
+            body: messageContent,
 
             // If a phone number does not have "+" prefix, phone number is US phone number
             to:
@@ -34,8 +38,15 @@ async function sendNotificationsToWalkIns(
             from: process.env.TWILIO_PHONE_NUMBER,
           });
         } else {
-          // TODO: send an email to user
-          return null;
+          return sendgridClient.send({
+            to: doc.data().waitListInfo.contactInfo,
+            from: {
+              email: process.env.HACKUTD_EMAIL,
+              name: 'HackUTD',
+            },
+            subject: 'Ready for check-in!!!',
+            text: messageContent,
+          });
         }
       }),
     );
