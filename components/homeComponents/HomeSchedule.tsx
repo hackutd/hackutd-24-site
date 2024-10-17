@@ -11,8 +11,8 @@ import topLilypad from '../../public/assets/top_lilypads.png';
 // import leftLilypad from '../../public/assets/left_lilypads.png';
 import ducks from '../../public/assets/ducks.png';
 
-import BoulderLeft from '../assets/BoulderLeft';
-import BoulderRight from '../assets/BoulderRight';
+import BoulderLeft from 'public/assets/boulderLeft.png';
+import BoulderRight from 'public/assets/boulderRight.png';
 
 /* Calendar */
 export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dateCard: Dates }) {
@@ -65,7 +65,6 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
     dateValues['endTime'],
     0,
   );
-
   /* Filter Functionality */
   const [filter, setFilter] = useState('All');
 
@@ -95,7 +94,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
     return (
       showEvent && (
         <>
-          <div className="border-b border-[#4D8889] p-4">
+          <div className="border-b border-[#4D8889] p-2">
             <div className="flex justify-between pb-1">
               <div className="text-md font-bold font-dmSans">{formattedTime}</div>
               <div className="text-md font-bold font-dmSans">{data.title}</div>
@@ -138,18 +137,18 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
   const day2Events = getDailyEvents(day2StartDateAndTime, eventEndDateAndTime);
 
   return (
-    <div className={`${styles.container} pt-[10rem] relative`} id="schedule-section">
+    <div className={`${styles.container} pt-[8rem] relative`} id="schedule-section">
       <BackgroundAssets />
       <div className={styles.content}>
         <div
           style={{ textShadow: '0 4px 4px rgba(0, 0, 0, 0.25)' }}
-          className="text-center text-2xl font-bold text-white p-4 font-montserrat uppercase relative"
+          className="text-center text-2xl font-bold text-white p-2 font-montserrat uppercase relative"
         >
           Schedule
         </div>
         <div
           style={{ textShadow: '0 4px 4px rgba(0, 0, 0, 0.25)' }}
-          className="text-center text-5xl font-bold text-[#F7CE79] p-4 font-fredoka uppercase relative"
+          className="text-center text-4xl font-bold text-[#F7CE79] p-2 font-fredoka uppercase relative"
         >
           What can you expect?
         </div>
@@ -157,11 +156,11 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
         <div className="flex justify-center relative">
           <div
             style={{ width: 'fit-content' }}
-            className="md:flex justify-center items-center bg-white bg-opacity-25 px-20 py-4 rounded-3xl shadow-default"
+            className="md:flex justify-center items-center bg-white bg-opacity-25 px-12 py-2 rounded-3xl shadow-default"
           >
             <div
               onClick={() => changeFilter('All')}
-              className={`text-sm cursor-pointer px-2 h-8 py-1 border-2 rounded-xl border-gray-500
+              className={`text-sm cursor-pointer px-2 h-8 py-1 border-2 rounded-xl 
               ${filter === 'All' ? eventColors['All-Filter'] : eventColors['All']}`}
             >
               All
@@ -169,7 +168,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
 
             <div
               onClick={() => changeFilter('Required')}
-              className={`text-sm cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl bg-white
+              className={`text-sm cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl 
               ${filter === 'Required' ? eventColors['Required-Filter'] : eventColors['Required']}`}
             >
               Required
@@ -177,7 +176,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
 
             <div
               onClick={() => changeFilter('Sponsor')}
-              className={`text-sm cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl bg-white
+              className={`text-sm cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl 
               ${filter === 'Sponsor' ? eventColors['Sponsor-Filter'] : eventColors['Sponsor']}`}
             >
               Sponsor
@@ -185,7 +184,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
 
             <div
               onClick={() => changeFilter('Food')}
-              className={`text-sm cursor-pointer	mx-1 px-2 h-8 py-1 border-2 rounded-xl bg-white
+              className={`text-sm cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl 
               ${filter === 'Food' ? eventColors['Food-Filter'] : eventColors['Food']}`}
             >
               Food
@@ -193,7 +192,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
 
             <div
               onClick={() => changeFilter('Workshop')}
-              className={`text-sm cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl bg-white
+              className={`text-sm cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl 
               ${filter === 'Workshop' ? eventColors['Workshop-Filter'] : eventColors['Workshop']}`}
             >
               Workshop
@@ -201,13 +200,14 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
 
             <div
               onClick={() => changeFilter('Social')}
-              className={`text-sm cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl bg-white
+              className={`text-sm cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl 
               ${filter === 'Social' ? eventColors['Social-Filter'] : eventColors['Social']}`}
             >
               Social
             </div>
           </div>
         </div>
+
         {/* Calendar */}
         {/* TODO: enable this when have schedule data */}
         {/* <div className="md:flex p-1 overflow-y-auto overflow-x-hidden mx-auto lg:w-[80%] w-full h-full">
@@ -218,7 +218,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
             >
               Day 1: Saturday
             </div>
-            <div className="bg-white mb-8 mx-2 p-2 border-2 rounded-2xl border-[#05149C] border-opacity-20">
+            <div className="bg-white mb-8 mx-2 p-2 border-2 rounded-lg border-[#05149C] border-opacity-20">
               {day1Events}
             </div>
           </div>
@@ -230,102 +230,81 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
             >
               Day 2: Sunday
             </div>
-            <div className="bg-white mb-8 mx-2 p-2 border-2 rounded-2xl border-[#05149C] border-opacity-20">
+            <div className="bg-white mb-8 mx-2 p-2 border-2 rounded-lg border-[#05149C] border-opacity-20">
               {day2Events}
             </div>
           </div>
         </div> */}
-        <div className="flex justify-center px-[3rem]">
-          {/* insert duck here */}
-          <Image width={700} height={400} src={ducks.src} alt="ducks.png" />
+        <div className="flex justify-center px-[2rem]">
+          {/* Ducks moving left to right */}
+          <div className={styles.duckAnimation}>
+            <Image width={600} height={300} src={ducks.src} alt="ducks.png" />
+          </div>
         </div>
       </div>
     </div>
   );
 }
 
+/* Background Assets */
+/* Background Assets */
 const BackgroundAssets = () => {
   return (
     <>
-      <BoulderLeft
-        className={styles.boulderLeft}
-        style={{
-          width: '50%',
-          position: 'absolute',
-          zIndex: 2,
-          left: '0',
-          top: '-14px',
-        }}
-      />
-      <BoulderRight
-        className={styles.boulderRight}
-        style={{
-          width: '50%',
-          position: 'absolute',
-          right: '0',
-          zIndex: 2,
-          top: '-4px',
-        }}
-      />
-
-      {/* TODO: make this dynamic */}
-      {/* NOTE: remove this for now since it clutter the UI */}
-      {/* <Image
-        style={{
-          position: 'absolute',
-          top: '70%',
-          right: '0',
-          zIndex: 3,
-        }}
-        width={400}
-        height={170}
-        src={rightLilypad.src}
-        alt="right_lilypads.png"
-      /> */}
-
-      {/* TODO: make this dynamic */}
-      {/* NOTE: remove this for now since it clutter the UI */}
-      {/* <Image
-        style={{
-          position: 'absolute',
-          top: '30%',
-          left: '0',
-          zIndex: 3,
-        }}
-        width={300}
-        height={170}
-        src={leftLilypad.src}
-        alt="left_lilypads.png"
-      /> */}
-
+      {/* Boulder Left */}
       <Image
-        style={{
-          position: 'absolute',
-          top: '10%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          zIndex: 3,
-        }}
-        width={1300}
-        height={1000}
-        className={styles.topLilypad}
-        src={topLilypad.src}
-        alt="top_lilypads.png"
+        src={BoulderLeft.src}
+        className={`${styles.boulderLeft} boulderLeft`}
+        alt="Boulder Left"
+        width={500}
+        height={500}
       />
 
+      {/* Boulder Right */}
       <Image
-        style={{
-          position: 'absolute',
-          top: '0',
-          left: '45%',
-          zIndex: 3,
-        }}
-        width={170}
-        height={170}
-        src={corgiOnBoat.src}
-        className={styles.mascot}
-        alt="corgi_on_boat.png"
+        src={BoulderRight.src}
+        className={`${styles.boulderRight} boulderRight`}
+        alt="Boulder Right"
+        width={500}
+        height={500}
       />
+
+      <div
+        className="image-container"
+        style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}
+      >
+        <Image
+          width={350}
+          height={350}
+          src={corgiOnBoat.src}
+          className={styles.mascot}
+          alt="corgi_on_boat.png"
+          style={{ position: 'relative', top: '-200px', zIndex: 3 }}
+        />
+      </div>
+
+      <div
+        style={{
+          position: 'relative',
+          width: '100vw',
+          height: '50vh',
+        }}
+      >
+        <Image
+          width={1300}
+          height={1000}
+          src={topLilypad.src}
+          alt="top_lilypads.png"
+          style={{
+            position: 'relative',
+            top: '-80%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: '100%',
+            height: '100%',
+          }}
+        />
+      </div>
     </>
   );
 };
