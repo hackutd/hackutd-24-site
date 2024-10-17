@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import UserList from '../adminComponents/UserList';
 import { Tab } from '@headlessui/react';
 import { RegistrationState } from '../../lib/util';
@@ -112,13 +113,16 @@ export default function AllUsersAdminView({
       >
         {/* Header */}
         <div
-          className={`flex flex-row border-b-2 border-gray px-6 py-3 bg-white justify-between sticky top-0`}
+          className={clsx(
+            `flex flex-row border-b-2 border-gray px-6 py-3 justify-between sticky top-0`,
+            `text-[#40B7BA] bg-[rgba(255,255,255,0.8)]`,
+          )}
         >
-          <div className="w-1/2 md:w-2/12">Name</div>
-          <div className="w-1/2 md:w-2/12">Status</div>
-          <div className="w-4/12  hidden md:block">University</div>
-          <div className="w-2/12 hidden md:block">Major</div>
-          <div className="w-2/12  hidden md:block">Year</div>
+          <div className="w-1/2 md:w-2/12 flex items-center justify-center">{/* Name */}</div>
+          <div className="w-1/2 md:w-2/12 flex items-center justify-center">Status</div>
+          <div className="w-4/12  hidden md:flex items-center justify-center">University</div>
+          <div className="w-2/12 hidden md:flex items-center justify-center">Major</div>
+          <div className="w-2/12  hidden md:flex items-center justify-center">Year</div>
         </div>
 
         {/* User List */}
