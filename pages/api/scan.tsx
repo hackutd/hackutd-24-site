@@ -38,8 +38,8 @@ async function checkLateCheckInEligible(userData: Registration) {
   const lateCheckInManager = await db.collection('/miscellaneous').doc('lateCheckInManager').get();
   if (lateCheckInManager && lateCheckInManager.exists) {
     return (
-      userData.waitlistNumber !== undefined &&
-      userData.waitlistNumber <= lateCheckInManager.data().allowedCheckInUpperBound
+      userData.waitListInfo?.waitlistNumber !== undefined &&
+      userData.waitListInfo.waitlistNumber <= lateCheckInManager.data().allowedCheckInUpperBound
     );
   }
   // if no late check-in doc, assume that organizers does not want to use this feature.
