@@ -79,7 +79,11 @@ const HomeAboutPhotos = () => {
           className="order-2 lg:order-1 flex justify-center items-center z-20 lg:justify-end lg:mr-8"
           style={balloonHoverStyle}
         >
-          <img src="/assets/frog-balloon.png" alt="Balloon" className="w-80 h-auto object-cover" />
+          <img
+            src="/assets/frog-balloon-moving.gif"
+            alt="Balloon"
+            className="w-80 h-auto object-cover"
+          />
         </div>
         <div className="w-[600px] order-1 lg:order-2 text-center lg:text-left text-[#F7CE79] text-stroke lg:ml-8">
           <p className="text-5xl font-bold stroke-rose-700">

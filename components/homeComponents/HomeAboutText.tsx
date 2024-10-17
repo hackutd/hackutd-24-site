@@ -68,26 +68,26 @@ const HomeAboutText = () => {
         </p>
         <div className="absolute inset-0 z-9">
           <img
-            src="/assets/fish.png"
+            src="/assets/koi.gif"
             alt="Fish"
             className="absolute hidden md:block"
             style={{
               top: '-10vw',
               right: '12vw',
-              width: '15vw',
-              height: '15vw',
+              width: '10vw',
+              height: '10vw',
               ...fish1HoverStyle,
             }}
           />
           <img
-            src="/assets/fish.png"
+            src="/assets/koi.gif"
             alt="Fish"
             className="absolute transform rotate-180 hidden md:block"
             style={{
               bottom: '-5vw',
               left: '13vw',
-              width: '15vw',
-              height: '15vw',
+              width: '10vw',
+              height: '10vw',
               ...fish2HoverStyle,
             }}
           />
