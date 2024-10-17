@@ -13,6 +13,8 @@ const SCANTYPES_COLLECTION = '/scan-types';
 // Used to dictate that user attempted to claim swag without checking in
 const ILLEGAL_SCAN_NAME = 'Illegal Scan';
 
+const ENABLE_ACCEPT_REJECT_FEATURE = true;
+
 /**
  *
  * Check if a user has checked in into the event
@@ -30,6 +32,27 @@ async function userAlreadyCheckedIn(scans: string[]) {
     }
   });
   return ok;
+}
+
+async function checkLateCheckInEligible(userData: Registration) {
+  const lateCheckInManager = await db.collection('/miscellaneous').doc('lateCheckInManager').get();
+  if (lateCheckInManager && lateCheckInManager.exists) {
+    return (
+      userData.waitListInfo?.waitlistNumber !== undefined &&
+      userData.waitListInfo.waitlistNumber <= lateCheckInManager.data().allowedCheckInUpperBound
+    );
+  }
+  // if no late check-in doc, assume that organizers does not want to use this feature.
+  return true;
+}
+
+async function checkUserIsRejected(userId: string): Promise<boolean> {
+  const snapshot = await db.collection('acceptreject').where('hackerId', '==', userId).get();
+  if (snapshot.docs.length === 0) {
+    return true;
+  }
+  // if user is not accepted by the time they are being checked in, assume that they will be rejected
+  return snapshot.docs[0].data().status !== 'Accepted';
 }
 
 /**
@@ -90,6 +113,17 @@ async function handleScan(req: NextApiRequest, res: NextApiResponse) {
 
     const userCheckedIn = await userAlreadyCheckedIn(scans);
     const scanIsCheckInEvent = await checkIfScanIsCheckIn(bodyData.scan);
+
+    if (!userCheckedIn && scanIsCheckInEvent && ENABLE_ACCEPT_REJECT_FEATURE) {
+      // if user is reject and not eligible for late check-in yet, throw error
+      const userIsRejected = await checkUserIsRejected(snapshot.id);
+      const lateCheckInEligible = await checkLateCheckInEligible(snapshot.data() as Registration);
+      if (userIsRejected && !lateCheckInEligible) {
+        return res
+          .status(400)
+          .json({ code: 'non eligible', message: 'User is not eligible for late check-in yet...' });
+      }
+    }
 
     if (!userCheckedIn && !scanIsCheckInEvent) {
       scans.push({
