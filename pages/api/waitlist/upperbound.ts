@@ -12,13 +12,37 @@ async function sendNotificationsToWalkIns(
 ) {
   const snapshot = await db
     .collection('/registrations')
-    .where('waitlistNumber', '>=', lowerBoundCheckInNumber)
-    .where('waitlistNumber', '<=', upperBoundCheckInNumber)
+    .where('waitListInfo.waitlistNumber', '>=', lowerBoundCheckInNumber)
+    .where('waitListInfo.waitlistNumber', '<=', upperBoundCheckInNumber)
     .get();
-  snapshot.forEach((doc) => {
-    const userPhoneNumber = doc.data().phoneNumber;
-    // TODO: extract phone number and send SMS message to phone number
-  });
+  const twilioClient = require('twilio')(
+    process.env.TWILIO_ACCOUNT_SID,
+    process.env.TWILIO_AUTH_TOKEN,
+  );
+  try {
+    await Promise.all(
+      snapshot.docs.map((doc) => {
+        if (doc.data().waitListInfo.notificationMethod === 'sms') {
+          return twilioClient.messages.create({
+            // TODO: change message into something works better
+            body: 'Hey there, we are ready to check you into HackUTD! Please come to ECSW so that we can kick start the process!!!',
+
+            // If a phone number does not have "+" prefix, phone number is US phone number
+            to:
+              ((doc.data().waitListInfo.contactInfo as string).charAt(0) === '+' ? '' : '+1') +
+              doc.data().waitListInfo.contactInfo,
+            from: process.env.TWILIO_PHONE_NUMBER,
+          });
+        } else {
+          // TODO: send an email to user
+          return null;
+        }
+      }),
+    );
+  } catch (err) {
+    console.error('Error sending notification to users');
+    console.error(err);
+  }
 }
 
 async function handlePostRequest(req: NextApiRequest, res: NextApiResponse) {
