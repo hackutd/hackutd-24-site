@@ -133,7 +133,7 @@ type Registration = {
   majorManual?: string;
   universityManual?: string;
   heardFromManual?: string;
-  waitlistInfo?: {
+  waitListInfo?: {
     waitlistNumber: number;
     notificationMethod: string;
     contactInfo: string;

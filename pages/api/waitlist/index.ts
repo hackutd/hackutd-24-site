@@ -72,12 +72,12 @@ async function assignNewCheckInNumberToUser(
         contactInfo,
       },
     });
-    return 2;
+    return 1;
   }
 }
 
 function alreadyHasCheckInNumber(userData: Registration) {
-  return Object.hasOwn(userData, 'waitlistInfo');
+  return Object.hasOwn(userData, 'waitListInfo');
 }
 
 async function handlePostRequest(req: NextApiRequest, res: NextApiResponse) {
