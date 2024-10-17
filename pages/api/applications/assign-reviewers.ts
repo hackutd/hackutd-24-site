@@ -62,24 +62,34 @@ async function handleAssignReviewers(req: NextApiRequest, res: NextApiResponse) 
   try {
     //  get all non-reviewed applications, no reviewer properties (collections: registration,)
     // assumption made here: each time this api is called, it will assign 2 reviewers to all non-reviewed applications
-    const applicationsSnapshot = await db.collection(REGISTRATION_COLLECTIONS).get();
+    const applicationsSnapshot = await db
+      .collection(REGISTRATION_COLLECTIONS)
+      .where('user.permissions', '==', ['hacker'])
+      .get();
 
     // get all applications that need review and have role of hacker
-    const applicationsNeededForReview = applicationsSnapshot.docs
-      .filter((doc) => !doc.data().reviewer && doc.data().user.permissions.includes('hacker'))
-      .map((doc) => doc.data());
+    const applicationsNeededForReview = applicationsSnapshot.docs.map((doc) => {
+      return {
+        id: doc.id,
+        data: doc.data(),
+      };
+    });
 
     // shuffle the applications to avoid bias
     shuffle(applicationsNeededForReview);
 
     // get all organizers
-    const organizers: any[] = applicationsSnapshot.docs
-      .filter((doc) =>
-        ['super_admin', 'admin'].some((allowedPermission) =>
-          doc.data().user.permissions.includes(allowedPermission),
-        ),
-      )
-      .map((doc) => ({ ...doc.data(), reviewCount: doc.data().reviewCount || 0 }));
+    const organizersSnapshot = await db
+      .collection(REGISTRATION_COLLECTIONS)
+      .where('user.permissions', 'array-contains-any', ['super_admin', 'admin'])
+      .get();
+    const organizers = organizersSnapshot.docs.map((doc) => {
+      return {
+        id: doc.id,
+        data: doc.data(),
+        reviewCount: doc.data().reviewCount || 0,
+      };
+    });
 
     // sort organizers by review count ascending order
     organizers.sort((a, b) => a.reviewCount - b.reviewCount);
@@ -99,6 +109,10 @@ async function handleAssignReviewers(req: NextApiRequest, res: NextApiResponse) 
         .doc(application.id)
         .update({
           reviewer: [reviewer1.id, reviewer2.id],
+          user: {
+            ...application.data.user,
+            permissions: ['hacker', 'in_review'],
+          },
         });
       // increase review count for organizer
       organizers[0].reviewCount++;
