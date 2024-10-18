@@ -21,7 +21,16 @@ export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
 
   useEffect(() => {
     setSponsor(props.sponsorCard);
-  });
+  }, [props.sponsorCard]);
+
+  const sponsorTiers: { [key: string]: Sponsor[] } = sponsor.reduce((acc, curr) => {
+    const tier = curr.tier;
+    if (!acc[tier]) {
+      acc[tier] = [];
+    }
+    acc[tier].push(curr);
+    return acc;
+  }, {} as { [key: string]: Sponsor[] });
 
   return (
     sponsor.length != 0 && (
@@ -60,23 +69,28 @@ export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
               hello@hackutd.co
             </a>
           </h2>
-          {/* Sponsor Card */}
           <section className="flex flex-wrap justify-center p-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-              <LogoContext.Provider value={{ currentHoveredLogo, setCurrentHoveredLogo }}>
-                {sponsor.map(({ link, reference, alternativeReference }, idx) =>
-                  alternativeReference ? (
-                    <SponsorAlternateCard
-                      alternativeReference={alternativeReference}
-                      reference={reference}
-                      key={idx}
-                      link={link}
-                    />
-                  ) : (
-                    <SponsorCard key={idx} link={link} reference={reference} />
-                  ),
-                )}
-              </LogoContext.Provider>
+            <div className="p-4 w-full place-items-center">
+              {['title', 'gold', 'bronze'].map((tier) => (
+                <div key={tier} className="text-center text-3xl text-white font-bold">
+                  <div className="flex gap-20 justify-center items-center">
+                    <LogoContext.Provider value={{ currentHoveredLogo, setCurrentHoveredLogo }}>
+                      {sponsorTiers[tier]?.map(({ link, reference, alternativeReference }, idx) =>
+                        alternativeReference ? (
+                          <SponsorAlternateCard
+                            alternativeReference={alternativeReference}
+                            reference={reference}
+                            key={idx}
+                            link={link}
+                          />
+                        ) : (
+                          <SponsorCard key={idx} link={link} reference={reference} />
+                        ),
+                      )}
+                    </LogoContext.Provider>
+                  </div>
+                </div>
+              ))}
             </div>
           </section>
         </div>
