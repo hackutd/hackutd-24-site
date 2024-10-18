@@ -23,14 +23,14 @@ export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
     setSponsor(props.sponsorCard);
   }, [props.sponsorCard]);
 
-  const sponsorTiers = sponsor.reduce((acc, curr) => {
+  const sponsorTiers: { [key: string]: Sponsor[] } = sponsor.reduce((acc, curr) => {
     const tier = curr.tier;
     if (!acc[tier]) {
       acc[tier] = [];
     }
     acc[tier].push(curr);
     return acc;
-  }, {} as Record<string, Sponsor[]>);
+  }, {} as { [key: string]: Sponsor[] });
 
   return (
     sponsor.length != 0 && (
