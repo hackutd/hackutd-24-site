@@ -178,12 +178,12 @@ function PortalApp({ Component, pageProps }: AppProps) {
                   <AppHeader2_Wrapper />
 
                   {/* Spacer at the top of the page so that content won't be covered by the navbar */}
-                  {router.pathname !== '/' && <div className="hidden md:block h-[86px] shrink-0" />}
+                  {router.pathname !== '/' && <div className="h-[86px] shrink-0" />}
 
                   <Component {...pageProps} />
 
                   {/* Spacer at the bottom of the page for navbar bottom on mobile, so that content won't be covered by the navbar */}
-                  {/*<div className="md:hidden h-[80px] shrink-0" />*/}
+                  <div className="md:hidden h-[80px] shrink-0" />
 
                   <AppNavbarBottom />
                 </div>

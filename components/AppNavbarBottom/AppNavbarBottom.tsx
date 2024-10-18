@@ -116,7 +116,7 @@ export default function AppNavbarBottom(props: Props) {
       className={clsx(
         'md:hidden fixed z-[1000] bottom-2 left-1/2 -translate-x-1/2',
         'bg-[rgba(0,0,0,0.70)] p-3 rounded-xl',
-        'w-[60%] min-w-[200px] max-w-[300px]',
+        'w-[max(60%,250px)] max-w-[300px]',
       )}
     >
       <FloatingDockWrapper

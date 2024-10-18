@@ -249,9 +249,11 @@ export default function UserPage() {
         <meta name="description" content="HackPortal's Admin Page" />
       </Head>
 
-      <section id="subheader" className="p-2 md:p-4">
+      {/* <section id="subheader" className="p-2 md:p-4">
         <AdminHeader />
-      </section>
+      </section> */}
+
+      <div className="p-4 md:p-8" />
 
       <div className="w-full max-w-screen-2xl mb-10" style={{ height: 'calc(100vh - 180px)' }}>
         {currentUser === '' ? (
