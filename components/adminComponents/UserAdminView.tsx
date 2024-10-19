@@ -174,42 +174,55 @@ export default function UserAdminView({
 
   const pageSize = Math.floor(height / 60);
   const startIndex = (currentPage - 1) * pageSize;
+
   // 208 px
   return (
-    <div className="lg:px-14 flex flex-row justify-between h-full">
+    <div
+      className={`
+        lg:mx-14 flex flex-row h-full 
+        bg-[rgba(255,255,255,0.6)] backdrop-blur
+        rounded-2xl
+      `}
+    >
       {/* User List */}
-      <div className="hidden md:block md:w-72">
+      <div className="hidden md:block md:w-72 px-2 py-4">
         {/* Page */}
         <div className="overflow-y-hidden h-[calc(100%-40px)]" ref={ref}>
           {users.slice(startIndex, startIndex + pageSize).map((user) => (
             <div
               key={user.id}
               className={`
-                flex flex-row justify-between items-center w-full py-2 rounded-md mb-3 h-12 p-4
-                shadow-md ${
-                  user.id === currentUserId
-                    ? 'border-primaryDark border-[3px]'
-                    : 'border-complementary/25  border-[1px]'
-                }
+                flex flex-row justify-between items-center w-full py-2 rounded-xl mb-3 h-12 p-4
+                bg-[rgba(255,255,255,0.6)]
+                shadow-md ${user.id === currentUserId ? 'border-primaryDark border-[2px]' : ''}
                 cursor-pointer
               `}
               onClick={() => onUserClick(user.id)}
             >
-              <div className="text-complementary text-lg font-bold whitespace-nowrap overflow-hidden text-ellipsis max-w-[60%]">
+              <div
+                className={`
+                  text-[rgba(19,19,19,1)] font-bold
+                  whitespace-nowrap overflow-hidden text-ellipsis max-w-[50%]
+                `}
+              >
                 {user.user.firstName}
               </div>
               <div
-                className={`py-0.6 px-6 rounded-md  ${
-                  user.status === 'Accepted' ? 'text-[#409019] bg-[#84DF58]/25' : ''
-                } ${user.status === 'Rejected' ? 'text-[#872852] bg-[#EA609C]/25' : ''}
-                  ${user.status === 'In Review' ? 'text-[#F59E0B] bg-[#FDE68A]/25' : ''}
-                  `}
+                className={`
+                  py-1 px-6 text-sm rounded-full
+                  max-w-[50%]
+                  whitespace-nowrap overflow-hidden text-ellipsis
+                  ${user.status === 'Accepted' ? 'bg-[rgb(242,253,226)] text-[rgb(27,111,19)]' : ''}
+                  ${user.status === 'Rejected' ? 'bg-[rgb(255,233,218)] text-[rgb(122,15,39)]' : ''}
+                  ${user.status === 'In Review' ? 'bg-[rgb(213,244,255)] text-[rgb(9,45,122)]' : ''}
+                `}
               >
                 {user.status}
               </div>
             </div>
           ))}
         </div>
+
         {/* Pagination */}
         <Pagination
           currentPage={currentPage}
@@ -220,9 +233,9 @@ export default function UserAdminView({
       </div>
 
       {/* User */}
-      <div className="rounded-2xl border-2 border-gray h-full overflow-y-scroll w-full md:w-[calc(100%-300px)]">
+      <div className="rounded-2xl h-full overflow-y-scroll w-full flex-1">
         {/* Header */}
-        <div className="sticky top-0 bg-white flex flex-row justify-between items-center text-secondary">
+        <div className="sticky top-0 bg-[rgba(255,255,255,0.8)] flex flex-row justify-between items-center text-secondary">
           <div className="flex items-center p-0">
             <ChevronLeftIcon
               className="h-12 w-12 text-sm font-extralight cursor-pointer"
@@ -239,27 +252,40 @@ export default function UserAdminView({
         </div>
 
         {/* Application */}
-        <div className="p-10 text-complementary bg-black/5">
+        <div className="p-10 text-complementary bg-[rgba(255,255,255,0.4)]">
           {/* Application Status */}
           <div className="flex flex-row justify-between items-start">
             <p
-              className={`text-lg font-bold py-1 px-6 rounded-full ${
-                currentUser.status === 'Accepted' ? 'text-[#409019] bg-[#84DF58]/25' : ''
-              } ${currentUser.status === 'Rejected' ? 'text-[#872852] bg-[#EA609C]/25' : ''}
-                  ${currentUser.status === 'In Review' ? 'text-[#F59E0B] bg-[#FDE68A]/25' : ''}
-                  `}
+              className={`
+                text-lg font-bold py-1 px-6 rounded-full
+                ${
+                  currentUser.status === 'Accepted'
+                    ? 'bg-[rgb(242,253,226)] text-[rgb(27,111,19)]'
+                    : ''
+                }
+                ${
+                  currentUser.status === 'Rejected'
+                    ? 'bg-[rgb(255,233,218)] text-[rgb(122,15,39)]'
+                    : ''
+                }
+                ${
+                  currentUser.status === 'In Review'
+                    ? 'bg-[rgb(213,244,255)] text-[rgb(9,45,122)]'
+                    : ''
+                }
+              `}
             >
               {currentUser.status}
             </p>
             <div className="flex flex-row justify-between items-start gap-x-3">
               <button
-                className="rounded-full bg-transparent text-secondary border-2 border-solid border-secondary text-lg font-bold py-2 px-8 hover:border-red-500 hover:text-white hover:bg-red-500 transition"
+                className="rounded-full bg-transparent text-[rgba(66,184,187,1)] border-2 border-solid border-[rgba(66,184,187,1)] text-lg font-bold py-2 px-8 hover:border-red-500 hover:text-white hover:bg-red-500 transition"
                 onClick={() => onAcceptReject('Rejected', applicationNotesRef.current.value)}
               >
                 REJECT
               </button>
               <button
-                className="rounded-full bg-secondary text-white border-2 border-solid border-secondary text-lg font-bold py-2 px-8 hover:border-green-500 hover:bg-green-500 transition"
+                className="rounded-full bg-[rgba(66,184,187,1)] text-white border-2 border-solid border-[rgba(66,184,187,1)] text-lg font-bold py-2 px-8 hover:border-green-500 hover:bg-green-500 transition"
                 onClick={() => onAcceptReject('Accepted', applicationNotesRef.current.value)}
               >
                 ACCEPT
