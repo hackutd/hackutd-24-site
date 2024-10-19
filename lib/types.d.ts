@@ -281,6 +281,7 @@ type Sponsor = {
   link: string;
   reference: string;
   alternativeReference?: string;
+  tier?: string;
 };
 
 type GeneralStats = {
