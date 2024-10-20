@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { RequestHelper } from '../../lib/request-helper';
+import { RequestHelper } from '../../../lib/request-helper';
 import Pagination from './UserAdminPagination';
-import { useAuthContext } from '../../lib/user/AuthContext';
+import { useAuthContext } from '../../../lib/user/AuthContext';
 import {
   CheckIcon,
   ChevronLeftIcon,
@@ -11,15 +11,16 @@ import {
   XIcon,
 } from '@heroicons/react/solid';
 import Link from 'next/link';
+import { getGroupId } from './helpers';
 
 interface UserAdminViewProps {
-  users: UserIdentifier[];
-  currentUserId: string;
+  userGroups: UserIdentifier[][];
+  currentUserGroupId: string;
   goBack: () => void;
   // updateCurrentUser: (value: Omit<UserIdentifier, 'scans'>) => void;
-  onUserClick: (id: string) => void;
-  onAcceptReject: (status: string, notes: string) => void;
-  onUpdateRole: (newRole: UserPermission) => void;
+  onUserGroupClick: (id: string) => void;
+  // onAcceptReject: (status: string, notes: string) => void;
+  // onUpdateRole: (newRole: UserPermission) => void;
 }
 
 interface BasicInfoProps {
@@ -64,19 +65,19 @@ function FRQInfo({ k, v }: BasicInfoProps) {
 }
 
 export default function UserAdminView({
-  users,
-  currentUserId,
+  // onAcceptReject,
+  // onUpdateRole,
+  userGroups,
+  currentUserGroupId,
   goBack,
-  onUserClick,
-  onAcceptReject,
-  onUpdateRole,
+  onUserGroupClick,
 }: UserAdminViewProps) {
   const { user } = useAuthContext();
 
-  let currentUserIndex = 0;
-  const currentUser = users.find((user, i) => {
-    if (user.id === currentUserId) {
-      currentUserIndex = i;
+  let currentUserGroupIndex = 0;
+  const currentUserGroup = userGroups.find((group, i) => {
+    if (getGroupId(group) === currentUserGroupId) {
+      currentUserGroupIndex = i;
       return true;
     }
     return false;
@@ -90,18 +91,18 @@ export default function UserAdminView({
   };
 
   const user_info = [
-    ['Major', currentUser.major],
-    ['Application Score', stringifyScore(currentUser.applicationScore)],
-    ['University', currentUser.university],
-    ['Current Level of Study', currentUser.studyLevel],
-    ['Number of Hackathons Attended', currentUser.hackathonExperience],
-    ['Software Experience', currentUser.softwareExperience],
+    ['Major', currentUserGroup[0].major],
+    ['Application Score', stringifyScore(currentUserGroup[0].applicationScore)],
+    ['University', currentUserGroup[0].university],
+    ['Current Level of Study', currentUserGroup[0].studyLevel],
+    ['Number of Hackathons Attended', currentUserGroup[0].hackathonExperience],
+    ['Software Experience', currentUserGroup[0].softwareExperience],
     [
       'Resume',
-      !currentUser.resume || currentUser.resume === '' ? (
+      !currentUserGroup[0].resume || currentUserGroup[0].resume === '' ? (
         <p>No resume found</p>
       ) : (
-        <Link passHref href={currentUser.resume} target="_blank" rel="noopener noreferrer">
+        <Link passHref href={currentUserGroup[0].resume} target="_blank" rel="noopener noreferrer">
           <button className="border-2 p-3 hover:bg-gray-200">Click here to download resume</button>
         </Link>
       ),
@@ -131,8 +132,8 @@ export default function UserAdminView({
   useEffect(() => {
     const h = Math.max(60, ref.current.offsetHeight);
     setHeight(h);
-    setCurrentPage(Math.floor(currentUserIndex / Math.floor(h / 60) + 1));
-  }, [windowHeight, currentUserIndex]);
+    setCurrentPage(Math.floor(currentUserGroupIndex / Math.floor(h / 60) + 1));
+  }, [windowHeight, currentUserGroupIndex]);
 
   const updateRole = async () => {
     if (!organizer.permissions.includes('super_admin')) {
@@ -155,7 +156,7 @@ export default function UserAdminView({
           },
         },
         {
-          userId: currentUser.id,
+          userId: currentUserGroup[0].id,
           newRole,
         },
       );
@@ -163,7 +164,7 @@ export default function UserAdminView({
         setErrors([...errors, data.msg]);
       } else {
         alert(data.msg);
-        onUpdateRole(newRole as UserPermission);
+        // onUpdateRole(newRole as UserPermission);
       }
     } catch (error) {
       console.error(error);
@@ -192,16 +193,18 @@ export default function UserAdminView({
       <div className="hidden md:block md:w-72 px-2 py-4">
         {/* Page */}
         <div className="overflow-y-hidden h-[calc(100%-40px)]" ref={ref}>
-          {users.slice(startIndex, startIndex + pageSize).map((user) => (
+          {userGroups.slice(startIndex, startIndex + pageSize).map((group) => (
             <div
-              key={user.id}
+              key={getGroupId(group)}
               className={`
                 flex flex-row justify-center items-center w-full py-2 rounded-xl mb-3 h-12 p-4
                 bg-[rgba(255,255,255,0.6)]
-                shadow-md ${user.id === currentUserId ? 'border-primaryDark border-[2px]' : ''}
+                shadow-md ${
+                  getGroupId(group) === currentUserGroupId ? 'border-primaryDark border-[2px]' : ''
+                }
                 cursor-pointer
               `}
-              onClick={() => onUserClick(user.id)}
+              onClick={() => onUserGroupClick(getGroupId(group))}
             >
               {/* <div
                 className={`
@@ -211,17 +214,30 @@ export default function UserAdminView({
               >
                 {user.user.firstName}
               </div> */}
+
               <div
                 className={`
                   py-1 px-6 text-sm font-bold rounded-full
                   flex-1 flex flex-row justify-center items-center
                   whitespace-nowrap overflow-hidden text-ellipsis
-                  ${user.status === 'Accepted' ? 'bg-[rgb(242,253,226)] text-[rgb(27,111,19)]' : ''}
-                  ${user.status === 'Rejected' ? 'bg-[rgb(255,233,218)] text-[rgb(122,15,39)]' : ''}
-                  ${user.status === 'In Review' ? 'bg-[rgb(213,244,255)] text-[rgb(9,45,122)]' : ''}
+                  ${
+                    group[0].status === 'Accepted'
+                      ? 'bg-[rgb(242,253,226)] text-[rgb(27,111,19)]'
+                      : ''
+                  }
+                  ${
+                    group[0].status === 'Rejected'
+                      ? 'bg-[rgb(255,233,218)] text-[rgb(122,15,39)]'
+                      : ''
+                  }
+                  ${
+                    group[0].status === 'In Review'
+                      ? 'bg-[rgb(213,244,255)] text-[rgb(9,45,122)]'
+                      : ''
+                  }
                 `}
               >
-                {user.status}
+                {group[0].status}
               </div>
             </div>
           ))}
@@ -230,7 +246,7 @@ export default function UserAdminView({
         {/* Pagination */}
         <Pagination
           currentPage={currentPage}
-          totalCount={users.length}
+          totalCount={userGroups.length}
           pageSize={pageSize}
           onPageChange={(page) => setCurrentPage(page)}
         />
@@ -243,11 +259,23 @@ export default function UserAdminView({
           <div className="flex items-center p-0">
             <ChevronLeftIcon
               className="h-12 w-12 text-sm font-extralight cursor-pointer"
-              onClick={() => onUserClick(users[currentUserIndex - 1]?.id || '')}
+              onClick={() =>
+                onUserGroupClick(
+                  userGroups[currentUserGroupIndex - 1]
+                    ? getGroupId(userGroups[currentUserGroupIndex - 1])
+                    : '',
+                )
+              }
             />
             <ChevronRightIcon
               className="h-12 w-12 text-sm font-extralight cursor-pointer"
-              onClick={() => onUserClick(users[currentUserIndex + 1]?.id || '')}
+              onClick={() =>
+                onUserGroupClick(
+                  userGroups[currentUserGroupIndex + 1]
+                    ? getGroupId(userGroups[currentUserGroupIndex - 1])
+                    : '',
+                )
+              }
             />
           </div>
           <div onClick={goBack} className="p-3">
@@ -263,35 +291,35 @@ export default function UserAdminView({
               className={`
                 font-bold py-1 px-6 rounded-full
                 ${
-                  currentUser.status === 'Accepted'
+                  currentUserGroup[0].status === 'Accepted'
                     ? 'bg-[rgb(242,253,226)] text-[rgb(27,111,19)]'
                     : ''
                 }
                 ${
-                  currentUser.status === 'Rejected'
+                  currentUserGroup[0].status === 'Rejected'
                     ? 'bg-[rgb(255,233,218)] text-[rgb(122,15,39)]'
                     : ''
                 }
                 ${
-                  currentUser.status === 'In Review'
+                  currentUserGroup[0].status === 'In Review'
                     ? 'bg-[rgb(213,244,255)] text-[rgb(9,45,122)]'
                     : ''
                 }
               `}
             >
-              {currentUser.status}
+              {currentUserGroup[0].status}
             </p>
 
             <div className="text-sm flex-wrap gap-y-2 flex flex-row justify-between items-start gap-x-3">
               <button
                 className="rounded-full bg-transparent text-[rgba(66,184,187,1)] border-2 border-solid border-[rgba(66,184,187,1)] font-bold py-2 px-8 hover:border-red-500 hover:text-white hover:bg-red-500 transition"
-                onClick={() => onAcceptReject('Rejected', applicationNotesRef.current.value)}
+                // onClick={() => onAcceptReject('Rejected', applicationNotesRef.current.value)}
               >
                 REJECT
               </button>
               <button
                 className="rounded-full bg-[rgba(66,184,187,1)] text-white border-2 border-solid border-[rgba(66,184,187,1)] font-bold py-2 px-8 hover:border-green-500 hover:bg-green-500 transition"
-                onClick={() => onAcceptReject('Accepted', applicationNotesRef.current.value)}
+                // onClick={() => onAcceptReject('Accepted', applicationNotesRef.current.value)}
               >
                 ACCEPT
               </button>
@@ -307,24 +335,27 @@ export default function UserAdminView({
               <div className="flex flex-col basis-0 flex-grow">
                 <BasicInfo
                   k="Name"
-                  v={currentUser.user.firstName + ' ' + currentUser.user.lastName}
+                  v={currentUserGroup[0].user.firstName + ' ' + currentUserGroup[0].user.lastName}
                   locked={true}
                   canUnlock={organizer.permissions.includes('super_admin')}
                 />
-                <BasicInfo k="Major" v={currentUser.major} />
-                <BasicInfo k="Level of Study" v={currentUser.studyLevel} />
+                <BasicInfo k="Major" v={currentUserGroup[0].major} />
+                <BasicInfo k="Level of Study" v={currentUserGroup[0].studyLevel} />
               </div>
 
               <div className="flex flex-col basis-0 flex-grow">
                 <BasicInfo
                   k="School"
-                  v={currentUser.university ?? currentUser.universityManual}
+                  v={currentUserGroup[0].university ?? currentUserGroup[0].universityManual}
                   locked={true}
                   canUnlock={organizer.permissions.includes('super_admin')}
                 />
-                <BasicInfo k="Software Experience" v={currentUser.softwareExperience} />
+                <BasicInfo k="Software Experience" v={currentUserGroup[0].softwareExperience} />
                 {/* this should PROBABLY be currentUser.hackathonNumber, but I think the registration interface is populated incorrectly */}
-                <BasicInfo k="Hackathons Attended" v={`${currentUser.hackathonExperience}`} />
+                <BasicInfo
+                  k="Hackathons Attended"
+                  v={`${currentUserGroup[0].hackathonExperience}`}
+                />
               </div>
             </div>
 
@@ -333,17 +364,17 @@ export default function UserAdminView({
               <p className="font-bold text-xl text-black">Application Score</p>
 
               <p className="text-8xl font-dmSans">
-                {currentUser.applicationScore.acceptCount -
-                  currentUser.applicationScore.rejectCount}
+                {currentUserGroup[0].applicationScore.acceptCount -
+                  currentUserGroup[0].applicationScore.rejectCount}
               </p>
 
               <p className="italic text-gray-600">
                 <span className="text-green-500">
-                  {currentUser.applicationScore.acceptCount} accepted
+                  {currentUserGroup[0].applicationScore.acceptCount} accepted
                 </span>{' '}
                 /{' '}
                 <span className="text-red-500">
-                  {currentUser.applicationScore.rejectCount} rejected
+                  {currentUserGroup[0].applicationScore.rejectCount} rejected
                 </span>
               </p>
 
@@ -390,21 +421,21 @@ export default function UserAdminView({
           <div className="flex flex-col w-full">
             <FRQInfo
               k={'Why do you want to attend HackUTD Ripple Effect?'}
-              v={currentUser.whyAttend}
+              v={currentUserGroup[0].whyAttend}
             />
             <FRQInfo
               k={'How many hackathons have you submitted to and what did you learn from them?'}
-              v={currentUser.hackathonNumber}
+              v={currentUserGroup[0].hackathonNumber}
             />
             <FRQInfo
               k={
                 "If you haven't been to a hackathon, what do you hope to learn from HackUTD Ripple Effect?"
               }
-              v={currentUser.hackathonFirstTimer}
+              v={currentUserGroup[0].hackathonFirstTimer}
             />
             <FRQInfo
               k={'What are you looking forward to at HackUTD Ripple Effect?'}
-              v={currentUser.lookingForward}
+              v={currentUserGroup[0].lookingForward}
             />
           </div>
         </div>
