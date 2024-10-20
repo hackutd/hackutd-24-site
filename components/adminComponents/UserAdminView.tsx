@@ -57,8 +57,8 @@ function BasicInfo({ k, v, locked, canUnlock }: BasicInfoProps) {
 function FRQInfo({ k, v }: BasicInfoProps) {
   return (
     <div className="flex flex-col my-4">
-      <p className="text-2xl font-bold text-black">{k}</p>
-      <p className="text-lg text-black">{v}</p>
+      <p className="text-2xl font-bold text-black mb-2">{k}</p>
+      <p className=" text-black">{v}</p>
     </div>
   );
 }
@@ -71,6 +71,8 @@ export default function UserAdminView({
   onAcceptReject,
   onUpdateRole,
 }: UserAdminViewProps) {
+  const { user } = useAuthContext();
+
   let currentUserIndex = 0;
   const currentUser = users.find((user, i) => {
     if (user.id === currentUserId) {
@@ -137,6 +139,7 @@ export default function UserAdminView({
       alert('You do not have permission to perform this functionality');
       return;
     }
+
     try {
       const { status, data } = await RequestHelper.post<
         {
@@ -166,6 +169,7 @@ export default function UserAdminView({
       console.error(error);
       setErrors((prev) => [...prev, 'Unexpected error. Please try again later']);
     }
+
     // TODO: Make request to backend to update user roles
   };
 
@@ -192,25 +196,25 @@ export default function UserAdminView({
             <div
               key={user.id}
               className={`
-                flex flex-row justify-between items-center w-full py-2 rounded-xl mb-3 h-12 p-4
+                flex flex-row justify-center items-center w-full py-2 rounded-xl mb-3 h-12 p-4
                 bg-[rgba(255,255,255,0.6)]
                 shadow-md ${user.id === currentUserId ? 'border-primaryDark border-[2px]' : ''}
                 cursor-pointer
               `}
               onClick={() => onUserClick(user.id)}
             >
-              <div
+              {/* <div
                 className={`
                   text-[rgba(19,19,19,1)] font-bold
                   whitespace-nowrap overflow-hidden text-ellipsis max-w-[50%]
                 `}
               >
                 {user.user.firstName}
-              </div>
+              </div> */}
               <div
                 className={`
-                  py-1 px-6 text-sm rounded-full
-                  max-w-[50%]
+                  py-1 px-6 text-sm font-bold rounded-full
+                  flex-1 flex flex-row justify-center items-center
                   whitespace-nowrap overflow-hidden text-ellipsis
                   ${user.status === 'Accepted' ? 'bg-[rgb(242,253,226)] text-[rgb(27,111,19)]' : ''}
                   ${user.status === 'Rejected' ? 'bg-[rgb(255,233,218)] text-[rgb(122,15,39)]' : ''}
@@ -252,12 +256,12 @@ export default function UserAdminView({
         </div>
 
         {/* Application */}
-        <div className="p-10 text-complementary bg-[rgba(255,255,255,0.4)]">
+        <div className="p-5 sm:p-10 text-complementary bg-[rgba(255,255,255,0.4)]">
           {/* Application Status */}
-          <div className="flex flex-row justify-between items-start">
+          <div className="flex-wrap gap-y-2 flex flex-row justify-between items-center">
             <p
               className={`
-                text-lg font-bold py-1 px-6 rounded-full
+                font-bold py-1 px-6 rounded-full
                 ${
                   currentUser.status === 'Accepted'
                     ? 'bg-[rgb(242,253,226)] text-[rgb(27,111,19)]'
@@ -277,26 +281,29 @@ export default function UserAdminView({
             >
               {currentUser.status}
             </p>
-            <div className="flex flex-row justify-between items-start gap-x-3">
+
+            <div className="text-sm flex-wrap gap-y-2 flex flex-row justify-between items-start gap-x-3">
               <button
-                className="rounded-full bg-transparent text-[rgba(66,184,187,1)] border-2 border-solid border-[rgba(66,184,187,1)] text-lg font-bold py-2 px-8 hover:border-red-500 hover:text-white hover:bg-red-500 transition"
+                className="rounded-full bg-transparent text-[rgba(66,184,187,1)] border-2 border-solid border-[rgba(66,184,187,1)] font-bold py-2 px-8 hover:border-red-500 hover:text-white hover:bg-red-500 transition"
                 onClick={() => onAcceptReject('Rejected', applicationNotesRef.current.value)}
               >
                 REJECT
               </button>
               <button
-                className="rounded-full bg-[rgba(66,184,187,1)] text-white border-2 border-solid border-[rgba(66,184,187,1)] text-lg font-bold py-2 px-8 hover:border-green-500 hover:bg-green-500 transition"
+                className="rounded-full bg-[rgba(66,184,187,1)] text-white border-2 border-solid border-[rgba(66,184,187,1)] font-bold py-2 px-8 hover:border-green-500 hover:bg-green-500 transition"
                 onClick={() => onAcceptReject('Accepted', applicationNotesRef.current.value)}
               >
                 ACCEPT
               </button>
             </div>
           </div>
+
           <div className="my-6 w-full border-2 border-gray-200 rounded-md" />
+
           {/* Basic Information */}
-          <div className="flex flex-row text-xl">
+          <div className="flex flex-col-reverse sm:flex-row gap-2">
             {/* Name, School, etc... */}
-            <div className="flex flex-row w-3/5">
+            <div className="flex flex-row gap-6 sm:w-3/5">
               <div className="flex flex-col basis-0 flex-grow">
                 <BasicInfo
                   k="Name"
@@ -307,6 +314,7 @@ export default function UserAdminView({
                 <BasicInfo k="Major" v={currentUser.major} />
                 <BasicInfo k="Level of Study" v={currentUser.studyLevel} />
               </div>
+
               <div className="flex flex-col basis-0 flex-grow">
                 <BasicInfo
                   k="School"
@@ -319,14 +327,17 @@ export default function UserAdminView({
                 <BasicInfo k="Hackathons Attended" v={`${currentUser.hackathonExperience}`} />
               </div>
             </div>
+
             {/* Application Score */}
-            <div className="flex flex-col items-center w-2/5 text-black">
+            <div className="flex flex-col items-center sm:w-2/5 text-black">
               <p className="font-bold text-xl text-black">Application Score</p>
+
               <p className="text-8xl font-dmSans">
                 {currentUser.applicationScore.acceptCount -
                   currentUser.applicationScore.rejectCount}
               </p>
-              <p className="text-lg italic text-gray-600">
+
+              <p className="italic text-gray-600">
                 <span className="text-green-500">
                   {currentUser.applicationScore.acceptCount} accepted
                 </span>{' '}
@@ -335,14 +346,38 @@ export default function UserAdminView({
                   {currentUser.applicationScore.rejectCount} rejected
                 </span>
               </p>
-              <button
-                className="mt-6 text-white font-bold text-2xl rounded-full bg-gray-700 transition hover:text-gray-700 hover:bg-white p-2 px-6"
-                onClick={openResume}
-              >
-                Resume
-              </button>
+
+              {user.permissions.includes('super_admin') && (
+                <div className="flex-wrap flex flex-row gap-2 p-3 w-full">
+                  <select
+                    value={newRole}
+                    onChange={(e) => {
+                      setNewRole(e.target.value);
+                    }}
+                    name="new_role"
+                    className="flex-1 border-2 rounded-xl p-2"
+                  >
+                    <option value="">Choose a role</option>
+                    <option value="super_admin">Super Admin</option>
+                    <option value="admin">Admin</option>
+                    <option value="hacker">Hacker</option>
+                  </select>
+
+                  {newRole !== '' && (
+                    <button
+                      onClick={() => {
+                        updateRole();
+                      }}
+                      className="flex-1 font-bold bg-[rgba(66,184,187,1)] text-white p-2 rounded-xl"
+                    >
+                      Update Role
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
           </div>
+
           {/* Notes */}
           <div>
             <textarea
