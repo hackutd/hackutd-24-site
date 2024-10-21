@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import SplitType from 'split-type';
 import Image from 'next/image';
+import Link from 'next/link'; // Import Link for Apply button
 import MLH_Sticker from '../../public/assets/mlh-2025.png';
 import HackUTDTitle from '../../public/assets/HackUTD 2024 Title.png';
 import DuckMoving from '../../public/assets/duck-moving.gif';
@@ -215,6 +216,7 @@ export default function HomeHero2() {
   const mascotRef = useRef(null);
   const welcomeTextRef = useRef(null);
   const dateTextRef = useRef(null);
+  const applyButtonRef = useRef(null); // Ref for the Apply button
   const slingshotRef = useRef(null); // Ref for slingshot element
 
   useEffect(() => {
@@ -261,10 +263,20 @@ export default function HomeHero2() {
           '-=0.5',
         );
       }
+
+      // Animate apply button
+      if (applyButtonRef.current) {
+        tl.fromTo(
+          applyButtonRef.current,
+          { opacity: 0, y: 50 },
+          { opacity: 1, y: 0, duration: 1.5, ease: 'power3.out' },
+          '-=0.5',
+        );
+      }
     }
   }, [isHeroLoaded]);
 
-  // Toggle between showing/hiding the welcome, title, and date when mascot or duck is clicked
+  // Toggle between showing/hiding the welcome, title, date, and apply button when mascot or duck is clicked
   const handleMascotClick = (color) => {
     const tl = gsap.timeline();
 
@@ -278,21 +290,27 @@ export default function HomeHero2() {
         duration: 1.5,
         ease: 'power3.inOut',
         onComplete: () => setShowSlingshot(false),
-      }).to([welcomeTextRef.current, titleRef.current, dateTextRef.current], {
-        opacity: 1,
-        y: 0,
-        duration: 1.5, // Smooth return of the text
-        ease: 'power3.inOut',
-      });
+      }).to(
+        [welcomeTextRef.current, titleRef.current, dateTextRef.current, applyButtonRef.current],
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1.5, // Smooth return of the text and button
+          ease: 'power3.inOut',
+        },
+      );
     } else {
       // Hide the text and show the slingshot
-      tl.to([welcomeTextRef.current, titleRef.current, dateTextRef.current], {
-        opacity: 0,
-        y: -50,
-        duration: 1.5, // Smooth hiding of the text
-        ease: 'power3.inOut',
-        onComplete: () => setShowSlingshot(true),
-      });
+      tl.to(
+        [welcomeTextRef.current, titleRef.current, dateTextRef.current, applyButtonRef.current],
+        {
+          opacity: 0,
+          y: -50,
+          duration: 1.5, // Smooth hiding of the text and button
+          ease: 'power3.inOut',
+          onComplete: () => setShowSlingshot(true),
+        },
+      );
     }
   };
 
@@ -394,6 +412,15 @@ export default function HomeHero2() {
                 >
                   NOV 16 - 17
                 </p>
+
+                {/* Apply Button */}
+                <div ref={applyButtonRef}>
+                  <Link href="/register">
+                    <div className="py-2 px-4 mt-4 rounded-[30px] text-white bg-[#F7CE79] font-jua text-xl cursor-pointer">
+                      Apply
+                    </div>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
