@@ -135,10 +135,7 @@ export default function WaitlistCheckinPage() {
         <title>HackPortal - Admin</title>
         <meta name="description" content="HackPortal's Admin Page" />
       </Head>
-      <section className="p-4">
-        <AdminHeader />
-      </section>
-      <div className="flex flex-col justify-center">
+      <div className="mt-4 flex flex-col justify-center">
         <div className="my-6 mx-auto">
           <div className="flex gap-x-4 mb-10 items-center">
             <h1 className="text-lg">Set late check-in eligible upper bound: </h1>
@@ -148,12 +145,13 @@ export default function WaitlistCheckinPage() {
               onChange={(e) => setUpperBoundValue(parseInt(e.target.value))}
             />
             <button
-              className="rounded-lg border border-green-900 p-3 text-green-900 hover:bg-green-400"
+              className="rounded-full bg-[rgba(66,184,187,1)] text-white border-2 border-solid border-[rgba(66,184,187,1)] font-bold py-2 px-8 hover:border-white hover:text-[rgba(66,184,187,1)] hover:bg-white transition"
+              // Score of 4 means strong YES
               onClick={async () => {
                 await handleUpdateLateCheckInUpperBound(upperBoundValue);
               }}
             >
-              Update
+              UPDATE
             </button>
           </div>
           <div className="flex flex-col gap-y-4">

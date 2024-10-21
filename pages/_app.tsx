@@ -48,7 +48,7 @@ function PortalApp({ Component, pageProps }: AppProps) {
 
   const duckBackgroundPathnames = ['/profile', '/profile/application/edit'];
   const registerBackgroundPathnames = ['/register', '/auth'];
-  const cloudBackgroundPathnames = ['/admin', '/admin/scan', '/admin/users'];
+  const cloudBackgroundPathnames = ['/admin', '/admin/scan', '/admin/users', '/admin/waitlist'];
 
   const faqRef = useRef<HTMLDivElement | null>(null);
   const aboutRef = useRef<HTMLDivElement | null>(null);
