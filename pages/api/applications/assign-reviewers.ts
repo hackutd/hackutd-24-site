@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { app, firestore } from 'firebase-admin';
 import initializeApi from '../../../lib/admin/init';
 import { userIsAuthorized } from '../../../lib/authorization/check-authorization';
+import { generateGroupsFromUserData } from '../users';
 
 initializeApi();
 
@@ -68,12 +69,14 @@ async function handleAssignReviewers(req: NextApiRequest, res: NextApiResponse) 
       .get();
 
     // get all applications that need review and have role of hacker
-    const applicationsNeededForReview = applicationsSnapshot.docs.map((doc) => {
-      return {
-        id: doc.id,
-        data: doc.data(),
-      };
-    });
+    const applicationsNeededForReview: Registration[][] = generateGroupsFromUserData(
+      applicationsSnapshot.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+        } as Registration;
+      }),
+    );
 
     // shuffle the applications to avoid bias
     shuffle(applicationsNeededForReview);
@@ -101,19 +104,24 @@ async function handleAssignReviewers(req: NextApiRequest, res: NextApiResponse) 
       // get organizer 1
       const reviewer1 = organizers[0];
       const reviewer2 = organizers[1];
-      const application = applicationsNeededForReview.pop();
+      const applications = applicationsNeededForReview.pop();
 
-      // update database for registration collection
-      await db
-        .collection(REGISTRATION_COLLECTIONS)
-        .doc(application.id)
-        .update({
-          reviewer: [reviewer1.id, reviewer2.id],
-          user: {
-            ...application.data.user,
-            permissions: ['hacker', 'in_review'],
-          },
-        });
+      await Promise.all(
+        applications.map((application) => {
+          // update database for registration collection
+          return db
+            .collection(REGISTRATION_COLLECTIONS)
+            .doc(application.id)
+            .update({
+              reviewer: [reviewer1.id, reviewer2.id],
+              user: {
+                ...application.user,
+                permissions: ['hacker', 'in_review'],
+              },
+            });
+        }),
+      );
+
       // increase review count for organizer
       organizers[0].reviewCount++;
       organizers[1].reviewCount++;
