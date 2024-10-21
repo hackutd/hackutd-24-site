@@ -1,5 +1,6 @@
 const { app, firestore } = require('firebase-admin');
 const admin = require('firebase-admin');
+const { generateGroupsFromUserData } = require('./pages/api/users')
 
 /**
  *
@@ -77,13 +78,13 @@ async function assignReviewers() {
       .where('user.permissions', '==', ['hacker'])
       .get();
 
-    // Get all applications that need review and have role of hacker
-    const applicationsNeededForReview = applicationsSnapshot.docs.map((doc) => {
+    // get all applications that need review and have role of hacker
+    const applicationsNeededForReview: Registration[][] = generateGroupsFromUserData(applicationsSnapshot.docs.map((doc) => {
       return {
         id: doc.id,
-        data: doc.data(),
-      };
-    });
+        ...doc.data(),
+      } as Registration;
+    }));
 
     // Shuffle the applications to avoid bias
     shuffle(applicationsNeededForReview);
@@ -108,19 +109,23 @@ async function assignReviewers() {
     while (applicationsNeededForReview.length > 0) {
       const reviewer1 = organizers[0];
       const reviewer2 = organizers[1];
-      const application = applicationsNeededForReview.pop();
+      const applications = applicationsNeededForReview.pop();
 
-      // Update the database for registration collection
-      await db
-        .collection(REGISTRATION_COLLECTIONS)
-        .doc(application.id)
-        .update({
-          reviewer: [reviewer1.id, reviewer2.id],
-          user: {
-            ...application.data.user,
-            permissions: ['hacker', 'in_review'],
-          },
-        });
+
+      await Promise.all(applications.map(application => {
+        // update database for registration collection
+        return db
+          .collection(REGISTRATION_COLLECTIONS)
+          .doc(application.id)
+          .update({
+            reviewer: [reviewer1.id, reviewer2.id],
+            user: {
+              ...application.user,
+              permissions: ['hacker', 'in_review'],
+            },
+          });
+
+      }))
 
       // Increase review count for the organizers
       organizers[0].reviewCount++;
