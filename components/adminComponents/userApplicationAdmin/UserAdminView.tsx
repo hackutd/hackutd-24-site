@@ -132,6 +132,7 @@ export default function UserAdminView({
                     ? 'bg-[rgb(213,244,255)] text-[rgb(9,45,122)]'
                     : ''
                 }
+                ${currentApplicant.status === 'Maybe' ? 'bg-yellow-200 text-[rgb(9,45,122)]' : ''}
               `}
         >
           {currentApplicant.status}

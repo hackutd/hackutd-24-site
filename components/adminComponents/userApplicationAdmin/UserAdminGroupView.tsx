@@ -126,6 +126,7 @@ export default function UserAdminGroupView({
                       ? 'bg-[rgb(213,244,255)] text-[rgb(9,45,122)]'
                       : ''
                   }
+                  ${group[0].status === 'Maybe' ? 'bg-yellow-200 text-[rgb(9,45,122)]' : ''}
                 `}
               >
                 {group[0].status}

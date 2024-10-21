@@ -58,65 +58,18 @@ export default function UserPage() {
       })
     )['data'];
 
-    const getHackerAppVerdict = ({
-      acceptCount,
-      rejectCount,
-      alreadyJudged,
-    }: {
-      acceptCount: number;
-      rejectCount: number;
-      alreadyJudged: boolean;
-    }) => {
-      if (allowRegistrationState.allowRegistrations && !alreadyJudged && acceptCount < 1000000000) {
-        return 'In Review';
-      }
-      return acceptCount - rejectCount >= 2 ? 'Accepted' : 'Rejected';
-    };
-
-    const hackersStatus = (
-      await RequestHelper.get<
-        Record<
-          string,
-          {
-            acceptCount: number;
-            rejectCount: number;
-            alreadyJudged: boolean;
-          }
-        >
-      >(`/api/acceptreject`, {
-        headers: {
-          Authorization: user.token,
-        },
-      })
-    )['data'];
-
     setRegistrationStatus(
       allowRegistrationState.allowRegistrations ? RegistrationState.OPEN : RegistrationState.CLOSED,
     );
 
     const userGroupsData: UserIdentifier[][] = (
-      await RequestHelper.get<Registration[][]>('/api/users', {
+      await RequestHelper.get<UserIdentifier[][]>('/api/users', {
         headers: {
           Authorization: user.token,
         },
       })
-    )['data'].map((userGroup) => {
-      return userGroup.map((eachUser) => {
-        const hackerApplicationScore = !Object.hasOwn(hackersStatus, eachUser.id)
-          ? { acceptCount: 0, rejectCount: 0, alreadyJudged: false }
-          : hackersStatus[eachUser.id];
-
-        return {
-          ...eachUser,
-          status: getHackerAppVerdict(hackerApplicationScore),
-          selected: false,
-          applicationScore: hackerApplicationScore,
-        };
-      });
-    });
-
+    )['data'];
     setUserGroups(userGroupsData);
-    // setFilteredUsers([...usersData.filter((user) => user.user.permissions.includes('hacker'))]);
     setLoading(false);
   }
 

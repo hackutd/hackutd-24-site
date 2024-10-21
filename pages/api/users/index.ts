@@ -151,6 +151,11 @@ export function generateGroupsFromUserData(userList: Registration[]): Registrati
   return ret;
 }
 
+async function checkDecisionIsReleased() {
+  const systemManagerDoc = await db.collection('/miscellaneous').doc('preferences').get();
+  return systemManagerDoc.data().applicationDecisions;
+}
+
 /**
  *
  * API endpoint to fetch all users from the database
@@ -175,7 +180,8 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
       msg: 'Request is not authorized to perform admin functionality.',
     });
   }
-
+  const decisionReleased = await checkDecisionIsReleased();
+  const statusString = ['Reject', 'Maybe', 'Maybe', 'Accepted'];
   const assignedAppCollectionRef = await db
     .collection(USERS_COLLECTION)
     .where('reviewer', 'array-contains', userData.id)
@@ -198,10 +204,17 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
           .collection(SCORING_COLLECTION)
           .where('hackerId', '==', doc.id)
           .get();
-        const organizerAlreadyReviewedApp =
-          scoringSnapshot.docs.find((d) => d.data().adminId === userData.id) !== undefined;
-        if (scoringSnapshot.empty || !organizerAlreadyReviewedApp) {
-          return data;
+        const organizerReview = scoringSnapshot.docs.find((d) => d.data().adminId === userData.id);
+        const appScore = scoringSnapshot.docs.reduce((acc, doc) => {
+          if (doc.data().score === 4) return acc + 1;
+          if (doc.data().score === 1) return acc - 1;
+          return acc;
+        }, 0);
+        if (scoringSnapshot.empty || organizerReview === undefined) {
+          return {
+            ...data,
+            status: decisionReleased ? (appScore >= 2 ? 'Accepted' : 'Rejected') : 'In Review',
+          };
         }
         return {
           ...data,
@@ -212,19 +225,52 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
               note: data.note,
             };
           }),
+          status: decisionReleased
+            ? appScore >= 2
+              ? 'Accepted'
+              : 'Rejected'
+            : statusString[organizerReview.data().score - 1],
         };
       }),
   );
   const data = [
-    ...assignedAppCollectionRef.docs.map((doc) => {
-      const data = doc.data();
-      delete data.reviewer; // Remove reviewer data from response
-      delete data.github; // Remove github data from response
-      delete data.linkedin; // Remove linkedin data from response
-      delete data.resume; // Remove resume data from response
-      delete data.phoneNumber; // Remove phone number data from response
-      return data;
-    }),
+    ...(await Promise.all(
+      assignedAppCollectionRef.docs.map(async (doc) => {
+        const data = doc.data();
+        delete data.reviewer; // Remove reviewer data from response
+        delete data.github; // Remove github data from response
+        delete data.linkedin; // Remove linkedin data from response
+        delete data.resume; // Remove resume data from response
+        delete data.phoneNumber; // Remove phone number data from response
+        const scoringSnapshot = await db
+          .collection(SCORING_COLLECTION)
+          .where('hackerId', '==', doc.id)
+          .get();
+        const organizerReview = scoringSnapshot.docs.find((d) => d.data().adminId === userData.id);
+        if (!decisionReleased) {
+          return {
+            ...data,
+            status: organizerReview ? statusString[organizerReview.data().score - 1] : 'In Review',
+          };
+        }
+        const appScore = scoringSnapshot.docs.reduce((acc, doc) => {
+          if (doc.data().score === 4) return acc + 1;
+          if (doc.data().score === 1) return acc - 1;
+          return acc;
+        }, 0);
+        return {
+          ...data,
+          scoring: scoringSnapshot.docs.map((doc) => {
+            const data = doc.data();
+            return {
+              score: data.score,
+              note: data.note,
+            };
+          }),
+          status: appScore >= 2 ? 'Accepted' : 'Rejected',
+        };
+      }),
+    )),
     ...commonAppWithScores,
   ];
 
