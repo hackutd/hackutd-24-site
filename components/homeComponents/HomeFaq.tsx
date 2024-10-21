@@ -54,7 +54,7 @@ export default function HomeFaq(props: { answeredQuestion: AnsweredQuestion[] })
               transform: translateY(0);
             }
             50% {
-              transform: translateY(-15px);
+              transform: translateY(-20px);
             }
           }
           .wave-container {
@@ -62,7 +62,6 @@ export default function HomeFaq(props: { answeredQuestion: AnsweredQuestion[] })
             bottom: -20px;
             margin-top: 10rem;
             z-index: 2;
-            overflow: hidden;
           }
           .wave-animation {
             animation: waveAnimation 4s ease-in-out infinite;
