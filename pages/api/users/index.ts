@@ -117,6 +117,7 @@ function generateGroupsFromUserData(userList: Registration[]): Registration[][] 
   userList.forEach((user) => {
     preliminaryGroups.get(findLeader(user.user.preferredEmail)).push(user);
   });
+
   const validGroup = (potentialGroup: Registration[]) => {
     if (potentialGroup.length !== 4) return false;
     const voteCounter = new Map<string, number>();
@@ -136,7 +137,9 @@ function generateGroupsFromUserData(userList: Registration[]): Registration[][] 
     });
     return isValidGroup;
   };
+
   const ret: Registration[][] = [];
+
   preliminaryGroups.forEach((value, _) => {
     if (validGroup(value)) {
       ret.push(value);
@@ -144,6 +147,7 @@ function generateGroupsFromUserData(userList: Registration[]): Registration[][] 
       value.forEach((user) => ret.push([user]));
     }
   });
+
   return ret;
 }
 
@@ -161,6 +165,7 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
 
   const userToken = headers['authorization'];
   const userData = await extractUserDataFromToken(userToken);
+
   const isAuthorized =
     (userData.user.permissions as string[]).includes('super_admin') ||
     (userData.user.permissions as string[]).includes('admin');
@@ -173,20 +178,24 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
 
   const collectionRef = await db.collection(USERS_COLLECTION).get();
   const data = collectionRef.docs.map((doc) => doc.data());
-  if (!(userData.user.permissions as string[]).includes('super_admin')) {
-    return res.json(
-      data.map((data) => ({
-        ...data,
-        user: {
-          ...data.user,
-          firstName: 'Anonymous',
-          lastName: '',
-        },
-      })),
-    );
-  } else {
-    return res.json(data);
-  }
+
+  // Hide sensitive data
+  const hideSensitiveData = (data: Registration[]) => {
+    return data.map((d) => ({
+      ...d,
+      user: {
+        ...d.user,
+        firstName: 'Anonymous',
+        lastName: '',
+      },
+    }));
+  };
+
+  const groups = (userData as UserData).user.permissions.includes('super_admin')
+    ? generateGroupsFromUserData(data as Registration[])
+    : generateGroupsFromUserData(hideSensitiveData(data as Registration[]));
+
+  return res.json(groups);
 }
 
 function handleGetRequest(req: NextApiRequest, res: NextApiResponse) {
