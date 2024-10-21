@@ -208,6 +208,7 @@ function Preloader({ setIsHeroLoaded }) {
 export default function HomeHero2() {
   const [isHeroLoaded, setIsHeroLoaded] = useState(false);
   const [showSlingshot, setShowSlingshot] = useState(false); // Track if the slingshot is shown
+  const [rockColor, setRockColor] = useState(''); // Track the rock color based on the clicked button
   const { aboutRef } = useContext(SectionReferenceContext);
   const titleRef = useRef(null);
   const duckRef = useRef(null);
@@ -264,8 +265,11 @@ export default function HomeHero2() {
   }, [isHeroLoaded]);
 
   // Toggle between showing/hiding the welcome, title, and date when mascot or duck is clicked
-  const handleMascotClick = () => {
+  const handleMascotClick = (color) => {
     const tl = gsap.timeline();
+
+    // Set the rock color depending on which button is clicked
+    setRockColor(color);
 
     // If slingshot is showing, hide slingshot first and then bring the text back
     if (showSlingshot) {
@@ -333,8 +337,9 @@ export default function HomeHero2() {
               {/* Duck image (Click event attached) */}
               <div
                 ref={duckRef}
-                onClick={handleMascotClick} // Click event added
-                className="w-[10rem] absolute top-[20%] md:top-[10%] right-[25%] md:w-[20rem] lg:w-[25rem] mb-4 cursor-pointer"
+                onClick={() => handleMascotClick('blue')} // Set rock color to blue on duck click
+                className="w-[10rem] absolute top-[20%] md:top-[10%] right-[25%] md:w-[20rem] lg:w-[25rem] mb-4 cursor-pointer z-30"
+                style={{ cursor: 'pointer', zIndex: '30' }} // Ensuring the duck is clickable
               >
                 <Image
                   src={DuckMoving.src}
@@ -398,8 +403,9 @@ export default function HomeHero2() {
           {/* Mascot image (Click event attached) */}
           <div
             ref={mascotRef}
-            onClick={handleMascotClick} // Click event added
-            className="w-[10rem] md:w-[20rem] lg:w-[25rem] cursor-pointer"
+            onClick={() => handleMascotClick('red')} // Set rock color to red on mascot click
+            className="w-[10rem] md:w-[20rem] lg:w-[25rem] cursor-pointer z-30"
+            style={{ cursor: 'pointer', zIndex: '30' }} // Ensuring the mascot is clickable
           >
             <Image
               src={MascotMoving.src}
@@ -417,7 +423,7 @@ export default function HomeHero2() {
             ref={slingshotRef}
             className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-auto"
           >
-            <SlingshotSimulation />
+            <SlingshotSimulation rockColor={rockColor} /> {/* Pass rockColor as a prop */}
           </div>
         )}
       </section>

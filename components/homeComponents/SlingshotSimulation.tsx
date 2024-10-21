@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import Matter from 'matter-js';
 
-const SlingshotSimulation = () => {
+const SlingshotSimulation = ({ rockColor }) => {
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -44,8 +44,11 @@ const SlingshotSimulation = () => {
       isStatic: true,
       render: { fillStyle: '#888' },
     });
-    const rockOptions = { density: 0.004, render: { fillStyle: '#999' } };
+
+    // Use the passed rock color for the rock
+    const rockOptions = { density: 0.004, render: { fillStyle: rockColor || '#999' } };
     let rock = Bodies.polygon(170, 300, 8, 20, rockOptions);
+
     const elastic = Constraint.create({
       pointA: { x: 170, y: 300 },
       bodyB: rock,
@@ -91,7 +94,7 @@ const SlingshotSimulation = () => {
       render.canvas.remove();
       render.textures = {};
     };
-  }, []);
+  }, [rockColor]); // Re-run effect when rockColor changes
 
   return (
     <div ref={containerRef} style={{ width: '500px', height: '400px', margin: '0 auto' }} /> // Center and reduce size
