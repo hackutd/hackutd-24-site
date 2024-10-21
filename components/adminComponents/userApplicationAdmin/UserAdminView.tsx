@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { RequestHelper } from '../../../lib/request-helper';
 import { useAuthContext } from '../../../lib/user/AuthContext';
 import { LockClosedIcon, LockOpenIcon, XIcon } from '@heroicons/react/solid';
+import MaybeVerdictDialog from './MaybeVerdictDialog';
 
 interface UserAdminViewProps {
   currentApplicant: UserIdentifier;
@@ -62,6 +63,7 @@ export default function UserAdminView({
   // Pagination
   const [newRole, setNewRole] = useState('');
   const [errors, setErrors] = useState<string[]>([]);
+  const [showMaybeDialog, setShowMaybeDialog] = useState(false);
   // Contains info of the user who is viewing the data
   const { user: organizer } = useAuthContext();
 
@@ -105,6 +107,12 @@ export default function UserAdminView({
   return (
     <div className="p-5 sm:p-10 text-complementary bg-[rgba(255,255,255,0.4)] mb-4">
       {/* Application Status */}
+      <MaybeVerdictDialog
+        isOpen={showMaybeDialog}
+        closeModal={() => setShowMaybeDialog(false)}
+        onMaybeYes={() => onScoreSubmit(3)}
+        onMaybeNo={() => onScoreSubmit(2)}
+      />
       <div className="flex-wrap gap-y-2 flex flex-row justify-between items-center">
         <p
           className={`
@@ -136,6 +144,14 @@ export default function UserAdminView({
             onClick={() => onScoreSubmit(1)}
           >
             REJECT
+          </button>
+          <button
+            className="rounded-full bg-transparent text-[rgba(66,184,187,1)] border-2 border-solid border-[rgba(66,184,187,1)] font-bold py-2 px-8 hover:border-yellow-500 hover:text-white hover:bg-yellow-500 transition"
+            onClick={() => {
+              setShowMaybeDialog(true);
+            }}
+          >
+            MAYBE
           </button>
           <button
             className="rounded-full bg-[rgba(66,184,187,1)] text-white border-2 border-solid border-[rgba(66,184,187,1)] font-bold py-2 px-8 hover:border-green-500 hover:bg-green-500 transition"
