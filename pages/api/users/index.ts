@@ -62,7 +62,7 @@ async function getAllUsers(req: NextApiRequest, res: NextApiResponse) {
  * @return list of groups, each represented as `Registration[]`
  *
  */
-function generateGroupsFromUserData(userList: Registration[]): Registration[][] {
+export function generateGroupsFromUserData(userList: Registration[]): Registration[][] {
   const groupLeader = new Map<string, string>();
   const groupSize = new Map<string, number>();
 
