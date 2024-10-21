@@ -2,7 +2,7 @@ name: Assign Reviewers to Applications
 
 on:
   schedule:
-    - cron: '0 0 * * *' # run cron job at midnight utc everyday
+    - cron: '0 7 * * *' # run at 1 am central time (after daylight saving)
   workflow_dispatch:
 
 jobs:
