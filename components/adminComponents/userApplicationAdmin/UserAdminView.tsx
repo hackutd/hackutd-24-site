@@ -1,10 +1,13 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RequestHelper } from '../../../lib/request-helper';
 import { useAuthContext } from '../../../lib/user/AuthContext';
 import { LockClosedIcon, LockOpenIcon, XIcon } from '@heroicons/react/solid';
 
 interface UserAdminViewProps {
   currentApplicant: UserIdentifier;
+  onNoteUpdate: (note: string) => void;
+  currentNote: string;
+  onScoreSubmit: (groupScore: number) => Promise<void>;
 }
 
 interface BasicInfoProps {
@@ -48,12 +51,15 @@ function FRQInfo({ k, v }: BasicInfoProps) {
   );
 }
 
-export default function UserAdminView({ currentApplicant }: UserAdminViewProps) {
+export default function UserAdminView({
+  currentApplicant,
+  onNoteUpdate,
+  currentNote,
+  onScoreSubmit,
+}: UserAdminViewProps) {
   const { user } = useAuthContext();
 
   // Pagination
-  const applicationNotesRef = useRef<HTMLTextAreaElement>(null);
-
   const [newRole, setNewRole] = useState('');
   const [errors, setErrors] = useState<string[]>([]);
   // Contains info of the user who is viewing the data
@@ -126,13 +132,15 @@ export default function UserAdminView({ currentApplicant }: UserAdminViewProps) 
         <div className="text-sm flex-wrap gap-y-2 flex flex-row justify-between items-start gap-x-3">
           <button
             className="rounded-full bg-transparent text-[rgba(66,184,187,1)] border-2 border-solid border-[rgba(66,184,187,1)] font-bold py-2 px-8 hover:border-red-500 hover:text-white hover:bg-red-500 transition"
-            // onClick={() => onAcceptReject('Rejected', applicationNotesRef.current.value)}
+            // Score of 1 means strong NO
+            onClick={() => onScoreSubmit(1)}
           >
             REJECT
           </button>
           <button
             className="rounded-full bg-[rgba(66,184,187,1)] text-white border-2 border-solid border-[rgba(66,184,187,1)] font-bold py-2 px-8 hover:border-green-500 hover:bg-green-500 transition"
-            // onClick={() => onAcceptReject('Accepted', applicationNotesRef.current.value)}
+            // Score of 4 means strong YES
+            onClick={() => onScoreSubmit(4)}
           >
             ACCEPT
           </button>
@@ -222,8 +230,12 @@ export default function UserAdminView({ currentApplicant }: UserAdminViewProps) 
       {/* Notes */}
       <div>
         <textarea
-          ref={applicationNotesRef}
           className="w-full h-52 border-gray-300 border-2 rounded-md text-black bg-gray-300/20"
+          value={currentNote}
+          onChange={(e) => {
+            e.preventDefault();
+            onNoteUpdate(e.target.value);
+          }}
         ></textarea>
       </div>
       <div className="my-6 w-full border-2 border-gray-200 rounded-md" />
