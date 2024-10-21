@@ -195,23 +195,38 @@ export default function UserAdminView({
 
         {/* Application Score */}
         <div className="flex flex-col items-center sm:w-2/5 text-black">
-          <p className="font-bold text-xl text-black">Application Score</p>
+          {currentApplicant.scoring && (
+            <>
+              <p className="font-bold text-xl text-black">Application Score</p>
 
-          <p className="text-8xl font-dmSans">
-            {currentApplicant.applicationScore.acceptCount -
-              currentApplicant.applicationScore.rejectCount}
-          </p>
+              <p className="text-8xl font-dmSans">
+                {currentApplicant.scoring.reduce(
+                  (acc: number, curr) =>
+                    curr.score === 4 ? acc + 1 : curr.score === 1 ? acc - 1 : acc,
+                  0,
+                )}
+              </p>
 
-          <p className="italic text-gray-600">
-            <span className="text-green-500">
-              {currentApplicant.applicationScore.acceptCount} accepted
-            </span>{' '}
-            /{' '}
-            <span className="text-red-500">
-              {currentApplicant.applicationScore.rejectCount} rejected
-            </span>
-          </p>
-
+              <p className="italic text-gray-600">
+                <span className="text-green-500">
+                  {currentApplicant.scoring.filter((score) => score.score === 4).length} accepted
+                </span>{' '}
+                /{' '}
+                <span className="text-red-500">
+                  {currentApplicant.scoring.filter((score) => score.score === 1).length} rejected
+                </span>{' '}
+                /{' '}
+                <span className="text-yellow-500">
+                  {
+                    currentApplicant.scoring.filter(
+                      (score) => score.score === 2 || score.score === 3,
+                    ).length
+                  }{' '}
+                  maybe
+                </span>
+              </p>
+            </>
+          )}
           {user.permissions.includes('super_admin') && (
             <div className="flex-wrap flex flex-row gap-2 p-3 w-full">
               <select
@@ -276,6 +291,18 @@ export default function UserAdminView({
           v={currentApplicant.lookingForward}
         />
       </div>
+      {currentApplicant.scoring && (
+        <>
+          <div className="my-6 w-full border-2 border-gray-200 rounded-md" />
+          <h1 className="text-4xl text-black mb-4">Other reviews</h1>
+          {currentApplicant.scoring.map((score, idx) => (
+            <div key={idx} className="p-3 border-2 border-gray-400 rounded-xl">
+              <p className="text-black text-lg">Scoring: {score.score}</p>
+              <p className="text-black text-lg">Note: {score.note}</p>
+            </div>
+          ))}
+        </>
+      )}
     </div>
   );
 }

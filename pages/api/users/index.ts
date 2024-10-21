@@ -12,7 +12,7 @@ const db = firestore();
 
 const USERS_COLLECTION = '/registrations';
 const MISC_COLLECTION = '/miscellaneous';
-
+const SCORING_COLLECTION = '/scoring';
 /**
  *
  * Represent how data of a User is stored in the backend
@@ -176,8 +176,57 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
     });
   }
 
-  const collectionRef = await db.collection(USERS_COLLECTION).get();
-  const data = collectionRef.docs.map((doc) => doc.data());
+  const assignedAppCollectionRef = await db
+    .collection(USERS_COLLECTION)
+    .where('reviewer', 'array-contains', userData.id)
+    .get();
+  const commonPoolCollectionRef = await db
+    .collection(USERS_COLLECTION)
+    .where('inCommonPool', '==', true)
+    .get();
+  const commonAppWithScores = await Promise.all(
+    commonPoolCollectionRef.docs
+      .filter((doc) => !doc.data().reviewer || !doc.data().reviewer.includes(userData.id))
+      .map(async (doc) => {
+        const data = doc.data();
+        delete data.reviewer; // Remove reviewer data from response
+        delete data.github; // Remove github data from response
+        delete data.linkedin; // Remove linkedin data from response
+        delete data.resume; // Remove resume data from response
+        delete data.phoneNumber; // Remove phone number data from response
+        const scoringSnapshot = await db
+          .collection(SCORING_COLLECTION)
+          .where('hackerId', '==', doc.id)
+          .get();
+        const organizerAlreadyReviewedApp =
+          scoringSnapshot.docs.find((d) => d.data().adminId === userData.id) !== undefined;
+        if (scoringSnapshot.empty || !organizerAlreadyReviewedApp) {
+          return data;
+        }
+        return {
+          ...data,
+          scoring: scoringSnapshot.docs.map((doc) => {
+            const data = doc.data();
+            return {
+              score: data.score,
+              note: data.note,
+            };
+          }),
+        };
+      }),
+  );
+  const data = [
+    ...assignedAppCollectionRef.docs.map((doc) => {
+      const data = doc.data();
+      delete data.reviewer; // Remove reviewer data from response
+      delete data.github; // Remove github data from response
+      delete data.linkedin; // Remove linkedin data from response
+      delete data.resume; // Remove resume data from response
+      delete data.phoneNumber; // Remove phone number data from response
+      return data;
+    }),
+    ...commonAppWithScores,
+  ];
 
   // Hide sensitive data
   const hideSensitiveData = (data: Registration[]) => {
