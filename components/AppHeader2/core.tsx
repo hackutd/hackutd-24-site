@@ -164,6 +164,10 @@ export default function AppHeader2_Core(props: Props) {
                         optionName: 'Stats at a Glance',
                         onClick: () => router.push('/admin/stats'),
                       },
+                      {
+                        optionName: 'Waitlist Check-in',
+                        onClick: () => router.push('/admin/waitlist'),
+                      },
                     ]}
                   />
                 </div>

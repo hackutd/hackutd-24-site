@@ -67,6 +67,14 @@ export default function AdminHeader() {
               Stats at a Glance
             </NavLink>
           )}
+          <NavLink
+            href="/admin/waitlist"
+            exact={true}
+            activeOptions={'border-b-4 border-primaryDark text-complementaryDark'}
+            className="mx-4 py-2"
+          >
+            Waitlist Check-in
+          </NavLink>
         </div>
       </header>
       <div className="mt-4 md:hidden ">
