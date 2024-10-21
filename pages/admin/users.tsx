@@ -12,6 +12,7 @@ import UserAdminGroupView from '../../components/adminComponents/userApplication
 import { RequestHelper } from '../../lib/request-helper';
 import { useAuthContext } from '../../lib/user/AuthContext';
 import { RegistrationState } from '../../lib/util';
+import { useUserGroup } from '@/lib/admin/group';
 
 /**
  *
@@ -24,7 +25,8 @@ export default function UserPage() {
   const { user } = useAuthContext();
 
   const [loading, setLoading] = useState(true);
-  const [userGroups, setUserGroups] = useState<UserIdentifier[][]>([]);
+  const userGroups = useUserGroup((state) => state.groups);
+  const setUserGroups = useUserGroup((state) => state.setUserGroup);
   const [currentUserGroup, setCurrentUserGroup] = useState('');
 
   // const [filter, setFilter] = useState({
