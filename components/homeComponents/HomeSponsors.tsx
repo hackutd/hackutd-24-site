@@ -72,8 +72,8 @@ export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
           <section className="flex flex-wrap justify-center p-4">
             <div className="p-4 w-full place-items-center">
               {['title', 'gold', 'bronze'].map((tier) => (
-                <div key={tier} className="text-center text-3xl text-white font-bold">
-                  <div className="flex gap-20 justify-center items-center">
+                <div key={tier} className="my-30 text-center text-3xl text-white font-bold">
+                  <div className="flex flex-wrap gap-20 justify-center items-center">
                     <LogoContext.Provider value={{ currentHoveredLogo, setCurrentHoveredLogo }}>
                       {sponsorTiers[tier]?.map(({ link, reference, alternativeReference }, idx) =>
                         alternativeReference ? (
