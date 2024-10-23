@@ -72,6 +72,7 @@ export default function UserPage() {
       })
     )['data'];
     setUserGroups(userGroupsData);
+    setFilteredGroups(userGroupsData);
     setLoading(false);
   }
 
@@ -230,7 +231,7 @@ export default function UserPage() {
           />
         ) : (
           <UserAdminGroupView
-            userGroups={userGroups}
+            userGroups={filteredGroups}
             currentUserGroupId={currentUserGroup}
             goBack={() => setCurrentUserGroup('')}
             onUserGroupClick={(id) => {

@@ -164,7 +164,7 @@ export default function UserAdminGroupView({
               onClick={() =>
                 onUserGroupClick(
                   userGroups[currentUserGroupIndex + 1]
-                    ? getGroupId(userGroups[currentUserGroupIndex - 1])
+                    ? getGroupId(userGroups[currentUserGroupIndex + 1])
                     : '',
                 )
               }
