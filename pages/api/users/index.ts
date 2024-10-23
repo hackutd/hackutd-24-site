@@ -251,6 +251,9 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
           return {
             ...data,
             status: organizerReview ? statusString[organizerReview.data().score - 1] : 'In Review',
+            scoring: organizerReview
+              ? [{ score: organizerReview.data().score, note: organizerReview.data().note }]
+              : undefined,
           };
         }
         const appScore = scoringSnapshot.docs.reduce((acc, doc) => {

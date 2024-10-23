@@ -295,7 +295,7 @@ export default function UserAdminView({
       {currentApplicant.scoring && (
         <>
           <div className="my-6 w-full border-2 border-gray-200 rounded-md" />
-          <h1 className="text-4xl text-black mb-4">Other reviews</h1>
+          <h1 className="text-4xl text-black mb-4">Reviews for this app</h1>
           {currentApplicant.scoring.map((score, idx) => (
             <div key={idx} className="p-3 border-2 border-gray-400 rounded-xl">
               <p className="text-black text-lg">Scoring: {score.score}</p>
