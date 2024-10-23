@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { RegistrationState } from '../../../lib/util';
 import UserList, { USERLIST_INFINITE_SCROLL_TARGET } from './UserList';
 import { SearchIcon } from '@heroicons/react/solid';
+import { useAuthContext } from '@/lib/user/AuthContext';
 
 interface AllUsersAdminViewProps {
   userGroups: UserIdentifier[][];
@@ -27,6 +28,7 @@ export default function AllUsersAdminView({
   registrationState,
   onUpdateRegistrationState,
 }: AllUsersAdminViewProps) {
+  const { user } = useAuthContext();
   return (
     <div className={`h-full px-4 md:px-14 text-sm md:text-base`}>
       {/* Top Bar with Status, Search, and Filters */}
@@ -137,7 +139,16 @@ export default function AllUsersAdminView({
           >
             {/* <div className="w-1/2 md:w-2/12 flex items-center justify-center">Name</div> */}
             <div className="w-2/12 flex items-center justify-center">Status</div>
-            <div className="w-4/12 flex items-center justify-center">University</div>
+            {user.permissions.includes('super_admin') && (
+              <div className="w-2/12 flex items-center justify-center">Name</div>
+            )}
+            <div
+              className={`${
+                user.permissions.includes('super_admin') ? 'w-2/12' : 'w-4/12'
+              } flex items-center justify-center`}
+            >
+              University
+            </div>
             <div className="w-2/12 flex items-center justify-center">Major</div>
             <div className="w-2/12 flex items-center justify-center">Year</div>
           </div>
