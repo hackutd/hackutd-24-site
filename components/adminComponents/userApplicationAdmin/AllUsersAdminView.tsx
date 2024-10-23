@@ -2,17 +2,18 @@ import { Tab } from '@headlessui/react';
 import clsx from 'clsx';
 import { RegistrationState } from '../../../lib/util';
 import UserList, { USERLIST_INFINITE_SCROLL_TARGET } from './UserList';
+import { SearchIcon } from '@heroicons/react/solid';
 
 interface AllUsersAdminViewProps {
   userGroups: UserIdentifier[][];
   // selectedUsers: string[];
-  // searchQuery: string;
+  searchQuery: string;
   registrationState: RegistrationState;
   onUpdateRegistrationState: (newState: RegistrationState) => void;
   onUserGroupClick: (id: string) => void;
   // onUserSelect: (id: string) => void;
   // onAcceptReject: (status: string) => void;
-  // onSearchQueryUpdate: (searchQuery: string) => void;
+  onSearchQueryUpdate: (searchQuery: string) => void;
 }
 
 export default function AllUsersAdminView({
@@ -21,8 +22,8 @@ export default function AllUsersAdminView({
   onUserGroupClick,
   // onUserSelect,
   // onAcceptReject,
-  // searchQuery,
-  // onSearchQueryUpdate,
+  searchQuery,
+  onSearchQueryUpdate,
   registrationState,
   onUpdateRegistrationState,
 }: AllUsersAdminViewProps) {
@@ -32,7 +33,7 @@ export default function AllUsersAdminView({
       <div className="flex flex-row justify-between">
         <div className="flex flex-col lg:flex-row  justify-between items-center w-full">
           {/* Search User */}
-          {/* <div className="relative icon flex flex-row justify-center items-center w-full lg:w-1/2">
+          <div className="relative icon flex flex-row justify-center items-center w-full lg:w-1/2">
             <input
               type="text"
               className={`
@@ -49,7 +50,7 @@ export default function AllUsersAdminView({
             <div className="absolute right-4">
               <SearchIcon className="w-6 h-6 text-[rgb(9,45,122)]" />
             </div>
-          </div> */}
+          </div>
 
           {/* Status (Close Registration / Live Registration) */}
           {/* <div className="flex flex-row justify-center items-center w-5/12">

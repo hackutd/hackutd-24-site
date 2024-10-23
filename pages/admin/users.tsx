@@ -36,8 +36,8 @@ export default function UserPage() {
   //   admin: true,
   //   super_admin: true,
   // });
-  // const [filteredUsers, setFilteredUsers] = useState<UserIdentifier[][]>([]);
-  // const [searchQuery, setSearchQuery] = useState('');
+  const [filteredGroups, setFilteredGroups] = useState<UserIdentifier[][]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
   // const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
 
   const [registrationStatus, setRegistrationStatus] = useState(RegistrationState.UNINITIALIZED);
@@ -79,26 +79,29 @@ export default function UserPage() {
     fetchInitData();
   }, []);
 
-  // useEffect(() => {
-  //   if (loading) return;
-  //   timer = setTimeout(() => {
-  //     if (searchQuery !== '') {
-  //       const newFiltered = users.filter(
-  //         ({ user }) =>
-  //           `${user.firstName.trim()} ${user.lastName.trim()}`
-  //             .toLowerCase()
-  //             .indexOf(searchQuery.toLowerCase()) !== -1,
-  //       );
-  //       setFilteredUsers(newFiltered);
-  //     } else {
-  //       setFilteredUsers([...users]);
-  //     }
-  //   }, 750);
+  useEffect(() => {
+    if (loading) return;
+    timer = setTimeout(() => {
+      if (searchQuery !== '') {
+        const newFiltered = userGroups.filter(
+          (users) =>
+            users.filter(
+              ({ user }) =>
+                `${user.firstName.trim()} ${user.lastName.trim()}`
+                  .toLowerCase()
+                  .indexOf(searchQuery.toLowerCase()) !== -1,
+            ).length > 0,
+        );
+        setFilteredGroups(newFiltered);
+      } else {
+        setFilteredGroups([...userGroups]);
+      }
+    }, 750);
 
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, [searchQuery, loading, users]);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [searchQuery, loading, userGroups]);
 
   // const updateFilter = (name: string) => {
   //   const filterCriteria = {
@@ -208,7 +211,7 @@ export default function UserPage() {
       <div className="w-full max-w-screen-2xl mb-10" style={{ height: 'calc(100vh - 180px)' }}>
         {currentUserGroup === '' ? (
           <AllUsersAdminView
-            userGroups={userGroups}
+            userGroups={filteredGroups}
             // selectedUsers={selectedUsers}
             onUserGroupClick={(id) => {
               // setSelectedUsers([id]);
@@ -219,10 +222,10 @@ export default function UserPage() {
             }}
             // onUserSelect={(id) => handleUserSelect(id)}
             // onAcceptReject={(status) => postHackersStatus(status, '')}
-            // searchQuery={searchQuery}
-            // onSearchQueryUpdate={(searchQuery) => {
-            //   setSearchQuery(searchQuery);
-            // }}
+            searchQuery={searchQuery}
+            onSearchQueryUpdate={(searchQuery) => {
+              setSearchQuery(searchQuery);
+            }}
             registrationState={registrationStatus}
           />
         ) : (
