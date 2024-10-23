@@ -14,6 +14,7 @@ import PlaceholderMascot from '../../public/assets/Reveal.gif';
 import Image from 'next/image';
 import LogoContext from '@/lib/context/logo';
 import SponsorAlternateCard from './SponsorAlternateCard';
+import TierTitle from './TierTitle';
 
 export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
   const [sponsor, setSponsor] = useState<Sponsor[]>([]);
@@ -72,7 +73,8 @@ export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
           <section className="flex flex-wrap justify-center p-4">
             <div className="p-4 w-full place-items-center">
               {['title', 'platinum', 'gold', 'silver', 'bronze'].map((tier) => (
-                <div key={tier} className="my-30 text-center text-3xl text-white font-bold">
+                <div key={tier} className="my-[3rem] text-center text-3xl text-white font-bold">
+                  <TierTitle tierName={tier} />
                   <div className="flex flex-wrap gap-20 justify-center items-center">
                     <LogoContext.Provider value={{ currentHoveredLogo, setCurrentHoveredLogo }}>
                       {sponsorTiers[tier]?.map(({ link, reference, alternativeReference }, idx) =>
