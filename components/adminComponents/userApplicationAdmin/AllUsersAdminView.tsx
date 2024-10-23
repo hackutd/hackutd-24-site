@@ -68,21 +68,21 @@ export default function AllUsersAdminView({
               }}
             >
               <Tab.List className="flex flex-row justify-center items-center w-full">
-                <div className="bg-secondary rounded-full">
+                <div className="bg-[#F1F8FC] rounded-full">
                   <Tab
-                    className={`rounded-full ${
+                    className={`rounded-full font-bold ${
                       registrationState === RegistrationState.CLOSED
-                        ? 'bg-primaryDark text-secondary'
-                        : 'bg-secondary text-primaryDark'
+                        ? 'bg-[#163950] text-[#F1F8FC]'
+                        : 'bg-[#F1F8FC] text-[#163950]'
                     } py-2 px-4`}
                   >
                     Close Registration
                   </Tab>
                   <Tab
-                    className={`rounded-full ${
+                    className={`rounded-full font-bold ${
                       registrationState === RegistrationState.OPEN
-                        ? 'bg-primaryDark text-secondary'
-                        : 'bg-secondary text-primaryDark'
+                        ? 'bg-[#163950] text-[#F1F8FC]'
+                        : 'bg-[#F1F8FC] text-[#163950]'
                     } py-2 px-4`}
                   >
                     Live Registration
