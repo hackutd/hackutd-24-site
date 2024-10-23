@@ -110,8 +110,25 @@ export default function UserAdminView({
       <MaybeVerdictDialog
         isOpen={showMaybeDialog}
         closeModal={() => setShowMaybeDialog(false)}
-        onMaybeYes={() => onScoreSubmit(3)}
-        onMaybeNo={() => onScoreSubmit(2)}
+        onMaybeYes={async () => {
+          try {
+            await onScoreSubmit(3);
+          } catch (err) {
+            console.error(err);
+          } finally {
+            console.log('done');
+            setShowMaybeDialog(false);
+          }
+        }}
+        onMaybeNo={async () => {
+          try {
+            await onScoreSubmit(2);
+          } catch (err) {
+            console.error(err);
+          } finally {
+            setShowMaybeDialog(false);
+          }
+        }}
       />
       <div className="flex-wrap gap-y-2 flex flex-row justify-between items-center">
         <p
