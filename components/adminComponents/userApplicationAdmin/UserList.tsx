@@ -1,40 +1,64 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMemo } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { getGroupId } from './helpers';
+import { useAuthContext } from '@/lib/user/AuthContext';
+import { LockClosedIcon, LockOpenIcon } from '@heroicons/react/solid';
 
 export const USERLIST_INFINITE_SCROLL_TARGET = 'userlist-infinite-scroll-target';
 
 interface UserListProps {
-  users: UserIdentifier[];
-  selectedUsers: string[];
+  userGroups: UserIdentifier[][];
+  // selectedUsers: string[];
+  onUserGroupClick: (id: string) => void;
+  // onUserSelect: (id: string) => void;
+}
 
-  onUserClick: (id: string) => void;
-  onUserSelect: (id: string) => void;
+function HiddenInfo({ v, canUnlock }: { v: string; canUnlock: boolean }) {
+  const [lock, setLock] = useState(true);
+  const lockOnClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (canUnlock) setLock(!lock);
+  };
+  const lockClassName = 'ml-1 w-5 h-5 hover:scale-125 transition cursor-pointer';
+  return (
+    <div className="flex gap-x-3 my-4 items-center">
+      <p className={`flex flex-row items-center font-bold text-black ${lock ? 'mx-auto' : ''}`}>
+        {lock ? (
+          <LockClosedIcon onClick={lockOnClick} className={lockClassName} />
+        ) : (
+          <LockOpenIcon onClick={lockOnClick} className={lockClassName} />
+        )}
+      </p>
+      <p className="text-black">{lock ? '' : v}</p>
+    </div>
+  );
 }
 
 export default function UserList({
-  users,
-  selectedUsers,
-  onUserClick,
-  onUserSelect,
-}: UserListProps) {
+  userGroups,
+  // selectedUsers,
+  onUserGroupClick,
+}: // onUserSelect,
+UserListProps) {
+  const { user } = useAuthContext();
   const userList = useMemo(() => {
     const result: JSX.Element[] = [];
 
-    users.forEach((user, idx) => {
+    userGroups.forEach((group, idx) => {
       const bgColor = idx % 2 == 0 ? 'bg-[rgba(227,227,227,0.8)]' : 'bg-[rgba(255,255,255,0.6)]';
       const blur = 'backdrop-blur-lg';
 
       result.push(
         <div
-          key={user.id}
+          key={getGroupId(group)}
           className={`
           flex flex-row justify-between px-6
-          cursor-pointer hover:bg-[rgb(255,255,255,0.7)] items-center 
+          cursor-pointer hover:bg-[rgb(255,255,255,0.2)] items-center transition
           ${bgColor}
           ${blur}
         `}
-          onClick={() => onUserClick(user.id)}
+          onClick={() => onUserGroupClick(getGroupId(group))}
         >
           {/*
             Name
@@ -83,18 +107,46 @@ export default function UserList({
             <span
               className={`
               py-1 px-6 rounded-full 
-              ${user.status === 'Accepted' ? 'bg-[rgb(242,253,226)] text-[rgb(27,111,19)]' : ''}
-              ${user.status === 'Rejected' ? 'bg-[rgb(255,233,218)] text-[rgb(122,15,39)]' : ''}
-              ${user.status === 'In Review' ? 'bg-[rgb(213,244,255)] text-[rgb(9,45,122)]' : ''}
+              ${group[0].status === 'Accepted' ? 'bg-[rgb(242,253,226)] text-[rgb(27,111,19)]' : ''}
+              ${group[0].status === 'Rejected' ? 'bg-[rgb(255,233,218)] text-[rgb(122,15,39)]' : ''}
+              ${group[0].status === 'In Review' ? 'bg-[rgb(213,244,255)] text-[rgb(9,45,122)]' : ''}
+              ${group[0].status === 'Maybe' ? 'bg-yellow-200 text-[rgb(9,45,122)]' : ''}
             `}
             >
-              {user.status}
+              {group[0].status}
             </span>
           </div>
-
+          {user.permissions.includes('super_admin') && (
+            <div
+              className={`
+            flex text-center items-center text-base text-[rgb(19,19,19)] w-2/12 h-full py-3j
+          `}
+            >
+              <div
+                className={`
+            whitespace-nowrap overflow-hidden text-ellipsis w-[100%]
+          `}
+              >
+                <HiddenInfo
+                  canUnlock={true}
+                  v={Array.from(
+                    new Set(
+                      group.map(
+                        (eachUser) => eachUser.user.firstName + ' ' + eachUser.user.lastName,
+                      ),
+                    ),
+                  )
+                    .sort((a, b) => a.localeCompare(b))
+                    .join(', ')}
+                />
+              </div>
+            </div>
+          )}
           <div
             className={`
-            flex text-center items-center text-base text-[rgb(19,19,19)] w-4/12 h-full py-3j
+            flex text-center items-center text-base text-[rgb(19,19,19)] ${
+              user.permissions.includes('super_admin') ? 'w-2/12' : 'w-4/12'
+            } h-full py-3j
           `}
           >
             <p
@@ -102,7 +154,12 @@ export default function UserList({
             whitespace-nowrap overflow-hidden text-ellipsis w-[100%]
           `}
             >
-              {user.university}
+              <HiddenInfo
+                v={Array.from(new Set(group.map((eachUser) => eachUser.university)))
+                  .sort((a, b) => a.localeCompare(b))
+                  .join(', ')}
+                canUnlock={user.permissions.includes('super_admin')}
+              />
             </p>
           </div>
 
@@ -116,7 +173,9 @@ export default function UserList({
             whitespace-nowrap overflow-hidden text-ellipsis w-[100%]
           `}
             >
-              {user.major}
+              {Array.from(new Set(group.map((eachUser) => eachUser.major)))
+                .sort((a, b) => a.localeCompare(b))
+                .join(', ')}
             </p>
           </div>
 
@@ -130,7 +189,9 @@ export default function UserList({
             whitespace-nowrap overflow-hidden text-ellipsis w-[100%]
           `}
             >
-              {user.studyLevel}
+              {Array.from(new Set(group.map((eachUser) => eachUser.studyLevel)))
+                .sort((a, b) => a.localeCompare(b))
+                .join(', ')}
             </p>
           </div>
         </div>,
@@ -138,7 +199,7 @@ export default function UserList({
     });
 
     return result;
-  }, [onUserClick, users]);
+  }, [onUserGroupClick, userGroups]);
 
   const pageSize = 20;
   const [userListSlice, setUserViewSlice] = React.useState<JSX.Element[]>(
@@ -147,7 +208,7 @@ export default function UserList({
 
   useEffect(() => {
     setUserViewSlice(userList.slice(0, pageSize));
-  }, [userList, users]);
+  }, [userList, userGroups]);
 
   const nextPage = () => {
     setUserViewSlice(userList.slice(0, Math.min(userList.length, userListSlice.length + pageSize)));

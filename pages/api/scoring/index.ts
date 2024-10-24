@@ -5,6 +5,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 initializeApi();
 const db = firestore();
+// TODO: change this to acceptreject
 const SCORING_COLLECTION = '/scoring';
 const REGISTRATION_COLLECTION = '/registrations';
 
@@ -96,11 +97,22 @@ async function handlePostRequest(req: NextApiRequest, res: NextApiResponse) {
           return;
         }
         // checking whether organizer is reviewing an app assigned to them or an app from common pool
-        const appIsAssigned = appAssignee.some((assigneeId) => assigneeId === scoring.adminId);
-        await db.collection(SCORING_COLLECTION).add({
-          ...scoring,
-          appIsAssigned,
-        });
+        const scoringRef = await db
+          .collection(SCORING_COLLECTION)
+          .where('adminId', '==', scoring.adminId)
+          .where('hackerId', '==', scoring.hackerId)
+          .get();
+        if (!scoringRef.empty) {
+          await scoringRef.docs[0].ref.update({
+            score: scoring.score,
+          });
+        } else {
+          const appIsAssigned = appAssignee.some((assigneeId) => assigneeId === scoring.adminId);
+          await db.collection(SCORING_COLLECTION).add({
+            ...scoring,
+            appIsAssigned,
+          });
+        }
         //  check if application should be moved into common pool.
         const appShouldBeMovedToCommonPool = await checkAppShouldEnterCommonPool(scoring.hackerId);
         if (appShouldBeMovedToCommonPool) {
@@ -108,6 +120,9 @@ async function handlePostRequest(req: NextApiRequest, res: NextApiResponse) {
         }
       }),
     );
+    return res.status(200).json({
+      msg: 'Score submitted successful',
+    });
   } catch (err) {
     console.error(err);
     return res.status(500).json({

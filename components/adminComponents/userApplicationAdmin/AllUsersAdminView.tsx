@@ -1,32 +1,34 @@
-import clsx from 'clsx';
-import UserList, { USERLIST_INFINITE_SCROLL_TARGET } from '../adminComponents/UserList';
 import { Tab } from '@headlessui/react';
-import { RegistrationState } from '../../lib/util';
-import { CheckIcon, SearchIcon, XIcon } from '@heroicons/react/solid';
+import clsx from 'clsx';
+import { RegistrationState } from '../../../lib/util';
+import UserList, { USERLIST_INFINITE_SCROLL_TARGET } from './UserList';
+import { SearchIcon } from '@heroicons/react/solid';
+import { useAuthContext } from '@/lib/user/AuthContext';
 
 interface AllUsersAdminViewProps {
-  users: UserIdentifier[];
-  selectedUsers: string[];
+  userGroups: UserIdentifier[][];
+  // selectedUsers: string[];
   searchQuery: string;
   registrationState: RegistrationState;
   onUpdateRegistrationState: (newState: RegistrationState) => void;
-  onUserClick: (id: string) => void;
-  onUserSelect: (id: string) => void;
-  onAcceptReject: (status: string) => void;
+  onUserGroupClick: (id: string) => void;
+  // onUserSelect: (id: string) => void;
+  // onAcceptReject: (status: string) => void;
   onSearchQueryUpdate: (searchQuery: string) => void;
 }
 
 export default function AllUsersAdminView({
-  users,
-  selectedUsers,
-  onUserClick,
-  onUserSelect,
-  onAcceptReject,
+  userGroups,
+  // selectedUsers,
+  onUserGroupClick,
+  // onUserSelect,
+  // onAcceptReject,
   searchQuery,
   onSearchQueryUpdate,
   registrationState,
   onUpdateRegistrationState,
 }: AllUsersAdminViewProps) {
+  const { user } = useAuthContext();
   return (
     <div className={`h-full px-4 md:px-14 text-sm md:text-base`}>
       {/* Top Bar with Status, Search, and Filters */}
@@ -69,21 +71,21 @@ export default function AllUsersAdminView({
               }}
             >
               <Tab.List className="flex flex-row justify-center items-center w-full">
-                <div className="bg-secondary rounded-full">
+                <div className="bg-[#F1F8FC] rounded-full">
                   <Tab
-                    className={`rounded-full ${
+                    className={`rounded-full font-bold ${
                       registrationState === RegistrationState.CLOSED
-                        ? 'bg-primaryDark text-secondary'
-                        : 'bg-secondary text-primaryDark'
+                        ? 'bg-[#163950] text-[#F1F8FC]'
+                        : 'bg-[#F1F8FC] text-[#163950]'
                     } py-2 px-4`}
                   >
                     Close Registration
                   </Tab>
                   <Tab
-                    className={`rounded-full ${
+                    className={`rounded-full font-bold ${
                       registrationState === RegistrationState.OPEN
-                        ? 'bg-primaryDark text-secondary'
-                        : 'bg-secondary text-primaryDark'
+                        ? 'bg-[#163950] text-[#F1F8FC]'
+                        : 'bg-[#F1F8FC] text-[#163950]'
                     } py-2 px-4`}
                   >
                     Live Registration
@@ -124,7 +126,7 @@ export default function AllUsersAdminView({
         <div
           className={`
             min-w-[1024px]
-            ${users.length === 0 ? 'bg-[rgba(255,255,255,0.6)]' : ''}
+            ${userGroups.length === 0 ? 'bg-[rgba(255,255,255,0.6)]' : ''}
             backdrop-blur
           `}
         >
@@ -137,17 +139,26 @@ export default function AllUsersAdminView({
           >
             {/* <div className="w-1/2 md:w-2/12 flex items-center justify-center">Name</div> */}
             <div className="w-2/12 flex items-center justify-center">Status</div>
-            <div className="w-4/12 flex items-center justify-center">University</div>
+            {user.permissions.includes('super_admin') && (
+              <div className="w-2/12 flex items-center justify-center">Name</div>
+            )}
+            <div
+              className={`${
+                user.permissions.includes('super_admin') ? 'w-2/12' : 'w-4/12'
+              } flex items-center justify-center`}
+            >
+              University
+            </div>
             <div className="w-2/12 flex items-center justify-center">Major</div>
             <div className="w-2/12 flex items-center justify-center">Year</div>
           </div>
 
           {/* User List */}
           <UserList
-            users={users}
-            selectedUsers={selectedUsers}
-            onUserClick={(id) => onUserClick(id)}
-            onUserSelect={(id) => onUserSelect(id)}
+            userGroups={userGroups}
+            // selectedUsers={selectedUsers}
+            onUserGroupClick={(id) => onUserGroupClick(id)}
+            // onUserSelect={(id) => onUserSelect(id)}
           />
         </div>
       </div>

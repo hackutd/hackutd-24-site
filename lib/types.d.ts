@@ -331,11 +331,10 @@ declare module '*.md' {
 type UserIdentifier = Omit<Registration, 'scans'> & {
   status: string;
   selected: boolean;
-  applicationScore: {
-    acceptCount: number;
-    rejectCount: number;
-    alreadyJudged: boolean;
-  };
+  scoring?: {
+    score: number;
+    note: string;
+  }[];
 };
 
 type PartialRegistration = {
