@@ -18,6 +18,8 @@ interface BasicInfoProps {
   canUnlock?: boolean;
 }
 
+const scoreState = ['No', 'Maybe No', 'Maybe Yes', 'Yes'];
+
 function BasicInfo({ k, v, locked, canUnlock }: BasicInfoProps) {
   const [lock, setLock] = useState<boolean>(locked);
   const lockOnClick = () => {
@@ -314,9 +316,22 @@ export default function UserAdminView({
           <div className="my-6 w-full border-2 border-gray-200 rounded-md" />
           <h1 className="text-4xl text-black mb-4">Reviews for this app</h1>
           {currentApplicant.scoring.map((score, idx) => (
-            <div key={idx} className="p-3 border-2 border-gray-400 rounded-xl">
-              <p className="text-black text-lg">Scoring: {score.score}</p>
-              <p className="text-black text-lg">Note: {score.note}</p>
+            <div
+              key={idx}
+              className="p-3 border-2 border-gray-400 rounded-xl flex flex-col gap-y-4"
+            >
+              {/* <p className="text-black text-lg">{score.score}</p> */}
+              <span
+                className={`
+                  w-fit py-1 px-6 rounded-full 
+                  ${score.score === 4 ? 'bg-[rgb(242,253,226)] text-[rgb(27,111,19)]' : ''}
+                  ${score.score === 1 ? 'bg-[rgb(255,233,218)] text-[rgb(122,15,39)]' : ''}
+                  ${score.score > 1 && score.score < 4 ? 'bg-yellow-200 text-[rgb(9,45,122)]' : ''}
+                  `}
+              >
+                {scoreState[score.score - 1]}
+              </span>
+              {score.note !== '' && <p className="text-black text-lg">{score.note}</p>}
             </div>
           ))}
         </>
