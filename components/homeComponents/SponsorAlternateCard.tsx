@@ -59,7 +59,7 @@ export default function SponsorAlternateCard(props: SponsorCardProps) {
 
   return (
     <div
-      className={`p-3 w-[200px] h-[100px] lg:h-[200px] flex justify-center items-center hover:scale-110 hover:duration-300 ${
+      className={`my-4 p-3 w-[200px] h-[100px] lg:h-[200px] flex justify-center items-center hover:scale-110 hover:duration-300 ${
         currentHoveredLogo !== '' && currentHoveredLogo !== props.alternativeReference
           ? 'opacity-30'
           : 'opacity-100'
@@ -85,8 +85,8 @@ export default function SponsorAlternateCard(props: SponsorCardProps) {
           <Image
             alt={`Sponsor Image ${props.alternativeReference}`}
             src={alternativeImgSrc}
-            width={200}
-            height={200}
+            width={150}
+            height={150}
             layout="fixed"
             objectFit="contain"
             style={useAlternativeImg ? mountedStyle : unmountedStyle}
@@ -95,8 +95,8 @@ export default function SponsorAlternateCard(props: SponsorCardProps) {
           <Image
             alt={`Sponsor Image ${props.reference}`}
             src={imgSrc}
-            width={200}
-            height={200}
+            width={150}
+            height={150}
             layout="fixed"
             objectFit="contain"
           />
