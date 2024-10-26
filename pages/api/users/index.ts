@@ -204,7 +204,20 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
           .collection(SCORING_COLLECTION)
           .where('hackerId', '==', doc.id)
           .get();
+        const reviewerIds = scoringSnapshot.docs.map((doc) => doc.data().adminId);
         const organizerReview = scoringSnapshot.docs.find((d) => d.data().adminId === userData.id);
+        const reviewerInfo = await db
+          .collection(USERS_COLLECTION)
+          .where('id', 'in', reviewerIds)
+          .select('id', 'user.firstName', 'user.lastName')
+          .get();
+        const reviewerMapping = new Map<string, string>();
+        reviewerInfo.forEach((info) => {
+          reviewerMapping.set(
+            info.data().id,
+            `${info.data().user.firstName} ${info.data().user.lastName}`,
+          );
+        });
         const appScore = scoringSnapshot.docs.reduce((acc, doc) => {
           if (doc.data().score === 4) return acc + 1;
           if (doc.data().score === 1) return acc - 1;
@@ -223,6 +236,7 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
             return {
               score: data.score,
               note: data.note,
+              reviewer: reviewerMapping.get(data.adminId),
             };
           }),
           status: decisionReleased
@@ -256,6 +270,19 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
               : undefined,
           };
         }
+        const reviewerIds = scoringSnapshot.docs.map((doc) => doc.data().adminId);
+        const reviewerInfo = await db
+          .collection(USERS_COLLECTION)
+          .where('id', 'in', reviewerIds)
+          .select('id', 'user.firstName', 'user.lastName')
+          .get();
+        const reviewerMapping = new Map<string, string>();
+        reviewerInfo.forEach((info) => {
+          reviewerMapping.set(
+            info.data().id,
+            `${info.data().user.firstName} ${info.data().user.lastName}`,
+          );
+        });
         const appScore = scoringSnapshot.docs.reduce((acc, doc) => {
           if (doc.data().score === 4) return acc + 1;
           if (doc.data().score === 1) return acc - 1;
@@ -268,6 +295,7 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
             return {
               score: data.score,
               note: data.note,
+              reviewer: reviewerMapping.get(data.adminId),
             };
           }),
           status: appScore >= 2 ? 'Accepted' : 'Rejected',

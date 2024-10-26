@@ -318,19 +318,22 @@ export default function UserAdminView({
           {currentApplicant.scoring.map((score, idx) => (
             <div
               key={idx}
-              className="p-3 border-2 border-gray-400 rounded-xl flex flex-col gap-y-4"
+              className="p-3 border-2 border-gray-400 rounded-xl flex flex-col gap-y-4 my-4"
             >
               {/* <p className="text-black text-lg">{score.score}</p> */}
-              <span
-                className={`
+              <div className="flex gap-x-3 items-center">
+                <span
+                  className={`
                   w-fit py-1 px-6 rounded-full 
                   ${score.score === 4 ? 'bg-[rgb(242,253,226)] text-[rgb(27,111,19)]' : ''}
                   ${score.score === 1 ? 'bg-[rgb(255,233,218)] text-[rgb(122,15,39)]' : ''}
                   ${score.score > 1 && score.score < 4 ? 'bg-yellow-200 text-[rgb(9,45,122)]' : ''}
                   `}
-              >
-                {scoreState[score.score - 1]}
-              </span>
+                >
+                  {scoreState[score.score - 1]}
+                </span>
+                <span className="text-black">{score.reviewer}</span>
+              </div>
               {score.note !== '' && <p className="text-black text-lg">{score.note}</p>}
             </div>
           ))}

@@ -334,6 +334,7 @@ type UserIdentifier = Omit<Registration, 'scans'> & {
   scoring?: {
     score: number;
     note: string;
+    reviewer: string;
   }[];
 };
 
