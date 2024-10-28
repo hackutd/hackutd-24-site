@@ -512,14 +512,6 @@ export default function Register({ allowedRegistrations }: RegisterPageProps) {
                           <DisplayQuestion key={idx} obj={obj} />
                         ))}
                       </div>
-                      <div className="text-[#00000080] poppins-regular mt-4 font-semibold mb-2">
-                        Applying for travel reimbursement?
-                        <a href="https://acmutd.typeform.com/to/RxlL9v8R" target="_blank">
-                          <span className="ml-2 text-[#40B7BA] underline cursor-pointer">
-                            Click here!
-                          </span>
-                        </a>
-                      </div>
                     </div>
                     <div className="flex justify-end">
                       <button
