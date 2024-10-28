@@ -24,38 +24,45 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
   );
   const { faqRef } = useContext(SectionReferenceContext);
 
+  // Updated fish movement styles to simulate more fluid fish-like swimming motions
   const fish1HoverStyle = {
-    animation: 'moveLeftRight 2s infinite alternate',
+    animation: 'fishSwim1 5s infinite alternate ease-in-out',
   };
 
   const fish2HoverStyle = {
-    animation: 'moveUpDownLeftRight 4s infinite alternate',
+    animation: 'fishSwim2 7s infinite alternate ease-in-out',
   };
 
   const fish3HoverStyle = {
-    animation: 'moveUpDown 2s infinite alternate',
+    animation: 'fishSwim3 6s infinite alternate ease-in-out',
   };
 
   return (
     <div className="flex flex-col flex-grow relative">
       <style>
         {`
-          @keyframes moveUpDown {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-8px); }
+          @keyframes fishSwim1 {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(10px, -5px) rotate(5deg); }
+            50% { transform: translate(20px, 0) rotate(0deg); }
+            75% { transform: translate(10px, 5px) rotate(-5deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
           }
 
-          @keyframes moveUpDownLeftRight {
-            0% { transform: translate(0, 0); }
-            25% { transform: translate(4px, -4px); }
-            50% { transform: translate(8px, 0); }
-            75% { transform: translate(4px, 4px); }
-            100% { transform: translate(0, 0); }
+          @keyframes fishSwim2 {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(-10px, 10px) rotate(-10deg); }
+            50% { transform: translate(-20px, 0) rotate(0deg); }
+            75% { transform: translate(-10px, -10px) rotate(10deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
           }
 
-          @keyframes moveLeftRight {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(8px); }
+          @keyframes fishSwim3 {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(8px, -8px) rotate(8deg); }
+            50% { transform: translate(16px, 0) rotate(0deg); }
+            75% { transform: translate(8px, 8px) rotate(-8deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
           }
         `}
       </style>
