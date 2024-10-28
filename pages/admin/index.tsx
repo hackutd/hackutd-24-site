@@ -74,9 +74,11 @@ export default function Admin({ questions }: { questions: QADocument[] }) {
         <title>HackUTD 2024 - Admin</title>
         <meta name="description" content="HackPortal's Admin Page" />
       </Head>
+
       <section className="p-4">
         <AdminHeader />
       </section>
+
       {user.permissions.includes('super_admin') && (
         <div className="2xl:px-32 md:px-16 px-6">
           <ErrorList

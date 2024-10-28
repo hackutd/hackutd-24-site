@@ -184,19 +184,16 @@ export default function UserPage() {
     setSelectedUsers([...selectedUsers, id]);
   };
 
-  const postHackersStatus = (status: string) => {
-    const hackerIds = selectedUsers.filter(
-      (id) => users.find((user) => user.id == id).status !== status,
-    );
-
-    if (hackerIds.length === 0) return;
+  const postHackersStatus = (status: string, notes: string) => {
+    if (selectedUsers.length === 0) return;
 
     fetch('/api/acceptreject', {
       method: 'post',
       body: JSON.stringify({
         adminId: user.id,
-        hackerIds,
+        selectedUsers,
         status,
+        notes,
       }),
       headers: {
         Authorization: user.token,
@@ -209,7 +206,7 @@ export default function UserPage() {
           setUsers((prev) =>
             prev.map((user) => ({
               ...user,
-              status: hackerIds.includes(user.id) ? status : user.status,
+              status: selectedUsers.includes(user.id) ? status : user.status,
               selected: false,
             })),
           );
@@ -217,7 +214,7 @@ export default function UserPage() {
             prev.map((user) => ({
               ...user,
               selected: false,
-              status: hackerIds.includes(user.id) ? status : user.status,
+              status: selectedUsers.includes(user.id) ? status : user.status,
             })),
           );
           alert('Hackers update success');
@@ -225,9 +222,6 @@ export default function UserPage() {
       })
       .catch((err) => {
         alert(err);
-      })
-      .finally(() => {
-        setSelectedUsers([]);
       });
   };
 
@@ -244,6 +238,67 @@ export default function UserPage() {
 
   return (
     <div className="flex flex-col flex-grow items-center">
+      <Head>
+        <title>HackUTD 2024 - Admin</title> {/* !change */}
+        <meta name="description" content="HackPortal's Admin Page" />
+      </Head>
+
+      {/* <section id="subheader" className="p-2 md:p-4">
+        <AdminHeader />
+      </section> */}
+
+      <div className="p-4 md:p-8" />
+
+      <div className="w-full max-w-screen-2xl mb-10" style={{ height: 'calc(100vh - 180px)' }}>
+        {currentUser === '' ? (
+          <AllUsersAdminView
+            users={filteredUsers}
+            selectedUsers={selectedUsers}
+            onUserClick={(id) => {
+              setSelectedUsers([id]);
+              setCurrentUser(id);
+            }}
+            onUpdateRegistrationState={(newState) => {
+              setNextRegistrationStatus(newState);
+            }}
+            onUserSelect={(id) => handleUserSelect(id)}
+            onAcceptReject={(status) => postHackersStatus(status, '')}
+            searchQuery={searchQuery}
+            onSearchQueryUpdate={(searchQuery) => {
+              setSearchQuery(searchQuery);
+            }}
+            registrationState={registrationStatus}
+          />
+        ) : (
+          <UserAdminView
+            users={filteredUsers}
+            currentUserId={currentUser}
+            goBack={() => setCurrentUser('')}
+            onUserClick={(id) => {
+              setSelectedUsers([id]);
+              setCurrentUser(id);
+            }}
+            onAcceptReject={(status, notes) => postHackersStatus(status, notes)}
+            onUpdateRole={(newRole) => {
+              setUsers((users) =>
+                users.map((user) =>
+                  user.id !== currentUser
+                    ? { ...user }
+                    : { ...user, user: { ...user.user, permissions: [newRole] } },
+                ),
+              );
+              setFilteredUsers((users) =>
+                users.map((user) =>
+                  user.id !== currentUser
+                    ? { ...user }
+                    : { ...user, user: { ...user.user, permissions: [newRole] } },
+                ),
+              );
+            }}
+          />
+        )}
+      </div>
+
       <Transition
         appear
         show={
@@ -340,62 +395,6 @@ export default function UserPage() {
           </div>
         </Dialog>
       </Transition>
-      <Head>
-        <title>HackUTD 2024 - Admin</title> {/* !change */}
-        <meta name="description" content="HackPortal's Admin Page" />
-      </Head>
-      <section id="subheader" className="p-2 md:p-4">
-        <AdminHeader />
-      </section>
-      <div className="w-full max-w-screen-2xl mb-10" style={{ height: 'calc(100vh - 180px)' }}>
-        {currentUser === '' ? (
-          <AllUsersAdminView
-            users={filteredUsers}
-            selectedUsers={selectedUsers}
-            onUserClick={(id) => {
-              setSelectedUsers([id]);
-              setCurrentUser(id);
-            }}
-            onUpdateRegistrationState={(newState) => {
-              setNextRegistrationStatus(newState);
-            }}
-            onUserSelect={(id) => handleUserSelect(id)}
-            onAcceptReject={(status) => postHackersStatus(status)}
-            searchQuery={searchQuery}
-            onSearchQueryUpdate={(searchQuery) => {
-              setSearchQuery(searchQuery);
-            }}
-            registrationState={registrationStatus}
-          />
-        ) : (
-          <UserAdminView
-            users={filteredUsers}
-            currentUserId={currentUser}
-            goBack={() => setCurrentUser('')}
-            onUserClick={(id) => {
-              setSelectedUsers([id]);
-              setCurrentUser(id);
-            }}
-            onAcceptReject={(status) => postHackersStatus(status)}
-            onUpdateRole={(newRole) => {
-              setUsers((users) =>
-                users.map((user) =>
-                  user.id !== currentUser
-                    ? { ...user }
-                    : { ...user, user: { ...user.user, permissions: [newRole] } },
-                ),
-              );
-              setFilteredUsers((users) =>
-                users.map((user) =>
-                  user.id !== currentUser
-                    ? { ...user }
-                    : { ...user, user: { ...user.user, permissions: [newRole] } },
-                ),
-              );
-            }}
-          />
-        )}
-      </div>
     </div>
   );
 }
