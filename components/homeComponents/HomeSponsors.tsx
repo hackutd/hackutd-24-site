@@ -1,19 +1,17 @@
-import { useEffect, useState } from 'react';
-import SponsorCard from './SponsorCard';
-import Wave2 from '../assets/Wave2';
-import styles from './HomeSponsors.module.css';
-
-import PlaceholderMascot1 from '../../public/assets/Mascot.gif';
-import PlaceholderMascot2 from '../../public/assets/Corgi.gif';
-import PlaceholderMascot3 from '../../public/assets/Capybara.gif';
-import PlaceholderMascot4 from '../../public/assets/Duck.gif';
-import PlaceholderMascot5 from '../../public/assets/Frog.gif';
-
-import PlaceholderMascot from '../../public/assets/Reveal.gif';
-
-import Image from 'next/image';
 import LogoContext from '@/lib/context/logo';
-import SponsorAlternateCard from './SponsorAlternateCard';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import PlaceholderMascot from '../../public/assets/Reveal.gif';
+import styles from './HomeSponsors.module.css';
+import SponsorCard from './SponsorCard';
+import TierTitle from './TierTitle';
+
+// import Wave2 from '../assets/Wave2';
+// import PlaceholderMascot1 from '../../public/assets/Mascot.gif';
+// import PlaceholderMascot2 from '../../public/assets/Corgi.gif';
+// import PlaceholderMascot3 from '../../public/assets/Capybara.gif';
+// import PlaceholderMascot4 from '../../public/assets/Duck.gif';
+// import PlaceholderMascot5 from '../../public/assets/Frog.gif';
 
 export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
   const [sponsor, setSponsor] = useState<Sponsor[]>([]);
@@ -21,7 +19,16 @@ export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
 
   useEffect(() => {
     setSponsor(props.sponsorCard);
-  });
+  }, [props.sponsorCard]);
+
+  const sponsorTiers: { [key: string]: Sponsor[] } = sponsor.reduce((acc, curr) => {
+    const tier = curr.tier;
+    if (!acc[tier]) {
+      acc[tier] = [];
+    }
+    acc[tier].push(curr);
+    return acc;
+  }, {} as { [key: string]: Sponsor[] });
 
   return (
     sponsor.length != 0 && (
@@ -60,23 +67,29 @@ export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
               hello@hackutd.co
             </a>
           </h2>
-          {/* Sponsor Card */}
           <section className="flex flex-wrap justify-center p-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-              <LogoContext.Provider value={{ currentHoveredLogo, setCurrentHoveredLogo }}>
-                {sponsor.map(({ link, reference, alternativeReference }, idx) =>
-                  alternativeReference ? (
-                    <SponsorAlternateCard
-                      alternativeReference={alternativeReference}
-                      reference={reference}
-                      key={idx}
-                      link={link}
-                    />
-                  ) : (
-                    <SponsorCard key={idx} link={link} reference={reference} />
-                  ),
-                )}
-              </LogoContext.Provider>
+            <div className="p-4 w-full place-items-center">
+              {['title', 'platinum', 'gold', 'silver', 'bronze'].map((tier) => (
+                <div
+                  key={tier}
+                  className="flex flex-col gap-8 my-[3rem] text-center text-3xl text-white font-bold"
+                >
+                  <TierTitle tierName={tier} />
+
+                  <div className="flex flex-wrap gap-16 justify-center items-center">
+                    <LogoContext.Provider value={{ currentHoveredLogo, setCurrentHoveredLogo }}>
+                      {sponsorTiers[tier]?.map(({ link, reference, alternativeReference }, idx) => (
+                        <SponsorCard
+                          alternativeReference={alternativeReference}
+                          reference={reference}
+                          key={idx}
+                          link={link}
+                        />
+                      ))}
+                    </LogoContext.Provider>
+                  </div>
+                </div>
+              ))}
             </div>
           </section>
         </div>

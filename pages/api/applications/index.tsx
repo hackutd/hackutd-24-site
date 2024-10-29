@@ -23,6 +23,12 @@ async function checkRegistrationAllowed() {
 }
 
 async function deleteResumeFromStorage(fileUrl: string) {
+  if (firebase.apps.length <= 0)
+    firebase.initializeApp({
+      apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+      authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+      storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    });
   await firebase
     .auth()
     .signInWithEmailAndPassword(

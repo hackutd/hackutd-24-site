@@ -9,8 +9,10 @@ import '../styles/tailwind.css';
 
 import 'firebase/compat/auth';
 
+import CloudBackgroundImage from '@/public/assets/cloud-bg.png';
 import PondBackgroundImage from '@/public/assets/pond-background.png';
 import RegisterBackgroundImage from '@/public/assets/registration-background.png';
+
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AppProps } from 'next/dist/shared/lib/router/router';
@@ -43,11 +45,15 @@ function PortalApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [particlesInit, setParticlesInit] = useState(false);
   const hash = useUrlHash('');
+
   const duckBackgroundPathnames = ['/profile', '/profile/application/edit'];
   const registerBackgroundPathnames = ['/register', '/auth'];
+  const cloudBackgroundPathnames = ['/admin', '/admin/scan', '/admin/users'];
+
   const faqRef = useRef<HTMLDivElement | null>(null);
   const aboutRef = useRef<HTMLDivElement | null>(null);
   const scheduleRef = useRef<HTMLDivElement | null>(null);
+
   const [callbackRegistry, setCallbackRegistry] = useState<Record<string, () => Promise<unknown>>>(
     {},
   );
@@ -132,7 +138,7 @@ function PortalApp({ Component, pageProps }: AppProps) {
                   <meta name="theme-color" content="#5D5FEF" />
                 </Head>
 
-                <div className="min-h-screen flex flex-col">
+                <div className="min-h-screen flex flex-col overflow-hidden">
                   {duckBackgroundPathnames.includes(router.pathname) && (
                     <div className="fixed top-0 left-0 w-screen h-screen -z-10">
                       <Image
@@ -144,8 +150,6 @@ function PortalApp({ Component, pageProps }: AppProps) {
                       />
                     </div>
                   )}
-
-                  <AppHeader2_Wrapper />
 
                   {registerBackgroundPathnames.includes(router.pathname) && (
                     <div className="fixed top-0 left-0 w-screen h-screen -z-10">
@@ -159,13 +163,27 @@ function PortalApp({ Component, pageProps }: AppProps) {
                     </div>
                   )}
 
+                  {cloudBackgroundPathnames.includes(router.pathname) && (
+                    <div className="fixed top-0 left-0 w-screen h-screen -z-10">
+                      <Image
+                        className="w-screen h-screen object-cover"
+                        alt="Cloud background"
+                        src={CloudBackgroundImage.src}
+                        width={CloudBackgroundImage.width}
+                        height={CloudBackgroundImage.height}
+                      />
+                    </div>
+                  )}
+
+                  <AppHeader2_Wrapper />
+
                   {/* Spacer at the top of the page so that content won't be covered by the navbar */}
-                  {router.pathname !== '/' && <div className="hidden md:block h-[86px] shrink-0" />}
+                  {router.pathname !== '/' && <div className="h-[86px] shrink-0" />}
 
                   <Component {...pageProps} />
 
                   {/* Spacer at the bottom of the page for navbar bottom on mobile, so that content won't be covered by the navbar */}
-                  {/*<div className="md:hidden h-[80px] shrink-0" />*/}
+                  <div className="md:hidden h-[80px] shrink-0" />
 
                   <AppNavbarBottom />
                 </div>

@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { app, firestore } from 'firebase-admin';
 import initializeApi from '../../../lib/admin/init';
 import { userIsAuthorized } from '../../../lib/authorization/check-authorization';
+import { generateGroupsFromUserData } from '../users';
 
 initializeApi();
 
@@ -62,24 +63,36 @@ async function handleAssignReviewers(req: NextApiRequest, res: NextApiResponse) 
   try {
     //  get all non-reviewed applications, no reviewer properties (collections: registration,)
     // assumption made here: each time this api is called, it will assign 2 reviewers to all non-reviewed applications
-    const applicationsSnapshot = await db.collection(REGISTRATION_COLLECTIONS).get();
+    const applicationsSnapshot = await db
+      .collection(REGISTRATION_COLLECTIONS)
+      .where('user.permissions', '==', ['hacker'])
+      .get();
 
     // get all applications that need review and have role of hacker
-    const applicationsNeededForReview = applicationsSnapshot.docs
-      .filter((doc) => !doc.data().reviewer && doc.data().user.permissions.includes('hacker'))
-      .map((doc) => doc.data());
+    const applicationsNeededForReview: Registration[][] = generateGroupsFromUserData(
+      applicationsSnapshot.docs.map((doc) => {
+        return {
+          id: doc.id,
+          ...doc.data(),
+        } as Registration;
+      }),
+    );
 
     // shuffle the applications to avoid bias
     shuffle(applicationsNeededForReview);
 
     // get all organizers
-    const organizers: any[] = applicationsSnapshot.docs
-      .filter((doc) =>
-        ['super_admin', 'admin'].some((allowedPermission) =>
-          doc.data().user.permissions.includes(allowedPermission),
-        ),
-      )
-      .map((doc) => ({ ...doc.data(), reviewCount: doc.data().reviewCount || 0 }));
+    const organizersSnapshot = await db
+      .collection(REGISTRATION_COLLECTIONS)
+      .where('user.permissions', 'array-contains-any', ['super_admin', 'admin'])
+      .get();
+    const organizers = organizersSnapshot.docs.map((doc) => {
+      return {
+        id: doc.id,
+        data: doc.data(),
+        reviewCount: doc.data().reviewCount || 0,
+      };
+    });
 
     // sort organizers by review count ascending order
     organizers.sort((a, b) => a.reviewCount - b.reviewCount);
@@ -91,15 +104,24 @@ async function handleAssignReviewers(req: NextApiRequest, res: NextApiResponse) 
       // get organizer 1
       const reviewer1 = organizers[0];
       const reviewer2 = organizers[1];
-      const application = applicationsNeededForReview.pop();
+      const applications = applicationsNeededForReview.pop();
 
-      // update database for registration collection
-      await db
-        .collection(REGISTRATION_COLLECTIONS)
-        .doc(application.id)
-        .update({
-          reviewer: [reviewer1.id, reviewer2.id],
-        });
+      await Promise.all(
+        applications.map((application) => {
+          // update database for registration collection
+          return db
+            .collection(REGISTRATION_COLLECTIONS)
+            .doc(application.id)
+            .update({
+              reviewer: [reviewer1.id, reviewer2.id],
+              user: {
+                ...application.user,
+                permissions: ['hacker', 'in_review'],
+              },
+            });
+        }),
+      );
+
       // increase review count for organizer
       organizers[0].reviewCount++;
       organizers[1].reviewCount++;

@@ -78,6 +78,7 @@ export default function Pagination({
     siblingCount,
     currentPage,
   });
+
   if (currentPage === 0 || paginationRange.length < 2) {
     return null;
   }
@@ -87,11 +88,11 @@ export default function Pagination({
   return (
     <div className="flex items-center justify-center space-x-1">
       <button
-        className="flex flex-col item-center justify-center w-6 h-6 rounded-full border-2 border-complementary/25"
+        className="flex flex-col item-center justify-center w-6 h-6 rounded-full border-2 border-[rgba(19,19,19,1)]"
         disabled={currentPage <= 1}
         onClick={() => onPageChange(currentPage - 1)}
       >
-        <ChevronLeftIcon className="ml-0.5 w-4 h-4 text-complementary cursor-pointer" />
+        <ChevronLeftIcon className="ml-0.5 w-4 h-4 text-[rgba(19,19,19,1)] cursor-pointer" />
       </button>
 
       {paginationRange.map((pageNumber, i) => {
@@ -99,9 +100,24 @@ export default function Pagination({
           <div
             key={i}
             className={`flex items-center justify-center w-6 h-6 rounded-full mx-1 cursor-pointer text-sm
-          ${pageNumber === currentPage ? 'bg-primaryDark text-white' : 'text-complementary'}
+          ${
+            pageNumber === currentPage
+              ? 'bg-[rgba(19,19,19,1)] text-white'
+              : 'text-[rgba(19,19,19,1)]'
+          }
           `}
-            onClick={() => onPageChange(pageNumber)}
+            onClick={() => {
+              if (pageNumber === DOTS) {
+                const curIdx = paginationRange.indexOf(currentPage);
+                if (i < curIdx) {
+                  onPageChange(paginationRange[i + 1] - 1);
+                } else {
+                  onPageChange(paginationRange[i - 1] + 1);
+                }
+              } else {
+                onPageChange(pageNumber);
+              }
+            }}
           >
             {pageNumber}
           </div>
@@ -109,11 +125,11 @@ export default function Pagination({
       })}
 
       <button
-        className="flex flex-col item-center justify-center w-6 h-6 rounded-full border-2 border-complementary/25"
+        className="flex flex-col item-center justify-center w-6 h-6 rounded-full border-2 border-[rgba(19,19,19,1)]"
         disabled={currentPage >= lastPage}
         onClick={() => onPageChange(currentPage + 1)}
       >
-        <ChevronRightIcon className="ml-0.5 w-4 h-4 text-complementary cursor-pointer" />
+        <ChevronRightIcon className="ml-0.5 w-4 h-4 text-[rgba(19,19,19,1)] cursor-pointer" />
       </button>
     </div>
   );

@@ -1,4 +1,5 @@
-import UserList from '../adminComponents/UserList';
+import clsx from 'clsx';
+import UserList, { USERLIST_INFINITE_SCROLL_TARGET } from '../adminComponents/UserList';
 import { Tab } from '@headlessui/react';
 import { RegistrationState } from '../../lib/util';
 import { CheckIcon, SearchIcon, XIcon } from '@heroicons/react/solid';
@@ -27,7 +28,7 @@ export default function AllUsersAdminView({
   onUpdateRegistrationState,
 }: AllUsersAdminViewProps) {
   return (
-    <div className={`h-full px-14  text-sm md:text-base`}>
+    <div className={`h-full px-4 md:px-14 text-sm md:text-base`}>
       {/* Top Bar with Status, Search, and Filters */}
       <div className="flex flex-row justify-between">
         <div className="flex flex-col lg:flex-row  justify-between items-center w-full">
@@ -35,7 +36,11 @@ export default function AllUsersAdminView({
           <div className="relative icon flex flex-row justify-center items-center w-full lg:w-1/2">
             <input
               type="text"
-              className="absolute rounded-lg bg-secondary w-full border-none text-complementary placeholder:text-complementary/70"
+              className={`
+                rounded-lg
+                bg-[rgb(213,244,255)] text-[rgb(9,45,122)] placeholder:text-[rgba(9,45,122,0.7)]
+                w-full border-none
+              `}
               placeholder="Search Users"
               value={searchQuery}
               onChange={(e) => {
@@ -43,7 +48,7 @@ export default function AllUsersAdminView({
               }}
             />
             <div className="absolute right-4">
-              <SearchIcon className="w-6 h-6 text-complementary" />
+              <SearchIcon className="w-6 h-6 text-[rgb(9,45,122)]" />
             </div>
           </div>
 
@@ -52,6 +57,7 @@ export default function AllUsersAdminView({
             <div>Close Registration</div>
             <div>Live Registration</div>
           </div> */}
+
           <div className="flex flex-col md:flex-row justify-center items-center w-full mt-8 lg:mt-0">
             <Tab.Group
               selectedIndex={registrationState === RegistrationState.OPEN ? 1 : 0}
@@ -87,7 +93,7 @@ export default function AllUsersAdminView({
             </Tab.Group>
 
             {/* Accept Reject buttons */}
-            <div className="flex flex-row w-full justify-around max-w-xs mt-4 lg:mt-0">
+            {/* <div className="flex flex-row w-full justify-around max-w-xs mt-4 lg:mt-0">
               <button
                 className="flex flex-row bg-[#EA609C]/25 text-[#872852] text-lg font-bold py-2 px-8 rounded-md"
                 onClick={() => onAcceptReject('Rejected')}
@@ -100,34 +106,50 @@ export default function AllUsersAdminView({
               >
                 <CheckIcon className="w-6 h-6 mr-1 mt-0.5" /> Accept
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
 
       {/* User Table List */}
       <div
-        className="rounded-lg border-2 border-gray mt-5 mb-10 overflow-y-scroll"
+        id={USERLIST_INFINITE_SCROLL_TARGET}
+        className={`
+          overflow-auto
+          mt-5 mb-10
+          border-2 border-gray rounded-lg
+        `}
         style={{ height: 'calc(100% - 100px)' }}
       >
-        {/* Header */}
         <div
-          className={`flex flex-row border-b-2 border-gray px-6 py-3 bg-white justify-between sticky top-0`}
+          className={`
+            min-w-[1024px]
+            ${users.length === 0 ? 'bg-[rgba(255,255,255,0.6)]' : ''}
+            backdrop-blur
+          `}
         >
-          <div className="w-1/2 md:w-2/12">Name</div>
-          <div className="w-1/2 md:w-2/12">Status</div>
-          <div className="w-4/12  hidden md:block">University</div>
-          <div className="w-2/12 hidden md:block">Major</div>
-          <div className="w-2/12  hidden md:block">Year</div>
-        </div>
+          {/* Header */}
+          <div
+            className={clsx(
+              `flex flex-row border-b-2 border-gray px-6 py-3 justify-between sticky z-10 top-0`,
+              `text-[#40B7BA] bg-[rgba(255,255,255,0.8)]`,
+            )}
+          >
+            {/* <div className="w-1/2 md:w-2/12 flex items-center justify-center">Name</div> */}
+            <div className="w-2/12 flex items-center justify-center">Status</div>
+            <div className="w-4/12 flex items-center justify-center">University</div>
+            <div className="w-2/12 flex items-center justify-center">Major</div>
+            <div className="w-2/12 flex items-center justify-center">Year</div>
+          </div>
 
-        {/* User List */}
-        <UserList
-          users={users}
-          selectedUsers={selectedUsers}
-          onUserClick={(id) => onUserClick(id)}
-          onUserSelect={(id) => onUserSelect(id)}
-        />
+          {/* User List */}
+          <UserList
+            users={users}
+            selectedUsers={selectedUsers}
+            onUserClick={(id) => onUserClick(id)}
+            onUserSelect={(id) => onUserSelect(id)}
+          />
+        </div>
       </div>
     </div>
   );
