@@ -1,0 +1,9 @@
+.container::after {
+  content: '';
+  position: absolute;
+  top: 100dvh;
+  left: 0;
+  background: linear-gradient(to bottom, #3398d1 30%, #8bd1f0, #c6e9f4);
+  width: 100%;
+  min-height: 293dvh;
+}
