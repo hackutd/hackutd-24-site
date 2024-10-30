@@ -80,6 +80,7 @@ export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
                     <LogoContext.Provider value={{ currentHoveredLogo, setCurrentHoveredLogo }}>
                       {sponsorTiers[tier]?.map(({ link, reference, alternativeReference }, idx) => (
                         <SponsorCard
+                          tier={tier}
                           alternativeReference={alternativeReference}
                           reference={reference}
                           key={idx}
