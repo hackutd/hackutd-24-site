@@ -8,6 +8,8 @@ import mascotLifeRing from '../../public/assets/mascot_life_ring.png';
 import styles from './HomeHero2.module.css';
 import { SectionReferenceContext } from '@/lib/context/section';
 import Link from 'next/link';
+import LilyPads from 'public/assets/lilypads.png'; // Importing the lily pads image
+import noLPHero from 'public/assets/hero-no-lilypads.png';
 
 export default function HomeHero2() {
   const [isShort, setIsShort] = useState(false);
@@ -15,8 +17,9 @@ export default function HomeHero2() {
 
   return (
     <section
-      className={`bg-[url('/assets/hero.png')] md:bg-[url('/assets/hero-desktop.png')] lg:bg-[url('/assets/hero-xl.png')] ${styles.container} min-h-screen bg-center relative bg-white flex flex-col-reverse md:flex-col`}
+      className={`${styles.container} min-h-screen bg-center relative bg-white flex flex-col-reverse md:flex-col`}
       style={{
+        backgroundImage: `url(${LilyPads.src}), url(${noLPHero.src})`,
         backgroundSize: '100% 100%',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
@@ -32,7 +35,12 @@ export default function HomeHero2() {
           HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24
         </p>
       </div>
-
+      {/* Lily Pads - Positioned absolutely to cover the full width */}
+      <div className="absolute top-0 left-0 right-0 w-full z-10">
+        <div className="relative w-full" style={{ overflow: 'visible' }}>
+          <Image src={LilyPads.src} alt="Lily Pads" fill className="object-cover" priority />
+        </div>
+      </div>
       <div className="flex-grow flex h-full w-full relative">
         <div className="relative z-10 shrink-0 w-full flex">
           {/* MLH sticker */}
