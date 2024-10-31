@@ -45,6 +45,8 @@ export default function UserAdminGroupCarousel({ group }: UserAdminGroupCarousel
             {group.map((member, idx) => (
               <div key={member.id} className="min-w-0 shrink-0 grow-0 basis-full pl-4">
                 <UserAdminView
+                  groupLength={group.length}
+                  userIndex={idx + 1}
                   onNoteUpdate={(newNote) => {
                     setNotes((prev) =>
                       prev.map((note, noteIndex) => (noteIndex === idx ? newNote : note)),

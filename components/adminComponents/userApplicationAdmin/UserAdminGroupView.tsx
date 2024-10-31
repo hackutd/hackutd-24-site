@@ -94,6 +94,7 @@ export default function UserAdminGroupView({
                   getGroupId(group) === currentUserGroupId ? 'border-primaryDark border-[2px]' : ''
                 }
                 cursor-pointer
+                gap-x-3
               `}
               onClick={() => onUserGroupClick(getGroupId(group))}
             >
@@ -126,10 +127,20 @@ export default function UserAdminGroupView({
                       ? 'bg-[rgb(213,244,255)] text-[rgb(9,45,122)]'
                       : ''
                   }
-                  ${group[0].status === 'Maybe' ? 'bg-yellow-200 text-[rgb(9,45,122)]' : ''}
+                  ${group[0].status.startsWith('Maybe') ? 'bg-yellow-200 text-[rgb(9,45,122)]' : ''}
                 `}
               >
                 {group[0].status}
+              </div>
+              <div
+                className={`
+                  py-1 px-6 text-sm font-bold rounded-full
+                  flex-1 flex flex-row justify-center items-center
+                  whitespace-nowrap overflow-hidden text-ellipsis
+                  bg-green-200                
+                `}
+              >
+                {group.length} member{group.length > 1 && 's'}
               </div>
             </div>
           ))}

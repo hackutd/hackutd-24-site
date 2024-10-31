@@ -110,7 +110,7 @@ UserListProps) {
               ${group[0].status === 'Accepted' ? 'bg-[rgb(242,253,226)] text-[rgb(27,111,19)]' : ''}
               ${group[0].status === 'Rejected' ? 'bg-[rgb(255,233,218)] text-[rgb(122,15,39)]' : ''}
               ${group[0].status === 'In Review' ? 'bg-[rgb(213,244,255)] text-[rgb(9,45,122)]' : ''}
-              ${group[0].status === 'Maybe' ? 'bg-yellow-200 text-[rgb(9,45,122)]' : ''}
+              ${group[0].status.startsWith('Maybe') ? 'bg-yellow-200 text-[rgb(9,45,122)]' : ''}
             `}
             >
               {group[0].status}

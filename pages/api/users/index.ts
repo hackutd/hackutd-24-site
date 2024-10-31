@@ -181,7 +181,7 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
     });
   }
   const decisionReleased = await checkDecisionIsReleased();
-  const statusString = ['Rejected', 'Maybe', 'Maybe', 'Accepted'];
+  const statusString = ['Rejected', 'Maybe No', 'Maybe Yes', 'Accepted'];
   const assignedAppCollectionRef = await db
     .collection(USERS_COLLECTION)
     .where('reviewer', 'array-contains', userData.id)

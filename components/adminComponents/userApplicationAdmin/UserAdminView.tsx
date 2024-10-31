@@ -5,6 +5,8 @@ import { LockClosedIcon, LockOpenIcon, XIcon } from '@heroicons/react/solid';
 import MaybeVerdictDialog from './MaybeVerdictDialog';
 
 interface UserAdminViewProps {
+  userIndex: number;
+  groupLength: number;
   currentApplicant: UserIdentifier;
   onNoteUpdate: (note: string) => void;
   currentNote: string;
@@ -56,9 +58,11 @@ function FRQInfo({ k, v }: BasicInfoProps) {
 
 export default function UserAdminView({
   currentApplicant,
+  groupLength,
   onNoteUpdate,
   currentNote,
   onScoreSubmit,
+  userIndex,
 }: UserAdminViewProps) {
   const { user } = useAuthContext();
 
@@ -132,6 +136,9 @@ export default function UserAdminView({
           }
         }}
       />
+      <h1 className="text-3xl my-3 text-black font-bold">
+        Team member {userIndex}/{groupLength}
+      </h1>
       <div className="flex-wrap gap-y-2 flex flex-row justify-between items-center">
         <p
           className={`
@@ -151,7 +158,11 @@ export default function UserAdminView({
                     ? 'bg-[rgb(213,244,255)] text-[rgb(9,45,122)]'
                     : ''
                 }
-                ${currentApplicant.status === 'Maybe' ? 'bg-yellow-200 text-[rgb(9,45,122)]' : ''}
+                ${
+                  currentApplicant.status.startsWith('Maybe')
+                    ? 'bg-yellow-200 text-[rgb(9,45,122)]'
+                    : ''
+                }
               `}
         >
           {currentApplicant.status}
