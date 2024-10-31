@@ -69,7 +69,7 @@ export default function SponsorCard(props: SponsorCardProps) {
         {
           ['opacity-30']: currentHoveredLogo.length !== 0 && currentHoveredLogo !== props.reference,
           ['w-[250px] h-[150px]']: props.tier !== 'title',
-          ['w-[600px] h-[400px]']: props.tier === 'title',
+          ['w-[600px] h-[150px]']: props.tier === 'title',
         },
       )}
       onTouchStart={() => {
@@ -100,7 +100,7 @@ export default function SponsorCard(props: SponsorCardProps) {
             style={hovering ? mountedStyle : unmountedStyle}
             className={clsx('object-contain', {
               ['w-[250px] h-[150px]']: props.tier !== 'title',
-              ['w-[600] h-[400px]']: props.tier === 'title',
+              ['w-[600] h-[150px]']: props.tier === 'title',
             })}
           />
         ) : (
@@ -113,7 +113,7 @@ export default function SponsorCard(props: SponsorCardProps) {
             objectFit="contain"
             className={clsx('object-contain', {
               ['w-[250px] h-[150px]']: props.tier !== 'title',
-              ['w-[600px] h-[400px]']: props.tier === 'title',
+              ['w-[600px] h-[150px]']: props.tier === 'title',
             })}
           />
         )}
