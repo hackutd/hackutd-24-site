@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMemo } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { getGroupId } from './helpers';
+import { useAuthContext } from '@/lib/user/AuthContext';
+import { LockClosedIcon, LockOpenIcon } from '@heroicons/react/solid';
 
 export const USERLIST_INFINITE_SCROLL_TARGET = 'userlist-infinite-scroll-target';
 
@@ -12,12 +14,34 @@ interface UserListProps {
   // onUserSelect: (id: string) => void;
 }
 
+function HiddenInfo({ v, canUnlock }: { v: string; canUnlock: boolean }) {
+  const [lock, setLock] = useState(true);
+  const lockOnClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (canUnlock) setLock(!lock);
+  };
+  const lockClassName = 'ml-1 w-5 h-5 hover:scale-125 transition cursor-pointer';
+  return (
+    <div className="flex gap-x-3 my-4 items-center">
+      <p className={`flex flex-row items-center font-bold text-black ${lock ? 'mx-auto' : ''}`}>
+        {lock ? (
+          <LockClosedIcon onClick={lockOnClick} className={lockClassName} />
+        ) : (
+          <LockOpenIcon onClick={lockOnClick} className={lockClassName} />
+        )}
+      </p>
+      <p className="text-black">{lock ? '' : v}</p>
+    </div>
+  );
+}
+
 export default function UserList({
   userGroups,
   // selectedUsers,
   onUserGroupClick,
 }: // onUserSelect,
 UserListProps) {
+  const { user } = useAuthContext();
   const userList = useMemo(() => {
     const result: JSX.Element[] = [];
 
@@ -86,15 +110,43 @@ UserListProps) {
               ${group[0].status === 'Accepted' ? 'bg-[rgb(242,253,226)] text-[rgb(27,111,19)]' : ''}
               ${group[0].status === 'Rejected' ? 'bg-[rgb(255,233,218)] text-[rgb(122,15,39)]' : ''}
               ${group[0].status === 'In Review' ? 'bg-[rgb(213,244,255)] text-[rgb(9,45,122)]' : ''}
+              ${group[0].status.startsWith('Maybe') ? 'bg-yellow-200 text-[rgb(9,45,122)]' : ''}
             `}
             >
               {group[0].status}
             </span>
           </div>
-
+          {user.permissions.includes('super_admin') && (
+            <div
+              className={`
+            flex text-center items-center text-base text-[rgb(19,19,19)] w-2/12 h-full py-3j
+          `}
+            >
+              <div
+                className={`
+            whitespace-nowrap overflow-hidden text-ellipsis w-[100%]
+          `}
+              >
+                <HiddenInfo
+                  canUnlock={true}
+                  v={Array.from(
+                    new Set(
+                      group.map(
+                        (eachUser) => eachUser.user.firstName + ' ' + eachUser.user.lastName,
+                      ),
+                    ),
+                  )
+                    .sort((a, b) => a.localeCompare(b))
+                    .join(', ')}
+                />
+              </div>
+            </div>
+          )}
           <div
             className={`
-            flex text-center items-center text-base text-[rgb(19,19,19)] w-4/12 h-full py-3j
+            flex text-center items-center text-base text-[rgb(19,19,19)] ${
+              user.permissions.includes('super_admin') ? 'w-2/12' : 'w-4/12'
+            } h-full py-3j
           `}
           >
             <p
@@ -102,9 +154,12 @@ UserListProps) {
             whitespace-nowrap overflow-hidden text-ellipsis w-[100%]
           `}
             >
-              {Array.from(new Set(group.map((eachUser) => eachUser.university)))
-                .sort((a, b) => a.localeCompare(b))
-                .join(', ')}
+              <HiddenInfo
+                v={Array.from(new Set(group.map((eachUser) => eachUser.university)))
+                  .sort((a, b) => a.localeCompare(b))
+                  .join(', ')}
+                canUnlock={user.permissions.includes('super_admin')}
+              />
             </p>
           </div>
 

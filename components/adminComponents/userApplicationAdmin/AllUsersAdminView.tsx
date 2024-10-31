@@ -2,17 +2,19 @@ import { Tab } from '@headlessui/react';
 import clsx from 'clsx';
 import { RegistrationState } from '../../../lib/util';
 import UserList, { USERLIST_INFINITE_SCROLL_TARGET } from './UserList';
+import { SearchIcon } from '@heroicons/react/solid';
+import { useAuthContext } from '@/lib/user/AuthContext';
 
 interface AllUsersAdminViewProps {
   userGroups: UserIdentifier[][];
   // selectedUsers: string[];
-  // searchQuery: string;
+  searchQuery: string;
   registrationState: RegistrationState;
   onUpdateRegistrationState: (newState: RegistrationState) => void;
   onUserGroupClick: (id: string) => void;
   // onUserSelect: (id: string) => void;
   // onAcceptReject: (status: string) => void;
-  // onSearchQueryUpdate: (searchQuery: string) => void;
+  onSearchQueryUpdate: (searchQuery: string) => void;
 }
 
 export default function AllUsersAdminView({
@@ -21,18 +23,19 @@ export default function AllUsersAdminView({
   onUserGroupClick,
   // onUserSelect,
   // onAcceptReject,
-  // searchQuery,
-  // onSearchQueryUpdate,
+  searchQuery,
+  onSearchQueryUpdate,
   registrationState,
   onUpdateRegistrationState,
 }: AllUsersAdminViewProps) {
+  const { user } = useAuthContext();
   return (
     <div className={`h-full px-4 md:px-14 text-sm md:text-base`}>
       {/* Top Bar with Status, Search, and Filters */}
       <div className="flex flex-row justify-between">
         <div className="flex flex-col lg:flex-row  justify-between items-center w-full">
           {/* Search User */}
-          {/* <div className="relative icon flex flex-row justify-center items-center w-full lg:w-1/2">
+          <div className="relative icon flex flex-row justify-center items-center w-full lg:w-1/2">
             <input
               type="text"
               className={`
@@ -49,7 +52,7 @@ export default function AllUsersAdminView({
             <div className="absolute right-4">
               <SearchIcon className="w-6 h-6 text-[rgb(9,45,122)]" />
             </div>
-          </div> */}
+          </div>
 
           {/* Status (Close Registration / Live Registration) */}
           {/* <div className="flex flex-row justify-center items-center w-5/12">
@@ -68,21 +71,21 @@ export default function AllUsersAdminView({
               }}
             >
               <Tab.List className="flex flex-row justify-center items-center w-full">
-                <div className="bg-secondary rounded-full">
+                <div className="bg-[#F1F8FC] rounded-full">
                   <Tab
-                    className={`rounded-full ${
+                    className={`rounded-full font-bold ${
                       registrationState === RegistrationState.CLOSED
-                        ? 'bg-primaryDark text-secondary'
-                        : 'bg-secondary text-primaryDark'
+                        ? 'bg-[#163950] text-[#F1F8FC]'
+                        : 'bg-[#F1F8FC] text-[#163950]'
                     } py-2 px-4`}
                   >
                     Close Registration
                   </Tab>
                   <Tab
-                    className={`rounded-full ${
+                    className={`rounded-full font-bold ${
                       registrationState === RegistrationState.OPEN
-                        ? 'bg-primaryDark text-secondary'
-                        : 'bg-secondary text-primaryDark'
+                        ? 'bg-[#163950] text-[#F1F8FC]'
+                        : 'bg-[#F1F8FC] text-[#163950]'
                     } py-2 px-4`}
                   >
                     Live Registration
@@ -136,7 +139,16 @@ export default function AllUsersAdminView({
           >
             {/* <div className="w-1/2 md:w-2/12 flex items-center justify-center">Name</div> */}
             <div className="w-2/12 flex items-center justify-center">Status</div>
-            <div className="w-4/12 flex items-center justify-center">University</div>
+            {user.permissions.includes('super_admin') && (
+              <div className="w-2/12 flex items-center justify-center">Name</div>
+            )}
+            <div
+              className={`${
+                user.permissions.includes('super_admin') ? 'w-2/12' : 'w-4/12'
+              } flex items-center justify-center`}
+            >
+              University
+            </div>
             <div className="w-2/12 flex items-center justify-center">Major</div>
             <div className="w-2/12 flex items-center justify-center">Year</div>
           </div>

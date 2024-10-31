@@ -21,7 +21,7 @@ const SCORING_MAYBE_NO = 2;
 const SCORING_MAYBE_YES = 3;
 const SCORING_YES = 4;
 
-async function checkAppShouldEnterCommonPool(hackerId: string) {
+async function checkAppShouldEnterCommonPool(hackerId: string, isInATeam: boolean) {
   const hackerApplication = await db.collection(REGISTRATION_COLLECTION).doc(hackerId).get();
   // NOTE: if app already had `inCommonPool` flag, there's no reason to move it to common pool again
   if (!!hackerApplication.data().inCommonPool) {
@@ -49,6 +49,10 @@ async function checkAppShouldEnterCommonPool(hackerId: string) {
     }
     return acc + 1;
   }, 0);
+  if (scoring.docs.length === 2 && appScore < 0) {
+    // NOTE: if appScore is negative and 2 assigned officers already reviewed app, then user will go to common pool if whole team is rejected
+    return isInATeam;
+  }
   return appScore === 0;
 }
 
@@ -78,6 +82,8 @@ async function handlePostRequest(req: NextApiRequest, res: NextApiResponse) {
       msg: 'Request is not authorized to perform admin functionality',
     });
   }
+
+  const isTeam = req.body.scores.length > 1;
 
   // NOTE: req.body will be of type { scores: ScoringDataType[] }
   try {
@@ -114,7 +120,10 @@ async function handlePostRequest(req: NextApiRequest, res: NextApiResponse) {
           });
         }
         //  check if application should be moved into common pool.
-        const appShouldBeMovedToCommonPool = await checkAppShouldEnterCommonPool(scoring.hackerId);
+        const appShouldBeMovedToCommonPool = await checkAppShouldEnterCommonPool(
+          scoring.hackerId,
+          isTeam,
+        );
         if (appShouldBeMovedToCommonPool) {
           await moveAppToCommonPool(scoring.hackerId);
         }

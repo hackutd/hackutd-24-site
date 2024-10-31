@@ -5,6 +5,8 @@ import { LockClosedIcon, LockOpenIcon, XIcon } from '@heroicons/react/solid';
 import MaybeVerdictDialog from './MaybeVerdictDialog';
 
 interface UserAdminViewProps {
+  userIndex: number;
+  groupLength: number;
   currentApplicant: UserIdentifier;
   onNoteUpdate: (note: string) => void;
   currentNote: string;
@@ -17,6 +19,8 @@ interface BasicInfoProps {
   locked?: boolean;
   canUnlock?: boolean;
 }
+
+const scoreState = ['No', 'Maybe No', 'Maybe Yes', 'Yes'];
 
 function BasicInfo({ k, v, locked, canUnlock }: BasicInfoProps) {
   const [lock, setLock] = useState<boolean>(locked);
@@ -54,9 +58,11 @@ function FRQInfo({ k, v }: BasicInfoProps) {
 
 export default function UserAdminView({
   currentApplicant,
+  groupLength,
   onNoteUpdate,
   currentNote,
   onScoreSubmit,
+  userIndex,
 }: UserAdminViewProps) {
   const { user } = useAuthContext();
 
@@ -110,9 +116,29 @@ export default function UserAdminView({
       <MaybeVerdictDialog
         isOpen={showMaybeDialog}
         closeModal={() => setShowMaybeDialog(false)}
-        onMaybeYes={() => onScoreSubmit(3)}
-        onMaybeNo={() => onScoreSubmit(2)}
+        onMaybeYes={async () => {
+          try {
+            await onScoreSubmit(3);
+          } catch (err) {
+            console.error(err);
+          } finally {
+            console.log('done');
+            setShowMaybeDialog(false);
+          }
+        }}
+        onMaybeNo={async () => {
+          try {
+            await onScoreSubmit(2);
+          } catch (err) {
+            console.error(err);
+          } finally {
+            setShowMaybeDialog(false);
+          }
+        }}
       />
+      <h1 className="text-3xl my-3 text-black font-bold">
+        Team member {userIndex}/{groupLength}
+      </h1>
       <div className="flex-wrap gap-y-2 flex flex-row justify-between items-center">
         <p
           className={`
@@ -130,6 +156,11 @@ export default function UserAdminView({
                 ${
                   currentApplicant.status === 'In Review'
                     ? 'bg-[rgb(213,244,255)] text-[rgb(9,45,122)]'
+                    : ''
+                }
+                ${
+                  currentApplicant.status.startsWith('Maybe')
+                    ? 'bg-yellow-200 text-[rgb(9,45,122)]'
                     : ''
                 }
               `}
@@ -195,23 +226,38 @@ export default function UserAdminView({
 
         {/* Application Score */}
         <div className="flex flex-col items-center sm:w-2/5 text-black">
-          <p className="font-bold text-xl text-black">Application Score</p>
+          {currentApplicant.scoring && (
+            <>
+              <p className="font-bold text-xl text-black">Application Score</p>
 
-          <p className="text-8xl font-dmSans">
-            {currentApplicant.applicationScore.acceptCount -
-              currentApplicant.applicationScore.rejectCount}
-          </p>
+              <p className="text-8xl font-dmSans">
+                {currentApplicant.scoring.reduce(
+                  (acc: number, curr) =>
+                    curr.score === 4 ? acc + 1 : curr.score === 1 ? acc - 1 : acc,
+                  0,
+                )}
+              </p>
 
-          <p className="italic text-gray-600">
-            <span className="text-green-500">
-              {currentApplicant.applicationScore.acceptCount} accepted
-            </span>{' '}
-            /{' '}
-            <span className="text-red-500">
-              {currentApplicant.applicationScore.rejectCount} rejected
-            </span>
-          </p>
-
+              <p className="italic text-gray-600">
+                <span className="text-green-500">
+                  {currentApplicant.scoring.filter((score) => score.score === 4).length} accepted
+                </span>{' '}
+                /{' '}
+                <span className="text-red-500">
+                  {currentApplicant.scoring.filter((score) => score.score === 1).length} rejected
+                </span>{' '}
+                /{' '}
+                <span className="text-yellow-500">
+                  {
+                    currentApplicant.scoring.filter(
+                      (score) => score.score === 2 || score.score === 3,
+                    ).length
+                  }{' '}
+                  maybe
+                </span>
+              </p>
+            </>
+          )}
           {user.permissions.includes('super_admin') && (
             <div className="flex-wrap flex flex-row gap-2 p-3 w-full">
               <select
@@ -276,6 +322,34 @@ export default function UserAdminView({
           v={currentApplicant.lookingForward}
         />
       </div>
+      {currentApplicant.scoring && (
+        <>
+          <div className="my-6 w-full border-2 border-gray-200 rounded-md" />
+          <h1 className="text-4xl text-black mb-4">Reviews for this app</h1>
+          {currentApplicant.scoring.map((score, idx) => (
+            <div
+              key={idx}
+              className="p-3 border-2 border-gray-400 rounded-xl flex flex-col gap-y-4 my-4"
+            >
+              {/* <p className="text-black text-lg">{score.score}</p> */}
+              <div className="flex gap-x-3 items-center">
+                <span
+                  className={`
+                  w-fit py-1 px-6 rounded-full 
+                  ${score.score === 4 ? 'bg-[rgb(242,253,226)] text-[rgb(27,111,19)]' : ''}
+                  ${score.score === 1 ? 'bg-[rgb(255,233,218)] text-[rgb(122,15,39)]' : ''}
+                  ${score.score > 1 && score.score < 4 ? 'bg-yellow-200 text-[rgb(9,45,122)]' : ''}
+                  `}
+                >
+                  {scoreState[score.score - 1]}
+                </span>
+                <span className="text-black">{score.reviewer}</span>
+              </div>
+              {score.note !== '' && <p className="text-black text-lg">{score.note}</p>}
+            </div>
+          ))}
+        </>
+      )}
     </div>
   );
 }

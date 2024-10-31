@@ -1,8 +1,10 @@
 import useEmblaCarousel from 'embla-carousel-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import UserAdminView from './UserAdminView';
 import { RequestHelper } from '@/lib/request-helper';
 import { useAuthContext } from '@/lib/user/AuthContext';
+import { useUserGroup } from '@/lib/admin/group';
+import { getGroupId } from './helpers';
 
 interface UserAdminGroupCarouselProps {
   group: UserIdentifier[];
@@ -21,6 +23,8 @@ export default function UserAdminGroupCarousel({ group }: UserAdminGroupCarousel
     setNotes(group.map((_) => ''));
   }, [group]);
   const { user } = useAuthContext();
+  const updateGroupVerdict = useUserGroup((state) => state.updateGroupVerdict);
+  const groupId = useMemo(() => getGroupId(group), [group]);
   return (
     <div className="h-full flex w-full p-3">
       <button className="embla__prev" onClick={scrollPrev}>
@@ -41,6 +45,8 @@ export default function UserAdminGroupCarousel({ group }: UserAdminGroupCarousel
             {group.map((member, idx) => (
               <div key={member.id} className="min-w-0 shrink-0 grow-0 basis-full pl-4">
                 <UserAdminView
+                  groupLength={group.length}
+                  userIndex={idx + 1}
                   onNoteUpdate={(newNote) => {
                     setNotes((prev) =>
                       prev.map((note, noteIndex) => (noteIndex === idx ? newNote : note)),
@@ -78,6 +84,10 @@ export default function UserAdminGroupCarousel({ group }: UserAdminGroupCarousel
                         },
                       );
                       alert(data.msg);
+                      updateGroupVerdict(
+                        groupId,
+                        groupScore === 1 ? 'Rejected' : groupScore === 4 ? 'Accepted' : 'Maybe',
+                      );
                     } catch (err) {
                       alert('Error submitting score. Please try again later...');
                       console.error(err);

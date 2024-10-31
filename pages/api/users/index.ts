@@ -12,7 +12,7 @@ const db = firestore();
 
 const USERS_COLLECTION = '/registrations';
 const MISC_COLLECTION = '/miscellaneous';
-
+const SCORING_COLLECTION = '/scoring';
 /**
  *
  * Represent how data of a User is stored in the backend
@@ -151,6 +151,11 @@ export function generateGroupsFromUserData(userList: Registration[]): Registrati
   return ret;
 }
 
+async function checkDecisionIsReleased() {
+  const systemManagerDoc = await db.collection('/miscellaneous').doc('preferences').get();
+  return systemManagerDoc.data().applicationDecisions;
+}
+
 /**
  *
  * API endpoint to fetch all users from the database
@@ -175,9 +180,130 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
       msg: 'Request is not authorized to perform admin functionality.',
     });
   }
-
-  const collectionRef = await db.collection(USERS_COLLECTION).get();
-  const data = collectionRef.docs.map((doc) => doc.data());
+  const decisionReleased = await checkDecisionIsReleased();
+  const statusString = ['Rejected', 'Maybe No', 'Maybe Yes', 'Accepted'];
+  const assignedAppCollectionRef = await db
+    .collection(USERS_COLLECTION)
+    .where('reviewer', 'array-contains', userData.id)
+    .get();
+  const commonPoolCollectionRef = await db
+    .collection(USERS_COLLECTION)
+    .where('inCommonPool', '==', true)
+    .get();
+  const commonAppWithScores = await Promise.all(
+    commonPoolCollectionRef.docs
+      .filter((doc) => !doc.data().reviewer || !doc.data().reviewer.includes(userData.id))
+      .map(async (doc) => {
+        const data = doc.data();
+        delete data.reviewer; // Remove reviewer data from response
+        delete data.github; // Remove github data from response
+        delete data.linkedin; // Remove linkedin data from response
+        delete data.resume; // Remove resume data from response
+        delete data.phoneNumber; // Remove phone number data from response
+        const scoringSnapshot = await db
+          .collection(SCORING_COLLECTION)
+          .where('hackerId', '==', doc.id)
+          .get();
+        const reviewerIds = scoringSnapshot.docs.map((doc) => doc.data().adminId);
+        const organizerReview = scoringSnapshot.docs.find((d) => d.data().adminId === userData.id);
+        const reviewerInfo = await db
+          .collection(USERS_COLLECTION)
+          .where('id', 'in', reviewerIds)
+          .select('id', 'user.firstName', 'user.lastName')
+          .get();
+        const reviewerMapping = new Map<string, string>();
+        reviewerInfo.forEach((info) => {
+          reviewerMapping.set(
+            info.data().id,
+            `${info.data().user.firstName} ${info.data().user.lastName}`,
+          );
+        });
+        const appScore = scoringSnapshot.docs.reduce((acc, doc) => {
+          if (doc.data().score === 4) return acc + 1;
+          if (doc.data().score === 1) return acc - 1;
+          return acc;
+        }, 0);
+        if (scoringSnapshot.empty || organizerReview === undefined) {
+          return {
+            ...data,
+            status: decisionReleased ? (appScore >= 2 ? 'Accepted' : 'Rejected') : 'In Review',
+          };
+        }
+        return {
+          ...data,
+          scoring: scoringSnapshot.docs.map((doc) => {
+            const data = doc.data();
+            return {
+              score: data.score,
+              note: data.note,
+              reviewer: reviewerMapping.get(data.adminId),
+            };
+          }),
+          status: decisionReleased
+            ? appScore >= 2
+              ? 'Accepted'
+              : 'Rejected'
+            : statusString[organizerReview.data().score - 1],
+        };
+      }),
+  );
+  const data = [
+    ...(await Promise.all(
+      assignedAppCollectionRef.docs.map(async (doc) => {
+        const data = doc.data();
+        delete data.reviewer; // Remove reviewer data from response
+        delete data.github; // Remove github data from response
+        delete data.linkedin; // Remove linkedin data from response
+        delete data.resume; // Remove resume data from response
+        delete data.phoneNumber; // Remove phone number data from response
+        const scoringSnapshot = await db
+          .collection(SCORING_COLLECTION)
+          .where('hackerId', '==', doc.id)
+          .get();
+        const organizerReview = scoringSnapshot.docs.find((d) => d.data().adminId === userData.id);
+        if (!decisionReleased) {
+          return {
+            ...data,
+            status: organizerReview ? statusString[organizerReview.data().score - 1] : 'In Review',
+            scoring: organizerReview
+              ? [{ score: organizerReview.data().score, note: organizerReview.data().note }]
+              : undefined,
+          };
+        }
+        const reviewerIds = scoringSnapshot.docs.map((doc) => doc.data().adminId);
+        const reviewerInfo = await db
+          .collection(USERS_COLLECTION)
+          .where('id', 'in', reviewerIds)
+          .select('id', 'user.firstName', 'user.lastName')
+          .get();
+        const reviewerMapping = new Map<string, string>();
+        reviewerInfo.forEach((info) => {
+          reviewerMapping.set(
+            info.data().id,
+            `${info.data().user.firstName} ${info.data().user.lastName}`,
+          );
+        });
+        const appScore = scoringSnapshot.docs.reduce((acc, doc) => {
+          if (doc.data().score === 4) return acc + 1;
+          if (doc.data().score === 1) return acc - 1;
+          return acc;
+        }, 0);
+        return {
+          ...data,
+          scoring: scoringSnapshot.docs.map((doc) => {
+            const data = doc.data();
+            return {
+              score: data.score,
+              note: data.note,
+              reviewer: reviewerMapping.get(data.adminId),
+            };
+          }),
+          status: appScore >= 2 ? 'Accepted' : 'Rejected',
+        };
+      }),
+    )),
+    ...commonAppWithScores,
+  ];
 
   // Hide sensitive data
   const hideSensitiveData = (data: Registration[]) => {
