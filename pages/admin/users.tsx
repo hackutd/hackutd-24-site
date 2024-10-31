@@ -8,7 +8,7 @@ import Head from 'next/head';
 import { Fragment, useEffect, useState } from 'react';
 import { isAuthorized } from '.';
 import AllUsersAdminView from '../../components/adminComponents/userApplicationAdmin/AllUsersAdminView';
-import UserAdminView from '../../components/adminComponents/userApplicationAdmin/UserAdminView';
+import UserAdminGroupView from '../../components/adminComponents/userApplicationAdmin/UserAdminGroupView';
 import { RequestHelper } from '../../lib/request-helper';
 import { useAuthContext } from '../../lib/user/AuthContext';
 import { RegistrationState } from '../../lib/util';
@@ -271,7 +271,7 @@ export default function UserPage() {
             registrationState={registrationStatus}
           />
         ) : (
-          <UserAdminView
+          <UserAdminGroupView
             userGroups={userGroups}
             currentUserGroupId={currentUserGroup}
             goBack={() => setCurrentUserGroup('')}
