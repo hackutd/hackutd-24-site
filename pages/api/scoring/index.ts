@@ -5,6 +5,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 initializeApi();
 const db = firestore();
+// TODO: change this to acceptreject
 const SCORING_COLLECTION = '/scoring';
 const REGISTRATION_COLLECTION = '/registrations';
 
@@ -20,7 +21,7 @@ const SCORING_MAYBE_NO = 2;
 const SCORING_MAYBE_YES = 3;
 const SCORING_YES = 4;
 
-async function checkAppShouldEnterCommonPool(hackerId: string) {
+async function checkAppShouldEnterCommonPool(hackerId: string, isInATeam: boolean) {
   const hackerApplication = await db.collection(REGISTRATION_COLLECTION).doc(hackerId).get();
   // NOTE: if app already had `inCommonPool` flag, there's no reason to move it to common pool again
   if (!!hackerApplication.data().inCommonPool) {
@@ -48,6 +49,10 @@ async function checkAppShouldEnterCommonPool(hackerId: string) {
     }
     return acc + 1;
   }, 0);
+  if (scoring.docs.length === 2 && appScore < 0) {
+    // NOTE: if appScore is negative and 2 assigned officers already reviewed app, then user will go to common pool if whole team is rejected
+    return isInATeam;
+  }
   return appScore === 0;
 }
 
@@ -78,6 +83,8 @@ async function handlePostRequest(req: NextApiRequest, res: NextApiResponse) {
     });
   }
 
+  const isTeam = req.body.scores.length > 1;
+
   // NOTE: req.body will be of type { scores: ScoringDataType[] }
   try {
     await Promise.all(
@@ -96,18 +103,35 @@ async function handlePostRequest(req: NextApiRequest, res: NextApiResponse) {
           return;
         }
         // checking whether organizer is reviewing an app assigned to them or an app from common pool
-        const appIsAssigned = appAssignee.some((assigneeId) => assigneeId === scoring.adminId);
-        await db.collection(SCORING_COLLECTION).add({
-          ...scoring,
-          appIsAssigned,
-        });
+        const scoringRef = await db
+          .collection(SCORING_COLLECTION)
+          .where('adminId', '==', scoring.adminId)
+          .where('hackerId', '==', scoring.hackerId)
+          .get();
+        if (!scoringRef.empty) {
+          await scoringRef.docs[0].ref.update({
+            score: scoring.score,
+          });
+        } else {
+          const appIsAssigned = appAssignee.some((assigneeId) => assigneeId === scoring.adminId);
+          await db.collection(SCORING_COLLECTION).add({
+            ...scoring,
+            appIsAssigned,
+          });
+        }
         //  check if application should be moved into common pool.
-        const appShouldBeMovedToCommonPool = await checkAppShouldEnterCommonPool(scoring.hackerId);
+        const appShouldBeMovedToCommonPool = await checkAppShouldEnterCommonPool(
+          scoring.hackerId,
+          isTeam,
+        );
         if (appShouldBeMovedToCommonPool) {
           await moveAppToCommonPool(scoring.hackerId);
         }
       }),
     );
+    return res.status(200).json({
+      msg: 'Score submitted successful',
+    });
   } catch (err) {
     console.error(err);
     return res.status(500).json({

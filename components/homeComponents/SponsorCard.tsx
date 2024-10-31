@@ -8,6 +8,7 @@ import { useContext, useEffect, useState } from 'react';
 import LoadIcon from '../LoadIcon';
 
 interface SponsorCardProps {
+  tier: string;
   link: string;
   reference: string;
   alternativeReference?: string;
@@ -64,9 +65,11 @@ export default function SponsorCard(props: SponsorCardProps) {
   return (
     <div
       className={clsx(
-        `my-4 p-3 w-[250px] h-[150px] flex justify-center items-center hover:scale-110 hover:duration-300  duration-500 opacity-100`,
+        `my-4 p-3 flex justify-center items-center hover:scale-110 hover:duration-300  duration-500 opacity-100`,
         {
           ['opacity-30']: currentHoveredLogo.length !== 0 && currentHoveredLogo !== props.reference,
+          ['w-[250px] h-[150px]']: props.tier !== 'title',
+          ['w-[600px] h-[400px]']: props.tier === 'title',
         },
       )}
       onTouchStart={() => {
@@ -90,22 +93,28 @@ export default function SponsorCard(props: SponsorCardProps) {
           <Image
             alt={`Sponsor Image ${props.alternativeReference}`}
             src={alternativeImgSrc}
-            width={200}
-            height={200}
+            width={props.tier === 'title' ? 600 : 200}
+            height={props.tier === 'title' ? 600 : 200}
             layout="fixed"
             objectFit="contain"
             style={hovering ? mountedStyle : unmountedStyle}
-            className={'w-[250px] h-[150px] object-contain'}
+            className={clsx('object-contain', {
+              ['w-[250px] h-[150px]']: props.tier !== 'title',
+              ['w-[600] h-[400px]']: props.tier === 'title',
+            })}
           />
         ) : (
           <Image
             alt={`Sponsor Image ${props.reference}`}
             src={imgSrc}
-            width={200}
-            height={200}
+            width={props.tier === 'title' ? 600 : 200}
+            height={props.tier === 'title' ? 600 : 200}
             layout="fixed"
             objectFit="contain"
-            className={'w-[250px] h-[150px] object-contain'}
+            className={clsx('object-contain', {
+              ['w-[250px] h-[150px]']: props.tier !== 'title',
+              ['w-[600px] h-[400px]']: props.tier === 'title',
+            })}
           />
         )}
       </a>
