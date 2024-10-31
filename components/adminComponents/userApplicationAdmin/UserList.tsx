@@ -1,40 +1,40 @@
 import React, { useEffect } from 'react';
 import { useMemo } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { getGroupId } from './helpers';
 
 export const USERLIST_INFINITE_SCROLL_TARGET = 'userlist-infinite-scroll-target';
 
 interface UserListProps {
-  users: UserIdentifier[];
-  selectedUsers: string[];
-
-  onUserClick: (id: string) => void;
-  onUserSelect: (id: string) => void;
+  userGroups: UserIdentifier[][];
+  // selectedUsers: string[];
+  onUserGroupClick: (id: string) => void;
+  // onUserSelect: (id: string) => void;
 }
 
 export default function UserList({
-  users,
-  selectedUsers,
-  onUserClick,
-  onUserSelect,
-}: UserListProps) {
+  userGroups,
+  // selectedUsers,
+  onUserGroupClick,
+}: // onUserSelect,
+UserListProps) {
   const userList = useMemo(() => {
     const result: JSX.Element[] = [];
 
-    users.forEach((user, idx) => {
+    userGroups.forEach((group, idx) => {
       const bgColor = idx % 2 == 0 ? 'bg-[rgba(227,227,227,0.8)]' : 'bg-[rgba(255,255,255,0.6)]';
       const blur = 'backdrop-blur-lg';
 
       result.push(
         <div
-          key={user.id}
+          key={getGroupId(group)}
           className={`
           flex flex-row justify-between px-6
-          cursor-pointer hover:bg-[rgb(255,255,255,0.7)] items-center 
+          cursor-pointer hover:bg-[rgb(255,255,255,0.2)] items-center transition
           ${bgColor}
           ${blur}
         `}
-          onClick={() => onUserClick(user.id)}
+          onClick={() => onUserGroupClick(getGroupId(group))}
         >
           {/*
             Name
@@ -83,12 +83,12 @@ export default function UserList({
             <span
               className={`
               py-1 px-6 rounded-full 
-              ${user.status === 'Accepted' ? 'bg-[rgb(242,253,226)] text-[rgb(27,111,19)]' : ''}
-              ${user.status === 'Rejected' ? 'bg-[rgb(255,233,218)] text-[rgb(122,15,39)]' : ''}
-              ${user.status === 'In Review' ? 'bg-[rgb(213,244,255)] text-[rgb(9,45,122)]' : ''}
+              ${group[0].status === 'Accepted' ? 'bg-[rgb(242,253,226)] text-[rgb(27,111,19)]' : ''}
+              ${group[0].status === 'Rejected' ? 'bg-[rgb(255,233,218)] text-[rgb(122,15,39)]' : ''}
+              ${group[0].status === 'In Review' ? 'bg-[rgb(213,244,255)] text-[rgb(9,45,122)]' : ''}
             `}
             >
-              {user.status}
+              {group[0].status}
             </span>
           </div>
 
@@ -102,7 +102,9 @@ export default function UserList({
             whitespace-nowrap overflow-hidden text-ellipsis w-[100%]
           `}
             >
-              {user.university}
+              {Array.from(new Set(group.map((eachUser) => eachUser.university)))
+                .sort((a, b) => a.localeCompare(b))
+                .join(', ')}
             </p>
           </div>
 
@@ -116,7 +118,9 @@ export default function UserList({
             whitespace-nowrap overflow-hidden text-ellipsis w-[100%]
           `}
             >
-              {user.major}
+              {Array.from(new Set(group.map((eachUser) => eachUser.major)))
+                .sort((a, b) => a.localeCompare(b))
+                .join(', ')}
             </p>
           </div>
 
@@ -130,7 +134,9 @@ export default function UserList({
             whitespace-nowrap overflow-hidden text-ellipsis w-[100%]
           `}
             >
-              {user.studyLevel}
+              {Array.from(new Set(group.map((eachUser) => eachUser.studyLevel)))
+                .sort((a, b) => a.localeCompare(b))
+                .join(', ')}
             </p>
           </div>
         </div>,
@@ -138,7 +144,7 @@ export default function UserList({
     });
 
     return result;
-  }, [onUserClick, users]);
+  }, [onUserGroupClick, userGroups]);
 
   const pageSize = 20;
   const [userListSlice, setUserViewSlice] = React.useState<JSX.Element[]>(
@@ -147,7 +153,7 @@ export default function UserList({
 
   useEffect(() => {
     setUserViewSlice(userList.slice(0, pageSize));
-  }, [userList, users]);
+  }, [userList, userGroups]);
 
   const nextPage = () => {
     setUserViewSlice(userList.slice(0, Math.min(userList.length, userListSlice.length + pageSize)));
