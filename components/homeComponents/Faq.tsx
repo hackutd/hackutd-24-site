@@ -24,7 +24,6 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
   );
   const { faqRef } = useContext(SectionReferenceContext);
 
-  // Updated fish movement styles to simulate more fluid fish-like swimming motions
   // Updated fish movement styles to simulate more fluid fish-like swimming motions and add underwater effect
   const fish1HoverStyle = {
     animation: 'fishSwim1 5s infinite alternate ease-in-out',
