@@ -36,6 +36,7 @@ async function getStatsData() {
     scans: {},
     timestamp: {},
     codeOfConduct: {},
+    disclaimer: {},
     ...statRecords,
   };
 
