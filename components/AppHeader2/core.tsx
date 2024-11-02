@@ -206,7 +206,7 @@ export default function AppHeader2_Core(props: Props) {
     // TODO: Read after applications open
     items.push(
       <div id={itemIdRoot + itemIdx} className="p-2 text-white cursor-pointer">
-        {user && hasProfile ? (
+        {user && hasProfile && (
           <button
             onClick={async () => {
               if (Object.hasOwn(callbackRegistry, router.pathname)) {
@@ -217,10 +217,6 @@ export default function AppHeader2_Core(props: Props) {
           >
             <div className="py-3 px-5 rounded-[30px] bg-[#40B7BA] font-bold">Profile</div>
           </button>
-        ) : (
-          <Link href="/register">
-            <div className="py-3 px-5 rounded-[30px] bg-[#40B7BA] font-bold">Apply</div>
-          </Link>
         )}
       </div>,
     );
