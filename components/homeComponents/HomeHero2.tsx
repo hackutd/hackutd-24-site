@@ -223,26 +223,33 @@ export default function HomeHero2() {
     if (isHeroLoaded) {
       const tl = gsap.timeline({ delay: 0.5 });
 
-      // Animating hero elements on initial load
-      tl.fromTo(
-        titleRef.current,
-        { opacity: 0, y: 50, scale: 0.8 },
-        { opacity: 1, y: 0, scale: 1, duration: 1.5, ease: 'power4.out' },
-      )
-        .fromTo(
+      if (titleRef.current) {
+        tl.fromTo(
+          titleRef.current,
+          { opacity: 0, y: 50, scale: 0.8 },
+          { opacity: 1, y: 0, scale: 1, duration: 1.5, ease: 'power4.out' },
+        );
+      }
+
+      if (duckRef.current) {
+        tl.fromTo(
           duckRef.current,
           { opacity: 0, x: 100, scale: 0.8 },
           { opacity: 1, x: 0, scale: 1, duration: 1.5, ease: 'power4.out' },
           '-=1',
-        )
-        .fromTo(
+        );
+      }
+
+      if (mascotRef.current) {
+        tl.fromTo(
           mascotRef.current,
           { opacity: 0, y: 100, scale: 0.8 },
           { opacity: 1, y: 0, scale: 1, duration: 1.5, ease: 'power4.out' },
           '-=1.2',
         );
+      }
 
-      // Animate welcome text
+      // Animate welcome text if it exists
       if (welcomeTextRef.current) {
         const welcomeSplit = new SplitType(welcomeTextRef.current, { types: 'words,chars' });
         tl.fromTo(
@@ -253,7 +260,7 @@ export default function HomeHero2() {
         );
       }
 
-      // Animate date text
+      // Animate date text if it exists
       if (dateTextRef.current) {
         const dateSplit = new SplitType(dateTextRef.current, { types: 'words,chars' });
         tl.fromTo(
@@ -264,7 +271,7 @@ export default function HomeHero2() {
         );
       }
 
-      // Animate apply button
+      // Animate apply button if it exists
       if (applyButtonRef.current) {
         tl.fromTo(
           applyButtonRef.current,
@@ -291,7 +298,12 @@ export default function HomeHero2() {
         ease: 'power3.inOut',
         onComplete: () => setShowSlingshot(false),
       }).to(
-        [welcomeTextRef.current, titleRef.current, dateTextRef.current, applyButtonRef.current],
+        [
+          welcomeTextRef.current,
+          titleRef.current,
+          dateTextRef.current,
+          applyButtonRef.current,
+        ].filter(Boolean), // Ensure non-null refs
         {
           opacity: 1,
           y: 0,
@@ -302,7 +314,12 @@ export default function HomeHero2() {
     } else {
       // Hide the text and show the slingshot
       tl.to(
-        [welcomeTextRef.current, titleRef.current, dateTextRef.current, applyButtonRef.current],
+        [
+          welcomeTextRef.current,
+          titleRef.current,
+          dateTextRef.current,
+          applyButtonRef.current,
+        ].filter(Boolean), // Ensure non-null refs
         {
           opacity: 0,
           y: -50,
@@ -356,7 +373,7 @@ export default function HomeHero2() {
               <div
                 ref={duckRef}
                 onClick={() => handleMascotClick('blue')} // Set rock color to blue on duck click
-                className="w-[10rem] absolute top-[20%] md:top-[10%] right-[25%] md:w-[20rem] lg:w-[25rem] mb-4 cursor-pointer z-30"
+                className="w-[10rem] absolute top-[20%] md:top-[10%] right-[25%] md:w-[15rem] lg:w-[20rem] mb-4 cursor-pointer z-30"
                 style={{ cursor: 'pointer', zIndex: '30' }} // Ensuring the duck is clickable
               >
                 <Image
@@ -373,23 +390,13 @@ export default function HomeHero2() {
                 className="relative flex flex-col items-center gap-2"
                 style={{ paddingTop: '8vh' }}
               >
-                <p
-                  ref={welcomeTextRef}
-                  className="font-montserrat mx-auto lg:ml-[5rem] text-[#FFFFFF] text-xs sm:text-sm md:text-md lg:text-lg xl:text-xl font-semibold"
-                  style={{
-                    lineHeight: '24.38px',
-                    letterSpacing: '0.3em',
-                  }}
-                >
-                  WELCOME TO
-                </p>
-
                 {/* Title */}
                 <div
                   ref={titleRef}
-                  className="w-[60vw] md:w-[40vw] lg:w-[30vw]"
+                  className="w-[80vw] md:w-[60vw] lg:w-[50vw]"
                   style={{
-                    maxWidth: '600px',
+                    maxWidth: '800px',
+                    marginTop: '5rem',
                   }}
                 >
                   <Image
@@ -426,12 +433,12 @@ export default function HomeHero2() {
           </div>
         </div>
 
-        <div className="absolute bottom-[30%] left-0 lg:left-[2%] lg:bottom-[25%] z-20">
+        <div className="absolute bottom-[20%] left-0 lg:left-[2%] lg:bottom-[25%] z-20">
           {/* Mascot image (Click event attached) */}
           <div
             ref={mascotRef}
             onClick={() => handleMascotClick('red')} // Set rock color to red on mascot click
-            className="w-[10rem] md:w-[20rem] lg:w-[25rem] cursor-pointer z-30"
+            className="w-[10rem] md:w-[15rem] lg:w-[20rem] cursor-pointer z-30"
             style={{ cursor: 'pointer', zIndex: '30' }} // Ensuring the mascot is clickable
           >
             <Image

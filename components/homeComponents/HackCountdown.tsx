@@ -8,11 +8,13 @@ const Countdown = () => {
     days: 20,
     hours: 22,
     minutes: 56,
+    seconds: 0, // Add seconds to the initial state
   });
 
   const countdownRef = useRef(null); // Reference to countdown container
   const cloudRef = useRef(null); // Reference to cloud
   const countdownTitleRef = useRef(null); // Reference to countdown title
+
   const cloudHoverStyle = {
     animation: 'moveUpDown 2s infinite alternate',
   };
@@ -27,8 +29,9 @@ const Countdown = () => {
       const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
       const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000); // Calculate the seconds
 
-      setTimeLeft({ days, hours, minutes });
+      setTimeLeft({ days, hours, minutes, seconds });
     }, 1000);
 
     return () => clearInterval(intervalId);
@@ -80,21 +83,6 @@ const Countdown = () => {
     };
   }, []);
 
-  useEffect(() => {
-    // Hover effect for cloud
-    gsap.fromTo(
-      '.cloud',
-      { scale: 1 },
-      {
-        scale: 1.1,
-        repeat: -1,
-        yoyo: true,
-        duration: 2,
-        ease: 'power1.inOut',
-      },
-    );
-  }, []);
-
   const renderTimeBox = (value, label) => {
     const digits = value.toString().padStart(2, '0').split('');
     return (
@@ -122,19 +110,23 @@ const Countdown = () => {
       <div
         ref={countdownRef} // Apply the ref to the countdown container
         className="relative min-h-screen flex flex-col items-center justify-center font-jua"
-        style={{ position: 'relative', minHeight: '100vh' }} // Fully visible initially
+        style={{ position: 'relative', minHeight: '150vh' }}
       >
-        <div className="relative flex justify-center items-center w-full " style={cloudHoverStyle}>
+        <div className="relative flex justify-center items-center w-full" style={cloudHoverStyle}>
           <div
             className="relative w-full flex justify-center items-center"
-            style={{ maxWidth: '1000px', height: 'auto' }}
+            style={{ height: 'auto' }} // Adjusted cloud width
           >
             <img
               src="/assets/bigCloud.png"
               alt="Cloud"
-              ref={cloudRef} // Cloud ref
-              className={`w-full h-auto ${styles.cloud} cloud`}
-              style={{ opacity: 0 }} // Initially hidden, controlled by GSAP
+              ref={cloudRef} // Cloud ref for GSAP animation
+              className={`${styles.cloud}`}
+              style={{
+                width: '800px',
+                height: 'auto',
+                opacity: 0, // Initially hidden, animated by GSAP
+              }}
             />
             <div className="absolute flex flex-col items-center justify-center w-full h-full p-4 text-center">
               <h1
@@ -148,6 +140,7 @@ const Countdown = () => {
                 {renderTimeBox(timeLeft.days, 'DAYS')}
                 {renderTimeBox(timeLeft.hours, 'HOURS')}
                 {renderTimeBox(timeLeft.minutes, 'MINUTES')}
+                {renderTimeBox(timeLeft.seconds, 'SECONDS')} {/* Render the seconds */}
               </div>
             </div>
           </div>

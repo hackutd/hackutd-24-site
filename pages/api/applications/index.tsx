@@ -1,7 +1,13 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { firestore } from 'firebase-admin';
+import { firestore, auth } from 'firebase-admin';
 import initializeApi from '../../../lib/admin/init';
-import { userIsAuthorized } from '../../../lib/authorization/check-authorization';
+import {
+  extractUserDataFromToken,
+  userIsAuthorized,
+} from '../../../lib/authorization/check-authorization';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/storage';
+import 'firebase/compat/auth';
 
 initializeApi();
 
@@ -14,6 +20,24 @@ const PARTIAL_APPLICATIONS_COLLECTION = '/partial-registrations';
 async function checkRegistrationAllowed() {
   const preferenceDoc = await db.collection('miscellaneous').doc('preferences').get();
   return preferenceDoc.data().allowRegistrations ?? false;
+}
+
+async function deleteResumeFromStorage(fileUrl: string) {
+  if (firebase.apps.length <= 0)
+    firebase.initializeApp({
+      apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+      authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+      storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+    });
+  await firebase
+    .auth()
+    .signInWithEmailAndPassword(
+      process.env.NEXT_PUBLIC_RESUME_UPLOAD_SERVICE_ACCOUNT,
+      process.env.NEXT_PUBLIC_RESUME_UPLOAD_PASSWORD,
+    );
+  const resumeRef = firebase.storage().refFromURL(fileUrl);
+  const files = await resumeRef.list();
+  await Promise.all(files.items.map((file) => file.delete()));
 }
 
 async function updateAllUsersDoc(userId: string, profile: any) {
@@ -132,7 +156,10 @@ async function handlePostApplications(req: NextApiRequest, res: NextApiResponse)
   // await updateAllUsersDoc(body.user.id, body);
   res.status(200).json({
     msg: 'Operation completed',
-    registrationData: completedRegistrationInfo,
+    registrationData: {
+      ...completedRegistrationInfo,
+      updatedAt: new Date(),
+    },
   });
 }
 
@@ -198,6 +225,37 @@ async function handlePutApplications(req: NextApiRequest, res: NextApiResponse) 
   });
 }
 
+async function handleDeleteApplication(req: NextApiRequest, res: NextApiResponse) {
+  const { headers } = req;
+  const userToken = headers['authorization'] as string | undefined;
+  const userAuthData = await auth().verifyIdToken(userToken);
+  try {
+    const userPartialApp = await db
+      .collection(PARTIAL_APPLICATIONS_COLLECTION)
+      .doc(userAuthData.uid)
+      .get();
+    if (userPartialApp.exists) {
+      if (userPartialApp.data().resume && userPartialApp.data().resume !== '') {
+        await deleteResumeFromStorage(userPartialApp.data().resume);
+      }
+      await db.collection(PARTIAL_APPLICATIONS_COLLECTION).doc(userAuthData.uid).delete();
+    }
+    const userAppData = await db.collection(APPLICATIONS_COLLECTION).doc(userAuthData.uid).get();
+    if (userAppData.exists) {
+      if (userAppData.data().resume && userAppData.data().resume !== '') {
+        await deleteResumeFromStorage(userAppData.data().resume);
+      }
+      await db.collection(APPLICATIONS_COLLECTION).doc(userAppData.data().id).delete();
+    }
+    return res.status(200).json({
+      msg: 'Delete successfully',
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ msg: 'Internal server error' });
+  }
+}
+
 type ApplicationsResponse = {};
 
 /**
@@ -217,6 +275,8 @@ export default async function handleApplications(
     return handlePostApplications(req, res);
   } else if (method == 'PUT') {
     return handlePutApplications(req, res);
+  } else if (method === 'DELETE') {
+    return handleDeleteApplication(req, res);
   } else {
     res.setHeader('Allow', ['GET', 'POST', 'PUT']);
     res.status(405).end(`Method ${method} Not Allowed`);

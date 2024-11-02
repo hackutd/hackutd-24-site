@@ -12,6 +12,7 @@ import ChickenImage from '@/public/assets/profile-chicken-egg.png';
 import { TextField, TextFieldProps } from '@mui/material';
 import Link from 'next/link';
 import { RequestHelper } from '@/lib/request-helper';
+import DeleteProfileDialog from '@/components/profileComponents/DeleteProfileDialog';
 
 /**
  * A page that allows a user to modify app or profile settings and see their data.
@@ -28,8 +29,10 @@ export default function ProfilePage() {
     user,
     profile,
     updateProfile,
+    signOut,
   } = useAuthContext();
   const [uploading, setUploading] = useState<boolean>(false);
+  const [showAppDeleteModal, setShowAppDeleteModal] = useState<boolean>(false);
   const resumeRef = useRef(null);
 
   const isValidUrl = (s: string) => {
@@ -57,6 +60,11 @@ export default function ProfilePage() {
     if (isValidUrl(github)) return github;
     if (github.startsWith('github.com') || github.startsWith('www.')) return 'https://' + github;
     return 'https://github.com/' + github;
+  };
+
+  const prettyPrintWebsite = (website: string) => {
+    if (isValidUrl(website)) return website;
+    return 'https://' + website;
   };
 
   useEffect(() => {
@@ -87,6 +95,25 @@ export default function ProfilePage() {
         notchedOutline: '!border-[#79747E]',
       },
     },
+  };
+
+  const deleteApplicationHandler = async () => {
+    try {
+      const { data, status } = await RequestHelper.delete<unknown, { msg: string }>(
+        '/api/applications/',
+        {
+          headers: {
+            Authorization: user.token,
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+      alert(data.msg);
+      await signOut();
+    } catch (err) {
+      alert('Error deleting application. Please try again later...');
+      console.error(err);
+    }
   };
 
   const handleResumeUpload = async (profile) => {
@@ -160,6 +187,11 @@ export default function ProfilePage() {
   if (profile)
     return (
       <div className="mb-10 mt-16 md:mt-0 md:py-16 py-12 text-black flex justify-center">
+        <DeleteProfileDialog
+          closeModalHandler={() => setShowAppDeleteModal(false)}
+          showDialog={showAppDeleteModal}
+          confirmDeletionHandler={deleteApplicationHandler}
+        />
         <div className="bg-white min-w-3/4 py-12 px-16 rounded-xl flex flex-col md:flex-row 2xl:gap-x-14 gap-x-12 2xl:justify-center">
           {/* QR Code */}
           <div className="">
@@ -177,41 +209,45 @@ export default function ProfilePage() {
                 {profile?.user.group ? profile?.user.group : 'Group TBD'}
               </div>
             </div>
-            <div className="border-y-[1.2px] border-primaryDark/20 py-4 md:my-8 my-6">
+            <div className="border-y-[1.2px] border-primaryDark/20 py-4 md:my-8 my-6 flex flex-col gap-y-3">
               <div className="font-fredoka font-semibold text-lg">Application Status</div>
-
-              <h1
-                className={`font-fredoka text-xl font-semibold ${
-                  profile?.status === 'Accepted'
-                    ? 'text-[#5DC55B]'
-                    : profile?.status === 'Rejected'
-                    ? 'text-[#DE3163]'
-                    : 'text-[#5C67C9]'
-                }`}
-              >
-                {profile?.status ? profile?.status : 'In Review'}
-              </h1>
-              <div className="text-sm md:flex pt-2 md:pt-0">
-                {profile?.updatedAt && (
-                  <p className="text-nowrap mr-4">
-                    Application {hasPartialProfile ? 'last worked on' : 'last submitted on'}{' '}
-                    {hasPartialProfile
-                      ? new Date(partialProfile?.updatedAt).toLocaleDateString()
-                      : new Date(profile?.updatedAt).toLocaleDateString()}
-                  </p>
-                )}
-                <Link
-                  href="/profile/application/edit"
-                  className="text-[#40B7BA] font-bold underline text-nowrap"
+              <div>
+                <h1
+                  className={`font-fredoka text-xl font-semibold ${
+                    profile?.status === 'Accepted'
+                      ? 'text-[#5DC55B]'
+                      : profile?.status === 'Rejected'
+                      ? 'text-[#DE3163]'
+                      : 'text-[#5C67C9]'
+                  }`}
                 >
-                  <p className="">
-                    {hasPartialProfile ? 'Continue Editing Application' : 'Edit Application'}
-                  </p>
-                </Link>
+                  {profile?.status ? profile?.status : 'In Review'}
+                </h1>
+                <div className="text-sm md:flex pt-2 md:pt-0">
+                  {profile?.updatedAt && (
+                    <p className="text-nowrap mr-4 text-[#4A5156] font-semibold">
+                      Application {hasPartialProfile ? 'last worked on' : 'last submitted on'}{' '}
+                      {hasPartialProfile
+                        ? new Date(partialProfile?.updatedAt).toLocaleDateString()
+                        : new Date(profile?.updatedAt).toLocaleDateString()}
+                    </p>
+                  )}
+                  <Link
+                    href="/profile/application/edit"
+                    className="text-[#40B7BA] font-bold underline text-nowrap"
+                  >
+                    <p className="">
+                      {hasPartialProfile ? 'Continue Editing Application' : 'Edit Application'}
+                    </p>
+                  </Link>
+                </div>
               </div>
+              <p className="text-sm text-nowrap mr-4 text-[#79838A]">
+                Decisions will be out by 11/08/2024
+              </p>
             </div>
 
-            <div className="flex gap-x-4 flex-col md:flex-row">
+            <div className="flex flex-col">
               <div className="mb-4 flex gap-x-4 flex-row">
                 {profile?.linkedin && profile.linkedin !== '' && (
                   <div className="flex items-center justify-center w-10 h-10 rounded-full">
@@ -238,14 +274,14 @@ export default function ProfilePage() {
                 )}
                 {profile?.website && profile.website !== '' && (
                   <div className="flex items-center justify-center w-10 h-10 rounded-full">
-                    <a href={profile.website} target="_blank" rel="noreferrer">
+                    <a href={prettyPrintWebsite(profile.website)} target="_blank" rel="noreferrer">
                       <LanguageRoundedIcon className="text-[#5C67C9] !w-10 !h-10" />
                     </a>
                   </div>
                 )}
               </div>
 
-              <div className="my-2">
+              <div className="my-2 flex flex-col md:flex-row items-center gap-4 mx-auto">
                 {!uploading ? (
                   <>
                     <input
@@ -258,7 +294,7 @@ export default function ProfilePage() {
                     />
                     <label
                       id="resume_label"
-                      className="font-fredoka transition py-3 font-semibold px-6 text-sm text-center whitespace-nowrap text-white w-min bg-[#40B7BA] rounded-full cursor-pointer hover:brightness-110 mr-4"
+                      className="font-fredoka transition py-3 font-semibold px-6 text-sm text-center whitespace-nowrap text-white w-min bg-[#40B7BA] rounded-full cursor-pointer hover:brightness-110"
                       htmlFor="resume"
                     >
                       {profile.resume ? 'Update' : 'Add'} Resume
@@ -272,6 +308,12 @@ export default function ProfilePage() {
                         View Resume
                       </Link>
                     )}
+                    <button
+                      className="font-fredoka transition py-3 font-semibold px-6 text-sm text-center whitespace-nowrap text-white w-min bg-red-400 rounded-full cursor-pointer hover:brightness-110"
+                      onClick={() => setShowAppDeleteModal(true)}
+                    >
+                      Delete Application
+                    </button>
                   </>
                 ) : (
                   <LoadIcon width={16} height={16} />

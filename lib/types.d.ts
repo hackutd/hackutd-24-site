@@ -280,6 +280,8 @@ type Dates = {
 type Sponsor = {
   link: string;
   reference: string;
+  alternativeReference?: string;
+  tier?: string;
 };
 
 type GeneralStats = {
@@ -329,11 +331,11 @@ declare module '*.md' {
 type UserIdentifier = Omit<Registration, 'scans'> & {
   status: string;
   selected: boolean;
-  applicationScore: {
-    acceptCount: number;
-    rejectCount: number;
-    alreadyJudged: boolean;
-  };
+  scoring?: {
+    score: number;
+    note: string;
+    reviewer: string;
+  }[];
 };
 
 type PartialRegistration = {

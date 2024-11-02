@@ -26,24 +26,17 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
   const { faqRef } = useContext(SectionReferenceContext);
   const faqContainerRef = useRef(null); // Ref for the FAQ container
 
-  const fish1HoverStyle = {
-    animation: 'moveLeftRight 2s infinite alternate',
-  };
+  // Styles for fish animations
+  const fish1HoverStyle = { animation: 'moveLeftRight 2s infinite alternate' };
+  const fish2HoverStyle = { animation: 'moveUpDownLeftRight 4s infinite alternate' };
+  const fish3HoverStyle = { animation: 'moveUpDown 2s infinite alternate' };
 
-  const fish2HoverStyle = {
-    animation: 'moveUpDownLeftRight 4s infinite alternate',
-  };
-
-  const fish3HoverStyle = {
-    animation: 'moveUpDown 2s infinite alternate',
-  };
-
+  // GSAP animation on FAQ items when they come into view
   useEffect(() => {
     const handleIntersection = (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          // Animate FAQ boxes using GSAP when they come into view
-          gsap.to('.faq-box', {
+          gsap.to(entry.target, {
             opacity: 1,
             y: 0,
             stagger: 0.1,
@@ -56,14 +49,14 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
 
     const observer = new IntersectionObserver(handleIntersection, { threshold: 0.1 });
     if (faqContainerRef.current) {
-      observer.observe(faqContainerRef.current);
+      const faqBoxes = faqContainerRef.current.querySelectorAll('.faq-box');
+      faqBoxes.forEach((box) => {
+        gsap.set(box, { opacity: 0, y: 50 }); // Initial hidden state for each FAQ item
+        observer.observe(box);
+      });
     }
 
-    return () => {
-      if (faqContainerRef.current) {
-        observer.unobserve(faqContainerRef.current);
-      }
-    };
+    return () => observer.disconnect();
   }, []);
 
   return (
@@ -119,8 +112,8 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
             style={fish3HoverStyle}
           />
         </div>
-        <div id="faq-section" ref={faqRef} className="pt-[8rem]">
-          <div className="bg-white mx-10 p-10 rounded-lg flex justify-between font-fredoka">
+        <div id="faq-section" ref={faqContainerRef} className="pt-[8rem]">
+          <div className="bg-white mx-[8vw] p-10 rounded-lg flex justify-between font-fredoka">
             <div className="pt-3">
               <h1 className="text-3xl mb-4 font-bold text-[#54DDE8]">FAQ</h1>
               <p>Can’t find what you’re looking for? Connect with our team at hello@hackutd.co</p>
@@ -135,13 +128,12 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
             </div>
           </div>
           {/* FAQ for lg-md */}
-          {/* Uses different section for mobile because using 2 columns is buggy when expanding FAQs */}
-          <div className="md:flex hidden justify-between p-6" ref={faqContainerRef}>
-            <div className="w-[49%] my-3 space-y-4 > * + *">
+          <div className="hidden lg:grid lg:grid-cols-2 gap-4">
+            <div className="w-full my-3 pl-[8vw] space-y-4">
               {faqs.map(
                 ({ question, answer }, idx) =>
                   idx % 2 === 0 && (
-                    <div className="faq-box opacity-0 translate-y-10" key={idx}>
+                    <div key={idx} className="faq-box">
                       <FaqDisclosure
                         question={question}
                         answer={answer}
@@ -156,11 +148,11 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
                   ),
               )}
             </div>
-            <div className="w-[49%] my-3 space-y-4 > * + *">
+            <div className="w-full my-3 pr-[8vw] space-y-4">
               {faqs.map(
                 ({ question, answer }, idx) =>
                   idx % 2 !== 0 && (
-                    <div className="faq-box opacity-0 translate-y-10" key={idx}>
+                    <div key={idx} className="faq-box">
                       <FaqDisclosure
                         question={question}
                         answer={answer}
@@ -177,10 +169,10 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
             </div>
           </div>
           {/* FAQ for mobile */}
-          <div className="md:hidden">
-            <div className="w-full my-3 space-y-4 > * + *">
+          <div className="lg:hidden">
+            <div className="mx-[8vw] my-3 space-y-4">
               {faqs.map(({ question, answer }, idx) => (
-                <div className="faq-box opacity-0 translate-y-10" key={idx}>
+                <div key={idx} className="faq-box">
                   <FaqDisclosure
                     question={question}
                     answer={answer}
@@ -202,9 +194,7 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
 }
 
 /**
- *
  * Fetch FAQ questions stored in the backend, which will be used as props by FaqPage component upon build time
- *
  */
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const protocol = context.req.headers.referer?.split('://')[0] || 'http';

@@ -1,36 +1,37 @@
-import Image from 'next/image';
-import DuckBackgroundImage from '@/public/assets/duck-background.png';
-import RegisterBackgroundImage from '@/public/assets/registration-background.png';
-import PondBackgroundImage from '@/public/assets/pond-background.png';
-import Head from 'next/head';
-import { AppProps } from 'next/dist/shared/lib/router/router';
-import 'firebase/compat/auth';
-import { initFirebase } from '../lib/firebase-client';
-import { AuthProvider } from '../lib/user/AuthContext';
-import '../styles/globals.css';
-import '../styles/tailwind.css';
-import { FCMProvider } from '../lib/service-worker/FCMContext';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-// import { DndProvider } from 'react-dnd';
-// import { HTML5Backend } from 'react-dnd-html5-backend';
-
 // core styles shared by all of react-notion-x (required)
 import 'react-notion-x/src/styles.css';
 // used for code syntax highlighting
 import 'prismjs/themes/prism-tomorrow.css';
 // used for rendering equations
 import 'katex/dist/katex.min.css';
-import { useEffect, useRef, useState } from 'react';
-import { initParticlesEngine } from '../components/Particles';
-import { loadSlim } from '@tsparticles/slim';
-import { ParticlesContext } from '../components/Particles/ParticlesProvider';
+import '../styles/globals.css';
+import '../styles/tailwind.css';
+
+import 'firebase/compat/auth';
+
+import CloudBackgroundImage from '@/public/assets/cloud-bg.png';
+import PondBackgroundImage from '@/public/assets/pond-background.png';
+import RegisterBackgroundImage from '@/public/assets/registration-background.png';
+
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AppProps } from 'next/dist/shared/lib/router/router';
+import Head from 'next/head';
+import Image from 'next/image';
+import { initFirebase } from '../lib/firebase-client';
+import { FCMProvider } from '../lib/service-worker/FCMContext';
+import { AuthProvider } from '../lib/user/AuthContext';
+
 import AppHeader2_Wrapper from '@/components/AppHeader2/wrapper';
 import AppNavbarBottom from '@/components/AppNavbarBottom/AppNavbarBottom';
-import { useRouter } from 'next/router';
-import { useUrlHash } from '@/lib/hooks';
-import { SectionReferenceContext } from '@/lib/context/section';
 import { NavbarCallbackRegistryContext } from '@/lib/context/navbar';
+import { SectionReferenceContext } from '@/lib/context/section';
+import { useUrlHash } from '@/lib/hooks';
+import { loadSlim } from '@tsparticles/slim';
+import { useRouter } from 'next/router';
+import { useEffect, useRef, useState } from 'react';
+import { initParticlesEngine } from '../components/Particles';
+import { ParticlesContext } from '../components/Particles/ParticlesProvider';
 
 initFirebase();
 
@@ -44,11 +45,15 @@ function PortalApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const [particlesInit, setParticlesInit] = useState(false);
   const hash = useUrlHash('');
+
   const duckBackgroundPathnames = ['/profile', '/profile/application/edit'];
   const registerBackgroundPathnames = ['/register', '/auth'];
+  const cloudBackgroundPathnames = ['/admin', '/admin/scan', '/admin/users'];
+
   const faqRef = useRef<HTMLDivElement | null>(null);
   const aboutRef = useRef<HTMLDivElement | null>(null);
   const scheduleRef = useRef<HTMLDivElement | null>(null);
+
   const [callbackRegistry, setCallbackRegistry] = useState<Record<string, () => Promise<unknown>>>(
     {},
   );
@@ -89,63 +94,62 @@ function PortalApp({ Component, pageProps }: AppProps) {
           <ParticlesContext.Provider
             value={{ state: { init: particlesInit }, actions: { setInit: setParticlesInit } }}
           >
-            <Head>
-              <meta charSet="utf-8" />
-              <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-              <meta
-                name="viewport"
-                content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
-              />
-              <title>HackUTD 2024</title> {/* !change */}
-              <meta name="description" content="Your all-in-one guide to this hackathon." />
-              {process.env.ENABLE_PWA ||
-                (process.env.NODE_ENV !== 'development' && (
-                  <link rel="manifest" href="/manifest.json" />
-                ))}
-              <link href="/icons/favicon-16x16.png" rel="icon" type="image/png" sizes="16x16" />
-              <link href="/icons/favicon-32x32.png" rel="icon" type="image/png" sizes="32x32" />
-              <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
-              <meta name="theme-color" content="#5D5FEF" />
-            </Head>
-
-            <div className="min-h-screen flex flex-col">
-              {duckBackgroundPathnames.includes(router.pathname) && (
-                <div className="fixed top-0 left-0 w-screen h-screen -z-10">
-                  <Image
-                    className="w-screen h-screen object-cover"
-                    alt="Pond Background"
-                    src={PondBackgroundImage.src}
-                    width={PondBackgroundImage.width}
-                    height={PondBackgroundImage.height}
-                  />
-                </div>
-              )}
-              <SectionReferenceContext.Provider
+            <SectionReferenceContext.Provider
+              value={{
+                faqRef,
+                aboutRef,
+                scheduleRef,
+              }}
+            >
+              <NavbarCallbackRegistryContext.Provider
                 value={{
-                  faqRef,
-                  aboutRef,
-                  scheduleRef,
+                  callbackRegistry,
+                  setCallback: (pathname, cb) => {
+                    setCallbackRegistry((prev) => ({ ...prev, [pathname]: cb }));
+                  },
+                  removeCallback: (pathname) => {
+                    setCallbackRegistry((prev) => {
+                      if (!Object.hasOwn(prev, pathname)) {
+                        return prev;
+                      }
+                      const newRegistry = { ...prev };
+                      delete newRegistry[pathname];
+                      return newRegistry;
+                    });
+                  },
                 }}
               >
-                <NavbarCallbackRegistryContext.Provider
-                  value={{
-                    callbackRegistry,
-                    setCallback: (pathname, cb) => {
-                      setCallbackRegistry((prev) => ({ ...prev, [pathname]: cb }));
-                    },
-                    removeCallback: (pathname) => {
-                      setCallbackRegistry((prev) => {
-                        if (!Object.hasOwn(prev, pathname)) {
-                          return prev;
-                        }
-                        const newRegistry = { ...prev };
-                        delete newRegistry[pathname];
-                        return newRegistry;
-                      });
-                    },
-                  }}
-                >
-                  <AppHeader2_Wrapper />
+                <Head>
+                  <meta charSet="utf-8" />
+                  <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+                  <meta
+                    name="viewport"
+                    content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"
+                  />
+                  <title>HackUTD 2024</title> {/* !change */}
+                  <meta name="description" content="Your all-in-one guide to this hackathon." />
+                  {process.env.ENABLE_PWA ||
+                    (process.env.NODE_ENV !== 'development' && (
+                      <link rel="manifest" href="/manifest.json" />
+                    ))}
+                  <link href="/icons/favicon-16x16.png" rel="icon" type="image/png" sizes="16x16" />
+                  <link href="/icons/favicon-32x32.png" rel="icon" type="image/png" sizes="32x32" />
+                  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+                  <meta name="theme-color" content="#5D5FEF" />
+                </Head>
+
+                <div className="min-h-screen flex flex-col overflow-hidden">
+                  {duckBackgroundPathnames.includes(router.pathname) && (
+                    <div className="fixed top-0 left-0 w-screen h-screen -z-10">
+                      <Image
+                        className="w-screen h-screen object-cover"
+                        alt="Pond Background"
+                        src={PondBackgroundImage.src}
+                        width={PondBackgroundImage.width}
+                        height={PondBackgroundImage.height}
+                      />
+                    </div>
+                  )}
 
                   {registerBackgroundPathnames.includes(router.pathname) && (
                     <div className="fixed top-0 left-0 w-screen h-screen -z-10">
@@ -159,18 +163,34 @@ function PortalApp({ Component, pageProps }: AppProps) {
                     </div>
                   )}
 
+                  {cloudBackgroundPathnames.includes(router.pathname) && (
+                    <div className="fixed top-0 left-0 w-screen h-screen -z-10">
+                      <Image
+                        className="w-screen h-screen object-cover"
+                        alt="Cloud background"
+                        src={CloudBackgroundImage.src}
+                        width={CloudBackgroundImage.width}
+                        height={CloudBackgroundImage.height}
+                      />
+                    </div>
+                  )}
+
+                  <AppHeader2_Wrapper />
+
                   {/* Spacer at the top of the page so that content won't be covered by the navbar */}
-                  {router.pathname !== '/' && <div className="hidden md:block h-[86px] shrink-0" />}
+                  {router.pathname !== '/' && router.pathname !== '/parking' && (
+                    <div className="h-[86px] shrink-0" />
+                  )}
 
                   <Component {...pageProps} />
 
                   {/* Spacer at the bottom of the page for navbar bottom on mobile, so that content won't be covered by the navbar */}
-                  {/*<div className="md:hidden h-[80px] shrink-0" />*/}
+                  <div className="md:hidden h-[80px] shrink-0" />
 
                   <AppNavbarBottom />
-                </NavbarCallbackRegistryContext.Provider>
-              </SectionReferenceContext.Provider>
-            </div>
+                </div>
+              </NavbarCallbackRegistryContext.Provider>
+            </SectionReferenceContext.Provider>
           </ParticlesContext.Provider>
         </FCMProvider>
       </AuthProvider>

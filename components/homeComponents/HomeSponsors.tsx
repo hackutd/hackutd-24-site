@@ -1,24 +1,34 @@
-import { useEffect, useState } from 'react';
-import SponsorCard from './SponsorCard';
-import Wave2 from '../assets/Wave2';
-import styles from './HomeSponsors.module.css';
-
-import PlaceholderMascot1 from '../../public/assets/Mascot.gif';
-import PlaceholderMascot2 from '../../public/assets/Corgi.gif';
-import PlaceholderMascot3 from '../../public/assets/Capybara.gif';
-import PlaceholderMascot4 from '../../public/assets/Duck.gif';
-import PlaceholderMascot5 from '../../public/assets/Frog.gif';
-
-import PlaceholderMascot from '../../public/assets/Reveal.gif';
-
+import LogoContext from '@/lib/context/logo';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import PlaceholderMascot from '../../public/assets/Reveal.gif';
+import styles from './HomeSponsors.module.css';
+import SponsorCard from './SponsorCard';
+import TierTitle from './TierTitle';
+
+// import Wave2 from '../assets/Wave2';
+// import PlaceholderMascot1 from '../../public/assets/Mascot.gif';
+// import PlaceholderMascot2 from '../../public/assets/Corgi.gif';
+// import PlaceholderMascot3 from '../../public/assets/Capybara.gif';
+// import PlaceholderMascot4 from '../../public/assets/Duck.gif';
+// import PlaceholderMascot5 from '../../public/assets/Frog.gif';
 
 export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
   const [sponsor, setSponsor] = useState<Sponsor[]>([]);
+  const [currentHoveredLogo, setCurrentHoveredLogo] = useState<string>('');
 
   useEffect(() => {
     setSponsor(props.sponsorCard);
-  });
+  }, [props.sponsorCard]);
+
+  const sponsorTiers: { [key: string]: Sponsor[] } = sponsor.reduce((acc, curr) => {
+    const tier = curr.tier;
+    if (!acc[tier]) {
+      acc[tier] = [];
+    }
+    acc[tier].push(curr);
+    return acc;
+  }, {} as { [key: string]: Sponsor[] });
 
   return (
     sponsor.length != 0 && (
@@ -41,7 +51,7 @@ export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
           </div>
         </div>
         <div className="flex flex-col flex-grow">
-          <h4 className="text-white font-bold md:text-5xl text-2xl my-4 text-center uppercase font-fredoka pt-32">
+          <h4 className="text-white font-bold md:text-5xl text-2xl my-4 text-center uppercase font-fredoka pt-32 pb-12">
             Sponsorship
           </h4>
           <h2 className="uppercase text-center text-white text-3xl">interested in sponsoring?</h2>
@@ -57,11 +67,29 @@ export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
               hello@hackutd.co
             </a>
           </h2>
-          {/* Sponsor Card */}
           <section className="flex flex-wrap justify-center p-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-              {sponsor.map(({ link, reference }, idx) => (
-                <SponsorCard key={idx} link={link} reference={reference} />
+            <div className="p-4 w-full place-items-center">
+              {['title', 'platinum', 'gold', 'silver', 'bronze'].map((tier) => (
+                <div
+                  key={tier}
+                  className="flex flex-col gap-8 my-[3rem] text-center text-3xl text-white font-bold"
+                >
+                  <TierTitle tierName={tier} />
+
+                  <div className="flex flex-wrap gap-16 justify-center items-center">
+                    <LogoContext.Provider value={{ currentHoveredLogo, setCurrentHoveredLogo }}>
+                      {sponsorTiers[tier]?.map(({ link, reference, alternativeReference }, idx) => (
+                        <SponsorCard
+                          tier={tier}
+                          alternativeReference={alternativeReference}
+                          reference={reference}
+                          key={idx}
+                          link={link}
+                        />
+                      ))}
+                    </LogoContext.Provider>
+                  </div>
+                </div>
               ))}
             </div>
           </section>

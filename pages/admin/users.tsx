@@ -1,18 +1,18 @@
-import { GetServerSideProps } from 'next';
+// import { GetServerSideProps } from 'next';
+// import AdminHeader from '../../components/adminComponents/AdminHeader';
+// import FilterComponent from '../../components/adminComponents/FilterComponent';
+// import UserList from '../../components/adminComponents/userApplicationAdmin/UserList';
+// import { UserData } from '../api/users';
+import { Dialog, Transition } from '@headlessui/react';
 import Head from 'next/head';
 import { Fragment, useEffect, useState } from 'react';
-import AdminHeader from '../../components/adminComponents/AdminHeader';
-import FilterComponent from '../../components/adminComponents/FilterComponent';
-import UserList from '../../components/adminComponents/UserList';
-import { RequestHelper } from '../../lib/request-helper';
-// import { UserData } from '../api/users';
-import { HackerStatus } from '../api/acceptreject';
-import { useAuthContext } from '../../lib/user/AuthContext';
-import UserAdminView from '../../components/adminComponents/UserAdminView';
 import { isAuthorized } from '.';
-import AllUsersAdminView from '../../components/adminComponents/AllUsersAdminView';
+import AllUsersAdminView from '../../components/adminComponents/userApplicationAdmin/AllUsersAdminView';
+import UserAdminGroupView from '../../components/adminComponents/userApplicationAdmin/UserAdminGroupView';
+import { RequestHelper } from '../../lib/request-helper';
+import { useAuthContext } from '../../lib/user/AuthContext';
 import { RegistrationState } from '../../lib/util';
-import { Dialog, Transition } from '@headlessui/react';
+import { useUserGroup } from '@/lib/admin/group';
 
 /**
  *
@@ -22,29 +22,30 @@ import { Dialog, Transition } from '@headlessui/react';
  *
  */
 export default function UserPage() {
+  const { user } = useAuthContext();
+
   const [loading, setLoading] = useState(true);
-  const [users, setUsers] = useState<UserIdentifier[]>([]);
-  const [filteredUsers, setFilteredUsers] = useState<UserIdentifier[]>([]);
+  const userGroups = useUserGroup((state) => state.groups);
+  const setUserGroups = useUserGroup((state) => state.setUserGroup);
+  const [currentUserGroup, setCurrentUserGroup] = useState('');
+
+  // const [filter, setFilter] = useState({
+  //   hacker: true,
+  //   sponsor: true,
+  //   organizer: true,
+  //   admin: true,
+  //   super_admin: true,
+  // });
+  const [filteredGroups, setFilteredGroups] = useState<UserIdentifier[][]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [currentUser, setCurrentUser] = useState('');
+  // const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+
   const [registrationStatus, setRegistrationStatus] = useState(RegistrationState.UNINITIALIZED);
   const [nextRegistrationStatus, setNextRegistrationStatus] = useState(
     RegistrationState.UNINITIALIZED,
   );
 
-  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
-
-  const { user } = useAuthContext();
-
   let timer: NodeJS.Timeout;
-
-  const [filter, setFilter] = useState({
-    hacker: true,
-    sponsor: true,
-    organizer: true,
-    admin: true,
-    super_admin: true,
-  });
 
   async function fetchInitData() {
     setLoading(true);
@@ -59,62 +60,19 @@ export default function UserPage() {
       })
     )['data'];
 
-    const getHackerAppVerdict = ({
-      acceptCount,
-      rejectCount,
-      alreadyJudged,
-    }: {
-      acceptCount: number;
-      rejectCount: number;
-      alreadyJudged: boolean;
-    }) => {
-      if (allowRegistrationState.allowRegistrations && !alreadyJudged && acceptCount < 1000000000) {
-        return 'In Review';
-      }
-      return acceptCount - rejectCount >= 2 ? 'Accepted' : 'Rejected';
-    };
+    setRegistrationStatus(
+      allowRegistrationState.allowRegistrations ? RegistrationState.OPEN : RegistrationState.CLOSED,
+    );
 
-    const hackersStatus = (
-      await RequestHelper.get<
-        Record<
-          string,
-          {
-            acceptCount: number;
-            rejectCount: number;
-            alreadyJudged: boolean;
-          }
-        >
-      >(`/api/acceptreject`, {
+    const userGroupsData: UserIdentifier[][] = (
+      await RequestHelper.get<UserIdentifier[][]>('/api/users', {
         headers: {
           Authorization: user.token,
         },
       })
     )['data'];
-
-    setRegistrationStatus(
-      allowRegistrationState.allowRegistrations ? RegistrationState.OPEN : RegistrationState.CLOSED,
-    );
-
-    const usersData = (
-      await RequestHelper.get<UserIdentifier[]>('/api/users', {
-        headers: {
-          Authorization: user.token,
-        },
-      })
-    )['data'].map((userData) => {
-      const hackerApplicationScore = !Object.hasOwn(hackersStatus, userData.id)
-        ? { acceptCount: 0, rejectCount: 0, alreadyJudged: false }
-        : hackersStatus[userData.id];
-      return {
-        ...userData,
-        status: getHackerAppVerdict(hackerApplicationScore),
-        selected: false,
-        applicationScore: hackerApplicationScore,
-      };
-    });
-
-    setUsers(usersData);
-    setFilteredUsers([...usersData.filter((user) => user.user.permissions.includes('hacker'))]);
+    setUserGroups(userGroupsData);
+    setFilteredGroups(userGroupsData);
     setLoading(false);
   }
 
@@ -126,110 +84,106 @@ export default function UserPage() {
     if (loading) return;
     timer = setTimeout(() => {
       if (searchQuery !== '') {
-        const newFiltered = users.filter(
-          ({ user }) =>
-            `${user.firstName.trim()} ${user.lastName.trim()}`
-              .toLowerCase()
-              .indexOf(searchQuery.toLowerCase()) !== -1,
+        const newFiltered = userGroups.filter(
+          (users) =>
+            users.filter(
+              ({ user }) =>
+                `${user.firstName.trim()} ${user.lastName.trim()}`
+                  .toLowerCase()
+                  .indexOf(searchQuery.toLowerCase()) !== -1,
+            ).length > 0,
         );
-        setFilteredUsers(newFiltered);
+        setFilteredGroups(newFiltered);
       } else {
-        setFilteredUsers([...users]);
+        setFilteredGroups([...userGroups]);
       }
     }, 750);
 
     return () => {
       clearTimeout(timer);
     };
-  }, [searchQuery, loading, users]);
+  }, [searchQuery, loading, userGroups]);
 
-  const updateFilter = (name: string) => {
-    const filterCriteria = {
-      ...filter,
-      [name]: !filter[name],
-    };
-    const newFilteredUser = users.filter(({ user }) => {
-      for (let category of Object.keys(filterCriteria) as UserPermission[]) {
-        if (filterCriteria[category] && user.permissions.includes(category)) {
-          return true;
-        }
-      }
-      return false;
-    });
-    setFilteredUsers(newFilteredUser);
-    setFilter(filterCriteria);
-  };
+  // const updateFilter = (name: string) => {
+  //   const filterCriteria = {
+  //     ...filter,
+  //     [name]: !filter[name],
+  //   };
+  //   const newFilteredUser = users.filter(({ user }) => {
+  //     for (let category of Object.keys(filterCriteria) as UserPermission[]) {
+  //       if (filterCriteria[category] && user.permissions.includes(category)) {
+  //         return true;
+  //       }
+  //     }
+  //     return false;
+  //   });
+  //   setFilteredUsers(newFilteredUser);
+  //   setFilter(filterCriteria);
+  // };
 
-  const sortByName = () => {
-    setFilteredUsers((prev) =>
-      [...prev].sort((a, b) => {
-        const nameA = a.user.firstName + ' ' + a.user.lastName;
-        const nameB = b.user.firstName + ' ' + b.user.lastName;
-        return nameA.localeCompare(nameB);
-      }),
-    );
-  };
+  // const sortByName = () => {
+  //   setFilteredUsers((prev) =>
+  //     [...prev].sort((a, b) => {
+  //       const nameA = a.user.firstName + ' ' + a.user.lastName;
+  //       const nameB = b.user.firstName + ' ' + b.user.lastName;
+  //       return nameA.localeCompare(nameB);
+  //     }),
+  //   );
+  // };
 
-  const handleUserSelect = (id: string) => {
-    setUsers((prev) =>
-      prev.map((user) => (user.id === id ? { ...user, selected: !user.selected } : user)),
-    );
-    setFilteredUsers((prev) =>
-      prev.map((user) => (user.id === id ? { ...user, selected: !user.selected } : user)),
-    );
-    if (selectedUsers.includes(id)) {
-      setSelectedUsers([...selectedUsers.filter((v) => v != id)]);
-      return;
-    }
-    setSelectedUsers([...selectedUsers, id]);
-  };
+  // const handleUserSelect = (id: string) => {
+  //   setUsers((prev) =>
+  //     prev.map((user) => (user.id === id ? { ...user, selected: !user.selected } : user)),
+  //   );
+  //   setFilteredUsers((prev) =>
+  //     prev.map((user) => (user.id === id ? { ...user, selected: !user.selected } : user)),
+  //   );
+  //   if (selectedUsers.includes(id)) {
+  //     setSelectedUsers([...selectedUsers.filter((v) => v != id)]);
+  //     return;
+  //   }
+  //   setSelectedUsers([...selectedUsers, id]);
+  // };
 
-  const postHackersStatus = (status: string) => {
-    const hackerIds = selectedUsers.filter(
-      (id) => users.find((user) => user.id == id).status !== status,
-    );
-
-    if (hackerIds.length === 0) return;
-
-    fetch('/api/acceptreject', {
-      method: 'post',
-      body: JSON.stringify({
-        adminId: user.id,
-        hackerIds,
-        status,
-      }),
-      headers: {
-        Authorization: user.token,
-      },
-    })
-      .then((res) => {
-        if (res.status !== 200) {
-          alert('Hackers update failed...');
-        } else {
-          setUsers((prev) =>
-            prev.map((user) => ({
-              ...user,
-              status: hackerIds.includes(user.id) ? status : user.status,
-              selected: false,
-            })),
-          );
-          setFilteredUsers((prev) =>
-            prev.map((user) => ({
-              ...user,
-              selected: false,
-              status: hackerIds.includes(user.id) ? status : user.status,
-            })),
-          );
-          alert('Hackers update success');
-        }
-      })
-      .catch((err) => {
-        alert(err);
-      })
-      .finally(() => {
-        setSelectedUsers([]);
-      });
-  };
+  // const postHackersStatus = (status: string, notes: string) => {
+  //   if (selectedUsers.length === 0) return;
+  //   fetch('/api/acceptreject', {
+  //     method: 'post',
+  //     body: JSON.stringify({
+  //       adminId: user.id,
+  //       selectedUsers,
+  //       status,
+  //       notes,
+  //     }),
+  //     headers: {
+  //       Authorization: user.token,
+  //     },
+  //   })
+  //     .then((res) => {
+  //       if (res.status !== 200) {
+  //         alert('Hackers update failed...');
+  //       } else {
+  //         setUsers((prev) =>
+  //           prev.map((user) => ({
+  //             ...user,
+  //             status: selectedUsers.includes(user.id) ? status : user.status,
+  //             selected: false,
+  //           })),
+  //         );
+  //         setFilteredUsers((prev) =>
+  //           prev.map((user) => ({
+  //             ...user,
+  //             selected: false,
+  //             status: selectedUsers.includes(user.id) ? status : user.status,
+  //           })),
+  //         );
+  //         alert('Hackers update success');
+  //       }
+  //     })
+  //     .catch((err) => {
+  //       alert(err);
+  //     });
+  // };
 
   if (!user || !isAuthorized(user))
     return <div className="text-2xl font-black text-center">Unauthorized</div>;
@@ -244,6 +198,67 @@ export default function UserPage() {
 
   return (
     <div className="flex flex-col flex-grow items-center">
+      <Head>
+        <title>HackUTD 2024 - Admin</title> {/* !change */}
+        <meta name="description" content="HackPortal's Admin Page" />
+      </Head>
+
+      {/* <section id="subheader" className="p-2 md:p-4">
+        <AdminHeader />
+      </section> */}
+
+      <div className="p-4 md:p-8" />
+
+      <div className="w-full max-w-screen-2xl mb-10" style={{ height: 'calc(100vh - 180px)' }}>
+        {currentUserGroup === '' ? (
+          <AllUsersAdminView
+            userGroups={filteredGroups}
+            // selectedUsers={selectedUsers}
+            onUserGroupClick={(id) => {
+              // setSelectedUsers([id]);
+              setCurrentUserGroup(id);
+            }}
+            onUpdateRegistrationState={(newState) => {
+              setNextRegistrationStatus(newState);
+            }}
+            // onUserSelect={(id) => handleUserSelect(id)}
+            // onAcceptReject={(status) => postHackersStatus(status, '')}
+            searchQuery={searchQuery}
+            onSearchQueryUpdate={(searchQuery) => {
+              setSearchQuery(searchQuery);
+            }}
+            registrationState={registrationStatus}
+          />
+        ) : (
+          <UserAdminGroupView
+            userGroups={filteredGroups}
+            currentUserGroupId={currentUserGroup}
+            goBack={() => setCurrentUserGroup('')}
+            onUserGroupClick={(id) => {
+              // setSelectedUsers([id]);
+              setCurrentUserGroup(id);
+            }}
+            // onAcceptReject={(status, notes) => postHackersStatus(status, notes)}
+            // onUpdateRole={(newRole) => {
+            //   setUsers((users) =>
+            //     users.map((user) =>
+            //       user.id !== currentUser
+            //         ? { ...user }
+            //         : { ...user, user: { ...user.user, permissions: [newRole] } },
+            //     ),
+            //   );
+            //   setFilteredUsers((users) =>
+            //     users.map((user) =>
+            //       user.id !== currentUser
+            //         ? { ...user }
+            //         : { ...user, user: { ...user.user, permissions: [newRole] } },
+            //     ),
+            //   );
+            // }}
+          />
+        )}
+      </div>
+
       <Transition
         appear
         show={
@@ -340,62 +355,6 @@ export default function UserPage() {
           </div>
         </Dialog>
       </Transition>
-      <Head>
-        <title>HackUTD 2024 - Admin</title> {/* !change */}
-        <meta name="description" content="HackPortal's Admin Page" />
-      </Head>
-      <section id="subheader" className="p-2 md:p-4">
-        <AdminHeader />
-      </section>
-      <div className="w-full max-w-screen-2xl mb-10" style={{ height: 'calc(100vh - 180px)' }}>
-        {currentUser === '' ? (
-          <AllUsersAdminView
-            users={filteredUsers}
-            selectedUsers={selectedUsers}
-            onUserClick={(id) => {
-              setSelectedUsers([id]);
-              setCurrentUser(id);
-            }}
-            onUpdateRegistrationState={(newState) => {
-              setNextRegistrationStatus(newState);
-            }}
-            onUserSelect={(id) => handleUserSelect(id)}
-            onAcceptReject={(status) => postHackersStatus(status)}
-            searchQuery={searchQuery}
-            onSearchQueryUpdate={(searchQuery) => {
-              setSearchQuery(searchQuery);
-            }}
-            registrationState={registrationStatus}
-          />
-        ) : (
-          <UserAdminView
-            users={filteredUsers}
-            currentUserId={currentUser}
-            goBack={() => setCurrentUser('')}
-            onUserClick={(id) => {
-              setSelectedUsers([id]);
-              setCurrentUser(id);
-            }}
-            onAcceptReject={(status) => postHackersStatus(status)}
-            onUpdateRole={(newRole) => {
-              setUsers((users) =>
-                users.map((user) =>
-                  user.id !== currentUser
-                    ? { ...user }
-                    : { ...user, user: { ...user.user, permissions: [newRole] } },
-                ),
-              );
-              setFilteredUsers((users) =>
-                users.map((user) =>
-                  user.id !== currentUser
-                    ? { ...user }
-                    : { ...user, user: { ...user.user, permissions: [newRole] } },
-                ),
-              );
-            }}
-          />
-        )}
-      </div>
     </div>
   );
 }
