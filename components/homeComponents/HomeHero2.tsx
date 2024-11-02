@@ -396,7 +396,6 @@ export default function HomeHero2() {
                   className="w-[80vw] md:w-[60vw] lg:w-[50vw]"
                   style={{
                     maxWidth: '800px',
-                    marginTop: '5rem',
                   }}
                 >
                   <Image
@@ -420,14 +419,15 @@ export default function HomeHero2() {
                   NOV 16 - 17
                 </p>
 
-                {/* Apply Button */}
-                <div ref={applyButtonRef}>
+                {/* {!isShort && (
+                <div className="mt-4">
                   <Link href="/register">
                     <div className="py-2 px-4 mt-4 rounded-[30px] text-white bg-[#F7CE79] font-jua text-xl cursor-pointer">
                       Apply
                     </div>
                   </Link>
                 </div>
+              )} */}
               </div>
             </div>
           </div>
