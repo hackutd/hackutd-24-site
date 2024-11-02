@@ -209,6 +209,12 @@ export default function UserAdminView({
             />
             <BasicInfo k="Major" v={currentApplicant.major} />
             <BasicInfo k="Level of Study" v={currentApplicant.studyLevel} />
+            <BasicInfo
+              k="Role"
+              v={currentApplicant.user.permissions[0]}
+              locked={true}
+              canUnlock={organizer.permissions.includes('super_admin')}
+            />
           </div>
 
           <div className="flex flex-col basis-0 flex-grow">
@@ -221,6 +227,12 @@ export default function UserAdminView({
             <BasicInfo k="Software Experience" v={currentApplicant.softwareExperience} />
             {/* this should PROBABLY be currentUser.hackathonNumber, but I think the registration interface is populated incorrectly */}
             <BasicInfo k="Hackathons Attended" v={`${currentApplicant.hackathonExperience}`} />
+            <BasicInfo
+              k="Email"
+              v={currentApplicant.user.preferredEmail}
+              locked={true}
+              canUnlock={organizer.permissions.includes('super_admin')}
+            />
           </div>
         </div>
 
