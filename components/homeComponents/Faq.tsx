@@ -4,8 +4,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import FaqDisclosure from './FaqDisclosure';
 import { RequestHelper } from '../../lib/request-helper';
 
-import Fish1 from '../../public/assets/fish_1.png';
-import Fish2 from '../../public/assets/fish_2.png';
+import Fish from '../../public/assets/koi.gif';
+
 import Image from 'next/image';
 import { SectionReferenceContext } from '@/lib/context/section';
 import Link from 'next/link';
@@ -24,17 +24,23 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
   );
   const { faqRef } = useContext(SectionReferenceContext);
 
-  // Updated fish movement styles to simulate more fluid fish-like swimming motions
+  // Updated fish movement styles to simulate more fluid fish-like swimming motions and add underwater effect
   const fish1HoverStyle = {
     animation: 'fishSwim1 5s infinite alternate ease-in-out',
+    opacity: 0.6, // Lower opacity to simulate underwater look
+    filter: 'brightness(0.8) contrast(0.9) blur(1px)', // Add slight blur and reduce brightness
   };
 
   const fish2HoverStyle = {
     animation: 'fishSwim2 7s infinite alternate ease-in-out',
+    opacity: 0.6,
+    filter: 'brightness(0.8) contrast(0.9) blur(1px)',
   };
 
   const fish3HoverStyle = {
     animation: 'fishSwim3 6s infinite alternate ease-in-out',
+    opacity: 0.6,
+    filter: 'brightness(0.8) contrast(0.9) blur(1px)',
   };
 
   return (
@@ -74,27 +80,21 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
         <div className="flex flex-row justify-between items-center py-1">
           <div>
             <Image
-              src={Fish2.src}
+              src={Fish.src}
               alt="fish_2.png"
               width={200}
               height={200}
               style={fish1HoverStyle}
             />
             <Image
-              src={Fish1.src}
+              src={Fish.src}
               alt="fish_1.png"
               width={200}
               height={200}
               style={fish2HoverStyle}
             />
           </div>
-          <Image
-            src={Fish2.src}
-            alt="fish_2.png"
-            width={200}
-            height={200}
-            style={fish3HoverStyle}
-          />
+          <Image src={Fish.src} alt="fish_2.png" width={200} height={200} style={fish3HoverStyle} />
         </div>
         <div id="faq-section" ref={faqRef} className="pt-[8rem]">
           <div className="bg-white mx-[8vw] p-10 rounded-lg flex justify-between font-fredoka">
