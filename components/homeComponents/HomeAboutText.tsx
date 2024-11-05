@@ -30,8 +30,8 @@ const HomeAboutText = () => {
         {`
           @keyframes moveLeft {
             0% { transform: translate(0, 0) rotate(0deg); }
-            13% { transform: translate(-30vw, -10vw) rotate(-20deg); }
-            25% { transform: translate(-55vw, -10vw) rotate(-90deg); }
+            13% { transform: translate(-30vw, -1vw) rotate(-20deg); }
+            25% { transform: translate(-55vw, -1vw) rotate(-90deg); }
             38% { transform: translate(-65vw, 15vw) rotate(-120deg); }
             50% { transform: translate(-55vw, 30vw) rotate(-180deg); }
             63% { transform: translate(-40vw, 35vw) rotate(-210deg); }

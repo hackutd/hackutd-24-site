@@ -17,7 +17,7 @@ export default function HomeHero2() {
 
   return (
     <section
-      className={`${styles.container} min-h-screen bg-center relative bg-white flex flex-col-reverse md:flex-col`}
+      className={`min-h-screen bg-center relative bg-white flex flex-col-reverse md:flex-col`}
       style={{
         backgroundImage: `url(${LilyPads.src}), url(${noLPHero.src})`,
         backgroundSize: '100% 100%',
