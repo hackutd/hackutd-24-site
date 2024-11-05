@@ -18,18 +18,18 @@ import BoulderRight from 'public/assets/boulderRight.png';
 export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dateCard: Dates }) {
   /* Event Colors */
   const eventColors = {
-    All: 'border-gray-500 text-gray-500',
-    Required: 'border-[#FC012E] text-[#FC012E]',
-    Meal: 'border-[#56E100] text-[#56E100]',
-    Social: 'border-[#FFB900] text-[#FFB900]',
-    Sponsor: 'border-[#008CF1] text-[#008CF1]',
-    Workshop: 'border-[#5200FF] text-[#5200FF]',
+    All: 'border-gray-500 text-gray-500 bg-white',
+    Required: 'border-[#EF6C8B] text-[#EF6C8B] bg-white',
+    Meal: 'border-[#2CB716] text-[#2CB716] bg-white',
+    Social: 'border-[#FFB900] text-[#FFB900] bg-white',
+    Sponsor: 'border-[#7579E1] text-[#7579E1] bg-white',
+    Workshop: 'border-[#22B9C5] text-[#22B9C5] bg-white',
     'All-Filter': 'border-gray-500 bg-gray-500 text-white',
-    'Required-Filter': 'border-[#FC012E] bg-[#FC012E] text-white',
-    'Meal-Filter': 'border-[#56E100] bg-[#56E100] text-white',
+    'Required-Filter': 'border-[#EF6C8B] bg-[#EF6C8B] text-white',
+    'Meal-Filter': 'border-[#2CB716] bg-[#2CB716] text-white',
     'Social-Filter': 'border-[#FFB900] bg-[#FFB900] text-white',
-    'Sponsor-Filter': 'border-[#008CF1] bg-[#008CF1] text-white',
-    'Workshop-Filter': 'border-[#5200FF] bg-[#5200FF] text-white',
+    'Sponsor-Filter': 'border-[#7579E1] bg-[#7579E1] text-white',
+    'Workshop-Filter': 'border-[#22B9C5] bg-[#22B9C5] text-white',
   };
 
   /* Dates Values */
@@ -101,7 +101,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
             </div>
             <div className="flex justify-between">
               <div
-                className={`bg-white text-xs rounded-xl py-1 px-2 border-2 font-dmSans ${
+                className={`font-bold font-poppins bg-white text-xs rounded-xl py-1 px-2 border-2 ${
                   eventColors[data.type]
                 }`}
               >
@@ -156,11 +156,11 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
         <div className="flex justify-center relative">
           <div
             style={{ width: 'fit-content' }}
-            className="md:flex justify-center items-center bg-white bg-opacity-25 px-12 py-2 rounded-3xl shadow-default"
+            className="md:flex justify-center items-center bg-white bg-opacity-60 px-12 py-2 rounded-3xl shadow-default"
           >
             <div
               onClick={() => changeFilter('All')}
-              className={`text-sm cursor-pointer px-2 h-8 py-1 border-2 rounded-xl 
+              className={`text-sm font-bold font-poppins cursor-pointer px-2 h-8 py-1 border-2 rounded-xl 
               ${filter === 'All' ? eventColors['All-Filter'] : eventColors['All']}`}
             >
               All
@@ -168,7 +168,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
 
             <div
               onClick={() => changeFilter('Required')}
-              className={`text-sm cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl 
+              className={`text-sm font-bold font-poppins cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl 
               ${filter === 'Required' ? eventColors['Required-Filter'] : eventColors['Required']}`}
             >
               Required
@@ -176,7 +176,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
 
             <div
               onClick={() => changeFilter('Sponsor')}
-              className={`text-sm cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl 
+              className={`text-sm font-bold font-poppins cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl 
               ${filter === 'Sponsor' ? eventColors['Sponsor-Filter'] : eventColors['Sponsor']}`}
             >
               Sponsor
@@ -184,7 +184,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
 
             <div
               onClick={() => changeFilter('Meal')}
-              className={`text-sm cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl 
+              className={`text-sm font-bold font-poppins cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl 
               ${filter === 'Meal' ? eventColors['Meal-Filter'] : eventColors['Meal']}`}
             >
               Meal
@@ -192,7 +192,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
 
             <div
               onClick={() => changeFilter('Workshop')}
-              className={`text-sm cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl 
+              className={`text-sm font-bold font-poppins cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl 
               ${filter === 'Workshop' ? eventColors['Workshop-Filter'] : eventColors['Workshop']}`}
             >
               Workshop
@@ -200,7 +200,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
 
             <div
               onClick={() => changeFilter('Social')}
-              className={`text-sm cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl 
+              className={`text-sm font-bold font-poppins cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl 
               ${filter === 'Social' ? eventColors['Social-Filter'] : eventColors['Social']}`}
             >
               Social
@@ -218,7 +218,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
             >
               Day 1: Saturday
             </div>
-            <div className="bg-white mb-8 mx-2 p-2 border-2 rounded-lg border-[#05149C] border-opacity-20">
+            <div className="bg-white mb-8 mx-2 p-2 border-2 rounded-3xl border-[#05149C] border-opacity-20">
               {day1Events}
             </div>
           </div>
@@ -230,7 +230,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
             >
               Day 2: Sunday
             </div>
-            <div className="bg-white mb-8 mx-2 p-2 border-2 rounded-lg border-[#05149C] border-opacity-20">
+            <div className="bg-white mb-8 mx-2 p-2 border-2 rounded-3xl border-[#05149C] border-opacity-20">
               {day2Events}
             </div>
           </div>
