@@ -1,6 +1,6 @@
 import { Tab } from '@headlessui/react';
 import clsx from 'clsx';
-import { RegistrationState } from '../../../lib/util';
+import { ApplicationViewState, RegistrationState } from '../../../lib/util';
 import UserList, { USERLIST_INFINITE_SCROLL_TARGET } from './UserList';
 import { SearchIcon } from '@heroicons/react/solid';
 import { useAuthContext } from '@/lib/user/AuthContext';
@@ -10,7 +10,9 @@ interface AllUsersAdminViewProps {
   // selectedUsers: string[];
   searchQuery: string;
   registrationState: RegistrationState;
+  appViewState: ApplicationViewState;
   onUpdateRegistrationState: (newState: RegistrationState) => void;
+  onUpdateAppViewState: (newState: ApplicationViewState) => void;
   onUserGroupClick: (id: string) => void;
   // onUserSelect: (id: string) => void;
   // onAcceptReject: (status: string) => void;
@@ -27,6 +29,8 @@ export default function AllUsersAdminView({
   onSearchQueryUpdate,
   registrationState,
   onUpdateRegistrationState,
+  appViewState,
+  onUpdateAppViewState,
 }: AllUsersAdminViewProps) {
   const { user } = useAuthContext();
   return (
@@ -90,6 +94,41 @@ export default function AllUsersAdminView({
                       } py-2 px-4`}
                     >
                       Live Registration
+                    </Tab>
+                  </div>
+                </Tab.List>
+              </Tab.Group>
+            )}
+
+            {user.permissions.includes('super_admin') && (
+              <Tab.Group
+                selectedIndex={appViewState === ApplicationViewState.ALL ? 1 : 0}
+                // manual
+                onChange={(idx) => {
+                  onUpdateAppViewState(
+                    idx === 0 ? ApplicationViewState.REVIEWABLE : ApplicationViewState.ALL,
+                  );
+                }}
+              >
+                <Tab.List className="flex flex-row justify-center items-center w-full">
+                  <div className="bg-[#F1F8FC] rounded-full">
+                    <Tab
+                      className={`rounded-full font-bold ${
+                        appViewState === ApplicationViewState.REVIEWABLE
+                          ? 'bg-[#163950] text-[#F1F8FC]'
+                          : 'bg-[#F1F8FC] text-[#163950]'
+                      } py-2 px-4`}
+                    >
+                      Show assigned apps
+                    </Tab>
+                    <Tab
+                      className={`rounded-full font-bold ${
+                        appViewState === ApplicationViewState.ALL
+                          ? 'bg-[#163950] text-[#F1F8FC]'
+                          : 'bg-[#F1F8FC] text-[#163950]'
+                      } py-2 px-4`}
+                    >
+                      View all apps
                     </Tab>
                   </div>
                 </Tab.List>

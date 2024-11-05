@@ -11,7 +11,7 @@ import AllUsersAdminView from '../../components/adminComponents/userApplicationA
 import UserAdminGroupView from '../../components/adminComponents/userApplicationAdmin/UserAdminGroupView';
 import { RequestHelper } from '../../lib/request-helper';
 import { useAuthContext } from '../../lib/user/AuthContext';
-import { RegistrationState } from '../../lib/util';
+import { ApplicationViewState, RegistrationState } from '../../lib/util';
 import { useUserGroup } from '@/lib/admin/group';
 import AdminStatsCard from '@/components/adminComponents/AdminStatsCard';
 import { CheckIcon, XCircleIcon } from '@heroicons/react/solid';
@@ -43,6 +43,7 @@ export default function UserPage() {
   // const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
 
   const [registrationStatus, setRegistrationStatus] = useState(RegistrationState.UNINITIALIZED);
+  const [appViewState, setAppViewState] = useState(ApplicationViewState.REVIEWABLE);
   const [nextRegistrationStatus, setNextRegistrationStatus] = useState(
     RegistrationState.UNINITIALIZED,
   );
@@ -351,6 +352,10 @@ export default function UserPage() {
             onSearchQueryUpdate={(searchQuery) => {
               setSearchQuery(searchQuery);
             }}
+            onUpdateAppViewState={(newState) => {
+              setAppViewState(newState);
+            }}
+            appViewState={appViewState}
             registrationState={registrationStatus}
           />
         ) : (
