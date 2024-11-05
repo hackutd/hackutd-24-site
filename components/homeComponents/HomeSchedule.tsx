@@ -9,7 +9,7 @@ import styles from './HomeSchedule.module.css';
 // import rightLilypad from '../../public/assets/right_lilypads.png';
 import topLilypad from '../../public/assets/top_lilypads.png';
 // import leftLilypad from '../../public/assets/left_lilypads.png';
-import ducks from '../../public/assets/ducks.png';
+import ducks from '../../public/assets/ducks-moving.gif';
 
 import BoulderLeft from 'public/assets/boulderLeft.png';
 import BoulderRight from 'public/assets/boulderRight.png';
@@ -210,7 +210,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
 
         {/* Calendar */}
         {/* TODO: enable this when have schedule data */}
-        {/* <div className="md:flex p-1 overflow-y-auto overflow-x-hidden mx-auto lg:w-[80%] w-full h-full">
+        <div className="md:flex p-1 overflow-y-auto overflow-x-hidden mx-auto lg:w-[80%] w-full h-full">
           <div className="w-full lg:w-1/2 px-4 md:px-0 relative">
             <div
               style={{ textShadow: '0 4px 4px rgb(0,0,0,0.25)' }}
@@ -234,7 +234,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
               {day2Events}
             </div>
           </div>
-        </div> */}
+        </div>
         <div className="flex justify-center px-[2rem]">
           {/* Ducks moving left to right */}
           <div className={styles.duckAnimation}>
@@ -254,7 +254,7 @@ const BackgroundAssets = () => {
       {/* Boulder Left */}
       <Image
         src={BoulderLeft.src}
-        className={`${styles.boulderLeft} boulderLeft`}
+        className="absolute w-[80vh] h-auto top-[-9.5vh] md:top-[-13.5vh] z-[2] left-0"
         alt="Boulder Left"
         width={500}
         height={500}
@@ -263,7 +263,7 @@ const BackgroundAssets = () => {
       {/* Boulder Right */}
       <Image
         src={BoulderRight.src}
-        className={`${styles.boulderRight} boulderRight`}
+        className="absolute w-[80vh] h-auto top-[-9.5vh] md:top-[-13.5vh] z-[2] right-0"
         alt="Boulder Right"
         width={500}
         height={500}

@@ -77,25 +77,31 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
         <meta name="description" content="HackPortal's Frequently Asked Questions" />
       </Head>
       <div className="top-6">
-        <div className="flex flex-row justify-between items-center py-1">
-          <div>
-            <Image
-              src={Fish.src}
-              alt="fish_2.png"
-              width={200}
-              height={200}
-              style={fish1HoverStyle}
-            />
-            <Image
-              src={Fish.src}
-              alt="fish_1.png"
-              width={200}
-              height={200}
-              style={fish2HoverStyle}
-            />
-          </div>
-          <Image src={Fish.src} alt="fish_2.png" width={200} height={200} style={fish3HoverStyle} />
-        </div>
+        {/* <div className="flex flex-row justify-between items-center py-1"> */}
+        {/*   <div> */}
+        {/*     <Image */}
+        {/*       src={Fish2.src} */}
+        {/*       alt="fish_2.png" */}
+        {/*       width={200} */}
+        {/*       height={200} */}
+        {/*       style={fish1HoverStyle} */}
+        {/*     /> */}
+        {/*     <Image */}
+        {/*       src={Fish1.src} */}
+        {/*       alt="fish_1.png" */}
+        {/*       width={200} */}
+        {/*       height={200} */}
+        {/*       style={fish2HoverStyle} */}
+        {/*     /> */}
+        {/*   </div> */}
+        {/*   <Image */}
+        {/*     src={Fish2.src} */}
+        {/*     alt="fish_2.png" */}
+        {/*     width={200} */}
+        {/*     height={200} */}
+        {/*     style={fish3HoverStyle} */}
+        {/*   /> */}
+        {/* </div> */}
         <div id="faq-section" ref={faqRef} className="pt-[8rem]">
           <div className="bg-white mx-[8vw] p-10 rounded-lg flex justify-between font-fredoka">
             <div className="pt-3">
