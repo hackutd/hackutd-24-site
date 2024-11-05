@@ -16,7 +16,7 @@ export default function UserAdminGroupCarousel({
   group,
   appViewState,
 }: UserAdminGroupCarouselProps) {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, watchDrag: false });
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev();
   }, [emblaApi]);
