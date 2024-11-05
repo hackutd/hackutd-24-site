@@ -266,7 +266,13 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
             ...data,
             status: organizerReview ? statusString[organizerReview.data().score - 1] : 'In Review',
             scoring: organizerReview
-              ? [{ score: organizerReview.data().score, note: organizerReview.data().note }]
+              ? [
+                  {
+                    score: organizerReview.data().score,
+                    note: organizerReview.data().note,
+                    reviewer: `${userData.user.firstName} ${userData.user.lastName}`,
+                  },
+                ]
               : undefined,
           };
         }
