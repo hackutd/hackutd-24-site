@@ -9,7 +9,9 @@ import DuckMoving from '../../public/assets/duck-moving.gif';
 import MascotMoving from '../../public/assets/mascot-moving.gif';
 import styles from './HomeHero2.module.css';
 import { SectionReferenceContext } from '@/lib/context/section';
-import SlingshotSimulation from './SlingshotSimulation'; // Import Slingshot component
+import LilyPads from 'public/assets/lilypads.png'; // Importing the lily pads image
+import noLPHero from 'public/assets/hero-no-lilypads.png';
+import SlingshotSimulation from './SlingshotSimulation';
 
 // Preloader Component (unchanged)
 function Preloader({ setIsHeroLoaded }) {

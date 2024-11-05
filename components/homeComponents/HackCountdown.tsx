@@ -118,15 +118,10 @@ const Countdown = () => {
             style={{ height: 'auto' }} // Adjusted cloud width
           >
             <img
-              src="/assets/bigCloud.png"
+              src="/assets/cloud.png"
               alt="Cloud"
-              ref={cloudRef} // Cloud ref for GSAP animation
-              className={`${styles.cloud}`}
-              style={{
-                width: '800px',
-                height: 'auto',
-                opacity: 0, // Initially hidden, animated by GSAP
-              }}
+              ref={cloudRef}
+              className={`w-100 h-auto ${styles.cloud} `}
             />
             <div className="absolute flex flex-col items-center justify-center w-full h-full p-4 text-center">
               <h1

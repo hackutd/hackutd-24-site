@@ -223,7 +223,7 @@ export default function ProfilePage() {
                 >
                   {profile?.status ? profile?.status : 'In Review'}
                 </h1>
-                <div className="text-sm md:flex pt-2 md:pt-0">
+                <div className="text-xs md:flex pt-2 md:pt-0">
                   {profile?.updatedAt && (
                     <p className="text-nowrap mr-4 text-[#4A5156] font-semibold">
                       Application {hasPartialProfile ? 'last worked on' : 'last submitted on'}{' '}
@@ -232,17 +232,17 @@ export default function ProfilePage() {
                         : new Date(profile?.updatedAt).toLocaleDateString()}
                     </p>
                   )}
-                  <Link
+                  {/* <Link
                     href="/profile/application/edit"
                     className="text-[#40B7BA] font-bold underline text-nowrap"
                   >
                     <p className="">
                       {hasPartialProfile ? 'Continue Editing Application' : 'Edit Application'}
                     </p>
-                  </Link>
+                  </Link> */}
                 </div>
               </div>
-              <p className="text-sm text-nowrap mr-4 text-[#79838A]">
+              <p className="text-lg text-nowrap mr-4 text-[#4A5156] font-bold underline">
                 Decisions will be out by 11/08/2024
               </p>
             </div>
