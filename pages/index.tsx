@@ -60,19 +60,19 @@ export default function Home(props: {
       <HomeAboutText />
       <div style={{ position: 'relative', zIndex: 0 }}>
         {/* TODO: enable this when UI is finalized */}
-        {/* <div
+        <div
           style={{
             position: 'absolute',
             top: 0,
             left: 0,
             width: '100%',
-          height: '100%',
+            height: '100%',
             backgroundImage: `url(${themedBackground.src})`,
             backgroundSize: '100% 100%',
             backgroundPosition: 'center top',
             backgroundRepeat: 'no-repeat',
           }}
-        /> */}
+        />
         <div style={{ position: 'relative', zIndex: 1 }}>
           <div
             style={{
@@ -101,7 +101,7 @@ export default function Home(props: {
             height={300}
             alt="cloud.png"
           />
-          {/* <HomeSchedule scheduleCard={props.scheduleCard} dateCard={props.dateCard} /> */}
+          <HomeSchedule scheduleCard={props.scheduleCard} dateCard={props.dateCard} />
           {/* <HomeSpeakers keynoteSpeakers={props.keynoteSpeakers} /> */}
           {/* <HomeChallenges challenges={props.challenges} /> */}
           {/* include HomePrizes in HomeChallenges */}
@@ -141,10 +141,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     `${protocol}://${context.req.headers.host}/api/sponsor`,
     {},
   );
-  // const { data: scheduleData } = await RequestHelper.get<ScheduleEvent[]>(
-  //   `${protocol}://${context.req.headers.host}/api/schedule`,
-  //   {},
-  // );
+  const { data: scheduleData } = await RequestHelper.get<ScheduleEvent[]>(
+    `${protocol}://${context.req.headers.host}/api/schedule`,
+    {},
+  );
   const { data: dateData } = await RequestHelper.get<ScheduleEvent[]>(
     `${protocol}://${context.req.headers.host}/api/dates`,
     {},
@@ -156,7 +156,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       answeredQuestion: answeredQuestion,
       // fetchedMembers: memberData,
       sponsorCard: sponsorData,
-      // scheduleCard: scheduleData,
+      scheduleCard: scheduleData,
       dateCard: dateData,
       // prizeData: prizeData,
     },
