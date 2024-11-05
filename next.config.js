@@ -29,6 +29,11 @@ const withPWA = require('next-pwa')({
           'https://docs.google.com/document/d/1bBuz6PGMjwtoCdb8miUZB0n3xR6Bi1teRjGOaHuFuIY/edit',
         permanent: true,
       },
+      {
+        source: '/discord',
+        destination: 'https://discord.gg/5gYNSwEKc2',
+        permanent: true,
+      },
     ];
   },
 
