@@ -16,8 +16,8 @@ interface UserListProps {
   appViewState: ApplicationViewState;
 }
 
-function HiddenInfo({ v, canUnlock }: { v: string; canUnlock: boolean }) {
-  const [lock, setLock] = useState(true);
+function HiddenInfo({ v, canUnlock, locked }: { v: string; canUnlock: boolean; locked: boolean }) {
+  const [lock, setLock] = useState(locked);
   const lockOnClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (canUnlock) setLock(!lock);
@@ -131,6 +131,7 @@ UserListProps) {
           `}
               >
                 <HiddenInfo
+                  locked={appViewState === ApplicationViewState.REVIEWABLE}
                   canUnlock={appViewState === ApplicationViewState.ALL}
                   v={Array.from(
                     new Set(
@@ -158,6 +159,7 @@ UserListProps) {
           `}
             >
               <HiddenInfo
+                locked={appViewState === ApplicationViewState.REVIEWABLE}
                 v={Array.from(new Set(group.map((eachUser) => eachUser.university)))
                   .sort((a, b) => a.localeCompare(b))
                   .join(', ')}

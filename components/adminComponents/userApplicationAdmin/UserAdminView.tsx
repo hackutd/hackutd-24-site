@@ -207,7 +207,7 @@ export default function UserAdminView({
             <BasicInfo
               k="Name"
               v={currentApplicant.user.firstName + ' ' + currentApplicant.user.lastName}
-              locked={true}
+              locked={appViewState === ApplicationViewState.REVIEWABLE}
               canUnlock={
                 appViewState === ApplicationViewState.ALL &&
                 organizer.permissions.includes('super_admin')
@@ -218,7 +218,7 @@ export default function UserAdminView({
             <BasicInfo
               k="Role"
               v={currentApplicant.user.permissions[0]}
-              locked={true}
+              locked={appViewState === ApplicationViewState.REVIEWABLE}
               canUnlock={
                 appViewState === ApplicationViewState.ALL &&
                 organizer.permissions.includes('super_admin')
@@ -230,7 +230,7 @@ export default function UserAdminView({
             <BasicInfo
               k="School"
               v={currentApplicant.university ?? currentApplicant.universityManual}
-              locked={true}
+              locked={appViewState === ApplicationViewState.REVIEWABLE}
               canUnlock={
                 appViewState === ApplicationViewState.ALL &&
                 organizer.permissions.includes('super_admin')
@@ -242,7 +242,7 @@ export default function UserAdminView({
             <BasicInfo
               k="Email"
               v={currentApplicant.user.preferredEmail}
-              locked={true}
+              locked={appViewState === ApplicationViewState.REVIEWABLE}
               canUnlock={
                 appViewState === ApplicationViewState.ALL &&
                 organizer.permissions.includes('super_admin')
