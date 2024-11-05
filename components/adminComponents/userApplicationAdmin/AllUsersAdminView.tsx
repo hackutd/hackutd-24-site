@@ -196,6 +196,7 @@ export default function AllUsersAdminView({
 
           {/* User List */}
           <UserList
+            appViewState={appViewState}
             userGroups={userGroups}
             // selectedUsers={selectedUsers}
             onUserGroupClick={(id) => onUserGroupClick(id)}

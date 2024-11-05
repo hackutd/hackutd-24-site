@@ -376,6 +376,7 @@ export default function UserPage() {
           />
         ) : (
           <UserAdminGroupView
+            appViewState={appViewState}
             userGroups={
               appViewState === ApplicationViewState.REVIEWABLE
                 ? filteredGroups
