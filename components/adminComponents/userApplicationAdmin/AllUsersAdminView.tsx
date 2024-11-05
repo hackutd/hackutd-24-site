@@ -61,38 +61,40 @@ export default function AllUsersAdminView({
           </div> */}
 
           <div className="flex flex-col md:flex-row justify-center items-center w-full mt-8 lg:mt-0">
-            <Tab.Group
-              selectedIndex={registrationState === RegistrationState.OPEN ? 1 : 0}
-              // manual
-              onChange={(idx) => {
-                onUpdateRegistrationState(
-                  idx === 0 ? RegistrationState.CLOSED : RegistrationState.OPEN,
-                );
-              }}
-            >
-              <Tab.List className="flex flex-row justify-center items-center w-full">
-                <div className="bg-[#F1F8FC] rounded-full">
-                  <Tab
-                    className={`rounded-full font-bold ${
-                      registrationState === RegistrationState.CLOSED
-                        ? 'bg-[#163950] text-[#F1F8FC]'
-                        : 'bg-[#F1F8FC] text-[#163950]'
-                    } py-2 px-4`}
-                  >
-                    Close Registration
-                  </Tab>
-                  <Tab
-                    className={`rounded-full font-bold ${
-                      registrationState === RegistrationState.OPEN
-                        ? 'bg-[#163950] text-[#F1F8FC]'
-                        : 'bg-[#F1F8FC] text-[#163950]'
-                    } py-2 px-4`}
-                  >
-                    Live Registration
-                  </Tab>
-                </div>
-              </Tab.List>
-            </Tab.Group>
+            {user.permissions.includes('super_admin') && (
+              <Tab.Group
+                selectedIndex={registrationState === RegistrationState.OPEN ? 1 : 0}
+                // manual
+                onChange={(idx) => {
+                  onUpdateRegistrationState(
+                    idx === 0 ? RegistrationState.CLOSED : RegistrationState.OPEN,
+                  );
+                }}
+              >
+                <Tab.List className="flex flex-row justify-center items-center w-full">
+                  <div className="bg-[#F1F8FC] rounded-full">
+                    <Tab
+                      className={`rounded-full font-bold ${
+                        registrationState === RegistrationState.CLOSED
+                          ? 'bg-[#163950] text-[#F1F8FC]'
+                          : 'bg-[#F1F8FC] text-[#163950]'
+                      } py-2 px-4`}
+                    >
+                      Close Registration
+                    </Tab>
+                    <Tab
+                      className={`rounded-full font-bold ${
+                        registrationState === RegistrationState.OPEN
+                          ? 'bg-[#163950] text-[#F1F8FC]'
+                          : 'bg-[#F1F8FC] text-[#163950]'
+                      } py-2 px-4`}
+                    >
+                      Live Registration
+                    </Tab>
+                  </div>
+                </Tab.List>
+              </Tab.Group>
+            )}
 
             {/* Accept Reject buttons */}
             {/* <div className="flex flex-row w-full justify-around max-w-xs mt-4 lg:mt-0">
