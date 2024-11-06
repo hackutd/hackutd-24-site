@@ -44,7 +44,7 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
   };
 
   return (
-    <div className="flex flex-col flex-grow relative">
+    <div ref={faqRef} id="faq-section" className="flex flex-col flex-grow relative">
       <style>
         {`
           @keyframes fishSwim1 {
@@ -102,7 +102,7 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
         {/*     style={fish3HoverStyle} */}
         {/*   /> */}
         {/* </div> */}
-        <div id="faq-section" ref={faqRef} className="pt-[8rem]">
+        <div className="pt-[8rem]">
           <div className="bg-white mx-[8vw] p-10 rounded-lg flex justify-between font-fredoka">
             <div className="pt-3">
               <h1 className="text-3xl mb-4 font-bold text-[#54DDE8]">FAQ</h1>

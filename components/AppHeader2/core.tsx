@@ -90,11 +90,11 @@ export default function AppHeader2_Core(props: Props) {
         text: 'FAQ',
         onClick: () => {
           if (router.pathname === '/') {
-            scheduleRef.current?.scrollIntoView({
+            faqRef.current?.scrollIntoView({
               behavior: 'smooth',
             });
           } else {
-            router.push('/#schedule-section');
+            router.push('/#faq-section');
           }
         },
       },
