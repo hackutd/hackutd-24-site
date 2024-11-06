@@ -9,8 +9,6 @@ import Image from 'next/image';
 import corgi from 'public/assets/corgi_on_boat.png';
 
 export default function HomeFaq(props: { answeredQuestion: AnsweredQuestion[] }) {
-  const { scheduleRef } = useContext(SectionReferenceContext);
-
   return (
     props.answeredQuestion.length != 0 && (
       <section
