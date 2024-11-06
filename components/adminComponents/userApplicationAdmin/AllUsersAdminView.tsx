@@ -100,40 +100,40 @@ export default function AllUsersAdminView({
               </Tab.Group>
             )}
 
-            {user.permissions.includes('super_admin') && (
-              <Tab.Group
-                selectedIndex={appViewState === ApplicationViewState.ALL ? 1 : 0}
-                // manual
-                onChange={(idx) => {
-                  onUpdateAppViewState(
-                    idx === 0 ? ApplicationViewState.REVIEWABLE : ApplicationViewState.ALL,
-                  );
-                }}
-              >
-                <Tab.List className="flex flex-row justify-center items-center w-full">
-                  <div className="bg-[#F1F8FC] rounded-full">
-                    <Tab
-                      className={`rounded-full font-bold ${
-                        appViewState === ApplicationViewState.REVIEWABLE
-                          ? 'bg-[#163950] text-[#F1F8FC]'
-                          : 'bg-[#F1F8FC] text-[#163950]'
-                      } py-2 px-4`}
-                    >
-                      Show assigned apps
-                    </Tab>
-                    <Tab
-                      className={`rounded-full font-bold ${
-                        appViewState === ApplicationViewState.ALL
-                          ? 'bg-[#163950] text-[#F1F8FC]'
-                          : 'bg-[#F1F8FC] text-[#163950]'
-                      } py-2 px-4`}
-                    >
-                      View all apps
-                    </Tab>
-                  </div>
-                </Tab.List>
-              </Tab.Group>
-            )}
+            {/* {user.permissions.includes('super_admin') && ( */}
+            {/*   <Tab.Group */}
+            {/*     selectedIndex={appViewState === ApplicationViewState.ALL ? 1 : 0} */}
+            {/*     // manual */}
+            {/*     onChange={(idx) => { */}
+            {/*       onUpdateAppViewState( */}
+            {/*         idx === 0 ? ApplicationViewState.REVIEWABLE : ApplicationViewState.ALL, */}
+            {/*       ); */}
+            {/*     }} */}
+            {/*   > */}
+            {/*     <Tab.List className="flex flex-row justify-center items-center w-full"> */}
+            {/*       <div className="bg-[#F1F8FC] rounded-full"> */}
+            {/*         <Tab */}
+            {/*           className={`rounded-full font-bold ${ */}
+            {/*             appViewState === ApplicationViewState.REVIEWABLE */}
+            {/*               ? 'bg-[#163950] text-[#F1F8FC]' */}
+            {/*               : 'bg-[#F1F8FC] text-[#163950]' */}
+            {/*           } py-2 px-4`} */}
+            {/*         > */}
+            {/*           Show assigned apps */}
+            {/*         </Tab> */}
+            {/*         <Tab */}
+            {/*           className={`rounded-full font-bold ${ */}
+            {/*             appViewState === ApplicationViewState.ALL */}
+            {/*               ? 'bg-[#163950] text-[#F1F8FC]' */}
+            {/*               : 'bg-[#F1F8FC] text-[#163950]' */}
+            {/*           } py-2 px-4`} */}
+            {/*         > */}
+            {/*           View all apps */}
+            {/*         </Tab> */}
+            {/*       </div> */}
+            {/*     </Tab.List> */}
+            {/*   </Tab.Group> */}
+            {/* )} */}
 
             {/* Accept Reject buttons */}
             {/* <div className="flex flex-row w-full justify-around max-w-xs mt-4 lg:mt-0">

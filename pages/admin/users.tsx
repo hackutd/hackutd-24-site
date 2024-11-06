@@ -369,7 +369,7 @@ export default function UserPage() {
               setSearchQuery(searchQuery);
             }}
             onUpdateAppViewState={(newState) => {
-              setAppViewState(newState);
+              // setAppViewState(newState);
             }}
             appViewState={appViewState}
             registrationState={registrationStatus}
