@@ -16,7 +16,7 @@ export default function HomeFaq(props: { answeredQuestion: AnsweredQuestion[] })
       <section
         className={styles.container}
         style={{
-          background: 'linear-gradient(#47c1ca 40%, #4fd4dd)',
+          background: 'linear-gradient(#4bccd3 40%, #4fd4dd)',
           position: 'relative',
         }}
       >
