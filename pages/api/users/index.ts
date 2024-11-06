@@ -313,6 +313,7 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
         ...d.user,
         firstName: 'Anonymous',
         lastName: '',
+        preferredEmail: '',
       },
     }));
   };

@@ -5,11 +5,11 @@ import { SectionReferenceContext } from '@/lib/context/section';
 
 const HomeAboutText = () => {
   const fish1HoverStyle = {
-    animation: 'moveLeft 80s linear infinite',
+    animation: 'moveLeft 100s linear infinite',
   };
 
   const fish2HoverStyle = {
-    animation: 'moveRight 80s linear infinite',
+    animation: 'moveRight 100s linear infinite',
   };
 
   const { aboutRef } = useContext(SectionReferenceContext);
@@ -30,28 +30,27 @@ const HomeAboutText = () => {
         {`
           @keyframes moveLeft {
             0% { transform: translate(0, 0) rotate(0deg); }
-            13% { transform: translate(-25vw, -6vw) rotate(-20deg); }
-            25% { transform: translate(-48vw, -6vw) rotate(-90deg); }
-            38% { transform: translate(-55vw, 5vw) rotate(-120deg); }
-            50% { transform: translate(-48vw, 15vw) rotate(-180deg); }
-            63% { transform: translate(-35vw, 17vw) rotate(-210deg); }
-            75% { transform: translate(-4vw, 16vw) rotate(-270deg); }
-            88% { transform: translate(3vw, 5vw) rotate(-300deg); }
+            13% { transform: translate(-30vw, -1vw) rotate(-20deg); }
+            25% { transform: translate(-55vw, -1vw) rotate(-90deg); }
+            38% { transform: translate(-65vw, 15vw) rotate(-120deg); }
+            50% { transform: translate(-55vw, 30vw) rotate(-180deg); }
+            63% { transform: translate(-40vw, 35vw) rotate(-210deg); }
+            75% { transform: translate(-10vw, 30vw) rotate(-270deg); }
+            88% { transform: translate(5vw, 10vw) rotate(-300deg); }
             100% { transform: translate(0, 0) rotate(-360deg); }
           }
 
           @keyframes moveRight {
             0% { transform: translate(0, 0) rotate(-180deg); }
-            13% { transform: translate(25vw, 2vw) rotate(-210deg); }
-            25% { transform: translate(50vw, 0) rotate(-270deg); }
-            38% { transform: translate(55vw, -6vw) rotate(-300deg); }
-            50% { transform: translate(50vw, -18vw) rotate(-360deg); }
-            63% { transform: translate(20vw, -22vw) rotate(-380deg); }
-            75% { transform: translate(5vw, -12vw) rotate(-450deg); }
-            88% { transform: translate(-1vw, -5vw) rotate(-480deg); }
+            13% { transform: translate(30vw, 5vw) rotate(-210deg); }
+            25% { transform: translate(60vw, 0) rotate(-270deg); }
+            38% { transform: translate(65vw, -10vw) rotate(-300deg); }
+            50% { transform: translate(60vw, -35vw) rotate(-360deg); }
+            63% { transform: translate(25vw, -40vw) rotate(-380deg); }
+            75% { transform: translate(10vw, -20vw) rotate(-450deg); }
+            88% { transform: translate(-5vw, -10vw) rotate(-480deg); }
             100% { transform: translate(0, 0) rotate(-510deg); }
           }
-
         `}
       </style>
       <h1 className="text-5xl font-bold mb-3 text-center relative font-jua z-10  text-[#F7CE79] text-stroke">
@@ -68,26 +67,26 @@ const HomeAboutText = () => {
         </p>
         <div className="absolute inset-0 z-9">
           <img
-            src="/assets/fish.png"
+            src="/assets/koi.gif"
             alt="Fish"
             className="absolute hidden md:block"
             style={{
-              top: '-10vw',
-              right: '12vw',
-              width: '15vw',
-              height: '15vw',
+              top: '-15vw',
+              right: '15vw',
+              width: '10vw',
+              height: '10vw',
               ...fish1HoverStyle,
             }}
           />
           <img
-            src="/assets/fish.png"
+            src="/assets/koi.gif"
             alt="Fish"
             className="absolute transform rotate-180 hidden md:block"
             style={{
-              bottom: '-5vw',
-              left: '13vw',
-              width: '15vw',
-              height: '15vw',
+              bottom: '-10vw',
+              left: '15vw',
+              width: '10vw',
+              height: '10vw',
               ...fish2HoverStyle,
             }}
           />
