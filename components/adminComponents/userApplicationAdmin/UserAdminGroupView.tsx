@@ -10,6 +10,7 @@ import {
 } from '@heroicons/react/solid';
 import { getGroupId } from './helpers';
 import UserAdminGroupCarousel from './UserAdminGroupCarousel';
+import { ApplicationViewState } from '@/lib/util';
 
 interface UserAdminGroupViewProps {
   userGroups: UserIdentifier[][];
@@ -19,6 +20,7 @@ interface UserAdminGroupViewProps {
   onUserGroupClick: (id: string) => void;
   // onAcceptReject: (status: string, notes: string) => void;
   // onUpdateRole: (newRole: UserPermission) => void;
+  appViewState: ApplicationViewState;
 }
 
 export default function UserAdminGroupView({
@@ -26,6 +28,7 @@ export default function UserAdminGroupView({
   currentUserGroupId,
   goBack,
   onUserGroupClick,
+  appViewState,
 }: UserAdminGroupViewProps) {
   const { user } = useAuthContext();
 
@@ -187,7 +190,7 @@ export default function UserAdminGroupView({
         </div>
 
         {/* Application */}
-        <UserAdminGroupCarousel group={currentUserGroup} />
+        <UserAdminGroupCarousel group={currentUserGroup} appViewState={appViewState} />
       </div>
     </div>
   );

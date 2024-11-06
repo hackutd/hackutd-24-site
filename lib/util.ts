@@ -8,3 +8,8 @@ export enum RegistrationState {
   OPEN = 1,
   CLOSED = 0,
 }
+
+export enum ApplicationViewState {
+  REVIEWABLE = 0,
+  ALL = 1,
+}
