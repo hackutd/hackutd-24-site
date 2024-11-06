@@ -266,8 +266,8 @@ export default function UserPage() {
   }, [userGroups]);
 
   const acceptanceRate = useMemo(
-    () => `${((numAppsAccepted * 100) / userGroups.length).toFixed(2)}%`,
-    [userGroups, numAppsAccepted],
+    () => `${((numAppsAccepted * 100) / numAppsReviewed).toFixed(2)}%`,
+    [numAppsReviewed, numAppsAccepted],
   );
 
   if (!user || !isAuthorized(user))
