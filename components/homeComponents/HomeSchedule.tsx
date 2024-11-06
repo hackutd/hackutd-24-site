@@ -13,10 +13,12 @@ import ducks from '../../public/assets/ducks-moving.gif';
 
 import BoulderLeft from 'public/assets/boulderLeft.png';
 import BoulderRight from 'public/assets/boulderRight.png';
+import { SectionReferenceContext } from '@/lib/context/section';
 
 /* Calendar */
 export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dateCard: Dates }) {
   /* Event Colors */
+  const { scheduleRef } = React.useContext(SectionReferenceContext);
   const eventColors = {
     All: 'border-gray-500 text-gray-500 bg-white',
     Required: 'border-[#EF6C8B] text-[#EF6C8B] bg-white',
@@ -137,9 +139,9 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
   const day2Events = getDailyEvents(day2StartDateAndTime, eventEndDateAndTime);
 
   return (
-    <div className={`${styles.container} pt-[8rem] relative`} id="schedule-section">
+    <div className={`${styles.container} pt-[8rem] relative`}>
       <BackgroundAssets />
-      <div className={styles.content}>
+      <div ref={scheduleRef} id="schedule-section" className={styles.content}>
         <div
           style={{ textShadow: '0 4px 4px rgba(0, 0, 0, 0.25)' }}
           className="text-center text-2xl font-bold text-white p-2 font-montserrat uppercase relative"
