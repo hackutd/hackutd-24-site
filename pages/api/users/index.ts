@@ -197,10 +197,7 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
   const statusString = ['Rejected', 'Maybe No', 'Maybe Yes', 'Accepted'];
   let allApps = [];
   if ((userData.user.permissions as string[]).includes('super_admin')) {
-    const allAppsSnapshot = await db
-      .collection(USERS_COLLECTION)
-      .where('user.permissions', 'array-contains', 'hacker')
-      .get();
+    const allAppsSnapshot = await db.collection(USERS_COLLECTION).get();
     const alLFormattedApp = await Promise.all(
       allAppsSnapshot.docs.map(async (doc) => {
         const data = doc.data();
