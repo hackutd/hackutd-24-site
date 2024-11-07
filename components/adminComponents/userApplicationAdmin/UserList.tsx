@@ -5,11 +5,12 @@ import { getGroupId } from './helpers';
 import { useAuthContext } from '@/lib/user/AuthContext';
 import { LockClosedIcon, LockOpenIcon } from '@heroicons/react/solid';
 import { ApplicationViewState } from '@/lib/util';
+import { ApplicationEntry } from '@/lib/admin/group';
 
 export const USERLIST_INFINITE_SCROLL_TARGET = 'userlist-infinite-scroll-target';
 
 interface UserListProps {
-  userGroups: UserIdentifier[][];
+  userGroups: ApplicationEntry[];
   // selectedUsers: string[];
   onUserGroupClick: (id: string) => void;
   // onUserSelect: (id: string) => void;
@@ -54,14 +55,14 @@ UserListProps) {
 
       result.push(
         <div
-          key={getGroupId(group)}
+          key={group.index}
           className={`
           flex flex-row justify-between px-6
           cursor-pointer hover:bg-[rgb(255,255,255,0.2)] items-center transition
           ${bgColor}
           ${blur}
         `}
-          onClick={() => onUserGroupClick(getGroupId(group))}
+          onClick={() => onUserGroupClick(getGroupId(group.application))}
         >
           {/*
             Name
@@ -110,13 +111,29 @@ UserListProps) {
             <span
               className={`
               py-1 px-6 rounded-full 
-              ${group[0].status === 'Accepted' ? 'bg-[rgb(242,253,226)] text-[rgb(27,111,19)]' : ''}
-              ${group[0].status === 'Rejected' ? 'bg-[rgb(255,233,218)] text-[rgb(122,15,39)]' : ''}
-              ${group[0].status === 'In Review' ? 'bg-[rgb(213,244,255)] text-[rgb(9,45,122)]' : ''}
-              ${group[0].status.startsWith('Maybe') ? 'bg-yellow-200 text-[rgb(9,45,122)]' : ''}
+              ${
+                group.application[0].status === 'Accepted'
+                  ? 'bg-[rgb(242,253,226)] text-[rgb(27,111,19)]'
+                  : ''
+              }
+              ${
+                group.application[0].status === 'Rejected'
+                  ? 'bg-[rgb(255,233,218)] text-[rgb(122,15,39)]'
+                  : ''
+              }
+              ${
+                group.application[0].status === 'In Review'
+                  ? 'bg-[rgb(213,244,255)] text-[rgb(9,45,122)]'
+                  : ''
+              }
+              ${
+                group.application[0].status.startsWith('Maybe')
+                  ? 'bg-yellow-200 text-[rgb(9,45,122)]'
+                  : ''
+              }
             `}
             >
-              {group[0].status}
+              {group.application[0].status}
             </span>
           </div>
           {user.permissions.includes('super_admin') && (
@@ -135,7 +152,7 @@ UserListProps) {
                   canUnlock={appViewState === ApplicationViewState.ALL}
                   v={Array.from(
                     new Set(
-                      group.map(
+                      group.application.map(
                         (eachUser) => eachUser.user.firstName + ' ' + eachUser.user.lastName,
                       ),
                     ),
@@ -160,7 +177,7 @@ UserListProps) {
             >
               <HiddenInfo
                 locked={appViewState === ApplicationViewState.REVIEWABLE}
-                v={Array.from(new Set(group.map((eachUser) => eachUser.university)))
+                v={Array.from(new Set(group.application.map((eachUser) => eachUser.university)))
                   .sort((a, b) => a.localeCompare(b))
                   .join(', ')}
                 canUnlock={appViewState === ApplicationViewState.ALL}
@@ -178,7 +195,7 @@ UserListProps) {
             whitespace-nowrap overflow-hidden text-ellipsis w-[100%]
           `}
             >
-              {Array.from(new Set(group.map((eachUser) => eachUser.major)))
+              {Array.from(new Set(group.application.map((eachUser) => eachUser.major)))
                 .sort((a, b) => a.localeCompare(b))
                 .join(', ')}
             </p>
@@ -194,7 +211,7 @@ UserListProps) {
             whitespace-nowrap overflow-hidden text-ellipsis w-[100%]
           `}
             >
-              {Array.from(new Set(group.map((eachUser) => eachUser.studyLevel)))
+              {Array.from(new Set(group.application.map((eachUser) => eachUser.studyLevel)))
                 .sort((a, b) => a.localeCompare(b))
                 .join(', ')}
             </p>

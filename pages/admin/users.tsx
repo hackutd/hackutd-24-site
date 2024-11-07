@@ -12,7 +12,7 @@ import UserAdminGroupView from '../../components/adminComponents/userApplication
 import { RequestHelper } from '../../lib/request-helper';
 import { useAuthContext } from '../../lib/user/AuthContext';
 import { ApplicationViewState, RegistrationState } from '../../lib/util';
-import { useUserGroup } from '@/lib/admin/group';
+import { ApplicationEntry, useUserGroup } from '@/lib/admin/group';
 import AdminStatsCard from '@/components/adminComponents/AdminStatsCard';
 import { CheckIcon, XCircleIcon } from '@heroicons/react/solid';
 
@@ -40,8 +40,8 @@ export default function UserPage() {
   //   admin: true,
   //   super_admin: true,
   // });
-  const [filteredGroups, setFilteredGroups] = useState<UserIdentifier[][]>([]);
-  const [filteredAllUserGroups, setFilteredAllUserGroups] = useState<UserIdentifier[][]>([]);
+  const [filteredGroups, setFilteredGroups] = useState<ApplicationEntry[]>([]);
+  const [filteredAllUserGroups, setFilteredAllUserGroups] = useState<ApplicationEntry[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   // const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
 
@@ -80,11 +80,31 @@ export default function UserPage() {
         },
       )
     )['data'];
-    setUserGroups(userGroupsData);
-    setFilteredGroups(userGroupsData);
+    setUserGroups(
+      userGroupsData.map((group, idx) => ({
+        application: group,
+        index: idx,
+      })),
+    );
+    setFilteredGroups(
+      userGroupsData.map((group, idx) => ({
+        application: group,
+        index: idx,
+      })),
+    );
 
-    setAllUserGroups(allApps);
-    setFilteredAllUserGroups(allApps);
+    setAllUserGroups(
+      allApps.map((group, idx) => ({
+        application: group,
+        index: idx + userGroupsData.length,
+      })),
+    );
+    setFilteredAllUserGroups(
+      allApps.map((group, idx) => ({
+        application: group,
+        index: idx + userGroupsData.length,
+      })),
+    );
     setLoading(false);
   }
 
@@ -99,7 +119,7 @@ export default function UserPage() {
         const newFiltered = (
           appViewState === ApplicationViewState.REVIEWABLE ? userGroups : allUserGroups
         ).filter(
-          (users) =>
+          ({ application: users }) =>
             users.filter(
               ({ user }) =>
                 `${user.firstName.trim()} ${user.lastName.trim()}`
@@ -208,61 +228,69 @@ export default function UserPage() {
   // };
   //
   const numAppsReviewed = useMemo(() => {
-    return userGroups.reduce(
-      (acc, curr) =>
-        acc +
-        (curr.every((applicant) =>
-          applicant.scoring?.some((s) => s.reviewer === `${user.firstName} ${user.lastName}`),
-        )
-          ? 1
-          : 0),
-      0,
-    );
+    return userGroups
+      .map((obj) => obj.application)
+      .reduce(
+        (acc, curr) =>
+          acc +
+          (curr.every((applicant) =>
+            applicant.scoring?.some((s) => s.reviewer === `${user.firstName} ${user.lastName}`),
+          )
+            ? 1
+            : 0),
+        0,
+      );
   }, [userGroups]);
 
   const numAppsAccepted = useMemo(() => {
-    return userGroups.reduce(
-      (acc, curr) =>
-        acc +
-        (curr.every((applicant) =>
-          applicant.scoring?.some(
-            (s) => s.reviewer === `${user.firstName} ${user.lastName}` && s.score === 4,
-          ),
-        )
-          ? 1
-          : 0),
-      0,
-    );
+    return userGroups
+      .map((obj) => obj.application)
+      .reduce(
+        (acc, curr) =>
+          acc +
+          (curr.every((applicant) =>
+            applicant.scoring?.some(
+              (s) => s.reviewer === `${user.firstName} ${user.lastName}` && s.score === 4,
+            ),
+          )
+            ? 1
+            : 0),
+        0,
+      );
   }, [userGroups]);
   const numAppsRejected = useMemo(() => {
-    return userGroups.reduce(
-      (acc, curr) =>
-        acc +
-        (curr.every((applicant) =>
-          applicant.scoring?.some(
-            (s) => s.reviewer === `${user.firstName} ${user.lastName}` && s.score === 1,
-          ),
-        )
-          ? 1
-          : 0),
-      0,
-    );
+    return userGroups
+      .map((obj) => obj.application)
+      .reduce(
+        (acc, curr) =>
+          acc +
+          (curr.every((applicant) =>
+            applicant.scoring?.some(
+              (s) => s.reviewer === `${user.firstName} ${user.lastName}` && s.score === 1,
+            ),
+          )
+            ? 1
+            : 0),
+        0,
+      );
   }, [userGroups]);
 
   const numAppsMaybe = useMemo(() => {
-    return userGroups.reduce(
-      (acc, curr) =>
-        acc +
-        (curr.every((applicant) =>
-          applicant.scoring?.some(
-            (s) =>
-              s.reviewer === `${user.firstName} ${user.lastName}` && s.score > 1 && s.score < 4,
-          ),
-        )
-          ? 1
-          : 0),
-      0,
-    );
+    return userGroups
+      .map((obj) => obj.application)
+      .reduce(
+        (acc, curr) =>
+          acc +
+          (curr.every((applicant) =>
+            applicant.scoring?.some(
+              (s) =>
+                s.reviewer === `${user.firstName} ${user.lastName}` && s.score > 1 && s.score < 4,
+            ),
+          )
+            ? 1
+            : 0),
+        0,
+      );
   }, [userGroups]);
 
   const acceptanceRate = useMemo(
@@ -369,7 +397,7 @@ export default function UserPage() {
               setSearchQuery(searchQuery);
             }}
             onUpdateAppViewState={(newState) => {
-              // setAppViewState(newState);
+              setAppViewState(newState);
             }}
             appViewState={appViewState}
             registrationState={registrationStatus}
