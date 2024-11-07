@@ -212,14 +212,13 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
           .get();
         const reviewerIds = scoringSnapshot.docs.map((doc) => doc.data().adminId);
         const organizerReview = scoringSnapshot.docs.find((d) => d.data().adminId === userData.id);
-        const reviewerInfo =
-          reviewerIds.length === 0
-            ? []
-            : await db
-                .collection(USERS_COLLECTION)
-                .where('id', 'in', reviewerIds)
-                .select('id', 'user.firstName', 'user.lastName')
-                .get();
+        const reviewerInfo = await (reviewerIds.length === 0
+          ? []
+          : db
+              .collection(USERS_COLLECTION)
+              .where('id', 'in', reviewerIds)
+              .select('id', 'user.firstName', 'user.lastName')
+              .get());
         const reviewerMapping = new Map<string, string>();
         reviewerInfo.forEach((info) => {
           reviewerMapping.set(
@@ -228,16 +227,11 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
           );
         });
         const appScore = scoringSnapshot.docs.reduce((acc, doc) => {
-          if (doc.data().score === 4) return acc + 1;
-          if (doc.data().score === 1) return acc - 1;
+          const scoreMultiplier = !!doc.data().isSuperVote ? 50 : 1;
+          if (doc.data().score === 4) return acc + scoreMultiplier;
+          if (doc.data().score === 1) return acc - scoreMultiplier;
           return acc;
         }, 0);
-        if (scoringSnapshot.empty || organizerReview === undefined) {
-          return {
-            ...data,
-            status: decisionReleased ? (appScore >= 2 ? 'Accepted' : 'Rejected') : 'In Review',
-          };
-        }
         return {
           ...data,
           scoring: scoringSnapshot.docs.map((doc) => {
@@ -246,25 +240,33 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
               score: data.score,
               note: data.note,
               reviewer: reviewerMapping.get(data.adminId),
+              isSuperVote: !!data.isSuperVote,
             };
           }),
           status: decisionReleased
             ? appScore >= 2
               ? 'Accepted'
               : 'Rejected'
-            : statusString[organizerReview.data().score - 1],
+            : organizerReview
+            ? statusString[organizerReview?.data().score - 1]
+            : 'In Review',
         };
       }),
     );
     allApps = generateGroupsFromUserData(alLFormattedApp as any[]);
+    return res.json({
+      groups: allApps,
+    });
   }
   const assignedAppCollectionRef = await db
     .collection(USERS_COLLECTION)
     .where('reviewer', 'array-contains', userData.id)
+    .where('user.permissions', 'array-contains', 'in_review')
     .get();
   const commonPoolCollectionRef = await db
     .collection(USERS_COLLECTION)
     .where('inCommonPool', '==', true)
+    .where('user.permissions', 'array-contains', 'in_review')
     .get();
   const commonAppWithScores = await Promise.all(
     commonPoolCollectionRef.docs
@@ -295,8 +297,9 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
           );
         });
         const appScore = scoringSnapshot.docs.reduce((acc, doc) => {
-          if (doc.data().score === 4) return acc + 1;
-          if (doc.data().score === 1) return acc - 1;
+          const scoreMultiplier = !!doc.data().isSuperVote ? 50 : 1;
+          if (doc.data().score === 4) return acc + scoreMultiplier;
+          if (doc.data().score === 1) return acc - scoreMultiplier;
           return acc;
         }, 0);
         if (scoringSnapshot.empty || organizerReview === undefined) {
@@ -366,8 +369,9 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
           );
         });
         const appScore = scoringSnapshot.docs.reduce((acc, doc) => {
-          if (doc.data().score === 4) return acc + 1;
-          if (doc.data().score === 1) return acc - 1;
+          const scoreMultiplier = !!doc.data().isSuperVote ? 50 : 1;
+          if (doc.data().score === 4) return acc + scoreMultiplier;
+          if (doc.data().score === 1) return acc - scoreMultiplier;
           return acc;
         }, 0);
         return {
