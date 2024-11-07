@@ -89,10 +89,12 @@ export default function AllUsersAdminView({
       return filterParamsList.includes(userGroup.application[0].status);
     });
     filteredUserGroups = filteredUserGroups.filter((userGroup) => {
-      return filterParamsList.includes(userGroup.application[0].user.permissions[0]);
+      return userGroup.application.some((app) =>
+        filterParamsList.includes(app.user.permissions[0]),
+      );
     });
     setFilteredUserGroups(filteredUserGroups);
-  }, [filterParamsList]);
+  }, [filterParamsList, userGroups]);
 
   return (
     <div className={`h-full px-4 md:px-14 text-sm md:text-base`}>
