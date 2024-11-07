@@ -240,6 +240,7 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
               score: data.score,
               note: data.note,
               reviewer: reviewerMapping.get(data.adminId),
+              isSuperVote: !!data.isSuperVote,
             };
           }),
           status: decisionReleased

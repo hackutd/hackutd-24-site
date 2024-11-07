@@ -246,11 +246,14 @@ export default function UserAdminView({
               <p className="font-bold text-xl text-black">Application Score</p>
 
               <p className="text-8xl font-dmSans">
-                {currentApplicant.scoring.reduce(
-                  (acc: number, curr) =>
-                    curr.score === 4 ? acc + 1 : curr.score === 1 ? acc - 1 : acc,
-                  0,
-                )}
+                {currentApplicant.scoring.reduce((acc: number, curr) => {
+                  const scoreMultiplier = !!curr.isSuperVote ? 50 : 1;
+                  return curr.score === 4
+                    ? acc + scoreMultiplier
+                    : curr.score === 1
+                    ? acc - scoreMultiplier
+                    : acc;
+                }, 0)}
               </p>
 
               <p className="italic text-gray-600">
