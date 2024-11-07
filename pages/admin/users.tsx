@@ -29,8 +29,6 @@ export default function UserPage() {
   const [loading, setLoading] = useState(true);
   const userGroups = useUserGroup((state) => state.groups);
   const setUserGroups = useUserGroup((state) => state.setUserGroup);
-  const allUserGroups = useUserGroup((state) => state.allUsers);
-  const setAllUserGroups = useUserGroup((state) => state.setAllUserGroup);
   const [currentUserGroup, setCurrentUserGroup] = useState('');
 
   // const [filter, setFilter] = useState({
@@ -41,12 +39,15 @@ export default function UserPage() {
   //   super_admin: true,
   // });
   const [filteredGroups, setFilteredGroups] = useState<ApplicationEntry[]>([]);
-  const [filteredAllUserGroups, setFilteredAllUserGroups] = useState<ApplicationEntry[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   // const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
 
   const [registrationStatus, setRegistrationStatus] = useState(RegistrationState.UNINITIALIZED);
-  const [appViewState, setAppViewState] = useState(ApplicationViewState.REVIEWABLE);
+  const [appViewState, setAppViewState] = useState(
+    user.permissions.includes('super_admin')
+      ? ApplicationViewState.ALL
+      : ApplicationViewState.REVIEWABLE,
+  );
   const [nextRegistrationStatus, setNextRegistrationStatus] = useState(
     RegistrationState.UNINITIALIZED,
   );
@@ -70,7 +71,7 @@ export default function UserPage() {
       allowRegistrationState.allowRegistrations ? RegistrationState.OPEN : RegistrationState.CLOSED,
     );
 
-    const { groups: userGroupsData, allApps } = (
+    const { groups: userGroupsData } = (
       await RequestHelper.get<{ groups: UserIdentifier[][]; allApps: UserIdentifier[][] }>(
         '/api/users',
         {
@@ -93,18 +94,6 @@ export default function UserPage() {
       })),
     );
 
-    setAllUserGroups(
-      allApps.map((group, idx) => ({
-        application: group,
-        index: idx + userGroupsData.length,
-      })),
-    );
-    setFilteredAllUserGroups(
-      allApps.map((group, idx) => ({
-        application: group,
-        index: idx + userGroupsData.length,
-      })),
-    );
     setLoading(false);
   }
 
@@ -116,9 +105,7 @@ export default function UserPage() {
     if (loading) return;
     timer = setTimeout(() => {
       if (searchQuery !== '') {
-        const newFiltered = (
-          appViewState === ApplicationViewState.REVIEWABLE ? userGroups : allUserGroups
-        ).filter(
+        const newFiltered = userGroups.filter(
           ({ application: users }) =>
             users.filter(
               ({ user }) =>
@@ -127,24 +114,16 @@ export default function UserPage() {
                   .indexOf(searchQuery.toLowerCase()) !== -1,
             ).length > 0,
         );
-        if (appViewState === ApplicationViewState.REVIEWABLE) {
-          setFilteredGroups(newFiltered);
-        } else {
-          setFilteredAllUserGroups(newFiltered);
-        }
+        setFilteredGroups(newFiltered);
       } else {
-        if (appViewState === ApplicationViewState.REVIEWABLE) {
-          setFilteredGroups([...userGroups]);
-        } else {
-          setFilteredAllUserGroups([...allUserGroups]);
-        }
+        setFilteredGroups([...userGroups]);
       }
     }, 750);
 
     return () => {
       clearTimeout(timer);
     };
-  }, [searchQuery, loading, userGroups, allUserGroups]);
+  }, [searchQuery, loading, userGroups]);
 
   // const updateFilter = (name: string) => {
   //   const filterCriteria = {
@@ -377,11 +356,7 @@ export default function UserPage() {
       <div className="w-full max-w-screen-2xl mb-10" style={{ height: 'calc(100vh - 180px)' }}>
         {currentUserGroup === '' ? (
           <AllUsersAdminView
-            userGroups={
-              appViewState === ApplicationViewState.REVIEWABLE
-                ? filteredGroups
-                : filteredAllUserGroups
-            }
+            userGroups={filteredGroups}
             // selectedUsers={selectedUsers}
             onUserGroupClick={(id) => {
               // setSelectedUsers([id]);
@@ -405,11 +380,7 @@ export default function UserPage() {
         ) : (
           <UserAdminGroupView
             appViewState={appViewState}
-            userGroups={
-              appViewState === ApplicationViewState.REVIEWABLE
-                ? filteredGroups
-                : filteredAllUserGroups
-            }
+            userGroups={filteredGroups}
             currentUserGroupId={currentUserGroup}
             goBack={() => setCurrentUserGroup('')}
             onUserGroupClick={(id) => {
