@@ -212,14 +212,13 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
           .get();
         const reviewerIds = scoringSnapshot.docs.map((doc) => doc.data().adminId);
         const organizerReview = scoringSnapshot.docs.find((d) => d.data().adminId === userData.id);
-        const reviewerInfo =
-          reviewerIds.length === 0
-            ? []
-            : await db
-                .collection(USERS_COLLECTION)
-                .where('id', 'in', reviewerIds)
-                .select('id', 'user.firstName', 'user.lastName')
-                .get();
+        const reviewerInfo = await (reviewerIds.length === 0
+          ? []
+          : db
+              .collection(USERS_COLLECTION)
+              .where('id', 'in', reviewerIds)
+              .select('id', 'user.firstName', 'user.lastName')
+              .get());
         const reviewerMapping = new Map<string, string>();
         reviewerInfo.forEach((info) => {
           reviewerMapping.set(
@@ -232,12 +231,6 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
           if (doc.data().score === 1) return acc - 1;
           return acc;
         }, 0);
-        if (scoringSnapshot.empty || organizerReview === undefined) {
-          return {
-            ...data,
-            status: decisionReleased ? (appScore >= 2 ? 'Accepted' : 'Rejected') : 'In Review',
-          };
-        }
         return {
           ...data,
           scoring: scoringSnapshot.docs.map((doc) => {
@@ -252,11 +245,16 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
             ? appScore >= 2
               ? 'Accepted'
               : 'Rejected'
-            : statusString[organizerReview.data().score - 1],
+            : organizerReview
+            ? statusString[organizerReview?.data().score - 1]
+            : 'In Review',
         };
       }),
     );
     allApps = generateGroupsFromUserData(alLFormattedApp as any[]);
+    return res.json({
+      groups: allApps,
+    });
   }
   const assignedAppCollectionRef = await db
     .collection(USERS_COLLECTION)
