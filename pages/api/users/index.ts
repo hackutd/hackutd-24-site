@@ -227,8 +227,9 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
           );
         });
         const appScore = scoringSnapshot.docs.reduce((acc, doc) => {
-          if (doc.data().score === 4) return acc + 1;
-          if (doc.data().score === 1) return acc - 1;
+          const scoreMultiplier = !!doc.data().isSuperVote ? 50 : 1;
+          if (doc.data().score === 4) return acc + scoreMultiplier;
+          if (doc.data().score === 1) return acc - scoreMultiplier;
           return acc;
         }, 0);
         return {
@@ -239,6 +240,7 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
               score: data.score,
               note: data.note,
               reviewer: reviewerMapping.get(data.adminId),
+              isSuperVote: !!data.isSuperVote,
             };
           }),
           status: decisionReleased
@@ -259,10 +261,12 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
   const assignedAppCollectionRef = await db
     .collection(USERS_COLLECTION)
     .where('reviewer', 'array-contains', userData.id)
+    .where('user.permissions', 'array-contains', 'in_review')
     .get();
   const commonPoolCollectionRef = await db
     .collection(USERS_COLLECTION)
     .where('inCommonPool', '==', true)
+    .where('user.permissions', 'array-contains', 'in_review')
     .get();
   const commonAppWithScores = await Promise.all(
     commonPoolCollectionRef.docs
@@ -293,8 +297,9 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
           );
         });
         const appScore = scoringSnapshot.docs.reduce((acc, doc) => {
-          if (doc.data().score === 4) return acc + 1;
-          if (doc.data().score === 1) return acc - 1;
+          const scoreMultiplier = !!doc.data().isSuperVote ? 50 : 1;
+          if (doc.data().score === 4) return acc + scoreMultiplier;
+          if (doc.data().score === 1) return acc - scoreMultiplier;
           return acc;
         }, 0);
         if (scoringSnapshot.empty || organizerReview === undefined) {
@@ -364,8 +369,9 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
           );
         });
         const appScore = scoringSnapshot.docs.reduce((acc, doc) => {
-          if (doc.data().score === 4) return acc + 1;
-          if (doc.data().score === 1) return acc - 1;
+          const scoreMultiplier = !!doc.data().isSuperVote ? 50 : 1;
+          if (doc.data().score === 4) return acc + scoreMultiplier;
+          if (doc.data().score === 1) return acc - scoreMultiplier;
           return acc;
         }, 0);
         return {

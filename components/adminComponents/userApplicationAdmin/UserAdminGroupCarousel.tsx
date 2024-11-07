@@ -69,6 +69,7 @@ export default function UserAdminGroupCarousel({
                             hackerId: string;
                             score: number;
                             note: string;
+                            isSuperVote: boolean;
                           }>;
                         },
                         { msg: string }
@@ -86,6 +87,7 @@ export default function UserAdminGroupCarousel({
                             hackerId: member.id,
                             score: groupScore,
                             note: notes[idx],
+                            isSuperVote: appViewState === ApplicationViewState.ALL,
                           })),
                         },
                       );

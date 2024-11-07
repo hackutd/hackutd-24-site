@@ -335,6 +335,7 @@ type UserIdentifier = Omit<Registration, 'scans'> & {
     score: number;
     note: string;
     reviewer: string;
+    isSuperVote?: boolean;
   }[];
 };
 
