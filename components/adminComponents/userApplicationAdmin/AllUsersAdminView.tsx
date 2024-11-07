@@ -216,34 +216,36 @@ export default function AllUsersAdminView({
       </div>
 
       {/* Super Admin Filter */}
-      <div>
-        <FormControl fullWidth={true} sx={{ m: 1 }}>
-          <InputLabel id="demo-multiple-checkbox-label">Tag</InputLabel>
-          <Select
-            labelId="demo-multiple-checkbox-label"
-            id="demo-multiple-checkbox"
-            multiple
-            value={filterParamsList}
-            onChange={handleChange}
-            input={<OutlinedInput label="Tag" />}
-            renderValue={(selected) => (
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                {selected.map((value) => (
-                  <Chip key={value} label={value} />
-                ))}
-              </Box>
-            )}
-            MenuProps={MenuProps}
-          >
-            {filterParams.map((filterParam) => (
-              <MenuItem key={filterParam} value={filterParam}>
-                <Checkbox checked={filterParamsList.includes(filterParam)} />
-                <ListItemText primary={filterParam} />
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
+      {user.permissions.includes('super_admin') && (
+        <div>
+          <FormControl fullWidth={true} sx={{ m: 1 }}>
+            <InputLabel id="demo-multiple-checkbox-label">Tag</InputLabel>
+            <Select
+              labelId="demo-multiple-checkbox-label"
+              id="demo-multiple-checkbox"
+              multiple
+              value={filterParamsList}
+              onChange={handleChange}
+              input={<OutlinedInput label="Tag" />}
+              renderValue={(selected) => (
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                  {selected.map((value) => (
+                    <Chip key={value} label={value} />
+                  ))}
+                </Box>
+              )}
+              MenuProps={MenuProps}
+            >
+              {filterParams.map((filterParam) => (
+                <MenuItem key={filterParam} value={filterParam}>
+                  <Checkbox checked={filterParamsList.includes(filterParam)} />
+                  <ListItemText primary={filterParam} />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </div>
+      )}
 
       {/* User Table List */}
       <div
