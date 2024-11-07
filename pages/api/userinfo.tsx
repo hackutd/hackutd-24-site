@@ -20,15 +20,15 @@ async function getApplicationDecision(userId: string): Promise<string> {
     return 'In Review';
   }
 
-  const userDoc = await db.collection(REGISTRATION_COLLECTION).doc(userId).get();
-  if (!userDoc.exists) {
-    throw new Error('ERROR');
-  }
-
-  const userRole = userDoc.data()?.user.permissions as string[];
-  if (userRole.includes('super_admin')) {
-    return 'Accepted';
-  }
+  // const userDoc = await db.collection(REGISTRATION_COLLECTION).doc(userId).get();
+  // if (!userDoc.exists) {
+  //   throw new Error('ERROR');
+  // }
+  //
+  // const userRole = userDoc.data()?.user.permissions as string[];
+  // if (userRole.includes('super_admin')) {
+  //   return 'Accepted';
+  // }
 
   const snapshot = await db.collection('/acceptreject').where('hackerId', '==', userId).get();
   const applicationPoint = snapshot.docs.reduce((acc: number, doc) => {
