@@ -5,6 +5,19 @@ import UserList, { USERLIST_INFINITE_SCROLL_TARGET } from './UserList';
 import { SearchIcon } from '@heroicons/react/solid';
 import { useAuthContext } from '@/lib/user/AuthContext';
 import { ApplicationEntry } from '@/lib/admin/group';
+import { useEffect, useState } from 'react';
+import {
+  Checkbox,
+  Chip,
+  FormControl,
+  InputLabel,
+  ListItemText,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  SelectChangeEvent,
+} from '@mui/material';
+import { Box } from '@mui/system';
 
 interface AllUsersAdminViewProps {
   userGroups: ApplicationEntry[];
@@ -33,7 +46,54 @@ export default function AllUsersAdminView({
   appViewState,
   onUpdateAppViewState,
 }: AllUsersAdminViewProps) {
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
+
   const { user } = useAuthContext();
+  const filterParams = [
+    'hacker',
+    'admin',
+    'super_admin',
+    'Accepted',
+    'Rejected',
+    'In Review',
+    'Maybe Yes',
+    'Maybe No',
+  ];
+  const [filterParamsList, setFilterParamsList] = useState<string[]>(filterParams);
+
+  const [filteredUserGroups, setFilteredUserGroups] = useState<ApplicationEntry[]>(userGroups);
+
+  const handleChange = (event: SelectChangeEvent<typeof filterParamsList>) => {
+    const {
+      target: { value },
+    } = event;
+
+    setFilterParamsList(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
+
+  useEffect(() => {
+    // Filter User Groups based on filterParamsList
+    let filteredUserGroups = userGroups.filter((userGroup) => {
+      return filterParamsList.includes(userGroup.application[0].status);
+    });
+    filteredUserGroups = filteredUserGroups.filter((userGroup) => {
+      return filterParamsList.includes(userGroup.application[0].user.permissions[0]);
+    });
+    setFilteredUserGroups(filteredUserGroups);
+  }, [filterParamsList]);
+
   return (
     <div className={`h-full px-4 md:px-14 text-sm md:text-base`}>
       {/* Top Bar with Status, Search, and Filters */}
@@ -155,6 +215,36 @@ export default function AllUsersAdminView({
         </div>
       </div>
 
+      {/* Super Admin Filter */}
+      <div>
+        <FormControl fullWidth={true} sx={{ m: 1 }}>
+          <InputLabel id="demo-multiple-checkbox-label">Tag</InputLabel>
+          <Select
+            labelId="demo-multiple-checkbox-label"
+            id="demo-multiple-checkbox"
+            multiple
+            value={filterParamsList}
+            onChange={handleChange}
+            input={<OutlinedInput label="Tag" />}
+            renderValue={(selected) => (
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                {selected.map((value) => (
+                  <Chip key={value} label={value} />
+                ))}
+              </Box>
+            )}
+            MenuProps={MenuProps}
+          >
+            {filterParams.map((filterParam) => (
+              <MenuItem key={filterParam} value={filterParam}>
+                <Checkbox checked={filterParamsList.includes(filterParam)} />
+                <ListItemText primary={filterParam} />
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </div>
+
       {/* User Table List */}
       <div
         id={USERLIST_INFINITE_SCROLL_TARGET}
@@ -168,7 +258,7 @@ export default function AllUsersAdminView({
         <div
           className={`
             min-w-[1024px]
-            ${userGroups.length === 0 ? 'bg-[rgba(255,255,255,0.6)]' : ''}
+            ${filteredUserGroups.length === 0 ? 'bg-[rgba(255,255,255,0.6)]' : ''}
             backdrop-blur
           `}
         >
@@ -198,7 +288,7 @@ export default function AllUsersAdminView({
           {/* User List */}
           <UserList
             appViewState={appViewState}
-            userGroups={userGroups}
+            userGroups={filteredUserGroups}
             // selectedUsers={selectedUsers}
             onUserGroupClick={(id) => onUserGroupClick(id)}
             // onUserSelect={(id) => onUserSelect(id)}
