@@ -208,7 +208,7 @@ export default function UserAdminView({
               k="Name"
               v={currentApplicant.user.firstName + ' ' + currentApplicant.user.lastName}
               locked={appViewState === ApplicationViewState.REVIEWABLE}
-              canUnlock={organizer.permissions.includes('super_admin')}
+              canUnlock={appViewState === ApplicationViewState.ALL}
             />
             <BasicInfo k="Major" v={currentApplicant.major} />
             <BasicInfo k="Level of Study" v={currentApplicant.studyLevel} />
@@ -216,7 +216,7 @@ export default function UserAdminView({
               k="Role"
               v={currentApplicant.user.permissions[0]}
               locked={appViewState === ApplicationViewState.REVIEWABLE}
-              canUnlock={organizer.permissions.includes('super_admin')}
+              canUnlock={appViewState === ApplicationViewState.ALL}
             />
           </div>
 
@@ -225,7 +225,7 @@ export default function UserAdminView({
               k="School"
               v={currentApplicant.university ?? currentApplicant.universityManual}
               locked={appViewState === ApplicationViewState.REVIEWABLE}
-              canUnlock={organizer.permissions.includes('super_admin')}
+              canUnlock={appViewState === ApplicationViewState.ALL}
             />
             <BasicInfo k="Software Experience" v={currentApplicant.softwareExperience} />
             {/* this should PROBABLY be currentUser.hackathonNumber, but I think the registration interface is populated incorrectly */}
@@ -234,7 +234,7 @@ export default function UserAdminView({
               k="Email"
               v={currentApplicant.user.preferredEmail}
               locked={appViewState === ApplicationViewState.REVIEWABLE}
-              canUnlock={organizer.permissions.includes('super_admin')}
+              canUnlock={appViewState === ApplicationViewState.ALL}
             />
           </div>
         </div>
