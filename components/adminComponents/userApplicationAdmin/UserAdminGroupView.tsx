@@ -47,7 +47,8 @@ export default function UserAdminGroupView({
       return false;
     });
     setCurrentUserGroupIndex(tempCurrentUserGroupIndex);
-  }, [userGroups]);
+    setCurrentUserGroup(tempCurrentUserGroup);
+  }, [userGroups, currentUserGroup, currentUserGroupId]);
 
   const stringifyScore = (appScore: { acceptCount: number; rejectCount: number }) => {
     if (appScore.acceptCount >= 1000000000) return 'Auto-Accepted by HackPortal';
@@ -95,7 +96,7 @@ export default function UserAdminGroupView({
       <div className="hidden md:block md:w-72 px-2 py-4">
         {/* Page */}
         <div className="overflow-y-hidden h-[calc(100%-40px)]" ref={ref}>
-          {userGroups.slice(startIndex, startIndex + pageSize).map((group) => (
+          {userGroups.slice(startIndex, startIndex + pageSize).map((group, idx) => (
             <div
               key={getGroupId(group.application)}
               className={`
@@ -109,7 +110,9 @@ export default function UserAdminGroupView({
                 cursor-pointer
                 gap-x-3
               `}
-              onClick={() => onUserGroupClick(getGroupId(group.application))}
+              onClick={() => {
+                onUserGroupClick(getGroupId(group.application));
+              }}
             >
               {/* <div
                 className={`
