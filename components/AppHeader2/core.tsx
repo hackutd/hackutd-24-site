@@ -160,8 +160,8 @@ export default function AppHeader2_Core(props: Props) {
                       onClick: () => router.push('/admin/users'),
                     },
                     {
-                      optionName: "Late Check-in",
-                      onClick: () => router.push('/admin/waitlist')
+                      optionName: 'Late Check-in',
+                      onClick: () => router.push('/admin/waitlist'),
                     },
                     ...(isSuperAdmin
                       ? [
