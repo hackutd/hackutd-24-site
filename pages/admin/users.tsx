@@ -30,7 +30,8 @@ export default function UserPage() {
   const [loading, setLoading] = useState(true);
   const userGroups = useUserGroup((state) => state.groups);
   const setUserGroups = useUserGroup((state) => state.setUserGroup);
-  const [currentUserGroup, setCurrentUserGroup] = useState('');
+  const currentUserGroup = useUserGroup((state) => state.currentUserGroup);
+  const setCurrentUserGroup = useUserGroup((state) => state.setCurrentUsergroup);
 
   // const [filter, setFilter] = useState({
   //   hacker: true,
