@@ -15,6 +15,7 @@ import { ApplicationViewState, RegistrationState } from '../../lib/util';
 import { ApplicationEntry, useUserGroup } from '@/lib/admin/group';
 import AdminStatsCard from '@/components/adminComponents/AdminStatsCard';
 import { CheckIcon, XCircleIcon } from '@heroicons/react/solid';
+import { SelectChangeEvent } from '@mui/material';
 
 /**
  *
@@ -42,6 +43,28 @@ export default function UserPage() {
   const [searchQuery, setSearchQuery] = useState('');
   // const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
 
+  const filterParams = [
+    'hacker',
+    'admin',
+    'super_admin',
+    'Accepted',
+    'Rejected',
+    'In Review',
+    'Maybe Yes',
+    'Maybe No',
+  ];
+
+  const [filterParamsList, setFilterParamsList] = useState<string[]>(filterParams);
+  const handleParamListChange = (event: SelectChangeEvent<typeof filterParamsList>) => {
+    const {
+      target: { value },
+    } = event;
+
+    setFilterParamsList(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
   const [registrationStatus, setRegistrationStatus] = useState(RegistrationState.UNINITIALIZED);
   const [appViewState, setAppViewState] = useState(
     user.permissions.includes('super_admin')
@@ -53,7 +76,6 @@ export default function UserPage() {
   );
 
   let timer: NodeJS.Timeout;
-
   async function fetchInitData() {
     setLoading(true);
     setNextRegistrationStatus(RegistrationState.UNINITIALIZED);
@@ -103,9 +125,17 @@ export default function UserPage() {
 
   useEffect(() => {
     if (loading) return;
+    let filteredUserGroups = userGroups.filter((userGroup) => {
+      return filterParamsList.includes(userGroup.application[0].status);
+    });
+    filteredUserGroups = filteredUserGroups.filter((userGroup) => {
+      return userGroup.application.some((app) =>
+        filterParamsList.includes(app.user.permissions[0]),
+      );
+    });
     timer = setTimeout(() => {
       if (searchQuery !== '') {
-        const newFiltered = userGroups.filter(
+        const newFiltered = filteredUserGroups.filter(
           ({ application: users }) =>
             users.filter(
               ({ user }) =>
@@ -116,14 +146,14 @@ export default function UserPage() {
         );
         setFilteredGroups(newFiltered);
       } else {
-        setFilteredGroups([...userGroups]);
+        setFilteredGroups(filteredUserGroups);
       }
     }, 750);
 
     return () => {
       clearTimeout(timer);
     };
-  }, [searchQuery, loading, userGroups]);
+  }, [searchQuery, loading, userGroups, filterParamsList]);
 
   // const updateFilter = (name: string) => {
   //   const filterCriteria = {
@@ -391,14 +421,8 @@ export default function UserPage() {
               setAppViewState(newState);
             }}
             appViewState={appViewState}
-            onUpdateFilterParamsList={(paramList) => {
-              let filteredUserGroups = userGroups
-                .filter((obj) => paramList.includes(obj.application[0].status))
-                .filter((obj) =>
-                  obj.application.some((app) => paramList.includes(app.user.permissions[0])),
-                );
-              setFilteredGroups(filteredUserGroups);
-            }}
+            handleParamListChange={handleParamListChange}
+            filterParamsList={filterParamsList}
             registrationState={registrationStatus}
           />
         ) : (
