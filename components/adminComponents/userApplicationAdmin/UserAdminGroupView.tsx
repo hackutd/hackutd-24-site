@@ -11,7 +11,7 @@ import {
 import { getGroupId } from './helpers';
 import UserAdminGroupCarousel from './UserAdminGroupCarousel';
 import { ApplicationViewState } from '@/lib/util';
-import { ApplicationEntry } from '@/lib/admin/group';
+import { ApplicationEntry, useUserGroup } from '@/lib/admin/group';
 
 interface UserAdminGroupViewProps {
   userGroups: ApplicationEntry[];
@@ -33,22 +33,17 @@ export default function UserAdminGroupView({
 }: UserAdminGroupViewProps) {
   const { user } = useAuthContext();
   const [currentUserGroupIndex, setCurrentUserGroupIndex] = useState(0);
-  const [currentUserGroup, setCurrentUserGroup] = useState(
-    userGroups.find((group) => getGroupId(group.application) === currentUserGroupId),
-  );
 
   useEffect(() => {
     let tempCurrentUserGroupIndex = 0;
-    const tempCurrentUserGroup = userGroups.find((group, i) => {
-      if (getGroupId(group.application) === currentUserGroupId) {
+    for (let i = 0; i < userGroups.length; i++) {
+      if (getGroupId(userGroups[i].application) === currentUserGroupId) {
         tempCurrentUserGroupIndex = i;
-        return true;
+        break;
       }
-      return false;
-    });
+    }
     setCurrentUserGroupIndex(tempCurrentUserGroupIndex);
-    setCurrentUserGroup(tempCurrentUserGroup);
-  }, [userGroups, currentUserGroup, currentUserGroupId]);
+  }, [userGroups, currentUserGroupId]);
 
   const stringifyScore = (appScore: { acceptCount: number; rejectCount: number }) => {
     if (appScore.acceptCount >= 1000000000) return 'Auto-Accepted by HackPortal';
@@ -207,7 +202,10 @@ export default function UserAdminGroupView({
         </div>
 
         {/* Application */}
-        <UserAdminGroupCarousel group={currentUserGroup.application} appViewState={appViewState} />
+        <UserAdminGroupCarousel
+          group={userGroups[currentUserGroupIndex].application}
+          appViewState={appViewState}
+        />
       </div>
     </div>
   );

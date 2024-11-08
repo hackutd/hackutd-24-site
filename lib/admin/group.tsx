@@ -9,6 +9,8 @@ export type ApplicationEntry = {
 interface UserGroupState {
   groups: ApplicationEntry[];
   allUsers: ApplicationEntry[];
+  currentUserGroup: string;
+  setCurrentUsergroup: (s: string) => void;
   setUserGroup: (groups: ApplicationEntry[]) => void;
   setAllUserGroup: (allUsers: ApplicationEntry[]) => void;
   updateGroupVerdict: (groupId: string, newVerdict: string) => void;
@@ -17,6 +19,7 @@ interface UserGroupState {
 export const useUserGroup = create<UserGroupState>((set) => ({
   groups: [],
   allUsers: [],
+  currentUserGroup: '',
   setUserGroup: (groups) =>
     set(() => ({
       groups,
@@ -33,4 +36,5 @@ export const useUserGroup = create<UserGroupState>((set) => ({
           : group,
       ),
     })),
+  setCurrentUsergroup: (s) => set(() => ({ currentUserGroup: s })),
 }));
