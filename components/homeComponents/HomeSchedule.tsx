@@ -79,7 +79,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
   };
 
   /* Event Component */
-  const Event = ({ data, index, arrayLength }) => {
+  const Event = ({ data, index, arrayLength, isLastElement }) => {
     const startDate = new Date(data.startDate);
     const formattedTime = startDate
       .toLocaleString([], { hour: 'numeric', minute: 'numeric' })
@@ -96,7 +96,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
     return (
       showEvent && (
         <>
-          <div className="border-b border-[#4D8889] p-2">
+          <div className={`${!isLastElement ? 'border-b border-[#4D8889]' : ''} p-2`}>
             <div className="flex justify-between pb-1">
               <div className="text-md font-bold font-dmSans">{formattedTime}</div>
               <div className="text-md font-bold font-dmSans">{data.title}</div>
@@ -122,17 +122,23 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
 
   /* Filter Daily Events */
   const getDailyEvents = (startTime, endTime) => {
-    return props.scheduleCard
+    const events = props.scheduleCard
       .sort((a, b) => {
         return +new Date(a.startDate) - +new Date(b.startDate);
       })
       .filter((event) => {
         const eventDate = new Date(event.startDate);
         return eventDate >= startTime && eventDate <= endTime;
-      })
-      .map((event, index, array) => (
-        <Event data={event} key={event.title + index} index={index} arrayLength={array.length} />
-      ));
+      });
+    return events.map((event, index, array) => (
+      <Event
+        data={event}
+        key={event.title + index}
+        index={index}
+        arrayLength={array.length}
+        isLastElement={index === events.length - 1}
+      />
+    ));
   };
 
   const day1Events = getDailyEvents(day1StartDateAndTime, day2StartDateAndTime);
