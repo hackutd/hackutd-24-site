@@ -31,6 +31,7 @@ interface AllUsersAdminViewProps {
   // onUserSelect: (id: string) => void;
   // onAcceptReject: (status: string) => void;
   onSearchQueryUpdate: (searchQuery: string) => void;
+  onUpdateFilterParamsList: (paramList: string[]) => void;
 }
 
 export default function AllUsersAdminView({
@@ -45,6 +46,7 @@ export default function AllUsersAdminView({
   onUpdateRegistrationState,
   appViewState,
   onUpdateAppViewState,
+  onUpdateFilterParamsList,
 }: AllUsersAdminViewProps) {
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -70,8 +72,6 @@ export default function AllUsersAdminView({
   ];
   const [filterParamsList, setFilterParamsList] = useState<string[]>(filterParams);
 
-  const [filteredUserGroups, setFilteredUserGroups] = useState<ApplicationEntry[]>(userGroups);
-
   const handleChange = (event: SelectChangeEvent<typeof filterParamsList>) => {
     const {
       target: { value },
@@ -84,16 +84,17 @@ export default function AllUsersAdminView({
   };
 
   useEffect(() => {
+    onUpdateFilterParamsList(filterParamsList);
     // Filter User Groups based on filterParamsList
-    let filteredUserGroups = userGroups.filter((userGroup) => {
-      return filterParamsList.includes(userGroup.application[0].status);
-    });
-    filteredUserGroups = filteredUserGroups.filter((userGroup) => {
-      return userGroup.application.some((app) =>
-        filterParamsList.includes(app.user.permissions[0]),
-      );
-    });
-    setFilteredUserGroups(filteredUserGroups);
+    // let filteredUserGroups = userGroups.filter((userGroup) => {
+    //   return filterParamsList.includes(userGroup.application[0].status);
+    // });
+    // filteredUserGroups = filteredUserGroups.filter((userGroup) => {
+    //   return userGroup.application.some((app) =>
+    //     filterParamsList.includes(app.user.permissions[0]),
+    //   );
+    // });
+    // setFilteredUserGroups(filteredUserGroups);
   }, [filterParamsList, userGroups]);
 
   return (
@@ -260,7 +261,7 @@ export default function AllUsersAdminView({
         <div
           className={`
             min-w-[1024px]
-            ${filteredUserGroups.length === 0 ? 'bg-[rgba(255,255,255,0.6)]' : ''}
+            ${userGroups.length === 0 ? 'bg-[rgba(255,255,255,0.6)]' : ''}
             backdrop-blur
           `}
         >
@@ -290,7 +291,7 @@ export default function AllUsersAdminView({
           {/* User List */}
           <UserList
             appViewState={appViewState}
-            userGroups={filteredUserGroups}
+            userGroups={userGroups}
             // selectedUsers={selectedUsers}
             onUserGroupClick={(id) => onUserGroupClick(id)}
             // onUserSelect={(id) => onUserSelect(id)}
