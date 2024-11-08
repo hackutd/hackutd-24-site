@@ -32,15 +32,22 @@ export default function UserAdminGroupView({
   appViewState,
 }: UserAdminGroupViewProps) {
   const { user } = useAuthContext();
+  const [currentUserGroupIndex, setCurrentUserGroupIndex] = useState(0);
+  const [currentUserGroup, setCurrentUserGroup] = useState(
+    userGroups.find((group) => getGroupId(group.application) === currentUserGroupId),
+  );
 
-  let currentUserGroupIndex = 0;
-  const currentUserGroup = userGroups.find((group, i) => {
-    if (getGroupId(group.application) === currentUserGroupId) {
-      currentUserGroupIndex = i;
-      return true;
-    }
-    return false;
-  });
+  useEffect(() => {
+    let tempCurrentUserGroupIndex = 0;
+    const tempCurrentUserGroup = userGroups.find((group, i) => {
+      if (getGroupId(group.application) === currentUserGroupId) {
+        tempCurrentUserGroupIndex = i;
+        return true;
+      }
+      return false;
+    });
+    setCurrentUserGroupIndex(tempCurrentUserGroupIndex);
+  }, [userGroups]);
 
   const stringifyScore = (appScore: { acceptCount: number; rejectCount: number }) => {
     if (appScore.acceptCount >= 1000000000) return 'Auto-Accepted by HackPortal';

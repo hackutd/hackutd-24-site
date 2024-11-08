@@ -31,7 +31,8 @@ interface AllUsersAdminViewProps {
   // onUserSelect: (id: string) => void;
   // onAcceptReject: (status: string) => void;
   onSearchQueryUpdate: (searchQuery: string) => void;
-  onUpdateFilterParamsList: (paramList: string[]) => void;
+  filterParamsList: string[];
+  handleParamListChange: (e: any) => void;
 }
 
 export default function AllUsersAdminView({
@@ -46,7 +47,8 @@ export default function AllUsersAdminView({
   onUpdateRegistrationState,
   appViewState,
   onUpdateAppViewState,
-  onUpdateFilterParamsList,
+  handleParamListChange,
+  filterParamsList,
 }: AllUsersAdminViewProps) {
   const ITEM_HEIGHT = 48;
   const ITEM_PADDING_TOP = 8;
@@ -60,6 +62,7 @@ export default function AllUsersAdminView({
   };
 
   const { user } = useAuthContext();
+
   const filterParams = [
     'hacker',
     'admin',
@@ -70,32 +73,19 @@ export default function AllUsersAdminView({
     'Maybe Yes',
     'Maybe No',
   ];
-  const [filterParamsList, setFilterParamsList] = useState<string[]>(filterParams);
-
-  const handleChange = (event: SelectChangeEvent<typeof filterParamsList>) => {
-    const {
-      target: { value },
-    } = event;
-
-    setFilterParamsList(
-      // On autofill we get a stringified value.
-      typeof value === 'string' ? value.split(',') : value,
-    );
-  };
-
-  useEffect(() => {
-    onUpdateFilterParamsList(filterParamsList);
-    // Filter User Groups based on filterParamsList
-    // let filteredUserGroups = userGroups.filter((userGroup) => {
-    //   return filterParamsList.includes(userGroup.application[0].status);
-    // });
-    // filteredUserGroups = filteredUserGroups.filter((userGroup) => {
-    //   return userGroup.application.some((app) =>
-    //     filterParamsList.includes(app.user.permissions[0]),
-    //   );
-    // });
-    // setFilteredUserGroups(filteredUserGroups);
-  }, [filterParamsList, userGroups]);
+  // useEffect(() => {
+  //   onUpdateFilterParamsList(filterParamsList);
+  //   // Filter User Groups based on filterParamsList
+  //   // let filteredUserGroups = userGroups.filter((userGroup) => {
+  //   //   return filterParamsList.includes(userGroup.application[0].status);
+  //   // });
+  //   // filteredUserGroups = filteredUserGroups.filter((userGroup) => {
+  //   //   return userGroup.application.some((app) =>
+  //   //     filterParamsList.includes(app.user.permissions[0]),
+  //   //   );
+  //   // });
+  //   // setFilteredUserGroups(filteredUserGroups);
+  // }, [filterParamsList, userGroups]);
 
   return (
     <div className={`h-full px-4 md:px-14 text-sm md:text-base`}>
@@ -227,7 +217,7 @@ export default function AllUsersAdminView({
             id="demo-multiple-checkbox"
             multiple
             value={filterParamsList}
-            onChange={handleChange}
+            onChange={handleParamListChange}
             input={<OutlinedInput label="Tag" />}
             renderValue={(selected) => (
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
