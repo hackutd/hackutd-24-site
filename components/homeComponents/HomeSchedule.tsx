@@ -296,6 +296,7 @@ const BackgroundAssets = () => {
           position: 'relative',
           width: '100vw',
           height: '50vh',
+          zIndex: 1000,
         }}
       >
         <Image
