@@ -243,13 +243,14 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
               isSuperVote: !!data.isSuperVote,
             };
           }),
-          status: decisionReleased
-            ? appScore >= 2
-              ? 'Accepted'
-              : 'Rejected'
-            : organizerReview
-            ? statusString[organizerReview?.data().score - 1]
-            : 'In Review',
+          status: appScore >= 2 ? 'Accepted' : appScore >= 0 ? 'In Review' : 'Rejected',
+          // status: decisionReleased
+          //   ? appScore >= 2
+          //     ? 'Accepted'
+          //     : 'Rejected'
+          //   : organizerReview
+          //   ? statusString[organizerReview?.data().score - 1]
+          //   : 'In Review',
         };
       }),
     );
