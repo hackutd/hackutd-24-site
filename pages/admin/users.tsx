@@ -391,6 +391,14 @@ export default function UserPage() {
               setAppViewState(newState);
             }}
             appViewState={appViewState}
+            onUpdateFilterParamsList={(paramList) => {
+              let filteredUserGroups = userGroups
+                .filter((obj) => paramList.includes(obj.application[0].status))
+                .filter((obj) =>
+                  obj.application.some((app) => paramList.includes(app.user.permissions[0])),
+                );
+              setFilteredGroups(filteredUserGroups);
+            }}
             registrationState={registrationStatus}
           />
         ) : (
