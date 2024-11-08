@@ -222,6 +222,14 @@ export default function UserPage() {
   }, [userGroups]);
 
   const numAppsAccepted = useMemo(() => {
+    if (user.permissions.includes('super_admin')) {
+      return userGroups
+        .map((obj) => obj.application)
+        .reduce((acc, curr) => {
+          const appScore = curr.some((app) => app.status === 'Accepted') ? 1 : 0;
+          return acc + appScore;
+        }, 0);
+    }
     return userGroups
       .map((obj) => obj.application)
       .reduce(
@@ -238,6 +246,14 @@ export default function UserPage() {
       );
   }, [userGroups]);
   const numAppsRejected = useMemo(() => {
+    if (user.permissions.includes('super_admin')) {
+      return userGroups
+        .map((obj) => obj.application)
+        .reduce((acc, curr) => {
+          const appScore = curr.some((app) => app.status === 'Rejected') ? 1 : 0;
+          return acc + appScore;
+        }, 0);
+    }
     return userGroups
       .map((obj) => obj.application)
       .reduce(
