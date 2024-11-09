@@ -14,6 +14,7 @@ import ducks from '../../public/assets/ducks-moving.gif';
 import BoulderLeft from 'public/assets/boulderLeft.png';
 import BoulderRight from 'public/assets/boulderRight.png';
 import { SectionReferenceContext } from '@/lib/context/section';
+import HomeSpeakers from './HomeSpeakers2';
 
 /* Calendar */
 export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dateCard: Dates }) {
@@ -148,6 +149,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
     <div className={`${styles.container} pt-[8rem] relative`}>
       <BackgroundAssets />
       <div ref={scheduleRef} id="schedule-section" className={styles.content}>
+        <HomeSpeakers />
         <div
           style={{ textShadow: '0 4px 4px rgba(0, 0, 0, 0.25)' }}
           className="text-center text-2xl font-bold text-white p-2 font-montserrat uppercase relative"
@@ -296,7 +298,7 @@ const BackgroundAssets = () => {
           position: 'relative',
           width: '100vw',
           height: '50vh',
-          zIndex: 1000,
+          zIndex: 10,
         }}
       >
         <Image
