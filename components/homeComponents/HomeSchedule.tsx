@@ -168,7 +168,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
           >
             <div
               onClick={() => changeFilter('All')}
-              className={`text-sm font-bold font-poppins cursor-pointer px-2 h-8 py-1 border-2 rounded-xl 
+              className={`text-center my-2 md:my-0 text-sm font-bold font-poppins cursor-pointer px-2 md:h-8 md:py-1 h-10 py-2 border-2 rounded-xl 
               ${filter === 'All' ? eventColors['All-Filter'] : eventColors['All']}`}
             >
               All
@@ -176,7 +176,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
 
             <div
               onClick={() => changeFilter('Required')}
-              className={`text-sm font-bold font-poppins cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl 
+              className={`text-center my-2 md:my-0 text-sm font-bold font-poppins cursor-pointer mx-1 px-2 md:h-8 md:py-1 h-10 py-2 border-2 rounded-xl 
               ${filter === 'Required' ? eventColors['Required-Filter'] : eventColors['Required']}`}
             >
               Required
@@ -184,7 +184,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
 
             <div
               onClick={() => changeFilter('Sponsor')}
-              className={`text-sm font-bold font-poppins cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl 
+              className={`text-center my-2 md:my-0 text-sm font-bold font-poppins cursor-pointer mx-1 px-2 md:h-8 md:py-1 h-10 py-2 border-2 rounded-xl 
               ${filter === 'Sponsor' ? eventColors['Sponsor-Filter'] : eventColors['Sponsor']}`}
             >
               Sponsor
@@ -192,7 +192,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
 
             <div
               onClick={() => changeFilter('Meal')}
-              className={`text-sm font-bold font-poppins cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl 
+              className={`text-center my-2 md:my-0 text-sm font-bold font-poppins cursor-pointer mx-1 px-2 md:h-8 md:py-1 h-10 py-2 border-2 rounded-xl 
               ${filter === 'Meal' ? eventColors['Meal-Filter'] : eventColors['Meal']}`}
             >
               Meal
@@ -200,7 +200,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
 
             <div
               onClick={() => changeFilter('Workshop')}
-              className={`text-sm font-bold font-poppins cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl 
+              className={`text-center my-2 md:my-0 text-sm font-bold font-poppins cursor-pointer mx-1 px-2 md:h-8 md:py-1 h-10 py-2 border-2 rounded-xl 
               ${filter === 'Workshop' ? eventColors['Workshop-Filter'] : eventColors['Workshop']}`}
             >
               Workshop
@@ -208,7 +208,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
 
             <div
               onClick={() => changeFilter('Social')}
-              className={`text-sm font-bold font-poppins cursor-pointer mx-1 px-2 h-8 py-1 border-2 rounded-xl 
+              className={`text-center my-2 md:my-0 text-sm font-bold font-poppins cursor-pointer mx-1 px-2 md:h-8 md:py-1 h-10 py-2 border-2 rounded-xl 
               ${filter === 'Social' ? eventColors['Social-Filter'] : eventColors['Social']}`}
             >
               Social
