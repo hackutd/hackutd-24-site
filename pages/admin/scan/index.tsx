@@ -11,6 +11,7 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { Dialog } from '@headlessui/react';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { TextField } from '@mui/material';
+import AppHeader2_Core_AdminMobile from '@/components/AppHeader2/core-mobile';
 
 const successStrings = {
   claimed: 'Scan claimed...',
@@ -277,6 +278,10 @@ export default function Admin() {
         <title>HackUTD 2024 - Admin</title>
         <meta name="description" content="HackPortal's Admin Page" />
       </Head>
+      <div className="z-50 md:hidden mb-[1000px] md:mb-0 md:mt-10 mt-10">
+        <AppHeader2_Core_AdminMobile />
+      </div>
+
       <section className="p-4">
         <AdminHeader />
       </section>
@@ -658,7 +663,7 @@ export default function Admin() {
               user.permissions.includes('super_admin') && (
                 <div className="mx-auto my-5">
                   <button
-                    className="py-3 px-4 font-bold rounded-lg hover:bg-secondary bg-primaryDark text-secondary hover:text-primaryDark border-[1px] border-transparent hover:border-primaryDark transition duration-300 ease-in-out"
+                    className="py-3 px-4 font-bold rounded-lg hover:bg-secondary bg-primaryDark text-white hover:text-primaryDark border-[1px] border-transparent hover:border-primaryDark transition duration-300 ease-in-out"
                     onClick={() => {
                       if (!user.permissions.includes('super_admin')) {
                         alert('You do not have the required permission to use this functionality');

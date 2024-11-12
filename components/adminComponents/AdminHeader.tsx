@@ -81,7 +81,7 @@ export default function AdminHeader() {
         <button
           ref={accordian}
           onClick={() => triggerAccordion()}
-          className="accordion text-left p-2 text-sm bg-primaryDark text-secondary flex justify-between relative"
+          className="accordion text-left p-2 text-sm bg-primaryDark text-white flex justify-between relative"
         >
           <p>Admin Menu</p>
           <ChevronRightIcon className={`${isOpen ? 'transform rotate-90' : ''} w-5 h-5`} />
