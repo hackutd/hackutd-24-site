@@ -12,7 +12,7 @@ export default function HomeSpeakers() {
         <Image className="w-fit" src={SpeakerImage} width={300} height={300} alt="Speaker" />
         <div className="w-4/5 bg-white rounded-3xl md:w-1/2 px-8 py-10 flex flex-col gap-y-2">
           <h1 className="font-fredoka font-medium text-[#F7CE79] text-4xl">Gen Fukunaga</h1>
-          <h3 className="font-fredoka text-xl">CEO of Fumination</h3>
+          <h3 className="font-fredoka text-xl">CEO of Funimation</h3>
           <hr className="border-t-4 w-[60px] border-black my-2" />
           <p className="mt-3 leading-7 font-fredoka text-lg font-normal">
             Gen Fukunaga, a pioneering Japanese-American entrepreneur, founded Funimation and
