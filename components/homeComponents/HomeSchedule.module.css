@@ -14,7 +14,6 @@
   z-index: 0;
 
   background-position: 0 0, 0 0;
-  /* animation: animatedBackground 30s linear infinite; */
 }
 
 @keyframes animatedBackground {
@@ -63,7 +62,11 @@
     transform: translateY(-10px);
   }
 }
-
+@media only screen and (min-width: 1000) {
+  .container::after {
+    animation: animatedBackground 30s linear infinite;
+  }
+}
 /* Duck Animation: Move left to right endlessly */
 @keyframes moveLeftToRight {
   0% {

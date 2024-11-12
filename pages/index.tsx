@@ -86,7 +86,7 @@ export default function Home(props: {
           >
             <Wave />
             <HomeAboutPhotos />
-            {/* <HomeVideoStats /> */}
+            {screen.width >= 1000 && <HomeVideoStats />}
             <HackCountdown />
           </div>
           <Image
