@@ -85,8 +85,8 @@ export default function Home(props: {
             }}
           >
             <Wave />
-            <HomeAboutPhotos />
-            <HomeVideoStats />
+            {/* <HomeAboutPhotos /> */}
+            {/* <HomeVideoStats /> */}
             <HackCountdown />
           </div>
           <Image
