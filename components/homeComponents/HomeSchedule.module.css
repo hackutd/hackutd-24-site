@@ -14,7 +14,7 @@
   z-index: 0;
 
   background-position: 0 0, 0 0;
-  animation: animatedBackground 30s linear infinite;
+  /* animation: animatedBackground 30s linear infinite; */
 }
 
 @keyframes animatedBackground {
@@ -79,12 +79,13 @@
   animation: moveLeftToRight 30s linear infinite; /* Extended duration to 20s for smoother movement */
 }
 
-.boulderLeft, .boulderRight {
+.boulderLeft,
+.boulderRight {
   position: absolute;
   width: 80vh;
-  height: auto; 
-  top: -13.5vh; 
-  z-index: 2; 
+  height: auto;
+  top: -13.5vh;
+  z-index: 2;
 }
 
 .boulderLeft {
@@ -94,7 +95,3 @@
 .boulderRight {
   right: 0;
 }
-
-
-
-
