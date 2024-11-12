@@ -161,11 +161,11 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
 
   const day1Events = React.useMemo(
     () => getDailyEvents(day1StartDateAndTime, day2StartDateAndTime),
-    [day1StartDateAndTime, day2StartDateAndTime],
+    [day1StartDateAndTime, day2StartDateAndTime, filter],
   );
   const day2Events = React.useMemo(
     () => getDailyEvents(day2StartDateAndTime, eventEndDateAndTime),
-    [day2StartDateAndTime, eventEndDateAndTime],
+    [day2StartDateAndTime, eventEndDateAndTime, filter],
   );
 
   return (
