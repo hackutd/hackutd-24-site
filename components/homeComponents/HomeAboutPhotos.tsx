@@ -18,7 +18,11 @@ const HomeAboutPhotos = () => {
   }, []);
 
   const cloudStyle = {
-    transition: 'transform 0.3s ease-out',
+    ...(screen.width >= 1000
+      ? {
+          transition: 'transform 0.3s ease-out',
+        }
+      : {}),
   };
 
   const cloudLeftScroll = {
@@ -30,7 +34,11 @@ const HomeAboutPhotos = () => {
   };
 
   const balloonHoverStyle = {
-    animation: 'balloonBob 1.5s infinite alternate ease-in-out',
+    ...(screen.width >= 1000
+      ? {
+          animation: 'balloonBob 1.5s infinite alternate ease-in-out',
+        }
+      : {}),
   };
 
   return (
@@ -75,55 +83,81 @@ const HomeAboutPhotos = () => {
           minHeight: '75vh',
         }}
       >
-        <div
-          className="order-2 lg:order-1 flex justify-center items-center z-20 lg:justify-end lg:mr-8"
-          style={balloonHoverStyle}
-        >
-          <img
-            src="/assets/frog-balloon-moving.gif"
-            alt="Balloon"
-            className="w-80 h-auto object-cover"
-          />
-        </div>
+        {screen.width >= 1000 && (
+          <div
+            className="order-2 lg:order-1 flex justify-center items-center z-20 lg:justify-end lg:mr-8"
+            style={balloonHoverStyle}
+          >
+            <img
+              src="/assets/frog-balloon-moving.gif"
+              alt="Balloon"
+              className="w-80 h-auto object-cover"
+            />
+          </div>
+        )}
         <div className="w-[600px] order-1 lg:order-2 text-center lg:text-left text-[#F7CE79] text-stroke lg:ml-8">
           <p className="text-5xl font-bold stroke-rose-700">
-            <NumberTicker value={1000} />+ Hackers
+            {screen.width >= 1000 ? (
+              <NumberTicker value={1000} />
+            ) : (
+              <span className="inline-block tabular-nums text-[#F7CE79] tracking-wider">1000</span>
+            )}
+            + Hackers
           </p>
           <p className="text-5xl font-bold">
-            <NumberTicker value={24} /> hours
+            {screen.width >= 1000 ? (
+              <NumberTicker value={24} />
+            ) : (
+              <span className="inline-block tabular-nums text-[#F7CE79] tracking-wider"></span>
+            )}{' '}
+            hours
           </p>
           <p className="text-5xl font-bold">
-            $<NumberTicker value={50000} /> in prizes
+            $
+            {screen.width >= 1000 ? (
+              <NumberTicker value={50000} />
+            ) : (
+              <span className="inline-block tabular-nums text-[#F7CE79] tracking-wider">50000</span>
+            )}{' '}
+            in prizes
           </p>
           <p className="text-5xl font-bold">
-            <NumberTicker value={200} />+ projects
+            {screen.width >= 1000 ? (
+              <NumberTicker value={200} />
+            ) : (
+              <span className="inline-block tabular-nums text-[#F7CE79] tracking-wider">200</span>
+            )}
+            + projects
           </p>
         </div>
       </div>
+      {screen.width >= 1000 && (
+        <>
+          {/* Left Cloud */}
+          <div
+            className="absolute top-[70%] lg:top-[15%] left-[5%] lg:left-[30%] transform -translate-x-[30%] z-50"
+            style={{ ...cloudStyle, ...cloudLeftScroll }}
+          >
+            <img
+              src="/assets/cloud.png"
+              alt="Cloud Background"
+              className="w-[40rem] md:w-[45rem] lg:w-[50rem] cloud-hover"
+            />
+          </div>
 
-      {/* Left Cloud */}
-      <div
-        className="absolute top-[70%] lg:top-[15%] left-[5%] lg:left-[30%] transform -translate-x-[30%] z-50"
-        style={{ ...cloudStyle, ...cloudLeftScroll }}
-      >
-        <img
-          src="/assets/cloud.png"
-          alt="Cloud Background"
-          className="w-[40rem] md:w-[45rem] lg:w-[50rem] cloud-hover"
-        />
-      </div>
-
-      {/* Right Cloud */}
-      <div
-        className="absolute top-[70%] lg:top-[15%] right-[5%] lg:right-[30%] transform translate-x-[30%] z-50"
-        style={{ ...cloudStyle, ...cloudRightScroll }}
-      >
-        <img
-          src="/assets/cloud.png"
-          alt="Cloud Background"
-          className="w-[40rem] md:w-[45rem] lg:w-[50rem] cloud-hover"
-        />
-      </div>
+          {/* Right Cloud */}
+          <div
+            className="absolute top-[70%] lg:top-[15%] right-[5%] lg:right-[30%] transform translate-x-[30%] z-50"
+            style={{ ...cloudStyle, ...cloudRightScroll }}
+          >
+            <img
+              src="/assets/cloud.png"
+              alt="Cloud Background"
+              className="w-[40rem] md:w-[45rem] lg:w-[50rem] cloud-hover"
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 };

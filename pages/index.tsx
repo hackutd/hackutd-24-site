@@ -7,7 +7,7 @@ import HomeVideoStats from '../components/homeComponents/HomeVideoStats';
 import HomeAboutText from '../components/homeComponents/HomeAboutText';
 import HomeAboutPhotos from '../components/homeComponents/HomeAboutPhotos';
 import HackCountdown from '../components/homeComponents/HackCountdown';
-import HomeSpeakers from '../components/homeComponents/HomeSpeakers';
+import HomeSpeakers from '../components/homeComponents/HomeSpeakers2';
 import HomeChallenges from '../components/homeComponents/HomeChallenges';
 import HomeTeam from '../components/homeComponents/HomeTeam';
 import HomeSponsors from '../components/homeComponents/HomeSponsors';
@@ -86,7 +86,7 @@ export default function Home(props: {
           >
             <Wave />
             <HomeAboutPhotos />
-            <HomeVideoStats />
+            {screen.width >= 1000 && <HomeVideoStats />}
             <HackCountdown />
           </div>
           <Image
@@ -102,7 +102,6 @@ export default function Home(props: {
             alt="cloud.png"
           />
           <HomeSchedule scheduleCard={props.scheduleCard} dateCard={props.dateCard} />
-          {/* <HomeSpeakers keynoteSpeakers={props.keynoteSpeakers} /> */}
           {/* <HomeChallenges challenges={props.challenges} /> */}
           {/* include HomePrizes in HomeChallenges */}
           {/* <HomePrizes prizes={props.prizeData} /> */}
