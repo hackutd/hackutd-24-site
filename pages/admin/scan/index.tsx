@@ -278,7 +278,7 @@ export default function Admin() {
         <title>HackUTD 2024 - Admin</title>
         <meta name="description" content="HackPortal's Admin Page" />
       </Head>
-      <div className="z-50 md:hidden mb-[1000px] md:mb-0 md:mt-10 mt-10">
+      <div className="z-10 md:hidden md:mt-10 mt-10">
         <AppHeader2_Core_AdminMobile />
       </div>
 
@@ -597,7 +597,7 @@ export default function Admin() {
                   ) : (
                     <div className="mx-auto flex flex-row gap-x-4">
                       <button
-                        className="font-bold bg-green-200 hover:bg-green-300 border border-green-800 text-green-900 rounded-lg md:p-3 p-1 px-2"
+                        className="font-bold bg-green-200 hover:bg-green-300 border border-green-800 text-green-700 rounded-lg md:p-3 p-1 px-2"
                         onClick={() => {
                           setStartScan(true);
                         }}
@@ -622,7 +622,7 @@ export default function Admin() {
                             Edit
                           </button>
                           <button
-                            className="font-bold text-red-800 bg-red-100 hover:bg-red-200 border border-red-400 rounded-lg md:p-3 p-1 px-2"
+                            className="font-bold text-red-700 bg-red-100 hover:bg-red-200 border border-red-400 rounded-lg md:p-3 p-1 px-2"
                             onClick={() => {
                               if (!user.permissions.includes('super_admin')) {
                                 alert(

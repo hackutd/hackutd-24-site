@@ -1,14 +1,11 @@
 import { useAuthContext } from '@/lib/user/AuthContext';
 import { Menu, Transition } from '@headlessui/react';
-import Link from 'next/link';
-import { Fragment, useContext, useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import AdminNavbarColumn from './AdminNavbarColumn';
 import { useRouter } from 'next/router';
 import AdminNavbarGrid from './AdminNavbarGrid';
 import { RequestHelper } from '@/lib/request-helper';
 import QRScanDialog from './QRScanDialog';
-import { SectionReferenceContext } from '@/lib/context/section';
-import { NavbarCallbackRegistryContext } from '@/lib/context/navbar';
 import FloatingDockWrapper from './FloatingDock/wrapper';
 import clsx from 'clsx';
 
@@ -59,7 +56,7 @@ export default function AppHeader2_Core_AdminMobile(props: Props) {
     if (isAdmin) {
       items.push(
         <Menu id={itemIdRoot + itemIdx} as="div">
-          <Menu.Button
+          <div
             className={clsx(
               'py-2 px-4 text-[#40B7BA] cursor-pointer flex gap-1 items-center justify-center font-bold',
               'hover:bg-[#DFFEFF] transition-[background] duration-300 ease-in-out',
@@ -67,28 +64,10 @@ export default function AppHeader2_Core_AdminMobile(props: Props) {
             )}
           >
             <div className="text-[#40B7BA]">Admin</div>
-            <svg
-              xmlns="http:www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="#40B7BA"
-              className="size-4"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-            </svg>
-          </Menu.Button>
+          </div>
 
-          <Transition
-            as={Fragment}
-            enter="transition ease-out duration-100"
-            enterFrom="transform opacity-0 scale-95"
-            enterTo="transform opacity-100 scale-100"
-            leave="transition ease-in duration-75"
-            leaveFrom="transform opacity-100 scale-100"
-            leaveTo="transform opacity-0 scale-95"
-          >
-            <Menu.Items className="flex-col absolute right-0 mt-2 w-full origin-top-right divide-x divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none flex">
+          <div>
+            <div className="flex-col absolute right-0 mt-2 w-full origin-top-right divide-x divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black/5 focus:outline-none flex">
               <div className="px-1 py-1 w-full">
                 <AdminNavbarColumn
                   sectionTitle="Admin"
@@ -137,8 +116,8 @@ export default function AppHeader2_Core_AdminMobile(props: Props) {
                     }))}
                 />
               </div>
-            </Menu.Items>
-          </Transition>
+            </div>
+          </div>
         </Menu>,
       );
       itemIdx++;

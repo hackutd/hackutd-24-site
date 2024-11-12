@@ -13,7 +13,7 @@ import FloatingDockWrapper from '../AppHeader2/FloatingDock/wrapper';
 
 function isAuthorized(user): boolean {
   if (!user || !user.permissions) return false;
-  return (user.permissions as string[]).includes('super_admin');
+  return (user.permissions as string[]).includes('admin');
 }
 
 type Props = {
