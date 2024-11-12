@@ -79,7 +79,8 @@
 
 .duckAnimation {
   position: relative;
-  animation: moveLeftToRight 30s linear infinite; /* Extended duration to 20s for smoother movement */
+  /* Extended duration to 20s for smoother movement */
+  /* animation: moveLeftToRight 30s linear infinite;  */
 }
 
 .boulderLeft,
