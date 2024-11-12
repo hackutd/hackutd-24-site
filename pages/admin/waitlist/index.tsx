@@ -137,7 +137,7 @@ export default function WaitlistCheckinPage() {
       </Head>
       <div className="mt-4 flex flex-col justify-center">
         <div className="my-6 mx-auto">
-          <div className="flex gap-x-4 mb-10 items-center">
+          <div className="md:flex gap-x-4 mb-10 items-center">
             <h1 className="text-lg">Set late check-in eligible upper bound: </h1>
             <input
               type="number"

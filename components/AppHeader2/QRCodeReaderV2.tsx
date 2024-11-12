@@ -41,7 +41,7 @@ export default function QRCodeReaderV2({ onScanSuccess, onScanFail }) {
   }, [qrOn]);
 
   return (
-    <div className="w-[400px] h-[400px]">
+    <div className="w-[100%] h-[400px]">
       <video ref={videoElement}></video>
     </div>
   );
