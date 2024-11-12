@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, GetStaticProps } from 'next';
 import { useEffect, useState } from 'react';
 import { RequestHelper } from '../lib/request-helper';
 import HomeNotif from '../components/homeComponents/HomeNotif';
@@ -114,38 +114,21 @@ export default function Home(props: {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const protocol = context.req.headers.referer?.split('://')[0] || 'http';
-  // const { data: keynoteData } = await RequestHelper.get<KeynoteSpeaker[]>(
-  //   `${protocol}://${context.req.headers.host}/api/keynotespeakers`,
-  //   {},
-  // );
-  // const { data: challengeData } = await RequestHelper.get<Challenge[]>(
-  //   `${protocol}://${context.req.headers.host}/api/challenges/`,
-  //   {},
-  // );
-  // const { data: prizeData } = await RequestHelper.get<Array<{ rank: number; prizeName: string }>>(
-  //   `${protocol}://${context.req.headers.host}/api/prizes`,
-  //   {},
-  // );
+export const getStaticProps: GetStaticProps = async () => {
   const { data: answeredQuestion } = await RequestHelper.get<AnsweredQuestion[]>(
-    `${protocol}://${context.req.headers.host}/api/questions/faq`,
+    `${process.env.BASE_URL}/api/questions/faq`,
     {},
   );
-  // const { data: memberData } = await RequestHelper.get<TeamMember[]>(
-  //   `${protocol}://${context.req.headers.host}/api/members`,
-  //   {},
-  // );
   const { data: sponsorData } = await RequestHelper.get<Sponsor[]>(
-    `${protocol}://${context.req.headers.host}/api/sponsor`,
+    `${process.env.BASE_URL}/api/sponsor`,
     {},
   );
   const { data: scheduleData } = await RequestHelper.get<ScheduleEvent[]>(
-    `${protocol}://${context.req.headers.host}/api/schedule`,
+    `${process.env.BASE_URL}/api/schedule`,
     {},
   );
   const { data: dateData } = await RequestHelper.get<ScheduleEvent[]>(
-    `${protocol}://${context.req.headers.host}/api/dates`,
+    `${process.env.BASE_URL}/api/dates`,
     {},
   );
   return {
