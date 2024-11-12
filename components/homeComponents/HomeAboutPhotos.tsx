@@ -18,7 +18,7 @@ const HomeAboutPhotos = () => {
   }, []);
 
   const cloudStyle = {
-    transition: 'transform 0.3s ease-out',
+    // transition: 'transform 0.3s ease-out',
   };
 
   const cloudLeftScroll = {
@@ -30,7 +30,7 @@ const HomeAboutPhotos = () => {
   };
 
   const balloonHoverStyle = {
-    animation: 'balloonBob 1.5s infinite alternate ease-in-out',
+    // animation: 'balloonBob 1.5s infinite alternate ease-in-out',
   };
 
   return (
