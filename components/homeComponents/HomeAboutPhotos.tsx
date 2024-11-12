@@ -87,16 +87,20 @@ const HomeAboutPhotos = () => {
         </div>
         <div className="w-[600px] order-1 lg:order-2 text-center lg:text-left text-[#F7CE79] text-stroke lg:ml-8">
           <p className="text-5xl font-bold stroke-rose-700">
-            <NumberTicker value={1000} />+ Hackers
+            {/* <NumberTicker value={1000} /> */}
+            1000+ Hackers
           </p>
           <p className="text-5xl font-bold">
-            <NumberTicker value={24} /> hours
+            {/* <NumberTicker value={24} /> */}
+            24 hours
           </p>
           <p className="text-5xl font-bold">
-            $<NumberTicker value={50000} /> in prizes
+            {/* $<NumberTicker value={50000} />  */}
+            $50000 in prizes
           </p>
           <p className="text-5xl font-bold">
-            <NumberTicker value={200} />+ projects
+            {/* <NumberTicker value={200} /> */}
+            200+ projects
           </p>
         </div>
       </div>
