@@ -2,18 +2,16 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import SplitType from 'split-type';
 import Image from 'next/image';
-import Link from 'next/link'; // Import Link for Apply button
+import { X } from 'lucide-react';
 import MLH_Sticker from '../../public/assets/mlh-2025.png';
 import HackUTDTitle from '../../public/assets/HackUTD 2024 Title.png';
 import DuckMoving from '../../public/assets/duck-moving.gif';
 import MascotMoving from '../../public/assets/mascot-moving.gif';
-import styles from './HomeHero2.module.css';
 import { SectionReferenceContext } from '@/lib/context/section';
-import LilyPads from 'public/assets/lilypads.png'; // Importing the lily pads image
+import LilyPads from 'public/assets/lilypads.png';
 import noLPHero from 'public/assets/hero-no-lilypads.png';
 import SlingshotSimulation from './SlingshotSimulation';
 
-// Preloader Component (unchanged)
 function Preloader({ setIsHeroLoaded }) {
   const preloaderRef = useRef(null);
   const ripple1Ref = useRef(null);
@@ -207,19 +205,20 @@ function Preloader({ setIsHeroLoaded }) {
   );
 }
 
-// Hero Section
 export default function HomeHero2() {
   const [isHeroLoaded, setIsHeroLoaded] = useState(false);
-  const [showSlingshot, setShowSlingshot] = useState(false); // Track if the slingshot is shown
-  const [rockColor, setRockColor] = useState(''); // Track the rock color based on the clicked button
+  const [showSlingshot, setShowSlingshot] = useState(false);
+  const [rockColor, setRockColor] = useState('');
   const { aboutRef } = useContext(SectionReferenceContext);
   const titleRef = useRef(null);
   const duckRef = useRef(null);
   const mascotRef = useRef(null);
   const welcomeTextRef = useRef(null);
   const dateTextRef = useRef(null);
-  const applyButtonRef = useRef(null); // Ref for the Apply button
-  const slingshotRef = useRef(null); // Ref for slingshot element
+  const applyButtonRef = useRef(null);
+  const slingshotRef = useRef(null);
+  const lilyPadsRef = useRef(null);
+  const backgroundRef = useRef(null);
 
   useEffect(() => {
     if (isHeroLoaded) {
@@ -251,7 +250,6 @@ export default function HomeHero2() {
         );
       }
 
-      // Animate welcome text if it exists
       if (welcomeTextRef.current) {
         const welcomeSplit = new SplitType(welcomeTextRef.current, { types: 'words,chars' });
         tl.fromTo(
@@ -262,7 +260,6 @@ export default function HomeHero2() {
         );
       }
 
-      // Animate date text if it exists
       if (dateTextRef.current) {
         const dateSplit = new SplitType(dateTextRef.current, { types: 'words,chars' });
         tl.fromTo(
@@ -273,7 +270,6 @@ export default function HomeHero2() {
         );
       }
 
-      // Animate apply button if it exists
       if (applyButtonRef.current) {
         tl.fromTo(
           applyButtonRef.current,
@@ -285,52 +281,69 @@ export default function HomeHero2() {
     }
   }, [isHeroLoaded]);
 
-  // Toggle between showing/hiding the welcome, title, date, and apply button when mascot or duck is clicked
   const handleMascotClick = (color) => {
     const tl = gsap.timeline();
-
-    // Set the rock color depending on which button is clicked
     setRockColor(color);
 
-    // If slingshot is showing, hide slingshot first and then bring the text back
     if (showSlingshot) {
-      tl.to(slingshotRef.current, {
+      return;
+    }
+
+    if (backgroundRef.current) {
+      backgroundRef.current.style.backgroundImage = `url(${noLPHero.src})`;
+      backgroundRef.current.style.backgroundSize = 'cover';
+      backgroundRef.current.style.backgroundPosition = 'center';
+    }
+
+    tl.to(
+      [
+        welcomeTextRef.current,
+        titleRef.current,
+        dateTextRef.current,
+        applyButtonRef.current,
+        duckRef.current,
+        mascotRef.current,
+        lilyPadsRef.current,
+      ].filter(Boolean),
+      {
         opacity: 0,
+        y: -50,
         duration: 1.5,
         ease: 'power3.inOut',
-        onComplete: () => setShowSlingshot(false),
-      }).to(
-        [
-          welcomeTextRef.current,
-          titleRef.current,
-          dateTextRef.current,
-          applyButtonRef.current,
-        ].filter(Boolean), // Ensure non-null refs
-        {
-          opacity: 1,
-          y: 0,
-          duration: 1.5, // Smooth return of the text and button
-          ease: 'power3.inOut',
-        },
-      );
-    } else {
-      // Hide the text and show the slingshot
-      tl.to(
-        [
-          welcomeTextRef.current,
-          titleRef.current,
-          dateTextRef.current,
-          applyButtonRef.current,
-        ].filter(Boolean), // Ensure non-null refs
-        {
-          opacity: 0,
-          y: -50,
-          duration: 1.5, // Smooth hiding of the text and button
-          ease: 'power3.inOut',
-          onComplete: () => setShowSlingshot(true),
-        },
-      );
+        onComplete: () => setShowSlingshot(true),
+      },
+    );
+  };
+
+  const handleClose = () => {
+    const tl = gsap.timeline();
+
+    if (backgroundRef.current) {
+      backgroundRef.current.style.backgroundImage = '';
     }
+
+    tl.to(slingshotRef.current, {
+      opacity: 0,
+      duration: 1.5,
+      ease: 'power3.inOut',
+      onComplete: () => setShowSlingshot(false),
+    }).to(
+      [
+        welcomeTextRef.current,
+        titleRef.current,
+        dateTextRef.current,
+        applyButtonRef.current,
+        duckRef.current,
+        mascotRef.current,
+        lilyPadsRef.current,
+      ].filter(Boolean),
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1.5,
+        ease: 'power3.inOut',
+      },
+    );
   };
 
   return (
@@ -338,16 +351,22 @@ export default function HomeHero2() {
       <Preloader setIsHeroLoaded={setIsHeroLoaded} />
 
       <section
-        className={`bg-[url('/assets/hero.png')] md:bg-[url('/assets/hero-desktop.png')] lg:bg-[url('/assets/hero-xl.png')] ${styles.container} min-h-screen bg-center relative bg-white flex flex-col-reverse md:flex-col`}
-        style={{
-          backgroundSize: '100% 100%',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          width: '100vw',
-          height: '100vh',
-          minHeight: '100vh',
-        }}
+        className="min-h-screen bg-center relative bg-white flex flex-col-reverse md:flex-col"
+        ref={backgroundRef}
       >
+        {!showSlingshot && (
+          <div
+            ref={lilyPadsRef}
+            className="absolute inset-0 z-0"
+            style={{
+              backgroundImage: `url(${LilyPads.src}), url(${noLPHero.src})`,
+              backgroundSize: '100% 100%',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+            }}
+          />
+        )}
+
         {/* Top banner */}
         <div className="font-dmSans w-full flex justify-center bg-[#40B7BA] text-white h-[1.75rem] text-nowrap overflow-hidden sm:hidden absolute top-0">
           <p className="text-lg">
@@ -371,12 +390,12 @@ export default function HomeHero2() {
 
             {/* Main Hero Section */}
             <div className="w-full flex flex-col gap-2 justify-center items-center h-full">
-              {/* Duck image (Click event attached) */}
+              {/* Duck image */}
               <div
                 ref={duckRef}
-                onClick={() => handleMascotClick('blue')} // Set rock color to blue on duck click
+                onClick={() => handleMascotClick('blue')}
                 className="w-[10rem] absolute top-[20%] md:top-[10%] right-[25%] md:w-[15rem] lg:w-[20rem] mb-4 cursor-pointer z-30"
-                style={{ cursor: 'pointer', zIndex: '30' }} // Ensuring the duck is clickable
+                style={{ cursor: 'pointer', zIndex: '30' }}
               >
                 <Image
                   src={DuckMoving.src}
@@ -420,48 +439,54 @@ export default function HomeHero2() {
                 >
                   NOV 16 - 17
                 </p>
-
-                {/* {!isShort && (
-                <div className="mt-4">
-                  <Link href="/register">
-                    <div className="py-2 px-4 mt-4 rounded-[30px] text-white bg-[#F7CE79] font-jua text-xl cursor-pointer">
-                      Apply
-                    </div>
-                  </Link>
-                </div>
-              )} */}
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="absolute bottom-[20%] left-0 lg:left-[2%] lg:bottom-[25%] z-20">
-          {/* Mascot image (Click event attached) */}
-          <div
-            ref={mascotRef}
-            onClick={() => handleMascotClick('red')} // Set rock color to red on mascot click
-            className="w-[10rem] md:w-[15rem] lg:w-[20rem] cursor-pointer z-30"
-            style={{ cursor: 'pointer', zIndex: '30' }} // Ensuring the mascot is clickable
-          >
-            <Image
-              src={MascotMoving.src}
-              alt="Mascot Moving"
-              layout="responsive"
-              width={MascotMoving.width}
-              height={MascotMoving.height}
-            />
+          <div className="absolute bottom-[20%] left-0 lg:left-[2%] lg:bottom-[25%] z-20">
+            {/* Mascot image */}
+            <div
+              ref={mascotRef}
+              onClick={() => handleMascotClick('red')}
+              className="w-[10rem] md:w-[15rem] lg:w-[20rem] cursor-pointer z-30"
+              style={{ cursor: 'pointer', zIndex: '30' }}
+            >
+              <Image
+                src={MascotMoving.src}
+                alt="Mascot Moving"
+                layout="responsive"
+                width={MascotMoving.width}
+                height={MascotMoving.height}
+              />
+            </div>
           </div>
-        </div>
 
-        {/* Conditionally render the Slingshot Simulation centered */}
-        {showSlingshot && (
-          <div
-            ref={slingshotRef}
-            className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-auto"
-          >
-            <SlingshotSimulation rockColor={rockColor} /> {/* Pass rockColor as a prop */}
-          </div>
-        )}
+          {/* Close button for slingshot */}
+          {showSlingshot && (
+            <button
+              onClick={handleClose}
+              className="absolute top-12 left-8 z-[60] p-4 rounded-full bg-white/80 transition-opacity duration-200 pointer-events-auto shadow-lg border border-gray-200"
+            >
+              <X className="w-6 h-6 text-gray-800" />
+            </button>
+          )}
+
+          {showSlingshot && (
+            <div
+              ref={slingshotRef}
+              className="absolute inset-0 z-20 flex items-center justify-center pointer-events-auto"
+              style={{
+                background: `url(${noLPHero.src})`,
+                backgroundSize: '100% 100%',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                overflow: 'visible',
+              }}
+            >
+              <SlingshotSimulation rockColor={rockColor} />
+            </div>
+          )}
+        </div>
       </section>
     </>
   );
