@@ -14,58 +14,117 @@ import ducks from '../../public/assets/ducks-moving.gif';
 import BoulderLeft from 'public/assets/boulderLeft.png';
 import BoulderRight from 'public/assets/boulderRight.png';
 import { SectionReferenceContext } from '@/lib/context/section';
+import HomeSpeakers from './HomeSpeakers2';
+
+const eventColors = {
+  All: 'border-gray-500 text-gray-500 bg-white',
+  Required: 'border-[#EF6C8B] text-[#EF6C8B] bg-white',
+  Meal: 'border-[#2CB716] text-[#2CB716] bg-white',
+  Social: 'border-[#FFB900] text-[#FFB900] bg-white',
+  Sponsor: 'border-[#7579E1] text-[#7579E1] bg-white',
+  Workshop: 'border-[#22B9C5] text-[#22B9C5] bg-white',
+  'All-Filter': 'border-gray-500 bg-gray-500 text-white',
+  'Required-Filter': 'border-[#EF6C8B] bg-[#EF6C8B] text-white',
+  'Meal-Filter': 'border-[#2CB716] bg-[#2CB716] text-white',
+  'Social-Filter': 'border-[#FFB900] bg-[#FFB900] text-white',
+  'Sponsor-Filter': 'border-[#7579E1] bg-[#7579E1] text-white',
+  'Workshop-Filter': 'border-[#22B9C5] bg-[#22B9C5] text-white',
+};
+
+/* Event Component */
+const Event = ({ data, index, arrayLength, isLastElement, filter }) => {
+  const startDate = React.useMemo(() => new Date(data.startDate), [data]);
+  const formattedTime = React.useMemo(
+    () =>
+      startDate
+        .toLocaleString([], { hour: 'numeric', minute: 'numeric' })
+        .replace(' ', '')
+        .replace('AM', 'am')
+        .replace('PM', 'pm'),
+    [startDate],
+  );
+
+  const showEvent = filter === 'All' || filter === data.type;
+
+  return (
+    showEvent && (
+      <>
+        <div className={`${!isLastElement ? 'border-b border-[#4D8889]' : ''} p-2`}>
+          <div className="flex justify-between pb-1">
+            <div className="text-md font-bold font-dmSans">{formattedTime}</div>
+            <div className="text-md font-bold font-dmSans">{data.title}</div>
+          </div>
+          <div className="flex justify-between">
+            <div
+              className={`font-bold font-poppins bg-white text-xs rounded-xl py-1 px-2 border-2 ${
+                eventColors[data.type]
+              }`}
+            >
+              {data.type}
+            </div>
+            <div className="text-gray-600 flex items-center font-dmSans">
+              <LocationOnIcon style={{ fontSize: 'large', marginRight: '2px' }} />
+              {data.location}
+            </div>
+          </div>
+        </div>
+      </>
+    )
+  );
+};
 
 /* Calendar */
 export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dateCard: Dates }) {
   /* Event Colors */
   const { scheduleRef } = React.useContext(SectionReferenceContext);
-  const eventColors = {
-    All: 'border-gray-500 text-gray-500 bg-white',
-    Required: 'border-[#EF6C8B] text-[#EF6C8B] bg-white',
-    Meal: 'border-[#2CB716] text-[#2CB716] bg-white',
-    Social: 'border-[#FFB900] text-[#FFB900] bg-white',
-    Sponsor: 'border-[#7579E1] text-[#7579E1] bg-white',
-    Workshop: 'border-[#22B9C5] text-[#22B9C5] bg-white',
-    'All-Filter': 'border-gray-500 bg-gray-500 text-white',
-    'Required-Filter': 'border-[#EF6C8B] bg-[#EF6C8B] text-white',
-    'Meal-Filter': 'border-[#2CB716] bg-[#2CB716] text-white',
-    'Social-Filter': 'border-[#FFB900] bg-[#FFB900] text-white',
-    'Sponsor-Filter': 'border-[#7579E1] bg-[#7579E1] text-white',
-    'Workshop-Filter': 'border-[#22B9C5] bg-[#22B9C5] text-white',
-  };
 
   /* Dates Values */
-  const dateValues = {
-    year: props.dateCard[0].year,
-    day1: props.dateCard[0].day1,
-    day1Month: props.dateCard[0].day1Month,
-    day2: props.dateCard[0].day2,
-    day2Month: props.dateCard[0].day2Month,
-    endTime: props.dateCard[0].endTime,
-    startTime: props.dateCard[0].startTime,
-  };
+  const dateValues = React.useMemo(
+    () => ({
+      year: props.dateCard[0].year,
+      day1: props.dateCard[0].day1,
+      day1Month: props.dateCard[0].day1Month,
+      day2: props.dateCard[0].day2,
+      day2Month: props.dateCard[0].day2Month,
+      endTime: props.dateCard[0].endTime,
+      startTime: props.dateCard[0].startTime,
+    }),
+    [props.dateCard],
+  );
 
   /* Set event dates and times */
-  const day1StartDateAndTime = new Date(
-    dateValues['year'],
-    dateValues['day1Month'],
-    dateValues['day1'],
-    dateValues['startTime'],
-    0,
+  const day1StartDateAndTime = React.useMemo(
+    () =>
+      new Date(
+        dateValues['year'],
+        dateValues['day1Month'],
+        dateValues['day1'],
+        dateValues['startTime'],
+        0,
+      ),
+    [dateValues],
   );
-  const day2StartDateAndTime = new Date(
-    dateValues['year'],
-    dateValues['day2Month'],
-    dateValues['day2'],
-    dateValues['startTime'],
-    0,
+  const day2StartDateAndTime = React.useMemo(
+    () =>
+      new Date(
+        dateValues['year'],
+        dateValues['day2Month'],
+        dateValues['day2'],
+        dateValues['startTime'],
+        0,
+      ),
+    [dateValues],
   );
-  const eventEndDateAndTime = new Date(
-    dateValues['year'],
-    dateValues['day1Month'],
-    dateValues['day2'] + 1,
-    dateValues['endTime'],
-    0,
+  const eventEndDateAndTime = React.useMemo(
+    () =>
+      new Date(
+        dateValues['year'],
+        dateValues['day1Month'],
+        dateValues['day2'] + 1,
+        dateValues['endTime'],
+        0,
+      ),
+    [dateValues],
   );
   /* Filter Functionality */
   const [filter, setFilter] = useState('All');
@@ -120,6 +179,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
     );
   };
 
+
   /* Filter Daily Events */
   const getDailyEvents = (startTime, endTime) => {
     const events = props.scheduleCard
@@ -132,6 +192,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
       });
     return events.map((event, index, array) => (
       <Event
+        filter={filter}
         data={event}
         key={event.title + index}
         index={index}
@@ -141,14 +202,23 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
     ));
   };
 
-  const day1Events = getDailyEvents(day1StartDateAndTime, day2StartDateAndTime);
-  const day2Events = getDailyEvents(day2StartDateAndTime, eventEndDateAndTime);
+  const day1Events = React.useMemo(
+    () => getDailyEvents(day1StartDateAndTime, day2StartDateAndTime),
+    [day1StartDateAndTime, day2StartDateAndTime, filter],
+  );
+  const day2Events = React.useMemo(
+    () => getDailyEvents(day2StartDateAndTime, eventEndDateAndTime),
+    [day2StartDateAndTime, eventEndDateAndTime, filter],
+  );
 
   return (
     <div className={`${styles.container} pt-[8rem] relative`}>
       <BackgroundAssets />
-      <div ref={scheduleRef} id="schedule-section" className={styles.content}>
+      <div className={styles.content}>
+        <HomeSpeakers />
         <div
+          id="schedule-section"
+          ref={scheduleRef}
           style={{ textShadow: '0 4px 4px rgba(0, 0, 0, 0.25)' }}
           className="text-center text-2xl font-bold text-white p-2 font-montserrat uppercase relative"
         >
@@ -296,7 +366,7 @@ const BackgroundAssets = () => {
           position: 'relative',
           width: '100vw',
           height: '50vh',
-          zIndex: 1000,
+          zIndex: 10,
         }}
       >
         <Image
