@@ -99,7 +99,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
           <div className={`${!isLastElement ? 'border-b border-[#4D8889]' : ''} p-2`}>
             <div className="flex justify-between pb-1">
               <div className="text-md font-bold font-dmSans">{formattedTime}</div>
-              <div className="text-md font-bold font-dmSans">{data.title}</div>
+              <div className="text-right pl-4 text-md font-bold font-dmSans">{data.title}</div>
             </div>
             <div className="flex justify-between">
               <div
