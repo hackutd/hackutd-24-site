@@ -45,6 +45,7 @@
     "gsap": "^3.12.5",
     "jsqr": "^1.4.0",
     "localforage": "^1.10.0",
+    "lucide-react": "^0.456.0",
     "matter-js": "^0.20.0",
     "multer": "^1.4.3",
     "next": "^15.0.3",
