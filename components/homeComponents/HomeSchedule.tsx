@@ -161,19 +161,21 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
 
   const day1Events = React.useMemo(
     () => getDailyEvents(day1StartDateAndTime, day2StartDateAndTime),
-    [day1StartDateAndTime, day2StartDateAndTime],
+    [day1StartDateAndTime, day2StartDateAndTime, filter],
   );
   const day2Events = React.useMemo(
     () => getDailyEvents(day2StartDateAndTime, eventEndDateAndTime),
-    [day2StartDateAndTime, eventEndDateAndTime],
+    [day2StartDateAndTime, eventEndDateAndTime, filter],
   );
 
   return (
     <div className={`${styles.container} pt-[8rem] relative`}>
       <BackgroundAssets />
-      <div ref={scheduleRef} id="schedule-section" className={styles.content}>
+      <div className={styles.content}>
         <HomeSpeakers />
         <div
+          id="schedule-section"
+          ref={scheduleRef}
           style={{ textShadow: '0 4px 4px rgba(0, 0, 0, 0.25)' }}
           className="text-center text-2xl font-bold text-white p-2 font-montserrat uppercase relative"
         >
