@@ -35,19 +35,6 @@ export default function Home(props: {
   dateCard: Dates;
   prizeData: Array<{ rank: number; prizeName: string }>;
 }) {
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    setLoading(false);
-  }, []);
-
-  if (loading) {
-    return (
-      <div>
-        <h1>Loading...</h1>
-      </div>
-    );
-  }
-
   return (
     <>
       <Head>
