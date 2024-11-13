@@ -28,6 +28,19 @@ export interface UserData {
   };
 }
 
+function shuffle(array) {
+  let currentIndex = array.length;
+
+  // While there remain elements to shuffle...
+  while (currentIndex != 0) {
+    // Pick a remaining element...
+    let randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+
+    // And swap it with the current element.
+    [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+  }
+}
 /**
  *
  * API endpoint to fetch all users from the database
@@ -182,6 +195,70 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
   }
   const decisionReleased = await checkDecisionIsReleased();
   const statusString = ['Rejected', 'Maybe No', 'Maybe Yes', 'Accepted'];
+  let allApps = [];
+  if ((userData.user.permissions as string[]).includes('super_admin')) {
+    const allAppsSnapshot = await db.collection(USERS_COLLECTION).get();
+    const alLFormattedApp = await Promise.all(
+      allAppsSnapshot.docs.map(async (doc) => {
+        const data = doc.data();
+        delete data.reviewer; // Remove reviewer data from response
+        delete data.github; // Remove github data from response
+        delete data.linkedin; // Remove linkedin data from response
+        delete data.resume; // Remove resume data from response
+        delete data.phoneNumber; // Remove phone number data from response
+        const scoringSnapshot = await db
+          .collection(SCORING_COLLECTION)
+          .where('hackerId', '==', doc.id)
+          .get();
+        const reviewerIds = scoringSnapshot.docs.map((doc) => doc.data().adminId);
+        const organizerReview = scoringSnapshot.docs.find((d) => d.data().adminId === userData.id);
+        const reviewerInfo = await (reviewerIds.length === 0
+          ? []
+          : db
+              .collection(USERS_COLLECTION)
+              .where('id', 'in', reviewerIds)
+              .select('id', 'user.firstName', 'user.lastName')
+              .get());
+        const reviewerMapping = new Map<string, string>();
+        reviewerInfo.forEach((info) => {
+          reviewerMapping.set(
+            info.data().id,
+            `${info.data().user.firstName} ${info.data().user.lastName}`,
+          );
+        });
+        const appScore = scoringSnapshot.docs.reduce((acc, doc) => {
+          const scoreMultiplier = !!doc.data().isSuperVote ? 50 : 1;
+          if (doc.data().score === 4) return acc + scoreMultiplier;
+          if (doc.data().score === 1) return acc - scoreMultiplier;
+          return acc;
+        }, 0);
+        return {
+          ...data,
+          scoring: scoringSnapshot.docs.map((doc) => {
+            const data = doc.data();
+            return {
+              score: data.score,
+              note: data.note,
+              reviewer: reviewerMapping.get(data.adminId),
+              isSuperVote: !!data.isSuperVote,
+            };
+          }),
+          status: appScore >= 2 ? 'Accepted' : appScore >= 0 ? 'In Review' : 'Rejected',
+          // status: decisionReleased
+          //   ? appScore >= 2
+          //     ? 'Accepted'
+          //     : 'Rejected'
+          //   : organizerReview
+          //   ? statusString[organizerReview?.data().score - 1]
+          //   : 'In Review',
+        };
+      }),
+    );
+    allApps = generateGroupsFromUserData(alLFormattedApp as any[]);
+    return res.json({
+      groups: allApps,
+    });
+  }
   const assignedAppCollectionRef = await db
     .collection(USERS_COLLECTION)
     .where('reviewer', 'array-contains', userData.id)
@@ -189,6 +266,7 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
   const commonPoolCollectionRef = await db
     .collection(USERS_COLLECTION)
     .where('inCommonPool', '==', true)
+    .where('user.permissions', 'array-contains', 'in_review')
     .get();
   const commonAppWithScores = await Promise.all(
     commonPoolCollectionRef.docs
@@ -219,8 +297,9 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
           );
         });
         const appScore = scoringSnapshot.docs.reduce((acc, doc) => {
-          if (doc.data().score === 4) return acc + 1;
-          if (doc.data().score === 1) return acc - 1;
+          const scoreMultiplier = !!doc.data().isSuperVote ? 50 : 1;
+          if (doc.data().score === 4) return acc + scoreMultiplier;
+          if (doc.data().score === 1) return acc - scoreMultiplier;
           return acc;
         }, 0);
         if (scoringSnapshot.empty || organizerReview === undefined) {
@@ -249,62 +328,76 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
   );
   const data = [
     ...(await Promise.all(
-      assignedAppCollectionRef.docs.map(async (doc) => {
-        const data = doc.data();
-        delete data.reviewer; // Remove reviewer data from response
-        delete data.github; // Remove github data from response
-        delete data.linkedin; // Remove linkedin data from response
-        delete data.resume; // Remove resume data from response
-        delete data.phoneNumber; // Remove phone number data from response
-        const scoringSnapshot = await db
-          .collection(SCORING_COLLECTION)
-          .where('hackerId', '==', doc.id)
-          .get();
-        const organizerReview = scoringSnapshot.docs.find((d) => d.data().adminId === userData.id);
-        if (!decisionReleased) {
+      assignedAppCollectionRef.docs
+        .filter((doc) => doc.data().user.permissions.includes('in_review'))
+        .map(async (doc) => {
+          const data = doc.data();
+          delete data.reviewer; // Remove reviewer data from response
+          delete data.github; // Remove github data from response
+          delete data.linkedin; // Remove linkedin data from response
+          delete data.resume; // Remove resume data from response
+          delete data.phoneNumber; // Remove phone number data from response
+          const scoringSnapshot = await db
+            .collection(SCORING_COLLECTION)
+            .where('hackerId', '==', doc.id)
+            .get();
+          const organizerReview = scoringSnapshot.docs.find(
+            (d) => d.data().adminId === userData.id,
+          );
+          if (!decisionReleased) {
+            return {
+              ...data,
+              status: organizerReview
+                ? statusString[organizerReview.data().score - 1]
+                : 'In Review',
+              scoring: organizerReview
+                ? [
+                    {
+                      score: organizerReview.data().score,
+                      note: organizerReview.data().note,
+                      reviewer: `${userData.user.firstName} ${userData.user.lastName}`,
+                    },
+                  ]
+                : undefined,
+            };
+          }
+          const reviewerIds = scoringSnapshot.docs.map((doc) => doc.data().adminId);
+          const reviewerInfo = await db
+            .collection(USERS_COLLECTION)
+            .where('id', 'in', reviewerIds)
+            .select('id', 'user.firstName', 'user.lastName')
+            .get();
+          const reviewerMapping = new Map<string, string>();
+          reviewerInfo.forEach((info) => {
+            reviewerMapping.set(
+              info.data().id,
+              `${info.data().user.firstName} ${info.data().user.lastName}`,
+            );
+          });
+          const appScore = scoringSnapshot.docs.reduce((acc, doc) => {
+            const scoreMultiplier = !!doc.data().isSuperVote ? 50 : 1;
+            if (doc.data().score === 4) return acc + scoreMultiplier;
+            if (doc.data().score === 1) return acc - scoreMultiplier;
+            return acc;
+          }, 0);
           return {
             ...data,
-            status: organizerReview ? statusString[organizerReview.data().score - 1] : 'In Review',
-            scoring: organizerReview
-              ? [{ score: organizerReview.data().score, note: organizerReview.data().note }]
-              : undefined,
+            scoring: scoringSnapshot.docs.map((doc) => {
+              const data = doc.data();
+              return {
+                score: data.score,
+                note: data.note,
+                reviewer: reviewerMapping.get(data.adminId),
+              };
+            }),
+            status: appScore >= 2 ? 'Accepted' : 'Rejected',
           };
-        }
-        const reviewerIds = scoringSnapshot.docs.map((doc) => doc.data().adminId);
-        const reviewerInfo = await db
-          .collection(USERS_COLLECTION)
-          .where('id', 'in', reviewerIds)
-          .select('id', 'user.firstName', 'user.lastName')
-          .get();
-        const reviewerMapping = new Map<string, string>();
-        reviewerInfo.forEach((info) => {
-          reviewerMapping.set(
-            info.data().id,
-            `${info.data().user.firstName} ${info.data().user.lastName}`,
-          );
-        });
-        const appScore = scoringSnapshot.docs.reduce((acc, doc) => {
-          if (doc.data().score === 4) return acc + 1;
-          if (doc.data().score === 1) return acc - 1;
-          return acc;
-        }, 0);
-        return {
-          ...data,
-          scoring: scoringSnapshot.docs.map((doc) => {
-            const data = doc.data();
-            return {
-              score: data.score,
-              note: data.note,
-              reviewer: reviewerMapping.get(data.adminId),
-            };
-          }),
-          status: appScore >= 2 ? 'Accepted' : 'Rejected',
-        };
-      }),
+        }),
     )),
     ...commonAppWithScores,
   ];
 
+  shuffle(data);
   // Hide sensitive data
   const hideSensitiveData = (data: Registration[]) => {
     return data.map((d) => ({
@@ -322,7 +415,10 @@ async function getAllRegistrations(req: NextApiRequest, res: NextApiResponse) {
     ? generateGroupsFromUserData(data as Registration[])
     : generateGroupsFromUserData(hideSensitiveData(data as Registration[]));
 
-  return res.json(groups);
+  return res.json({
+    groups,
+    allApps,
+  });
 }
 
 function handleGetRequest(req: NextApiRequest, res: NextApiResponse) {

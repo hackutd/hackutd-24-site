@@ -3,6 +3,7 @@ import { RequestHelper } from '../../../lib/request-helper';
 import { useAuthContext } from '../../../lib/user/AuthContext';
 import { LockClosedIcon, LockOpenIcon, XIcon } from '@heroicons/react/solid';
 import MaybeVerdictDialog from './MaybeVerdictDialog';
+import { ApplicationViewState } from '@/lib/util';
 
 interface UserAdminViewProps {
   userIndex: number;
@@ -11,6 +12,7 @@ interface UserAdminViewProps {
   onNoteUpdate: (note: string) => void;
   currentNote: string;
   onScoreSubmit: (groupScore: number) => Promise<void>;
+  appViewState: ApplicationViewState;
 }
 
 interface BasicInfoProps {
@@ -63,6 +65,7 @@ export default function UserAdminView({
   currentNote,
   onScoreSubmit,
   userIndex,
+  appViewState,
 }: UserAdminViewProps) {
   const { user } = useAuthContext();
 
@@ -204,16 +207,16 @@ export default function UserAdminView({
             <BasicInfo
               k="Name"
               v={currentApplicant.user.firstName + ' ' + currentApplicant.user.lastName}
-              locked={true}
-              canUnlock={organizer.permissions.includes('super_admin')}
+              locked={appViewState === ApplicationViewState.REVIEWABLE}
+              canUnlock={appViewState === ApplicationViewState.ALL}
             />
             <BasicInfo k="Major" v={currentApplicant.major} />
             <BasicInfo k="Level of Study" v={currentApplicant.studyLevel} />
             <BasicInfo
               k="Role"
               v={currentApplicant.user.permissions[0]}
-              locked={true}
-              canUnlock={organizer.permissions.includes('super_admin')}
+              locked={appViewState === ApplicationViewState.REVIEWABLE}
+              canUnlock={appViewState === ApplicationViewState.ALL}
             />
           </div>
 
@@ -221,8 +224,8 @@ export default function UserAdminView({
             <BasicInfo
               k="School"
               v={currentApplicant.university ?? currentApplicant.universityManual}
-              locked={true}
-              canUnlock={organizer.permissions.includes('super_admin')}
+              locked={appViewState === ApplicationViewState.REVIEWABLE}
+              canUnlock={appViewState === ApplicationViewState.ALL}
             />
             <BasicInfo k="Software Experience" v={currentApplicant.softwareExperience} />
             {/* this should PROBABLY be currentUser.hackathonNumber, but I think the registration interface is populated incorrectly */}
@@ -230,8 +233,8 @@ export default function UserAdminView({
             <BasicInfo
               k="Email"
               v={currentApplicant.user.preferredEmail}
-              locked={true}
-              canUnlock={organizer.permissions.includes('super_admin')}
+              locked={appViewState === ApplicationViewState.REVIEWABLE}
+              canUnlock={appViewState === ApplicationViewState.ALL}
             />
           </div>
         </div>
@@ -243,11 +246,14 @@ export default function UserAdminView({
               <p className="font-bold text-xl text-black">Application Score</p>
 
               <p className="text-8xl font-dmSans">
-                {currentApplicant.scoring.reduce(
-                  (acc: number, curr) =>
-                    curr.score === 4 ? acc + 1 : curr.score === 1 ? acc - 1 : acc,
-                  0,
-                )}
+                {currentApplicant.scoring.reduce((acc: number, curr) => {
+                  const scoreMultiplier = !!curr.isSuperVote ? 50 : 1;
+                  return curr.score === 4
+                    ? acc + scoreMultiplier
+                    : curr.score === 1
+                    ? acc - scoreMultiplier
+                    : acc;
+                }, 0)}
               </p>
 
               <p className="italic text-gray-600">

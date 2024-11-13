@@ -2,6 +2,7 @@ import CalendarIcon from '@/public/icons/calendar.svg';
 import QuestionIcon from '@/public/icons/question.svg';
 import HomeIcon from '@/public/icons/home.svg';
 import AdminIcon from '@/public/icons/admin.svg';
+import ScannerIcon from '@/public/icons/scanner.svg';
 import clsx from 'clsx';
 import { useAuthContext } from '@/lib/user/AuthContext';
 import { useContext } from 'react';
@@ -10,12 +11,20 @@ import { useRouter } from 'next/router';
 import { NavbarCallbackRegistryContext } from '@/lib/context/navbar';
 import FloatingDockWrapper from '../AppHeader2/FloatingDock/wrapper';
 
+function isAuthorized(user): boolean {
+  if (!user || !user.permissions) return false;
+  return (
+    (user.permissions as string[]).includes('admin') ||
+    (user.permissions as string[]).includes('super_admin')
+  );
+}
+
 type Props = {
   dockItemIdRoot?: string;
 };
 
 export default function AppNavbarBottom(props: Props) {
-  const { hasProfile } = useAuthContext();
+  const { user, hasProfile } = useAuthContext();
   const { faqRef, scheduleRef } = useContext(SectionReferenceContext);
   const { callbackRegistry } = useContext(NavbarCallbackRegistryContext);
 
@@ -108,6 +117,26 @@ export default function AppNavbarBottom(props: Props) {
     );
     itemIdx++;
 
+    // Scanner Icon
+    {
+      isAuthorized(user) &&
+        items.push(
+          <button
+            id={itemIdRoot + itemIdx}
+            className={clsx('p-1.5 hover:bg-[rgb(39,39,42)] rounded-full')}
+            onClick={async () => {
+              if (Object.hasOwn(callbackRegistry, router.pathname)) {
+                await callbackRegistry[router.pathname]();
+              }
+              await router.push(isAuthorized(user) ? '/admin/scan' : '/auth');
+            }}
+          >
+            <ScannerIcon />
+          </button>,
+        );
+      itemIdx++;
+    }
+
     return items;
   };
 
@@ -116,7 +145,7 @@ export default function AppNavbarBottom(props: Props) {
       className={clsx(
         'md:hidden fixed z-[1000] bottom-2 left-1/2 -translate-x-1/2',
         'bg-[rgba(0,0,0,0.70)] p-3 rounded-xl',
-        'w-[max(60%,250px)] max-w-[300px]',
+        'w-[max(80%, 250px)] max-w-[300px]',
       )}
     >
       <FloatingDockWrapper

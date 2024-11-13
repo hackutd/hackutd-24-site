@@ -133,6 +133,11 @@ type Registration = {
   majorManual?: string;
   universityManual?: string;
   heardFromManual?: string;
+  waitListInfo?: {
+    waitlistNumber: number;
+    notificationMethod: string;
+    contactInfo: string;
+  };
 };
 
 /**
@@ -335,6 +340,7 @@ type UserIdentifier = Omit<Registration, 'scans'> & {
     score: number;
     note: string;
     reviewer: string;
+    isSuperVote?: boolean;
   }[];
 };
 

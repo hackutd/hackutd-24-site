@@ -19,12 +19,25 @@ async function getApplicationDecision(userId: string): Promise<string> {
   if (!applicationDecisionFinalized) {
     return 'In Review';
   }
-  const snapshot = await db.collection('/acceptreject').where('hackerId', '==', userId).get();
-  const applicationPoint = snapshot.docs.reduce((acc: number, doc) => {
-    if (doc.data().status === 'Accepted') return acc + 1;
-    return acc - 1;
+
+  // const userDoc = await db.collection(REGISTRATION_COLLECTION).doc(userId).get();
+  // if (!userDoc.exists) {
+  //   throw new Error('ERROR');
+  // }
+  //
+  // const userRole = userDoc.data()?.user.permissions as string[];
+  // if (userRole.includes('super_admin')) {
+  //   return 'Accepted';
+  // }
+
+  const snapshot = await db.collection('/scoring').where('hackerId', '==', userId).get();
+  const appScore = snapshot.docs.reduce((acc, doc) => {
+    const scoreMultiplier = !!doc.data().isSuperVote ? 50 : 1;
+    if (doc.data().score === 4) return acc + scoreMultiplier;
+    if (doc.data().score === 1) return acc - scoreMultiplier;
+    return acc;
   }, 0);
-  if (applicationPoint >= APPLICATION_POINT_THRESHOLD) {
+  if (appScore >= APPLICATION_POINT_THRESHOLD) {
     return 'Accepted';
   }
   return 'Rejected';

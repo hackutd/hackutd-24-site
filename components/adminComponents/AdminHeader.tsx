@@ -67,13 +67,21 @@ export default function AdminHeader() {
               Stats at a Glance
             </NavLink>
           )}
+          <NavLink
+            href="/admin/waitlist"
+            exact={true}
+            activeOptions={'border-b-4 border-primaryDark text-complementaryDark'}
+            className="mx-4 py-2"
+          >
+            Waitlist Check-in
+          </NavLink>
         </div>
       </header>
-      <div className="mt-4 md:hidden ">
+      <div className="mt-4 hidden">
         <button
           ref={accordian}
           onClick={() => triggerAccordion()}
-          className="accordion text-left p-2 text-sm bg-primaryDark text-secondary flex justify-between relative"
+          className="accordion text-left p-2 text-sm bg-[#40B7BA] text-white flex justify-between relative"
         >
           <p>Admin Menu</p>
           <ChevronRightIcon className={`${isOpen ? 'transform rotate-90' : ''} w-5 h-5`} />

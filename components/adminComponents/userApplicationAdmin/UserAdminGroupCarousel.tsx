@@ -5,13 +5,18 @@ import { RequestHelper } from '@/lib/request-helper';
 import { useAuthContext } from '@/lib/user/AuthContext';
 import { useUserGroup } from '@/lib/admin/group';
 import { getGroupId } from './helpers';
+import { ApplicationViewState } from '@/lib/util';
 
 interface UserAdminGroupCarouselProps {
+  appViewState: ApplicationViewState;
   group: UserIdentifier[];
 }
 
-export default function UserAdminGroupCarousel({ group }: UserAdminGroupCarouselProps) {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false });
+export default function UserAdminGroupCarousel({
+  group,
+  appViewState,
+}: UserAdminGroupCarouselProps) {
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, watchDrag: false });
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev();
   }, [emblaApi]);
@@ -45,6 +50,7 @@ export default function UserAdminGroupCarousel({ group }: UserAdminGroupCarousel
             {group.map((member, idx) => (
               <div key={member.id} className="min-w-0 shrink-0 grow-0 basis-full pl-4">
                 <UserAdminView
+                  appViewState={appViewState}
                   groupLength={group.length}
                   userIndex={idx + 1}
                   onNoteUpdate={(newNote) => {
@@ -63,6 +69,7 @@ export default function UserAdminGroupCarousel({ group }: UserAdminGroupCarousel
                             hackerId: string;
                             score: number;
                             note: string;
+                            isSuperVote: boolean;
                           }>;
                         },
                         { msg: string }
@@ -80,6 +87,7 @@ export default function UserAdminGroupCarousel({ group }: UserAdminGroupCarousel
                             hackerId: member.id,
                             score: groupScore,
                             note: notes[idx],
+                            isSuperVote: appViewState === ApplicationViewState.ALL,
                           })),
                         },
                       );

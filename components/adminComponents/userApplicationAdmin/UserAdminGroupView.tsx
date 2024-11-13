@@ -10,15 +10,18 @@ import {
 } from '@heroicons/react/solid';
 import { getGroupId } from './helpers';
 import UserAdminGroupCarousel from './UserAdminGroupCarousel';
+import { ApplicationViewState } from '@/lib/util';
+import { ApplicationEntry, useUserGroup } from '@/lib/admin/group';
 
 interface UserAdminGroupViewProps {
-  userGroups: UserIdentifier[][];
+  userGroups: ApplicationEntry[];
   currentUserGroupId: string;
   goBack: () => void;
   // updateCurrentUser: (value: Omit<UserIdentifier, 'scans'>) => void;
   onUserGroupClick: (id: string) => void;
   // onAcceptReject: (status: string, notes: string) => void;
   // onUpdateRole: (newRole: UserPermission) => void;
+  appViewState: ApplicationViewState;
 }
 
 export default function UserAdminGroupView({
@@ -26,17 +29,21 @@ export default function UserAdminGroupView({
   currentUserGroupId,
   goBack,
   onUserGroupClick,
+  appViewState,
 }: UserAdminGroupViewProps) {
   const { user } = useAuthContext();
+  const [currentUserGroupIndex, setCurrentUserGroupIndex] = useState(0);
 
-  let currentUserGroupIndex = 0;
-  const currentUserGroup = userGroups.find((group, i) => {
-    if (getGroupId(group) === currentUserGroupId) {
-      currentUserGroupIndex = i;
-      return true;
+  useEffect(() => {
+    let tempCurrentUserGroupIndex = 0;
+    for (let i = 0; i < userGroups.length; i++) {
+      if (getGroupId(userGroups[i].application) === currentUserGroupId) {
+        tempCurrentUserGroupIndex = i;
+        break;
+      }
     }
-    return false;
-  });
+    setCurrentUserGroupIndex(tempCurrentUserGroupIndex);
+  }, [userGroups, currentUserGroupId]);
 
   const stringifyScore = (appScore: { acceptCount: number; rejectCount: number }) => {
     if (appScore.acceptCount >= 1000000000) return 'Auto-Accepted by HackPortal';
@@ -84,19 +91,23 @@ export default function UserAdminGroupView({
       <div className="hidden md:block md:w-72 px-2 py-4">
         {/* Page */}
         <div className="overflow-y-hidden h-[calc(100%-40px)]" ref={ref}>
-          {userGroups.slice(startIndex, startIndex + pageSize).map((group) => (
+          {userGroups.slice(startIndex, startIndex + pageSize).map((group, idx) => (
             <div
-              key={getGroupId(group)}
+              key={getGroupId(group.application)}
               className={`
                 flex flex-row justify-center items-center w-full py-2 rounded-xl mb-3 h-12 p-4
                 bg-[rgba(255,255,255,0.6)]
                 shadow-md ${
-                  getGroupId(group) === currentUserGroupId ? 'border-primaryDark border-[2px]' : ''
+                  getGroupId(group.application) === currentUserGroupId
+                    ? 'border-primaryDark border-[2px]'
+                    : ''
                 }
                 cursor-pointer
                 gap-x-3
               `}
-              onClick={() => onUserGroupClick(getGroupId(group))}
+              onClick={() => {
+                onUserGroupClick(getGroupId(group.application));
+              }}
             >
               {/* <div
                 className={`
@@ -113,24 +124,28 @@ export default function UserAdminGroupView({
                   flex-1 flex flex-row justify-center items-center
                   whitespace-nowrap overflow-hidden text-ellipsis
                   ${
-                    group[0].status === 'Accepted'
+                    group.application[0].status === 'Accepted'
                       ? 'bg-[rgb(242,253,226)] text-[rgb(27,111,19)]'
                       : ''
                   }
                   ${
-                    group[0].status === 'Rejected'
+                    group.application[0].status === 'Rejected'
                       ? 'bg-[rgb(255,233,218)] text-[rgb(122,15,39)]'
                       : ''
                   }
                   ${
-                    group[0].status === 'In Review'
+                    group.application[0].status === 'In Review'
                       ? 'bg-[rgb(213,244,255)] text-[rgb(9,45,122)]'
                       : ''
                   }
-                  ${group[0].status.startsWith('Maybe') ? 'bg-yellow-200 text-[rgb(9,45,122)]' : ''}
+                  ${
+                    group.application[0].status.startsWith('Maybe')
+                      ? 'bg-yellow-200 text-[rgb(9,45,122)]'
+                      : ''
+                  }
                 `}
               >
-                {group[0].status}
+                {group.application[0].status}
               </div>
               <div
                 className={`
@@ -140,7 +155,7 @@ export default function UserAdminGroupView({
                   bg-green-200                
                 `}
               >
-                {group.length} member{group.length > 1 && 's'}
+                {group.application.length} member{group.application.length > 1 && 's'}
               </div>
             </div>
           ))}
@@ -165,7 +180,7 @@ export default function UserAdminGroupView({
               onClick={() =>
                 onUserGroupClick(
                   userGroups[currentUserGroupIndex - 1]
-                    ? getGroupId(userGroups[currentUserGroupIndex - 1])
+                    ? getGroupId(userGroups[currentUserGroupIndex - 1].application)
                     : '',
                 )
               }
@@ -175,7 +190,7 @@ export default function UserAdminGroupView({
               onClick={() =>
                 onUserGroupClick(
                   userGroups[currentUserGroupIndex + 1]
-                    ? getGroupId(userGroups[currentUserGroupIndex + 1])
+                    ? getGroupId(userGroups[currentUserGroupIndex + 1].application)
                     : '',
                 )
               }
@@ -187,7 +202,10 @@ export default function UserAdminGroupView({
         </div>
 
         {/* Application */}
-        <UserAdminGroupCarousel group={currentUserGroup} />
+        <UserAdminGroupCarousel
+          group={userGroups[currentUserGroupIndex].application}
+          appViewState={appViewState}
+        />
       </div>
     </div>
   );

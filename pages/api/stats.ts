@@ -39,12 +39,25 @@ async function getStatsData() {
     disclaimer: {},
     ...statRecords,
   };
-
+  const scoreData = await db.collection('/scoring').get();
+  const userScoreMapping = new Map<string, number>();
+  scoreData.forEach((doc) => {
+    const currentUserScore = userScoreMapping.has(doc.data().hackerId)
+      ? userScoreMapping.get(doc.data().hackerId)
+      : 0;
+    const currentDelta =
+      (doc.data().score === 4 ? 1 : doc.data().score === 1 ? -1 : 0) *
+      (!!doc.data().isSuperVote ? 50 : 1);
+    userScoreMapping.set(doc.data().hackerId, currentUserScore + currentDelta);
+  });
   const snapshot = await db.collection(USERS_COLLECTION).get();
   snapshot.forEach((doc) => {
     const userData = doc.data();
     const date = doc.createTime.toDate();
     const stringDate = `${date.getMonth() + 1}-${date.getDate()}`;
+    if (!userScoreMapping.has(userData.id) || userScoreMapping.get(userData.id) < 0) {
+      return;
+    }
 
     if (!generalStats.timestamp.hasOwnProperty(stringDate)) {
       generalStats.timestamp[stringDate] = 0;

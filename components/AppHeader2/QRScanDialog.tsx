@@ -99,7 +99,7 @@ export default function QRScanDialog({ scan, onModalClose }: QRScanDialogProps) 
 
   return (
     <Transition appear show={scan !== null} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={onModalClose}>
+      <Dialog as="div" className="relative z-50" onClose={onModalClose}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"

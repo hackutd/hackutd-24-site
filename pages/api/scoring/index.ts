@@ -14,6 +14,7 @@ export interface ScoringDataType {
   hackerId: string;
   score: number;
   note: string;
+  isSuperVote?: boolean;
 }
 
 const SCORING_NO = 1;
@@ -98,7 +99,7 @@ async function handlePostRequest(req: NextApiRequest, res: NextApiResponse) {
 
         //  store scoring into database
         const appAssignee: string[] = hackerDoc.data().reviewer;
-        if (appAssignee.length === 0) {
+        if (!appAssignee || appAssignee.length === 0) {
           console.error('Hacker is not assigned a reviewer. Something is wrong :D');
           return;
         }
@@ -111,6 +112,8 @@ async function handlePostRequest(req: NextApiRequest, res: NextApiResponse) {
         if (!scoringRef.empty) {
           await scoringRef.docs[0].ref.update({
             score: scoring.score,
+            isSuperVote: !!scoring.isSuperVote,
+            note: scoring.note,
           });
         } else {
           const appIsAssigned = appAssignee.some((assigneeId) => assigneeId === scoring.adminId);
@@ -119,13 +122,20 @@ async function handlePostRequest(req: NextApiRequest, res: NextApiResponse) {
             appIsAssigned,
           });
         }
-        //  check if application should be moved into common pool.
-        const appShouldBeMovedToCommonPool = await checkAppShouldEnterCommonPool(
-          scoring.hackerId,
-          isTeam,
-        );
-        if (appShouldBeMovedToCommonPool) {
-          await moveAppToCommonPool(scoring.hackerId);
+        if (scoring.isSuperVote) {
+          // remove app from all pool
+          await hackerDoc.ref.update({
+            'user.permissions': [hackerDoc.data().user.permissions[0]],
+          });
+        } else {
+          //  check if application should be moved into common pool.
+          const appShouldBeMovedToCommonPool = await checkAppShouldEnterCommonPool(
+            scoring.hackerId,
+            isTeam,
+          );
+          if (appShouldBeMovedToCommonPool) {
+            await moveAppToCommonPool(scoring.hackerId);
+          }
         }
       }),
     );

@@ -1,20 +1,38 @@
 import { Tab } from '@headlessui/react';
 import clsx from 'clsx';
-import { RegistrationState } from '../../../lib/util';
+import { ApplicationViewState, RegistrationState } from '../../../lib/util';
 import UserList, { USERLIST_INFINITE_SCROLL_TARGET } from './UserList';
 import { SearchIcon } from '@heroicons/react/solid';
 import { useAuthContext } from '@/lib/user/AuthContext';
+import { ApplicationEntry } from '@/lib/admin/group';
+import { useEffect, useState } from 'react';
+import {
+  Checkbox,
+  Chip,
+  FormControl,
+  InputLabel,
+  ListItemText,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  SelectChangeEvent,
+} from '@mui/material';
+import { Box } from '@mui/system';
 
 interface AllUsersAdminViewProps {
-  userGroups: UserIdentifier[][];
+  userGroups: ApplicationEntry[];
   // selectedUsers: string[];
   searchQuery: string;
   registrationState: RegistrationState;
+  appViewState: ApplicationViewState;
   onUpdateRegistrationState: (newState: RegistrationState) => void;
+  onUpdateAppViewState: (newState: ApplicationViewState) => void;
   onUserGroupClick: (id: string) => void;
   // onUserSelect: (id: string) => void;
   // onAcceptReject: (status: string) => void;
   onSearchQueryUpdate: (searchQuery: string) => void;
+  filterParamsList: string[];
+  handleParamListChange: (e: any) => void;
 }
 
 export default function AllUsersAdminView({
@@ -27,8 +45,48 @@ export default function AllUsersAdminView({
   onSearchQueryUpdate,
   registrationState,
   onUpdateRegistrationState,
+  appViewState,
+  onUpdateAppViewState,
+  handleParamListChange,
+  filterParamsList,
 }: AllUsersAdminViewProps) {
+  const ITEM_HEIGHT = 48;
+  const ITEM_PADDING_TOP = 8;
+  const MenuProps = {
+    PaperProps: {
+      style: {
+        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        width: 250,
+      },
+    },
+  };
+
   const { user } = useAuthContext();
+
+  const filterParams = [
+    'hacker',
+    'admin',
+    'super_admin',
+    'Accepted',
+    'Rejected',
+    'In Review',
+    'Maybe Yes',
+    'Maybe No',
+  ];
+  // useEffect(() => {
+  //   onUpdateFilterParamsList(filterParamsList);
+  //   // Filter User Groups based on filterParamsList
+  //   // let filteredUserGroups = userGroups.filter((userGroup) => {
+  //   //   return filterParamsList.includes(userGroup.application[0].status);
+  //   // });
+  //   // filteredUserGroups = filteredUserGroups.filter((userGroup) => {
+  //   //   return userGroup.application.some((app) =>
+  //   //     filterParamsList.includes(app.user.permissions[0]),
+  //   //   );
+  //   // });
+  //   // setFilteredUserGroups(filteredUserGroups);
+  // }, [filterParamsList, userGroups]);
+
   return (
     <div className={`h-full px-4 md:px-14 text-sm md:text-base`}>
       {/* Top Bar with Status, Search, and Filters */}
@@ -61,38 +119,75 @@ export default function AllUsersAdminView({
           </div> */}
 
           <div className="flex flex-col md:flex-row justify-center items-center w-full mt-8 lg:mt-0">
-            <Tab.Group
-              selectedIndex={registrationState === RegistrationState.OPEN ? 1 : 0}
-              // manual
-              onChange={(idx) => {
-                onUpdateRegistrationState(
-                  idx === 0 ? RegistrationState.CLOSED : RegistrationState.OPEN,
-                );
-              }}
-            >
-              <Tab.List className="flex flex-row justify-center items-center w-full">
-                <div className="bg-[#F1F8FC] rounded-full">
-                  <Tab
-                    className={`rounded-full font-bold ${
-                      registrationState === RegistrationState.CLOSED
-                        ? 'bg-[#163950] text-[#F1F8FC]'
-                        : 'bg-[#F1F8FC] text-[#163950]'
-                    } py-2 px-4`}
-                  >
-                    Close Registration
-                  </Tab>
-                  <Tab
-                    className={`rounded-full font-bold ${
-                      registrationState === RegistrationState.OPEN
-                        ? 'bg-[#163950] text-[#F1F8FC]'
-                        : 'bg-[#F1F8FC] text-[#163950]'
-                    } py-2 px-4`}
-                  >
-                    Live Registration
-                  </Tab>
-                </div>
-              </Tab.List>
-            </Tab.Group>
+            {user.permissions.includes('super_admin') && (
+              <Tab.Group
+                selectedIndex={registrationState === RegistrationState.OPEN ? 1 : 0}
+                // manual
+                onChange={(idx) => {
+                  onUpdateRegistrationState(
+                    idx === 0 ? RegistrationState.CLOSED : RegistrationState.OPEN,
+                  );
+                }}
+              >
+                <Tab.List className="flex flex-row justify-center items-center w-full">
+                  <div className="bg-[#F1F8FC] rounded-full">
+                    <Tab
+                      className={`rounded-full font-bold ${
+                        registrationState === RegistrationState.CLOSED
+                          ? 'bg-[#163950] text-[#F1F8FC]'
+                          : 'bg-[#F1F8FC] text-[#163950]'
+                      } py-2 px-4`}
+                    >
+                      Close Registration
+                    </Tab>
+                    <Tab
+                      className={`rounded-full font-bold ${
+                        registrationState === RegistrationState.OPEN
+                          ? 'bg-[#163950] text-[#F1F8FC]'
+                          : 'bg-[#F1F8FC] text-[#163950]'
+                      } py-2 px-4`}
+                    >
+                      Live Registration
+                    </Tab>
+                  </div>
+                </Tab.List>
+              </Tab.Group>
+            )}
+
+            {/* {user.permissions.includes('super_admin') && ( */}
+            {/*   <Tab.Group */}
+            {/*     selectedIndex={appViewState === ApplicationViewState.ALL ? 1 : 0} */}
+            {/*     // manual */}
+            {/*     onChange={(idx) => { */}
+            {/*       onUpdateAppViewState( */}
+            {/*         idx === 0 ? ApplicationViewState.REVIEWABLE : ApplicationViewState.ALL, */}
+            {/*       ); */}
+            {/*     }} */}
+            {/*   > */}
+            {/*     <Tab.List className="flex flex-row justify-center items-center w-full"> */}
+            {/*       <div className="bg-[#F1F8FC] rounded-full"> */}
+            {/*         <Tab */}
+            {/*           className={`rounded-full font-bold ${ */}
+            {/*             appViewState === ApplicationViewState.REVIEWABLE */}
+            {/*               ? 'bg-[#163950] text-[#F1F8FC]' */}
+            {/*               : 'bg-[#F1F8FC] text-[#163950]' */}
+            {/*           } py-2 px-4`} */}
+            {/*         > */}
+            {/*           Show assigned apps */}
+            {/*         </Tab> */}
+            {/*         <Tab */}
+            {/*           className={`rounded-full font-bold ${ */}
+            {/*             appViewState === ApplicationViewState.ALL */}
+            {/*               ? 'bg-[#163950] text-[#F1F8FC]' */}
+            {/*               : 'bg-[#F1F8FC] text-[#163950]' */}
+            {/*           } py-2 px-4`} */}
+            {/*         > */}
+            {/*           View all apps */}
+            {/*         </Tab> */}
+            {/*       </div> */}
+            {/*     </Tab.List> */}
+            {/*   </Tab.Group> */}
+            {/* )} */}
 
             {/* Accept Reject buttons */}
             {/* <div className="flex flex-row w-full justify-around max-w-xs mt-4 lg:mt-0">
@@ -111,6 +206,36 @@ export default function AllUsersAdminView({
             </div> */}
           </div>
         </div>
+      </div>
+
+      {/* Filter */}
+      <div>
+        <FormControl fullWidth={true} sx={{ m: 1 }}>
+          <InputLabel id="demo-multiple-checkbox-label">Tag</InputLabel>
+          <Select
+            labelId="demo-multiple-checkbox-label"
+            id="demo-multiple-checkbox"
+            multiple
+            value={filterParamsList}
+            onChange={handleParamListChange}
+            input={<OutlinedInput label="Tag" />}
+            renderValue={(selected) => (
+              <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                {selected.map((value) => (
+                  <Chip key={value} label={value} />
+                ))}
+              </Box>
+            )}
+            MenuProps={MenuProps}
+          >
+            {filterParams.map((filterParam) => (
+              <MenuItem key={filterParam} value={filterParam}>
+                <Checkbox checked={filterParamsList.includes(filterParam)} />
+                <ListItemText primary={filterParam} />
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </div>
 
       {/* User Table List */}
@@ -155,6 +280,7 @@ export default function AllUsersAdminView({
 
           {/* User List */}
           <UserList
+            appViewState={appViewState}
             userGroups={userGroups}
             // selectedUsers={selectedUsers}
             onUserGroupClick={(id) => onUserGroupClick(id)}

@@ -5,14 +5,17 @@
 // import { UserData } from '../api/users';
 import { Dialog, Transition } from '@headlessui/react';
 import Head from 'next/head';
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { isAuthorized } from '.';
 import AllUsersAdminView from '../../components/adminComponents/userApplicationAdmin/AllUsersAdminView';
 import UserAdminGroupView from '../../components/adminComponents/userApplicationAdmin/UserAdminGroupView';
 import { RequestHelper } from '../../lib/request-helper';
 import { useAuthContext } from '../../lib/user/AuthContext';
-import { RegistrationState } from '../../lib/util';
-import { useUserGroup } from '@/lib/admin/group';
+import { ApplicationViewState, RegistrationState } from '../../lib/util';
+import { ApplicationEntry, useUserGroup } from '@/lib/admin/group';
+import AdminStatsCard from '@/components/adminComponents/AdminStatsCard';
+import { CheckIcon, XCircleIcon } from '@heroicons/react/solid';
+import { SelectChangeEvent } from '@mui/material';
 
 /**
  *
@@ -27,7 +30,8 @@ export default function UserPage() {
   const [loading, setLoading] = useState(true);
   const userGroups = useUserGroup((state) => state.groups);
   const setUserGroups = useUserGroup((state) => state.setUserGroup);
-  const [currentUserGroup, setCurrentUserGroup] = useState('');
+  const currentUserGroup = useUserGroup((state) => state.currentUserGroup);
+  const setCurrentUserGroup = useUserGroup((state) => state.setCurrentUsergroup);
 
   // const [filter, setFilter] = useState({
   //   hacker: true,
@@ -36,17 +40,43 @@ export default function UserPage() {
   //   admin: true,
   //   super_admin: true,
   // });
-  const [filteredGroups, setFilteredGroups] = useState<UserIdentifier[][]>([]);
+  const [filteredGroups, setFilteredGroups] = useState<ApplicationEntry[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   // const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
 
+  const filterParams = [
+    'hacker',
+    'admin',
+    'super_admin',
+    'Accepted',
+    'Rejected',
+    'In Review',
+    'Maybe Yes',
+    'Maybe No',
+  ];
+
+  const [filterParamsList, setFilterParamsList] = useState<string[]>(filterParams);
+  const handleParamListChange = (event: SelectChangeEvent<typeof filterParamsList>) => {
+    const {
+      target: { value },
+    } = event;
+
+    setFilterParamsList(
+      // On autofill we get a stringified value.
+      typeof value === 'string' ? value.split(',') : value,
+    );
+  };
   const [registrationStatus, setRegistrationStatus] = useState(RegistrationState.UNINITIALIZED);
+  const [appViewState, setAppViewState] = useState(
+    user.permissions.includes('super_admin')
+      ? ApplicationViewState.ALL
+      : ApplicationViewState.REVIEWABLE,
+  );
   const [nextRegistrationStatus, setNextRegistrationStatus] = useState(
     RegistrationState.UNINITIALIZED,
   );
 
   let timer: NodeJS.Timeout;
-
   async function fetchInitData() {
     setLoading(true);
     setNextRegistrationStatus(RegistrationState.UNINITIALIZED);
@@ -64,15 +94,29 @@ export default function UserPage() {
       allowRegistrationState.allowRegistrations ? RegistrationState.OPEN : RegistrationState.CLOSED,
     );
 
-    const userGroupsData: UserIdentifier[][] = (
-      await RequestHelper.get<UserIdentifier[][]>('/api/users', {
-        headers: {
-          Authorization: user.token,
+    const { groups: userGroupsData } = (
+      await RequestHelper.get<{ groups: UserIdentifier[][]; allApps: UserIdentifier[][] }>(
+        '/api/users',
+        {
+          headers: {
+            Authorization: user.token,
+          },
         },
-      })
+      )
     )['data'];
-    setUserGroups(userGroupsData);
-    setFilteredGroups(userGroupsData);
+    setUserGroups(
+      userGroupsData.map((group, idx) => ({
+        application: group,
+        index: idx,
+      })),
+    );
+    setFilteredGroups(
+      userGroupsData.map((group, idx) => ({
+        application: group,
+        index: idx,
+      })),
+    );
+
     setLoading(false);
   }
 
@@ -82,10 +126,18 @@ export default function UserPage() {
 
   useEffect(() => {
     if (loading) return;
+    let filteredUserGroups = userGroups.filter((userGroup) => {
+      return filterParamsList.includes(userGroup.application[0].status);
+    });
+    filteredUserGroups = filteredUserGroups.filter((userGroup) => {
+      return userGroup.application.some((app) =>
+        filterParamsList.includes(app.user.permissions[0]),
+      );
+    });
     timer = setTimeout(() => {
       if (searchQuery !== '') {
-        const newFiltered = userGroups.filter(
-          (users) =>
+        const newFiltered = filteredUserGroups.filter(
+          ({ application: users }) =>
             users.filter(
               ({ user }) =>
                 `${user.firstName.trim()} ${user.lastName.trim()}`
@@ -95,14 +147,14 @@ export default function UserPage() {
         );
         setFilteredGroups(newFiltered);
       } else {
-        setFilteredGroups([...userGroups]);
+        setFilteredGroups(filteredUserGroups);
       }
     }, 750);
 
     return () => {
       clearTimeout(timer);
     };
-  }, [searchQuery, loading, userGroups]);
+  }, [searchQuery, loading, userGroups, filterParamsList]);
 
   // const updateFilter = (name: string) => {
   //   const filterCriteria = {
@@ -184,6 +236,93 @@ export default function UserPage() {
   //       alert(err);
   //     });
   // };
+  //
+  const numAppsReviewed = useMemo(() => {
+    return userGroups
+      .map((obj) => obj.application)
+      .reduce(
+        (acc, curr) =>
+          acc +
+          (curr.every((applicant) =>
+            applicant.scoring?.some((s) => s.reviewer === `${user.firstName} ${user.lastName}`),
+          )
+            ? 1
+            : 0),
+        0,
+      );
+  }, [userGroups]);
+
+  const numAppsAccepted = useMemo(() => {
+    if (user.permissions.includes('super_admin')) {
+      return userGroups
+        .map((obj) => obj.application)
+        .reduce((acc, curr) => {
+          const appScore = curr.some((app) => app.status === 'Accepted') ? 1 : 0;
+          return acc + appScore;
+        }, 0);
+    }
+    return userGroups
+      .map((obj) => obj.application)
+      .reduce(
+        (acc, curr) =>
+          acc +
+          (curr.every((applicant) =>
+            applicant.scoring?.some(
+              (s) => s.reviewer === `${user.firstName} ${user.lastName}` && s.score === 4,
+            ),
+          )
+            ? 1
+            : 0),
+        0,
+      );
+  }, [userGroups]);
+  const numAppsRejected = useMemo(() => {
+    if (user.permissions.includes('super_admin')) {
+      return userGroups
+        .map((obj) => obj.application)
+        .reduce((acc, curr) => {
+          const appScore = curr.some((app) => app.status === 'Rejected') ? 1 : 0;
+          return acc + appScore;
+        }, 0);
+    }
+    return userGroups
+      .map((obj) => obj.application)
+      .reduce(
+        (acc, curr) =>
+          acc +
+          (curr.every((applicant) =>
+            applicant.scoring?.some(
+              (s) => s.reviewer === `${user.firstName} ${user.lastName}` && s.score === 1,
+            ),
+          )
+            ? 1
+            : 0),
+        0,
+      );
+  }, [userGroups]);
+
+  const numAppsMaybe = useMemo(() => {
+    return userGroups
+      .map((obj) => obj.application)
+      .reduce(
+        (acc, curr) =>
+          acc +
+          (curr.every((applicant) =>
+            applicant.scoring?.some(
+              (s) =>
+                s.reviewer === `${user.firstName} ${user.lastName}` && s.score > 1 && s.score < 4,
+            ),
+          )
+            ? 1
+            : 0),
+        0,
+      );
+  }, [userGroups]);
+
+  const acceptanceRate = useMemo(
+    () => `${((numAppsAccepted * 100) / numAppsReviewed).toFixed(2)}%`,
+    [numAppsReviewed, numAppsAccepted],
+  );
 
   if (!user || !isAuthorized(user))
     return <div className="text-2xl font-black text-center">Unauthorized</div>;
@@ -209,6 +348,58 @@ export default function UserPage() {
 
       <div className="p-4 md:p-8" />
 
+      <div className="w-full max-w-screen-2xl ">
+        <div className="w-full flex-col gap-y-3 md:flex-row flex justify-around mb-6">
+          <AdminStatsCard
+            icon={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"
+                />
+              </svg>
+            }
+            title="Apps reviewed"
+            value={numAppsReviewed}
+          />
+          <AdminStatsCard
+            icon={<CheckIcon color="green" />}
+            title="Apps accepted"
+            value={numAppsAccepted}
+          />
+          <AdminStatsCard
+            icon={<XCircleIcon color="red" />}
+            title="Apps rejected"
+            value={numAppsRejected}
+          />
+          <AdminStatsCard
+            icon={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="m8.99 14.993 6-6m6 3.001c0 1.268-.63 2.39-1.593 3.069a3.746 3.746 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043 3.745 3.745 0 0 1-3.068 1.593c-1.268 0-2.39-.63-3.068-1.593a3.745 3.745 0 0 1-3.296-1.043 3.746 3.746 0 0 1-1.043-3.297 3.746 3.746 0 0 1-1.593-3.068c0-1.268.63-2.39 1.593-3.068a3.746 3.746 0 0 1 1.043-3.297 3.745 3.745 0 0 1 3.296-1.042 3.745 3.745 0 0 1 3.068-1.594c1.268 0 2.39.63 3.068 1.593a3.745 3.745 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.297 3.746 3.746 0 0 1 1.593 3.068ZM9.74 9.743h.008v.007H9.74v-.007Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm4.125 4.5h.008v.008h-.008v-.008Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+                />
+              </svg>
+            }
+            title="Acceptance Rate"
+            value={acceptanceRate}
+          />
+        </div>
+      </div>
       <div className="w-full max-w-screen-2xl mb-10" style={{ height: 'calc(100vh - 180px)' }}>
         {currentUserGroup === '' ? (
           <AllUsersAdminView
@@ -227,10 +418,17 @@ export default function UserPage() {
             onSearchQueryUpdate={(searchQuery) => {
               setSearchQuery(searchQuery);
             }}
+            onUpdateAppViewState={(newState) => {
+              setAppViewState(newState);
+            }}
+            appViewState={appViewState}
+            handleParamListChange={handleParamListChange}
+            filterParamsList={filterParamsList}
             registrationState={registrationStatus}
           />
         ) : (
           <UserAdminGroupView
+            appViewState={appViewState}
             userGroups={filteredGroups}
             currentUserGroupId={currentUserGroup}
             goBack={() => setCurrentUserGroup('')}
