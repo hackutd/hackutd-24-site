@@ -75,17 +75,17 @@ export default function HomeSponsors() {
                   <TierTitle tierName={tier} />
 
                   <div className="flex flex-wrap gap-16 justify-center items-center">
-                    <LogoContext.Provider value={{ currentHoveredLogo, setCurrentHoveredLogo }}>
-                      {sponsorTiers[tier]?.map(({ link, reference, alternativeReference }, idx) => (
-                        <SponsorCard
-                          tier={tier}
-                          alternativeReference={alternativeReference}
-                          reference={reference}
-                          key={idx}
-                          link={link}
-                        />
-                      ))}
-                    </LogoContext.Provider>
+                    {/* <LogoContext.Provider value={{ currentHoveredLogo, setCurrentHoveredLogo }}> */}
+                    {sponsorTiers[tier]?.map(({ link, reference, alternativeReference }, idx) => (
+                      <SponsorCard
+                        tier={tier}
+                        alternativeReference={alternativeReference}
+                        reference={reference}
+                        key={idx}
+                        link={link}
+                      />
+                    ))}
+                    {/* </LogoContext.Provider> */}
                   </div>
                 </div>
               ))}
