@@ -11,10 +11,10 @@ const Countdown = () => {
     seconds: 0,
   });
 
-  const countdownRef = useRef(null);
-  const cloudRef = useRef(null);
-  const countdownTitleRef = useRef(null);
-  const countdownBoxesRef = useRef([]);
+  const countdownRef = useRef<HTMLDivElement>(null);
+  const cloudRef = useRef<HTMLImageElement>(null);
+  const countdownTitleRef = useRef<HTMLHeadingElement>(null);
+  const countdownBoxesRef = useRef<(HTMLDivElement | null)[]>([]);
 
   const isDesktopView = window.innerWidth >= 768;
 
@@ -45,6 +45,7 @@ const Countdown = () => {
       return;
     }
 
+    // Set initial opacity of elements to 0 for desktop animation
     gsap.set(cloudRef.current, { opacity: 0 });
     gsap.set(countdownTitleRef.current, { opacity: 0, y: -50 });
     gsap.set(countdownBoxesRef.current, { scale: 0, opacity: 0 });
@@ -84,7 +85,7 @@ const Countdown = () => {
     };
   }, [isDesktopView]);
 
-  const renderTimeBox = (value, label, index) => {
+  const renderTimeBox = (value: number, label: string, index: number) => {
     const digits = value.toString().padStart(2, '0').split('');
     return (
       <div className="flex flex-col items-center space-y-2" key={label}>
@@ -93,8 +94,10 @@ const Countdown = () => {
             <div
               key={idx}
               className={`font-fredoka bg-white rounded-md flex items-center justify-center ${styles['countdown-box']} countdown-box`}
-              ref={(el) => (countdownBoxesRef.current[index * 2 + idx] = el)}
-              style={{ opacity: isDesktopView ? 0 : 1 }} // Set initial opacity based on screen size
+              ref={(el) => {
+                countdownBoxesRef.current[index * 2 + idx] = el;
+              }} // Now returns void
+              style={{ opacity: isDesktopView ? 0 : 1 }}
             >
               {digit}
             </div>
@@ -123,7 +126,7 @@ const Countdown = () => {
             alt="Cloud"
             ref={cloudRef}
             className={`w-100 h-auto ${styles.cloud}`}
-            style={{ opacity: isDesktopView ? 0 : 1 }} // Set opacity for desktop/mobile
+            style={{ opacity: isDesktopView ? 0 : 1 }}
           />
           <div className="absolute flex flex-col items-center justify-center w-full h-full p-4 text-center">
             <h1
