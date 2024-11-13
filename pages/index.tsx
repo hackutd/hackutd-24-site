@@ -1,20 +1,15 @@
 import Head from 'next/head';
-import { GetServerSideProps, GetStaticProps } from 'next';
-import { useEffect, useState } from 'react';
+import { GetStaticProps } from 'next';
 import { RequestHelper } from '../lib/request-helper';
-import HomeNotif from '../components/homeComponents/HomeNotif';
 import HomeVideoStats from '../components/homeComponents/HomeVideoStats';
 import HomeAboutText from '../components/homeComponents/HomeAboutText';
 import HomeAboutPhotos from '../components/homeComponents/HomeAboutPhotos';
 import HackCountdown from '../components/homeComponents/HackCountdown';
-import HomeSpeakers from '../components/homeComponents/HomeSpeakers2';
 import HomeChallenges from '../components/homeComponents/HomeChallenges';
-import HomeTeam from '../components/homeComponents/HomeTeam';
 import HomeSponsors from '../components/homeComponents/HomeSponsors';
 import HomeFooter from '../components/homeComponents/HomeFooter';
 import HomeSchedule from '../components/homeComponents/HomeSchedule';
 import HomeFaq from '../components/homeComponents/HomeFaq';
-import HomePrizes from '../components/homeComponents/HomePrizes';
 import HomeHero2 from '../components/homeComponents/HomeHero2';
 import Wave from '../components/homeComponents/Wave';
 
@@ -26,13 +21,10 @@ import topBg from '../public/assets/topBg.png';
 import Image from 'next/image';
 
 export default function Home(props: {
-  keynoteSpeakers: KeynoteSpeaker[];
   challenges: Challenge[];
   answeredQuestion: AnsweredQuestion[];
-  fetchedMembers: TeamMember[];
   scheduleCard: ScheduleEvent[];
   dateCard: Dates;
-  prizeData: Array<{ rank: number; prizeName: string }>;
 }) {
   return (
     <>
@@ -45,7 +37,6 @@ export default function Home(props: {
       <HomeHero2 />
       <HomeAboutText />
       <div style={{ position: 'relative', zIndex: 0 }}>
-        {/* TODO: enable this when UI is finalized */}
         <div
           style={{
             position: 'absolute',
@@ -89,8 +80,6 @@ export default function Home(props: {
           />
           <HomeSchedule scheduleCard={props.scheduleCard} dateCard={props.dateCard} />
           <HomeChallenges challenges={props.challenges} />
-          {/* include HomePrizes in HomeChallenges */}
-          {/* <HomePrizes prizes={props.prizeData} /> */}
           <HomeFaq answeredQuestion={props.answeredQuestion} />
           <HomeSponsors />
           <HomeFooter />
