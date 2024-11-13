@@ -85,7 +85,7 @@ export default function Home(props: {
             }}
           >
             <Wave />
-            <HomeAboutPhotos />
+            {/* <HomeAboutPhotos /> */}
             {screen.width >= 1000 && <HomeVideoStats />}
             <HackCountdown />
           </div>
@@ -102,7 +102,7 @@ export default function Home(props: {
             alt="cloud.png"
           />
           <HomeSchedule scheduleCard={props.scheduleCard} dateCard={props.dateCard} />
-          {/* <HomeChallenges challenges={props.challenges} /> */}
+          <HomeChallenges challenges={props.challenges} />
           {/* include HomePrizes in HomeChallenges */}
           {/* <HomePrizes prizes={props.prizeData} /> */}
           <HomeFaq answeredQuestion={props.answeredQuestion} />
@@ -131,10 +131,14 @@ export const getStaticProps: GetStaticProps = async () => {
     `${process.env.BASE_URL}/api/dates`,
     {},
   );
+  const { data: challengeData } = await RequestHelper.get<Challenge[]>(
+    `${process.env.BASE_URL}/api/challenges/`,
+    {},
+  );
   return {
     props: {
       // keynoteSpeakers: keynoteData,
-      // challenges: challengeData,
+      challenges: challengeData,
       answeredQuestion: answeredQuestion,
       // fetchedMembers: memberData,
       sponsorCard: sponsorData,
