@@ -102,28 +102,28 @@ const HomeAboutPhotos = () => {
         </div>
       </div>
       {/* Left Cloud */}
-      <div
-        className="absolute top-[70%] lg:top-[15%] left-[5%] lg:left-[30%] transform -translate-x-[30%] z-50"
-        style={{ ...cloudStyle, ...cloudLeftScroll }}
-      >
-        <img
-          src="/assets/cloud.png"
-          alt="Cloud Background"
-          className="w-[40rem] md:w-[45rem] lg:w-[50rem] cloud-hover"
-        />
-      </div>
+      {/* <div */}
+      {/*   className="absolute top-[70%] lg:top-[15%] left-[5%] lg:left-[30%] transform -translate-x-[30%] z-50" */}
+      {/*   style={{ ...cloudStyle, ...cloudLeftScroll }} */}
+      {/* > */}
+      {/*   <img */}
+      {/*     src="/assets/cloud.png" */}
+      {/*     alt="Cloud Background" */}
+      {/*     className="w-[40rem] md:w-[45rem] lg:w-[50rem] cloud-hover" */}
+      {/*   /> */}
+      {/* </div> */}
 
       {/* Right Cloud */}
-      <div
-        className="absolute top-[70%] lg:top-[15%] right-[5%] lg:right-[30%] transform translate-x-[30%] z-50"
-        style={{ ...cloudStyle, ...cloudRightScroll }}
-      >
-        <img
-          src="/assets/cloud.png"
-          alt="Cloud Background"
-          className="w-[40rem] md:w-[45rem] lg:w-[50rem] cloud-hover"
-        />
-      </div>
+      {/* <div */}
+      {/*   className="absolute top-[70%] lg:top-[15%] right-[5%] lg:right-[30%] transform translate-x-[30%] z-50" */}
+      {/*   style={{ ...cloudStyle, ...cloudRightScroll }} */}
+      {/* > */}
+      {/*   <img */}
+      {/*     src="/assets/cloud.png" */}
+      {/*     alt="Cloud Background" */}
+      {/*     className="w-[40rem] md:w-[45rem] lg:w-[50rem] cloud-hover" */}
+      {/*   /> */}
+      {/* </div> */}
     </div>
   );
 };
