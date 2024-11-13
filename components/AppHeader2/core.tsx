@@ -75,6 +75,15 @@ export default function AppHeader2_Core(props: Props) {
         },
       },
       {
+        text: 'Livestream',
+        onClick: async () => {
+          if (Object.hasOwn(callbackRegistry, router.pathname)) {
+            await callbackRegistry[router.pathname]();
+          }
+          router.push('/livestream');
+        },
+      },
+      {
         text: 'Schedule',
         onClick: () => {
           if (router.pathname === '/') {

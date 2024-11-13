@@ -3,6 +3,7 @@ import QuestionIcon from '@/public/icons/question.svg';
 import HomeIcon from '@/public/icons/home.svg';
 import AdminIcon from '@/public/icons/admin.svg';
 import ScannerIcon from '@/public/icons/scanner.svg';
+import LivestreamIcon from '@/public/icons/livestream.svg';
 import clsx from 'clsx';
 import { useAuthContext } from '@/lib/user/AuthContext';
 import { useContext } from 'react';
@@ -54,6 +55,25 @@ export default function AppNavbarBottom(props: Props) {
         }}
       >
         <HomeIcon />
+      </button>,
+    );
+    itemIdx++;
+
+    // LivestreamIcon
+    items.push(
+      <button
+        id={itemIdRoot + itemIdx}
+        className={clsx('p-1.5 hover:bg-[rgb(39,39,42)] rounded-full')}
+        onClick={async () => {
+          if (Object.hasOwn(callbackRegistry, router.pathname)) {
+            await callbackRegistry[router.pathname]();
+          }
+          if (router.pathname !== '/livestream') {
+            router.push('/livestream');
+          }
+        }}
+      >
+        <LivestreamIcon style={{ width: '30px', height: '30px' }} />
       </button>,
     );
     itemIdx++;
