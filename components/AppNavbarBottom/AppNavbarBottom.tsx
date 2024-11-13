@@ -68,8 +68,8 @@ export default function AppNavbarBottom(props: Props) {
           if (Object.hasOwn(callbackRegistry, router.pathname)) {
             await callbackRegistry[router.pathname]();
           }
-          if (router.pathname !== '/livestream') {
-            router.push('/livestream');
+          if (router.pathname !== '/live') {
+            router.push('/live');
           }
         }}
       >

@@ -80,7 +80,7 @@ export default function AppHeader2_Core(props: Props) {
           if (Object.hasOwn(callbackRegistry, router.pathname)) {
             await callbackRegistry[router.pathname]();
           }
-          router.push('/livestream');
+          router.push('/live');
         },
       },
       {
