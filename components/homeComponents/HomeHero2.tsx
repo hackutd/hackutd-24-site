@@ -220,6 +220,8 @@ export default function HomeHero2() {
   const lilyPadsRef = useRef(null);
   const backgroundRef = useRef(null);
 
+  const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
+
   useEffect(() => {
     if (isHeroLoaded) {
       const tl = gsap.timeline({ delay: 0.5 });
@@ -282,12 +284,11 @@ export default function HomeHero2() {
   }, [isHeroLoaded]);
 
   const handleMascotClick = (color) => {
+    if (!isDesktop) return;
     const tl = gsap.timeline();
     setRockColor(color);
 
-    if (showSlingshot) {
-      return;
-    }
+    if (showSlingshot) return;
 
     if (backgroundRef.current) {
       backgroundRef.current.style.backgroundImage = `url(${noLPHero.src})`;
@@ -394,8 +395,11 @@ export default function HomeHero2() {
               <div
                 ref={duckRef}
                 onClick={() => handleMascotClick('blue')}
-                className="w-[10rem] absolute top-[20%] md:top-[10%] right-[25%] md:w-[15rem] lg:w-[20rem] mb-4 cursor-pointer z-30"
-                style={{ cursor: 'pointer', zIndex: '30' }}
+                className="w-[10rem] absolute top-[20%] md:top-[10%] right-[25%] md:w-[15rem] lg:w-[20rem] mb-4"
+                style={{
+                  cursor: isDesktop ? 'pointer' : 'default',
+                  zIndex: '30',
+                }}
               >
                 <Image
                   src={DuckMoving.src}
@@ -448,8 +452,11 @@ export default function HomeHero2() {
             <div
               ref={mascotRef}
               onClick={() => handleMascotClick('red')}
-              className="w-[10rem] md:w-[15rem] lg:w-[20rem] cursor-pointer z-30"
-              style={{ cursor: 'pointer', zIndex: '30' }}
+              className="w-[10rem] md:w-[15rem] lg:w-[20rem]"
+              style={{
+                cursor: isDesktop ? 'pointer' : 'default',
+                zIndex: '30',
+              }}
             >
               <Image
                 src={MascotMoving.src}

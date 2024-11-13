@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useRef } from 'react';
-import oceanBorder from '../../public/assets/ocean-border.png';
 import styles from './HomeAboutText.module.css';
 import { SectionReferenceContext } from '@/lib/context/section';
 import gsap from 'gsap';
@@ -19,60 +18,60 @@ const HomeAboutText = () => {
   const containerRef = useRef(null); // Reference for entire container to observe
 
   useEffect(() => {
-    // Create the intersection observer to observe when the component is in full view
-    const handleIntersection = (entries, observer) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          // Start the animations when the component is fully in view
-          const titleText = titleRef.current;
-          gsap.set(titleText, { opacity: 1 });
-          const titleLetters = titleText.innerText.split('');
-          titleText.innerHTML = titleLetters.map((letter) => `<span>${letter}</span>`).join('');
+    const isDesktopView = window.matchMedia('(min-width: 1024px)').matches;
 
-          // Animate title letter by letter
-          gsap.fromTo(
-            titleText.children,
-            { opacity: 0, y: 50 },
-            {
-              opacity: 1,
-              y: 0,
-              stagger: 0.1,
-              ease: 'power3.out',
-              duration: 1,
-            },
-          );
+    if (isDesktopView) {
+      const handleIntersection = (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const titleText = titleRef.current;
+            gsap.set(titleText, { opacity: 1 });
+            const titleLetters = titleText.innerText.split('');
+            titleText.innerHTML = titleLetters.map((letter) => `<span>${letter}</span>`).join('');
+            gsap.fromTo(
+              titleText.children,
+              { opacity: 0, y: 50 },
+              {
+                opacity: 1,
+                y: 0,
+                stagger: 0.1,
+                ease: 'power3.out',
+                duration: 1,
+              },
+            );
 
-          // Animate explanation text to rise as if coming out of water
-          gsap.fromTo(
-            explanationRef.current,
-            { opacity: 0, y: 100 },
-            { opacity: 1, y: 0, duration: 1.5, ease: 'power3.out', delay: 1.5 },
-          );
+            gsap.fromTo(
+              explanationRef.current,
+              { opacity: 0, y: 100 },
+              { opacity: 1, y: 0, duration: 1.5, ease: 'power3.out', delay: 1.5 },
+            );
 
-          // Unobserve the component after the animation has triggered once
-          observer.unobserve(entry.target);
-        }
+            observer.unobserve(entry.target);
+          }
+        });
+      };
+
+      const observer = new IntersectionObserver(handleIntersection, {
+        threshold: 1,
       });
-    };
 
-    const observer = new IntersectionObserver(handleIntersection, {
-      threshold: 1, // Trigger when the component is 100% in view
-    });
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
-    }
-
-    return () => {
       if (containerRef.current) {
-        observer.unobserve(containerRef.current);
+        observer.observe(containerRef.current);
       }
-    };
+
+      return () => {
+        if (containerRef.current) {
+          observer.unobserve(containerRef.current);
+        }
+      };
+    } else {
+      gsap.set([titleRef.current, explanationRef.current], { opacity: 1, y: 0 });
+    }
   }, []);
 
   return (
     <div
-      ref={containerRef} // Ref for IntersectionObserver
+      ref={containerRef}
       className="relative py-12 flex flex-col items-center justify-center font-jua"
       style={{
         background: '#54DDE8',
