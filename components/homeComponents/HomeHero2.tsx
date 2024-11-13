@@ -38,7 +38,7 @@ export default function HomeHero2() {
       {/* Lily Pads - Positioned absolutely to cover the full width */}
       <div className="absolute top-0 left-0 right-0 w-full z-10">
         <div className="relative w-full" style={{ overflow: 'visible' }}>
-          <Image src={LilyPads.src} alt="Lily Pads" fill className="object-cover" priority />
+          <Image src={LilyPads.src} alt="Lily Pads" fill className="object-cover" />
         </div>
       </div>
       <div className="flex-grow flex h-full w-full relative">
