@@ -34,6 +34,11 @@ const withPWA = require('next-pwa')({
         destination: 'https://discord.gg/5gYNSwEKc2',
         permanent: true,
       },
+      {
+        source: '/parking',
+        destination: '/parking.pdf',
+        permanent: true,
+      },
     ];
   },
 
