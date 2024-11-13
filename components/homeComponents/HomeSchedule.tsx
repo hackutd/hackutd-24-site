@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useState } from 'react';
+import { useState, useMemo, useContext } from 'react';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Image from 'next/image';
 
@@ -33,8 +32,8 @@ const eventColors = {
 
 /* Event Component */
 const Event = ({ data, index, arrayLength, isLastElement, filter }) => {
-  const startDate = React.useMemo(() => new Date(data.startDate), [data]);
-  const formattedTime = React.useMemo(
+  const startDate = useMemo(() => new Date(data.startDate), [data]);
+  const formattedTime = useMemo(
     () =>
       startDate
         .toLocaleString([], { hour: 'numeric', minute: 'numeric' })
@@ -76,10 +75,10 @@ const Event = ({ data, index, arrayLength, isLastElement, filter }) => {
 /* Calendar */
 export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dateCard: Dates }) {
   /* Event Colors */
-  const { scheduleRef } = React.useContext(SectionReferenceContext);
+  const { scheduleRef } = useContext(SectionReferenceContext);
 
   /* Dates Values */
-  const dateValues = React.useMemo(
+  const dateValues = useMemo(
     () => ({
       year: props.dateCard[0].year,
       day1: props.dateCard[0].day1,
@@ -93,7 +92,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
   );
 
   /* Set event dates and times */
-  const day1StartDateAndTime = React.useMemo(
+  const day1StartDateAndTime = useMemo(
     () =>
       new Date(
         dateValues['year'],
@@ -104,7 +103,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
       ),
     [dateValues],
   );
-  const day2StartDateAndTime = React.useMemo(
+  const day2StartDateAndTime = useMemo(
     () =>
       new Date(
         dateValues['year'],
@@ -115,7 +114,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
       ),
     [dateValues],
   );
-  const eventEndDateAndTime = React.useMemo(
+  const eventEndDateAndTime = useMemo(
     () =>
       new Date(
         dateValues['year'],
@@ -159,11 +158,11 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
     ));
   };
 
-  const day1Events = React.useMemo(
+  const day1Events = useMemo(
     () => getDailyEvents(day1StartDateAndTime, day2StartDateAndTime),
     [day1StartDateAndTime, day2StartDateAndTime, filter],
   );
-  const day2Events = React.useMemo(
+  const day2Events = useMemo(
     () => getDailyEvents(day2StartDateAndTime, eventEndDateAndTime),
     [day2StartDateAndTime, eventEndDateAndTime, filter],
   );
