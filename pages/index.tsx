@@ -30,7 +30,6 @@ export default function Home(props: {
   challenges: Challenge[];
   answeredQuestion: AnsweredQuestion[];
   fetchedMembers: TeamMember[];
-  sponsorCard: Sponsor[];
   scheduleCard: ScheduleEvent[];
   dateCard: Dates;
   prizeData: Array<{ rank: number; prizeName: string }>;
@@ -93,7 +92,7 @@ export default function Home(props: {
           {/* include HomePrizes in HomeChallenges */}
           {/* <HomePrizes prizes={props.prizeData} /> */}
           <HomeFaq answeredQuestion={props.answeredQuestion} />
-          <HomeSponsors sponsorCard={props.sponsorCard} />
+          <HomeSponsors />
           <HomeFooter />
         </div>
       </div>
@@ -104,10 +103,6 @@ export default function Home(props: {
 export const getStaticProps: GetStaticProps = async () => {
   const { data: answeredQuestion } = await RequestHelper.get<AnsweredQuestion[]>(
     `${process.env.BASE_URL}/api/questions/faq`,
-    {},
-  );
-  const { data: sponsorData } = await RequestHelper.get<Sponsor[]>(
-    `${process.env.BASE_URL}/api/sponsor`,
     {},
   );
   const { data: scheduleData } = await RequestHelper.get<ScheduleEvent[]>(
@@ -128,7 +123,6 @@ export const getStaticProps: GetStaticProps = async () => {
       challenges: challengeData,
       answeredQuestion: answeredQuestion,
       // fetchedMembers: memberData,
-      sponsorCard: sponsorData,
       scheduleCard: scheduleData,
       dateCard: dateData,
       // prizeData: prizeData,

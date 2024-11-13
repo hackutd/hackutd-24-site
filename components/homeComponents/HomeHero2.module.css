@@ -1,5 +1,4 @@
 .container::after {
-  content: '';
   position: absolute;
   top: 100dvh;
   left: 0;
