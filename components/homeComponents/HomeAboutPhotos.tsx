@@ -3,31 +3,31 @@ import birds from '../../public/assets/birds.png';
 import NumberTicker from '../NumberTicker';
 
 const HomeAboutPhotos = () => {
-  const [windowScroll, setWindowScroll] = useState(0);
+  // const [windowScroll, setWindowScroll] = useState(0);
+  //
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     setWindowScroll(window.scrollY);
+  //   };
+  //
+  //   window.addEventListener('scroll', handleScroll);
+  //
+  //   return () => {
+  //     window.removeEventListener('scroll', handleScroll);
+  //   };
+  // }, []);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setWindowScroll(window.scrollY);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-  const cloudStyle = {
-    transition: 'transform 0.3s ease-out',
-  };
-
-  const cloudLeftScroll = {
-    transform: `translateX(${windowScroll * (window.innerWidth <= 660 ? 0.2 : 0.42)}px)`,
-  };
-
-  const cloudRightScroll = {
-    transform: `translateX(${-1 * windowScroll * (window.innerWidth <= 660 ? 0.2 : 0.42)}px)`,
-  };
+  // const cloudStyle = {
+  //   transition: 'transform 0.3s ease-out',
+  // };
+  //
+  // const cloudLeftScroll = {
+  //   transform: `translateX(${windowScroll * (window.innerWidth <= 660 ? 0.2 : 0.42)}px)`,
+  // };
+  //
+  // const cloudRightScroll = {
+  //   transform: `translateX(${-1 * windowScroll * (window.innerWidth <= 660 ? 0.2 : 0.42)}px)`,
+  // };
 
   const balloonHoverStyle = {
     animation: 'balloonBob 1.5s infinite alternate ease-in-out',
