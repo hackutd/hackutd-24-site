@@ -6,7 +6,7 @@ const Livestream = () => {
       <div className="relative w-[90%] max-w-7xl">
         <div className="aspect-video w-full overflow-hidden rounded-lg bg-black/60 shadow-lg">
           <iframe
-            src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+            src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
