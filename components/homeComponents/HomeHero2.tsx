@@ -78,13 +78,7 @@ export default function HomeHero2() {
                   maxWidth: '800px',
                 }}
               >
-                <Image
-                  src={HackUTDTitle.src}
-                  alt="HackUTD Title"
-                  layout="responsive"
-                  width={HackUTDTitle.width}
-                  height={HackUTDTitle.height}
-                />
+                <Image src={HackUTDTitle.src} alt="HackUTD Title" width={800} height={600} />
               </div>
 
               {!isShort && (

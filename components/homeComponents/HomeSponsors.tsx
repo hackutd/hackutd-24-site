@@ -44,7 +44,7 @@ export default function HomeSponsors() {
                 maxWidth: '90vw',
               }}
             >
-              <Image src={PlaceholderMascot.src} layout="fill" alt="placeholder_5" />
+              <Image unoptimized src={PlaceholderMascot.src} layout="fill" alt="placeholder_5" />
             </div>
           </div>
         </div>

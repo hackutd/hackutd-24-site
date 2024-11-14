@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { config } from '../../hackportal.config';
 import styles from './HackCountdown.module.css';
-import Image from 'next/image';
 
 const Countdown = () => {
   const [timeLeft, setTimeLeft] = useState({
@@ -64,9 +63,7 @@ const Countdown = () => {
             className="relative w-full flex justify-center items-center"
             style={{ maxWidth: '1000px', height: 'auto' }}
           >
-            <div className={`w-full h-auto ${styles.cloud} `}>
-              <Image src="/assets/cloud.png" alt="Cloud" layout="fill" objectFit="contain" />
-            </div>
+            <img src="/assets/cloud.png" alt="Cloud" className={`w-full h-auto ${styles.cloud} `} />
             <div className="absolute flex flex-col items-center justify-center w-full h-full p-4 text-center">
               <h1 className="text-6xl md:text-6xl sm:text-md xs:text-small font-bold text-[#F7CE79] text-stroke">
                 COUNTDOWN
