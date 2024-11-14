@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { RequestHelper } from '@/lib/request-helper';
+import Image from 'next/image';
 
 export default function HomeFooter() {
   const [userEmail, setUserEmail] = useState<string>('');
@@ -36,17 +37,17 @@ export default function HomeFooter() {
           {/* Social Media Links */}
           <div className="flex space-x-4 mt-4">
             <a href="https://instagram.com/hackutd" target="_blank" rel="noopener noreferrer">
-              <img src="/assets/instagram.png" alt="Instagram" className="w-7 h-7" />
+              <Image width={28} height={28} src="/assets/instagram.png" alt="Instagram" />
             </a>
             <a
               href="https://linkedin.com/company/hackutd"
               target="_blank"
               rel="noopener noreferrer"
             >
-              <img src="/assets/linkedin.png" alt="LinkedIn" className="w-6 h-6" />
+              <Image width={24} height={24} src="/assets/linkedin.png" alt="LinkedIn" />
             </a>
             <a href="mailto:hello@hackutd.co">
-              <img src="/assets/gmail.png" alt="Email" className="w-7 h-7" />
+              <Image width={28} height={28} src="/assets/gmail.png" alt="Email" />
             </a>
           </div>
         </div>

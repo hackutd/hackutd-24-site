@@ -1,10 +1,8 @@
 import Head from 'next/head';
 import { GetStaticProps } from 'next';
 import { RequestHelper } from '../lib/request-helper';
-import HomeVideoStats from '../components/homeComponents/HomeVideoStats';
 import HomeAboutText from '../components/homeComponents/HomeAboutText';
 import HomeAboutPhotos from '../components/homeComponents/HomeAboutPhotos';
-import HackCountdown from '../components/homeComponents/HackCountdown';
 import HomeChallenges from '../components/homeComponents/HomeChallenges';
 import HomeSponsors from '../components/homeComponents/HomeSponsors';
 import HomeFooter from '../components/homeComponents/HomeFooter';
@@ -12,6 +10,7 @@ import HomeSchedule from '../components/homeComponents/HomeSchedule';
 import HomeFaq from '../components/homeComponents/HomeFaq';
 import HomeHero2 from '../components/homeComponents/HomeHero2';
 import Wave from '../components/homeComponents/Wave';
+import HackCountdown from '../components/homeComponents/HackCountdown';
 
 import themedBackground from '../public/assets/hackutd-bg.png';
 import countdownClouds from '../public/assets/countdown_clouds.png';
@@ -64,7 +63,7 @@ export default function Home(props: {
             <Wave />
             <HomeAboutPhotos />
             {/* <HomeVideoStats /> */}
-            {/* <HackCountdown /> */}
+            <HackCountdown />
           </div>
           <Image
             style={{

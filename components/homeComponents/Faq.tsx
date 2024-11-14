@@ -1,12 +1,9 @@
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import FaqDisclosure from './FaqDisclosure';
 import { RequestHelper } from '../../lib/request-helper';
 
-import Fish from '../../public/assets/koi.gif';
-
-import Image from 'next/image';
 import { SectionReferenceContext } from '@/lib/context/section';
 import Link from 'next/link';
 

@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
-import oceanBorder from '../../public/assets/ocean-border.png';
-import styles from './HomeAboutText.module.css';
 import { SectionReferenceContext } from '@/lib/context/section';
+import Image from 'next/image';
 
 const HomeAboutText = () => {
   const fish1HoverStyle = {
@@ -66,27 +65,29 @@ const HomeAboutText = () => {
           just getting started, we&apos;d love to see what you can make!
         </p>
         <div className="absolute inset-0 z-9">
-          <img
+          <Image
             src="/assets/koi.gif"
             alt="Fish"
             className="absolute hidden md:block"
+            width={0}
+            height={0}
+            sizes="10vh"
             style={{
               top: '-15vw',
               right: '15vw',
-              width: '10vw',
-              height: '10vw',
               ...fish1HoverStyle,
             }}
           />
-          <img
+          <Image
             src="/assets/koi.gif"
             alt="Fish"
+            width={0}
+            height={0}
+            sizes="10vh"
             className="absolute transform rotate-180 hidden md:block"
             style={{
               bottom: '-10vw',
               left: '15vw',
-              width: '10vw',
-              height: '10vw',
               ...fish2HoverStyle,
             }}
           />

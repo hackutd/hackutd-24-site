@@ -1,105 +1,87 @@
-import goldman_sachs from '../public/assets/sponsors/GoldmanSachs.png';
-import pinata from '../public/assets/sponsors/pinata2.png';
-import veolia from '../public/assets/sponsors/veolia.png';
-import samba_nova from '../public/assets/sponsors/SambaNova.png';
-import standout_stickers from '../public/assets/sponsors/stand-out-stickers-logo.png';
-import infosys from '../public/assets/sponsors/Infosys.png';
-import toyota from '../public/assets/sponsors/toyota.png';
-import cbre from '../public/assets/sponsors/CBRE.png';
-import saily from '../public/assets/sponsors/saily.png';
-import incogni from '../public/assets/sponsors/incogni.png';
-import eog from '../public/assets/sponsors/EOG_Resources-Logo.wine.png';
-import nordpass from '../public/assets/sponsors/nordpass.png';
-import pnc from '../public/assets/sponsors/PNC.png';
-import sf from '../public/assets/sponsors/SF.png';
-import benq from '../public/assets/sponsors/benq.png';
-import nordvpn from '../public/assets/sponsors/NordVPN.png';
-import frontier from '../public/assets/sponsors/Frontier.png';
-
 export const SPONSOR_LIST = [
   {
     link: 'https://www.goldmansachs.com/',
-    reference: goldman_sachs,
+    reference: '/assets/sponsors/GoldmanSachs.png',
     tier: 'gold',
   },
   {
     link: 'https://pinata.cloud/',
-    reference: pinata,
+    reference: '/assets/sponsors/pinata2.png',
     tier: 'platinum',
   },
   {
     link: 'https://www.veolianorthamerica.com/',
-    reference: veolia,
+    reference: '/assets/sponsors/veolia.png',
     tier: 'silver',
   },
   {
     link: 'https://sambanova.ai/enterprise-ai-careers-job-openings',
-    reference: samba_nova,
+    reference: '/assets/sponsors/SambaNova.png',
     tier: 'silver',
   },
   {
     link: 'https://www.standoutstickers.com',
-    reference: standout_stickers,
+    reference: '/assets/sponsors/stand-out-stickers-logo.png',
     tier: 'bronze',
   },
   {
     link: 'https://www.infosys.com/',
-    reference: infosys,
+    reference: '/assets/sponsors/Infosys.png',
     tier: 'gold',
   },
   {
     link: 'https://www.toyota.com/',
-    reference: toyota,
+    reference: '/assets/sponsors/toyota.png',
     tier: 'silver',
   },
   {
     link: 'https://www.cbre.com/',
-    reference: cbre,
+    reference: '/assets/sponsors/CBRE.png',
     tier: 'gold',
   },
   {
     link: 'https://saily.com/',
-    reference: saily,
+    reference: '/assets/sponsors/saily.png',
     tier: 'bronze',
   },
   {
     link: 'https://incogni.com/',
-    reference: incogni,
+    reference: '/assets/sponsors/incogni.png',
     tier: 'bronze',
   },
   {
     link: 'https://www.eogresources.com/',
-    reference: eog,
+    reference: '/assets/sponsors/EOG_Resources-Logo.wine.png',
     tier: 'gold',
   },
   {
     link: 'https://nordpass.com/',
-    reference: nordpass,
+    reference: '/assets/sponsors/nordpass.png',
     tier: 'bronze',
   },
   {
     link: 'https://www.pnc.com/',
-    reference: pnc,
+    reference: '/assets/sponsors/PNC.png',
     tier: 'title',
   },
   {
     link: 'https://www.statefarm.com/',
-    reference: sf,
+    reference: '/assets/sponsors/SF.png',
     tier: 'bronze',
   },
   {
     link: 'https://www.benq.com/en-us/index.html',
-    reference: benq,
+    reference: '/assets/sponsors/benq.png',
     tier: 'bronze',
   },
   {
     link: 'https://nordvpn.com/',
-    reference: nordvpn,
+    reference: '/assets/sponsors/NordVPN.png',
     tier: 'bronze',
   },
   {
     link: 'https://frontier.com/',
-    reference: frontier,
+    reference: '/assets/sponsors/Frontier.png',
     tier: 'silver',
   },
 ];
