@@ -84,6 +84,15 @@ export default function AppHeader2_Core(props: Props) {
         },
       },
       {
+        text: 'Hackerpacks',
+        onClick: async () => {
+          if (Object.hasOwn(callbackRegistry, router.pathname)) {
+            await callbackRegistry[router.pathname]();
+          }
+          router.push('/hackerpacks');
+        },
+      },
+      {
         text: 'Schedule',
         onClick: () => {
           if (router.pathname === '/') {
