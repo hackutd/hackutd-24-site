@@ -7,6 +7,7 @@ import Track2Image from '../../public/assets/track_2.png';
 import Track3Image from '../../public/assets/track_3.png';
 
 import styles from './HomeChallenges.module.css';
+import Image from 'next/image';
 
 const CHALLENGE_TRACKS = [
   {
@@ -31,7 +32,17 @@ const CHALLENGE_TRACKS = [
 
 export default function HomeChallengesComponent(props: { challenges: Challenge[] }) {
   return (
-    <section className={`${styles.container} m-auto pb-[20rem] relative`}>
+    <section className={`overflow-hidden m-auto pb-[20rem] relative w-screen h-full`}>
+      <Image
+        style={{
+          objectPosition: '0 0',
+          animation: 'animatedBackground 30s linear infinite',
+        }}
+        src="/assets/middle_wave.png"
+        alt="wave background"
+        fill
+        className="object-cover z-0 opacity-50 absolute top-0 left-0 w-full"
+      />
       <div className={styles.content}>
         <div
           style={{ textShadow: '0 4px 4px rgba(0, 0, 0, 0.25)' }}
