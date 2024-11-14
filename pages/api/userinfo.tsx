@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { auth, firestore } from 'firebase-admin';
 import initializeApi from '../../lib/admin/init';
+import { computeHash, determineColorByTeamIdx } from '@/lib/stats/group';
 
 initializeApi();
 
@@ -100,11 +101,16 @@ async function handleUserInfo(req: NextApiRequest, res: NextApiResponse) {
     if (!snapshot.exists)
       return res.status(404).json({ code: 'not found', message: "User doesn't exist..." });
     const applicationStatus = await getApplicationDecision(userID);
+    const userData = snapshot.data();
     return res.status(200).json({
-      ...snapshot.data(),
+      ...userData,
       status: applicationStatus,
       createdAt: snapshot.createTime.toDate(),
       updatedAt: snapshot.updateTime.toDate(),
+      user: {
+        ...userData.user,
+        group: determineColorByTeamIdx(computeHash(userData.id)),
+      },
     });
   } catch (error) {
     console.error('Error when fetching applications', error);
