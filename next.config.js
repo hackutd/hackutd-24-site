@@ -39,6 +39,16 @@ const withPWA = require('next-pwa')({
         destination: '/parking.pdf',
         permanent: true,
       },
+      {
+        source: '/menu',
+        destination: '/menu.pdf',
+        permanent: true,
+      },
+      {
+        source: '/hackerpacks',
+        destination: 'https://www.notion.so/hackutd/Hackerpack-1130d994cbb980e59d90ef16445ab97d',
+        permanent: true,
+      },
     ];
   },
 
