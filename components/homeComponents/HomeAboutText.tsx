@@ -129,7 +129,7 @@ const HomeAboutText = () => {
           just getting started, we&apos;d love to see what you can make!
         </p>
 
-        <div className="absolute inset-0 z-9">
+        <div className="absolute inset-0 z-9999">
           <img
             src="/assets/koi.gif"
             alt="Fish"

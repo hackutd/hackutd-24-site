@@ -481,7 +481,7 @@ export default function HomeHero2() {
           {showSlingshot && (
             <div
               ref={slingshotRef}
-              className="absolute inset-0 z-20 flex items-center justify-center pointer-events-auto"
+              className="absolute inset-0 flex items-center justify-center pointer-events-auto"
               style={{
                 background: `url(${noLPHero.src})`,
                 backgroundSize: '100% 100%',
