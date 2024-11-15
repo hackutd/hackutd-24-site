@@ -93,7 +93,7 @@ const HomeAboutPhotos = () => {
             <NumberTicker value={24} /> hours
           </p>
           <p className="text-5xl font-bold">
-            $<NumberTicker value={50000} /> in prizes
+            $<NumberTicker value={120000} /> in prizes
           </p>
           <p className="text-5xl font-bold">
             <NumberTicker value={200} />+ projects
