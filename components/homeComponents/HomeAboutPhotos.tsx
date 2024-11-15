@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import birds from '../../public/assets/birds.png';
+import frogBalloonMoving from '../../public/assets/frog-balloon-moving.gif';
 import NumberTicker from '../NumberTicker';
+import Image from 'next/image';
 
 const HomeAboutPhotos = () => {
   const [windowScroll, setWindowScroll] = useState(0);
@@ -79,9 +81,11 @@ const HomeAboutPhotos = () => {
           className="order-2 lg:order-1 flex justify-center items-center z-20 lg:justify-end lg:mr-8"
           style={balloonHoverStyle}
         >
-          <img
-            src="/assets/frog-balloon-moving.gif"
-            alt="Balloon"
+          <Image
+            src={frogBalloonMoving.src}
+            height={frogBalloonMoving.height}
+            width={frogBalloonMoving.width}
+            alt="frog-balloon-moving.gif"
             className="w-80 h-auto object-cover"
           />
         </div>
@@ -89,12 +93,15 @@ const HomeAboutPhotos = () => {
           <p className="text-5xl font-bold stroke-rose-700">
             <NumberTicker value={1000} />+ Hackers
           </p>
+
           <p className="text-5xl font-bold">
             <NumberTicker value={24} /> hours
           </p>
+
           <p className="text-5xl font-bold">
             $<NumberTicker value={120000} /> in prizes
           </p>
+
           <p className="text-5xl font-bold">
             <NumberTicker value={200} />+ projects
           </p>

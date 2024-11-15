@@ -24,6 +24,7 @@ const successStrings = {
   unexpectedError: 'Unexpected error...',
   notCheckedIn: "User hasn't checked in!",
   invalidFormat: 'Invalid hacker tag format...',
+  lateCheckinIneligible: 'User is not eligible for late check-in...',
 };
 
 interface UserProfile extends Omit<Registration, 'user'> {
@@ -57,7 +58,7 @@ export default function QRScanDialog({ scan, onModalClose }: QRScanDialogProps) 
     }
     const query = new URL(`http://localhost:3000/api/scan`);
     query.searchParams.append('id', data.replaceAll('hack:', ''));
-    fetch(query.toString().replaceAll('http://localhost:3000', ''), {
+    await fetch(query.toString().replaceAll('http://localhost:3000', ''), {
       mode: 'cors',
       headers: { Authorization: user.token },
       method: 'POST',
@@ -81,6 +82,8 @@ export default function QRScanDialog({ scan, onModalClose }: QRScanDialogProps) 
           return setSuccess(successStrings.alreadyClaimed);
         } else if (result.status === 403) {
           return setSuccess(successStrings.notCheckedIn);
+        } else if (result.status === 400) {
+          return setSuccess(successStrings.lateCheckinIneligible);
         } else if (result.status !== 200) {
           return setSuccess(successStrings.unexpectedError);
         }

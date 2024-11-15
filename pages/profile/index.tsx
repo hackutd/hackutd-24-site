@@ -13,6 +13,7 @@ import { TextField, TextFieldProps } from '@mui/material';
 import Link from 'next/link';
 import { RequestHelper } from '@/lib/request-helper';
 import DeleteProfileDialog from '@/components/profileComponents/DeleteProfileDialog';
+import QRCodeStyling from 'qr-code-styling';
 
 /**
  * A page that allows a user to modify app or profile settings and see their data.
@@ -199,11 +200,11 @@ export default function ProfilePage() {
               {/* Dark represents dots, Light represents the background */}
               <QRCode
                 data={'hack:' + user.id}
-                loading={false}
                 width={200}
                 height={200}
-                darkColor="#173950"
-                lightColor="#0000"
+                group={profile.user.group}
+                // darkColor="#173950"
+                // lightColor="#0000"
               />
               <div className="text-center text-[#170F49] text-md font-semibold">
                 {profile?.user.group ? profile?.user.group : 'Group TBD'}

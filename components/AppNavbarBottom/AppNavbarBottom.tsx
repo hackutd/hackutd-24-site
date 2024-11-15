@@ -204,7 +204,7 @@ export default function AppNavbarBottom(props: Props) {
           distanceMagnify: 80,
         }}
         classes={{
-          wrapperDiv: clsx('gap-4 flex items-center justify-center'),
+          wrapperDiv: clsx('gap-4 flex items-center justify-center flex-wrap'),
         }}
         items={floatingDockItems()}
       />
