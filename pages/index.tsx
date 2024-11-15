@@ -106,7 +106,7 @@ export default function Home(props: {
             <div className="relative z-[2]">
               <Wave />
               <HomeAboutPhotos />
-              {screen.width >= 1000 && <HomeVideoStats />}
+              <HomeVideoStats />
               <HackCountdown />
             </div>
           </div>
