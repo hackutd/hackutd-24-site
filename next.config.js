@@ -49,6 +49,11 @@ const withPWA = require('next-pwa')({
         destination: 'https://www.notion.so/hackutd/Hackerpack-1130d994cbb980e59d90ef16445ab97d',
         permanent: true,
       },
+      {
+        source: '/live',
+        destination: 'https://hackutd-24-site-git-develop-acmutd.vercel.app/live',
+        permanent: false,
+      },
     ];
   },
 
