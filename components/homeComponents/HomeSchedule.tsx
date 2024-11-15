@@ -12,6 +12,9 @@ import topLilypad from '../../public/assets/top_lilypads.png';
 import styles from './HomeSchedule.module.css';
 import HomeSpeakers from './HomeSpeakers2';
 
+import { ChevronDownIcon } from '@heroicons/react/solid';
+import { ChevronUpIcon } from '@heroicons/react/solid';
+
 const eventColors = {
   All: 'border-gray-500 text-gray-500 bg-white',
   Required: 'border-[#EF6C8B] text-[#EF6C8B] bg-white',
@@ -42,13 +45,27 @@ const Event = ({ data, index, arrayLength, isLastElement, filter }) => {
 
   const showEvent = filter === 'All' || filter === data.type;
 
+  const [showDescription, setShowDescription] = useState(false);
+
   return (
     showEvent && (
       <>
-        <div className={`${!isLastElement ? 'border-b border-[#4D8889]' : ''} p-2`}>
-          <div className="flex justify-between pb-1">
+        <div
+          onClick={() => setShowDescription(!showDescription)}
+          className={`${!isLastElement ? 'border-b border-[#4D8889]' : ''} p-2`}
+        >
+          <div className="flex justify-between">
             <div className="text-md font-bold font-dmSans">{formattedTime}</div>
-            <div className="text-right pl-4 text-md font-bold font-dmSans">{data.title}</div>
+            <div className="flex text-right pl-4 text-md font-bold font-dmSans">
+              {data.title}
+              <p>
+                {!showDescription ? (
+                  <ChevronDownIcon className="text-gray-400 mt-2 ml-2 transition transform duration-300 ease-in-out w-5 h-5" />
+                ) : (
+                  <ChevronUpIcon className="text-gray-400 mt-2 ml-2 transition transform duration-300 ease-in-out w-5 h-5" />
+                )}
+              </p>
+            </div>
           </div>
           <div className="flex justify-between">
             <div
@@ -58,10 +75,17 @@ const Event = ({ data, index, arrayLength, isLastElement, filter }) => {
             >
               {data.type}
             </div>
-            <div className="text-gray-600 flex items-center font-dmSans">
+            <div className="text-gray-600 flex items-center font-dmSans mr-7">
               <LocationOnIcon style={{ fontSize: 'large', marginRight: '2px' }} />
               {data.location}
             </div>
+          </div>
+          <div className="max-w-full">
+            {showDescription && (
+              <div className="break-words whitespace-normal overflow-y-auto overflow-hidden text-gray-500 font-dmSans text-sm mt-2">
+                {data.description}
+              </div>
+            )}
           </div>
         </div>
       </>
@@ -258,7 +282,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
             >
               Day 1: Saturday
             </div>
-            <div className="bg-white mb-8 mx-2 p-2 border-2 rounded-3xl border-[#05149C] border-opacity-20">
+            <div className="content-center mx-auto max-w-sm md:max-w-xs lg:max-w-md bg-white mb-8 mx-2 p-2 border-2 rounded-3xl border-[#05149C] border-opacity-20">
               {day1Events}
             </div>
           </div>
@@ -270,7 +294,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
             >
               Day 2: Sunday
             </div>
-            <div className="bg-white mb-8 mx-2 p-2 border-2 rounded-3xl border-[#05149C] border-opacity-20">
+            <div className="content-center mx-auto max-w-sm md:max-w-xs lg:max-w-md bg-white mb-8 mx-2 p-2 border-2 rounded-3xl border-[#05149C] border-opacity-20">
               {day2Events}
             </div>
           </div>
