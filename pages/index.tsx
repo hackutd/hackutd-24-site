@@ -73,7 +73,7 @@ export default function Home(props: {
             backgroundRepeat: 'no-repeat',
           }}
         />
-        <div style={{ position: 'relative', zIndex: 1 }}>
+        <div style={{ position: 'relative', zIndex: 1, overflowX: 'hidden' }}>
           <div
             style={{
               position: 'relative',
