@@ -219,69 +219,9 @@ export default function HomeHero2() {
   const slingshotRef = useRef(null);
   const lilyPadsRef = useRef(null);
   const backgroundRef = useRef(null);
+  const heroContentRef = useRef(null);
 
   const isDesktop = window.matchMedia('(min-width: 1024px)').matches;
-
-  useEffect(() => {
-    if (isHeroLoaded) {
-      const tl = gsap.timeline({ delay: 0.5 });
-
-      if (titleRef.current) {
-        tl.fromTo(
-          titleRef.current,
-          { opacity: 0, y: 50, scale: 0.8 },
-          { opacity: 1, y: 0, scale: 1, duration: 1.5, ease: 'power4.out' },
-        );
-      }
-
-      if (duckRef.current) {
-        tl.fromTo(
-          duckRef.current,
-          { opacity: 0, x: 100, scale: 0.8 },
-          { opacity: 1, x: 0, scale: 1, duration: 1.5, ease: 'power4.out' },
-          '-=1',
-        );
-      }
-
-      if (mascotRef.current) {
-        tl.fromTo(
-          mascotRef.current,
-          { opacity: 0, y: 100, scale: 0.8 },
-          { opacity: 1, y: 0, scale: 1, duration: 1.5, ease: 'power4.out' },
-          '-=1.2',
-        );
-      }
-
-      if (welcomeTextRef.current) {
-        const welcomeSplit = new SplitType(welcomeTextRef.current, { types: 'words,chars' });
-        tl.fromTo(
-          welcomeSplit.chars,
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, stagger: 0.02, duration: 0.5, ease: 'power3.out' },
-          '-=1',
-        );
-      }
-
-      if (dateTextRef.current) {
-        const dateSplit = new SplitType(dateTextRef.current, { types: 'words,chars' });
-        tl.fromTo(
-          dateSplit.chars,
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, stagger: 0.02, duration: 0.5, ease: 'power3.out' },
-          '-=0.5',
-        );
-      }
-
-      if (applyButtonRef.current) {
-        tl.fromTo(
-          applyButtonRef.current,
-          { opacity: 0, y: 50 },
-          { opacity: 1, y: 0, duration: 1.5, ease: 'power3.out' },
-          '-=0.5',
-        );
-      }
-    }
-  }, [isHeroLoaded]);
 
   const handleMascotClick = (color) => {
     if (!isDesktop) return;
@@ -296,24 +236,18 @@ export default function HomeHero2() {
       backgroundRef.current.style.backgroundPosition = 'center';
     }
 
-    tl.to(
-      [
-        welcomeTextRef.current,
-        titleRef.current,
-        dateTextRef.current,
-        applyButtonRef.current,
-        duckRef.current,
-        mascotRef.current,
-        lilyPadsRef.current,
-      ].filter(Boolean),
-      {
-        opacity: 0,
-        y: -50,
-        duration: 1.5,
-        ease: 'power3.inOut',
-        onComplete: () => setShowSlingshot(true),
+    // Modified animation to completely hide hero content
+    tl.to(heroContentRef.current, {
+      opacity: 0,
+      duration: 1,
+      ease: 'power3.inOut',
+      onComplete: () => {
+        if (heroContentRef.current) {
+          heroContentRef.current.style.display = 'none';
+        }
+        setShowSlingshot(true);
       },
-    );
+    });
   };
 
   const handleClose = () => {
@@ -325,26 +259,20 @@ export default function HomeHero2() {
 
     tl.to(slingshotRef.current, {
       opacity: 0,
-      duration: 1.5,
+      duration: 1,
       ease: 'power3.inOut',
-      onComplete: () => setShowSlingshot(false),
-    }).to(
-      [
-        welcomeTextRef.current,
-        titleRef.current,
-        dateTextRef.current,
-        applyButtonRef.current,
-        duckRef.current,
-        mascotRef.current,
-        lilyPadsRef.current,
-      ].filter(Boolean),
-      {
-        opacity: 1,
-        y: 0,
-        duration: 1.5,
-        ease: 'power3.inOut',
+      onComplete: () => {
+        setShowSlingshot(false);
+        if (heroContentRef.current) {
+          heroContentRef.current.style.display = 'flex';
+          gsap.to(heroContentRef.current, {
+            opacity: 1,
+            duration: 1,
+            ease: 'power3.inOut',
+          });
+        }
       },
-    );
+    });
   };
 
   return (
@@ -376,7 +304,8 @@ export default function HomeHero2() {
           </p>
         </div>
 
-        <div className="flex-grow flex h-full w-full relative">
+        {/* Hero content wrapper */}
+        <div ref={heroContentRef} className="flex-grow flex h-full w-full relative">
           <div className="relative z-10 shrink-0 w-full flex">
             {/* MLH sticker */}
             <div className="absolute top-[1.75rem] sm:top-0 right-4 z-20 transition-all">
@@ -415,7 +344,6 @@ export default function HomeHero2() {
                 className="relative flex flex-col items-center gap-2"
                 style={{ paddingTop: '8vh' }}
               >
-                {/* Title */}
                 <div
                   ref={titleRef}
                   className="w-[80vw] md:w-[60vw] lg:w-[50vw]"
@@ -432,7 +360,6 @@ export default function HomeHero2() {
                   />
                 </div>
 
-                {/* Date */}
                 <p
                   ref={dateTextRef}
                   className="font-montserrat text-[#FFFFFF] text-xs sm:text-sm md:text-md lg:text-lg xl:text-xl font-semibold"
@@ -448,7 +375,6 @@ export default function HomeHero2() {
           </div>
 
           <div className="absolute bottom-[20%] left-0 lg:left-[2%] lg:bottom-[25%] z-20">
-            {/* Mascot image */}
             <div
               ref={mascotRef}
               onClick={() => handleMascotClick('red')}
@@ -467,18 +393,18 @@ export default function HomeHero2() {
               />
             </div>
           </div>
+        </div>
 
-          {/* Close button for slingshot */}
-          {showSlingshot && (
+        {/* Slingshot section */}
+        {showSlingshot && (
+          <>
             <button
               onClick={handleClose}
               className="absolute top-12 left-8 z-[60] p-4 rounded-full bg-white/80 transition-opacity duration-200 pointer-events-auto shadow-lg border border-gray-200"
             >
               <X className="w-6 h-6 text-gray-800" />
             </button>
-          )}
 
-          {showSlingshot && (
             <div
               ref={slingshotRef}
               className="absolute inset-0 flex items-center justify-center pointer-events-auto"
@@ -492,7 +418,23 @@ export default function HomeHero2() {
             >
               <SlingshotSimulation />
             </div>
-          )}
+          </>
+        )}
+        {/* Learn More Text and Arrow */}
+        <div className="absolute bottom-5 w-full flex flex-col items-center z-20">
+          <p className="font-montserrat text-white text-lg md:text-xl">Learn More</p>
+          <div className="animate-bounce">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="2"
+              stroke="white"
+              className="w-6 h-6 md:w-8 md:h-8 mt-2"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
         </div>
       </section>
     </>
