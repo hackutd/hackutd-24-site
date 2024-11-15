@@ -19,12 +19,15 @@ import cloud from '../public/assets/cloud.png';
 import topBg from '../public/assets/topBg.png';
 
 import Image from 'next/image';
+import HomeChallengesComponent from '@/components/homeComponents/HomeChallenges';
 
 export default function Home(props: {
   answeredQuestion: AnsweredQuestion[];
   sponsorCard: Sponsor[];
   scheduleCard: ScheduleEvent[];
   dateCard: Dates;
+  challenges: Challenge[];
+  prizeData: Array<{ rank: number; prizeName: string }>;
 }) {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -93,7 +96,7 @@ export default function Home(props: {
             alt="cloud.png"
           />
           <HomeSchedule scheduleCard={props.scheduleCard} dateCard={props.dateCard} />
-          {/* <HomeChallenges challenges={props.challenges} /> */}
+          <HomeChallengesComponent challenges={props.challenges} />
           {/* include HomePrizes in HomeChallenges */}
           {/* <HomePrizes prizes={props.prizeData} /> */}
           <HomeFaq answeredQuestion={props.answeredQuestion} />
@@ -107,6 +110,18 @@ export default function Home(props: {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const protocol = context.req.headers.referer?.split('://')[0] || 'http';
+  // const { data: keynoteData } = await RequestHelper.get<KeynoteSpeaker[]>(
+  //   `${protocol}://${context.req.headers.host}/api/keynotespeakers`,
+  //   {},
+  // );
+  const { data: challengeData } = await RequestHelper.get<Challenge[]>(
+    `${protocol}://${context.req.headers.host}/api/challenges/`,
+    {},
+  );
+  const { data: prizeData } = await RequestHelper.get<Array<{ rank: number; prizeName: string }>>(
+    `${protocol}://${context.req.headers.host}/api/prizes`,
+    {},
+  );
   const { data: answeredQuestion } = await RequestHelper.get<AnsweredQuestion[]>(
     `${protocol}://${context.req.headers.host}/api/questions/faq`,
     {},
@@ -121,9 +136,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   );
   return {
     props: {
+      // keynoteSpeakers: keynoteData,
+      challenges: challengeData,
       answeredQuestion: answeredQuestion,
       scheduleCard: scheduleData,
       dateCard: dateData,
+      prizeData: prizeData,
     },
   };
 };
