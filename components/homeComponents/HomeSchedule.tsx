@@ -16,8 +16,8 @@ import BoulderRight from 'public/assets/boulderRight.png';
 import { SectionReferenceContext } from '@/lib/context/section';
 import HomeSpeakers from './HomeSpeakers2';
 
-import { PlusIcon } from '@heroicons/react/solid';
-import { MinusIcon } from '@heroicons/react/solid';
+import { ChevronDownIcon } from '@heroicons/react/solid';
+import { ChevronUpIcon } from '@heroicons/react/solid';
 
 const eventColors = {
   All: 'border-gray-500 text-gray-500 bg-white',
@@ -64,9 +64,9 @@ const Event = ({ data, index, arrayLength, isLastElement, filter }) => {
               {data.title}
               <p>
                 {!showDescription ? (
-                  <PlusIcon className="text-gray-400 mt-2 ml-2 transition transform duration-300 ease-in-out w-5 h-5" />
+                  <ChevronDownIcon className="text-gray-400 mt-2 ml-2 transition transform duration-300 ease-in-out w-5 h-5" />
                 ) : (
-                  <MinusIcon className="text-gray-400 mt-2 ml-2 transition transform duration-300 ease-in-out w-5 h-5" />
+                  <ChevronUpIcon className="text-gray-400 mt-2 ml-2 transition transform duration-300 ease-in-out w-5 h-5" />
                 )}
               </p>
             </div>
