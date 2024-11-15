@@ -5,10 +5,17 @@ import HomeChallengeTrackCard from './HomeChallengeTrackCard';
 import Track1Image from '../../public/assets/track_1.png';
 import Track2Image from '../../public/assets/track_2.png';
 import Track3Image from '../../public/assets/track_3.png';
+import GrandPrize from '../../public/assets/mac.png';
 
 import styles from './HomeChallenges.module.css';
 
 const CHALLENGE_TRACKS = [
+  {
+    title: 'First Place Software',
+    subtitle: '1st place software',
+    description: 'Short description of the speaker blah blah blah blah blah blah blah',
+    imgSrc: GrandPrize.src,
+  },
   {
     title: 'First Place Software',
     subtitle: '1st place software',
@@ -48,7 +55,7 @@ export default function HomeChallengesComponent(props: { challenges: Challenge[]
           </div>
 
           {/* Challenge Tracks */}
-          <div className="flex pt-14 px-16 flex-wrap">
+          <div className="flex pt-14 px-16 flex-nowrap gap-4">
             {CHALLENGE_TRACKS.map((track, idx) => (
               <HomeChallengeTrackCard key={idx} challengeTrack={track} blockType={idx % 3} />
             ))}
