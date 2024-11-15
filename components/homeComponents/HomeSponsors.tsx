@@ -1,27 +1,16 @@
 import LogoContext from '@/lib/context/logo';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import PlaceholderMascot from '../../public/assets/Reveal.gif';
 import styles from './HomeSponsors.module.css';
 import SponsorCard from './SponsorCard';
 import TierTitle from './TierTitle';
+import { SPONSOR_LIST } from '@/lib/sponsors';
 
-// import Wave2 from '../assets/Wave2';
-// import PlaceholderMascot1 from '../../public/assets/Mascot.gif';
-// import PlaceholderMascot2 from '../../public/assets/Corgi.gif';
-// import PlaceholderMascot3 from '../../public/assets/Capybara.gif';
-// import PlaceholderMascot4 from '../../public/assets/Duck.gif';
-// import PlaceholderMascot5 from '../../public/assets/Frog.gif';
-
-export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
-  const [sponsor, setSponsor] = useState<Sponsor[]>([]);
+export default function HomeSponsors() {
   const [currentHoveredLogo, setCurrentHoveredLogo] = useState<string>('');
 
-  useEffect(() => {
-    setSponsor(props.sponsorCard);
-  }, [props.sponsorCard]);
-
-  const sponsorTiers: { [key: string]: Sponsor[] } = sponsor.reduce((acc, curr) => {
+  const sponsorTiers: { [key: string]: Sponsor[] } = SPONSOR_LIST.reduce((acc, curr) => {
     const tier = curr.tier;
     if (!acc[tier]) {
       acc[tier] = [];
@@ -31,7 +20,7 @@ export default function HomeSponsors(props: { sponsorCard: Sponsor[] }) {
   }, {} as { [key: string]: Sponsor[] });
 
   return (
-    sponsor.length != 0 && (
+    SPONSOR_LIST.length != 0 && (
       <section className="relative pt-[10rem] bg-[#DAC397] font-fredoka">
         {/* TODO: will update styling better once get more assets and finalized content */}
         <div>
