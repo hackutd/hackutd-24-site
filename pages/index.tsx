@@ -27,14 +27,9 @@ export default function Home(props: {
 }) {
   return (
     <>
-      <Head>
-        <title>HackUTD 2024</title>
-        <meta name="description" content="A default HackPortal instance" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       {/* <HomeNotif /> */}
-      <HomeHero2 />
-      <HomeAboutText />
+      {/* <HomeHero2 /> */}
+      {/* <HomeAboutText /> */}
       <div style={{ position: 'relative', zIndex: 0 }}>
         <div
           style={{
@@ -60,10 +55,10 @@ export default function Home(props: {
               backgroundRepeat: 'no-repeat',
             }}
           >
-            <Wave />
-            <HomeAboutPhotos />
+            {/* <Wave /> */}
+            {/* <HomeAboutPhotos /> */}
             {/* <HomeVideoStats /> */}
-            <HackCountdown />
+            {/* <HackCountdown /> */}
           </div>
           <Image
             style={{

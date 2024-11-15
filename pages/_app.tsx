@@ -1,9 +1,3 @@
-// core styles shared by all of react-notion-x (required)
-import 'react-notion-x/src/styles.css';
-// used for code syntax highlighting
-import 'prismjs/themes/prism-tomorrow.css';
-// used for rendering equations
-import 'katex/dist/katex.min.css';
 import '../styles/globals.css';
 import '../styles/tailwind.css';
 
@@ -19,7 +13,6 @@ import { AppProps } from 'next/dist/shared/lib/router/router';
 import Head from 'next/head';
 import Image from 'next/image';
 import { initFirebase } from '../lib/firebase-client';
-import { FCMProvider } from '../lib/service-worker/FCMContext';
 import { AuthProvider } from '../lib/user/AuthContext';
 
 import AppHeader2_Wrapper from '@/components/AppHeader2/wrapper';
@@ -29,7 +22,6 @@ import { SectionReferenceContext } from '@/lib/context/section';
 import { useUrlHash } from '@/lib/hooks';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
-import { ParticlesContext } from '../components/Particles/ParticlesProvider';
 
 initFirebase();
 const duckBackgroundPathnames = ['/profile', '/profile/application/edit'];
