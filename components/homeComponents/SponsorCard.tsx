@@ -1,10 +1,9 @@
 import LogoContext from '@/lib/context/logo';
 import { useDelayUnmount } from '@/lib/hooks';
 import clsx from 'clsx';
-import firebase from 'firebase/compat/app';
 import 'firebase/compat/storage';
 import Image from 'next/image';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import LoadIcon from '../LoadIcon';
 
 interface SponsorCardProps {
@@ -24,43 +23,14 @@ const unmountedStyle = {
  * Keynote Speaker card for landing page.
  */
 export default function SponsorCard(props: SponsorCardProps) {
-  const [imgSrc, setImgSrc] = useState<string | undefined>(undefined);
-  const [alternativeImgSrc, setAlternativeImgSrc] = useState<string | undefined>(undefined);
-
-  const [loading, setLoading] = useState(true);
   const [hovering, setHovering] = useState(false);
 
   const { setCurrentHoveredLogo, currentHoveredLogo } = useContext(LogoContext);
 
-  const shouldRenderAlternativeImg = useDelayUnmount(hovering && Boolean(alternativeImgSrc), 100);
-
-  useEffect(() => {
-    Promise.all(
-      [
-        { imgRef: props.reference, setImgFunc: setImgSrc },
-        { imgRef: props.alternativeReference, setImgFunc: setAlternativeImgSrc },
-      ].map(async ({ imgRef, setImgFunc }) => {
-        if (imgRef !== undefined) {
-          const storageRef = firebase.storage().ref();
-          return storageRef
-            .child(`sponsor_images/${imgRef}`)
-            .getDownloadURL()
-            .then((url) => {
-              setImgFunc(url);
-            });
-        }
-      }),
-    )
-      .then(() => {
-        setLoading(false);
-      })
-      .catch((error) => {
-        setLoading(false);
-        console.error(error);
-      });
-  }, []);
-
-  if (loading) return <LoadIcon width={100} height={100} />;
+  const shouldRenderAlternativeImg = useDelayUnmount(
+    hovering && Boolean(props.alternativeReference),
+    100,
+  );
 
   return (
     <div
@@ -92,7 +62,7 @@ export default function SponsorCard(props: SponsorCardProps) {
         {shouldRenderAlternativeImg ? (
           <Image
             alt={`Sponsor Image ${props.alternativeReference}`}
-            src={alternativeImgSrc}
+            src={props.alternativeReference}
             width={props.tier === 'title' ? 600 : 200}
             height={props.tier === 'title' ? 600 : 200}
             layout="fixed"
@@ -106,7 +76,7 @@ export default function SponsorCard(props: SponsorCardProps) {
         ) : (
           <Image
             alt={`Sponsor Image ${props.reference}`}
-            src={imgSrc}
+            src={props.reference}
             width={props.tier === 'title' ? 600 : 200}
             height={props.tier === 'title' ? 600 : 200}
             layout="fixed"
