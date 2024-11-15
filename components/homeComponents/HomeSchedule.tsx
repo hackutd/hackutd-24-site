@@ -1,19 +1,15 @@
-import * as React from 'react';
-import { useState } from 'react';
+import middleWave from 'public/assets/middle_wave.png';
+import { SectionReferenceContext } from '@/lib/context/section';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import Image from 'next/image';
-
-import corgiOnBoat from '../../public/assets/corgi_on_boat.png';
-import styles from './HomeSchedule.module.css';
-
-// import rightLilypad from '../../public/assets/right_lilypads.png';
-import topLilypad from '../../public/assets/top_lilypads.png';
-// import leftLilypad from '../../public/assets/left_lilypads.png';
-import ducks from '../../public/assets/ducks-moving.gif';
-
 import BoulderLeft from 'public/assets/boulderLeft.png';
 import BoulderRight from 'public/assets/boulderRight.png';
-import { SectionReferenceContext } from '@/lib/context/section';
+import * as React from 'react';
+import { useState } from 'react';
+import corgiOnBoat from '../../public/assets/corgi_on_boat.png';
+import ducks from '../../public/assets/ducks-moving.gif';
+import topLilypad from '../../public/assets/top_lilypads.png';
+import styles from './HomeSchedule.module.css';
 import HomeSpeakers from './HomeSpeakers2';
 
 const eventColors = {
@@ -170,7 +166,16 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
 
   return (
     <div className={`${styles.container} pt-[8rem] relative`}>
+      <Image
+        src={middleWave.src}
+        height={middleWave.height}
+        width={middleWave.width}
+        alt="middle_wave.png"
+        className="absolute top-0 left-0 w-full h-full z-0"
+      />
+
       <BackgroundAssets />
+
       <div className={styles.content}>
         <HomeSpeakers />
         <div

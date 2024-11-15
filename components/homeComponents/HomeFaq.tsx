@@ -1,12 +1,6 @@
-import React, { useContext } from 'react';
+import Wave2 from '../assets/Wave2';
 import Faq from './Faq';
 import styles from './HomeFaq.module.css';
-import Wave2 from '../assets/Wave2';
-import { SectionReferenceContext } from '@/lib/context/section';
-import BoulderLeft from 'public/assets/boulderLeft.png';
-import BoulderRight from 'public/assets/boulderRight.png';
-import Image from 'next/image';
-import corgi from 'public/assets/corgi_on_boat.png';
 
 export default function HomeFaq(props: { answeredQuestion: AnsweredQuestion[] }) {
   return (
