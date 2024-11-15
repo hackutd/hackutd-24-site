@@ -1,6 +1,6 @@
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import FaqDisclosure from './FaqDisclosure';
 import { RequestHelper } from '../../lib/request-helper';
 
@@ -9,6 +9,7 @@ import Fish from '../../public/assets/koi.gif';
 import Image from 'next/image';
 import { SectionReferenceContext } from '@/lib/context/section';
 import Link from 'next/link';
+import gsap from 'gsap';
 
 /**
  * The FAQ page.
@@ -23,52 +24,61 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
     fetchedFaqs.map(() => false),
   );
   const { faqRef } = useContext(SectionReferenceContext);
+  const faqContainerRef = useRef(null); // Ref for the FAQ container
 
-  // Updated fish movement styles to simulate more fluid fish-like swimming motions and add underwater effect
-  const fish1HoverStyle = {
-    animation: 'fishSwim1 5s infinite alternate ease-in-out',
-    opacity: 0.6, // Lower opacity to simulate underwater look
-    filter: 'brightness(0.8) contrast(0.9) blur(1px)', // Add slight blur and reduce brightness
-  };
+  // Styles for fish animations
+  const fish1HoverStyle = { animation: 'moveLeftRight 2s infinite alternate' };
+  const fish2HoverStyle = { animation: 'moveUpDownLeftRight 4s infinite alternate' };
+  const fish3HoverStyle = { animation: 'moveUpDown 2s infinite alternate' };
 
-  const fish2HoverStyle = {
-    animation: 'fishSwim2 7s infinite alternate ease-in-out',
-    opacity: 0.6,
-    filter: 'brightness(0.8) contrast(0.9) blur(1px)',
-  };
+  // GSAP animation on FAQ items when they come into view
+  useEffect(() => {
+    const handleIntersection = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          gsap.to(entry.target, {
+            opacity: 1,
+            y: 0,
+            stagger: 0.1,
+            duration: 1,
+            ease: 'power3.out',
+          });
+        }
+      });
+    };
 
-  const fish3HoverStyle = {
-    animation: 'fishSwim3 6s infinite alternate ease-in-out',
-    opacity: 0.6,
-    filter: 'brightness(0.8) contrast(0.9) blur(1px)',
-  };
+    const observer = new IntersectionObserver(handleIntersection, { threshold: 0.1 });
+    if (faqContainerRef.current) {
+      const faqBoxes = faqContainerRef.current.querySelectorAll('.faq-box');
+      faqBoxes.forEach((box) => {
+        gsap.set(box, { opacity: 0, y: 50 }); // Initial hidden state for each FAQ item
+        observer.observe(box);
+      });
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div ref={faqRef} id="faq-section" className="flex flex-col flex-grow relative">
       <style>
         {`
-          @keyframes fishSwim1 {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(10px, -5px) rotate(5deg); }
-            50% { transform: translate(20px, 0) rotate(0deg); }
-            75% { transform: translate(10px, 5px) rotate(-5deg); }
-            100% { transform: translate(0, 0) rotate(0deg); }
+          @keyframes moveUpDown {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-8px); }
           }
 
-          @keyframes fishSwim2 {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(-10px, 10px) rotate(-10deg); }
-            50% { transform: translate(-20px, 0) rotate(0deg); }
-            75% { transform: translate(-10px, -10px) rotate(10deg); }
-            100% { transform: translate(0, 0) rotate(0deg); }
+          @keyframes moveUpDownLeftRight {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(4px, -4px); }
+            50% { transform: translate(8px, 0); }
+            75% { transform: translate(4px, 4px); }
+            100% { transform: translate(0, 0); }
           }
 
-          @keyframes fishSwim3 {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(8px, -8px) rotate(8deg); }
-            50% { transform: translate(16px, 0) rotate(0deg); }
-            75% { transform: translate(8px, 8px) rotate(-8deg); }
-            100% { transform: translate(0, 0) rotate(0deg); }
+          @keyframes moveLeftRight {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(8px); }
           }
         `}
       </style>
@@ -118,43 +128,42 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
             </div>
           </div>
           {/* FAQ for lg-md */}
-          {/* Uses different section for mobile because using 2 columns is buggy when expanding FAQs */}
           <div className="hidden lg:grid lg:grid-cols-2 gap-4">
-            {/* TODO: add faq header card */}
             <div className="w-full my-3 pl-[8vw] space-y-4">
               {faqs.map(
                 ({ question, answer }, idx) =>
                   idx % 2 === 0 && (
-                    <FaqDisclosure
-                      key={idx}
-                      question={question}
-                      answer={answer}
-                      isOpen={disclosuresStatus[idx]}
-                      toggleDisclosure={() => {
-                        const currDisclosure = [...disclosuresStatus];
-                        currDisclosure[idx] = !currDisclosure[idx];
-                        setDisclosureStatus(currDisclosure);
-                      }}
-                    />
+                    <div key={idx} className="faq-box">
+                      <FaqDisclosure
+                        question={question}
+                        answer={answer}
+                        isOpen={disclosuresStatus[idx]}
+                        toggleDisclosure={() => {
+                          const currDisclosure = [...disclosuresStatus];
+                          currDisclosure[idx] = !currDisclosure[idx];
+                          setDisclosureStatus(currDisclosure);
+                        }}
+                      />
+                    </div>
                   ),
               )}
             </div>
-            {/* Right column for odd index FAQs */}
             <div className="w-full my-3 pr-[8vw] space-y-4">
               {faqs.map(
                 ({ question, answer }, idx) =>
                   idx % 2 !== 0 && (
-                    <FaqDisclosure
-                      key={idx}
-                      question={question}
-                      answer={answer}
-                      isOpen={disclosuresStatus[idx]}
-                      toggleDisclosure={() => {
-                        const currDisclosure = [...disclosuresStatus];
-                        currDisclosure[idx] = !currDisclosure[idx];
-                        setDisclosureStatus(currDisclosure);
-                      }}
-                    />
+                    <div key={idx} className="faq-box">
+                      <FaqDisclosure
+                        question={question}
+                        answer={answer}
+                        isOpen={disclosuresStatus[idx]}
+                        toggleDisclosure={() => {
+                          const currDisclosure = [...disclosuresStatus];
+                          currDisclosure[idx] = !currDisclosure[idx];
+                          setDisclosureStatus(currDisclosure);
+                        }}
+                      />
+                    </div>
                   ),
               )}
             </div>
@@ -163,17 +172,18 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
           <div className="lg:hidden">
             <div className="mx-[8vw] my-3 space-y-4">
               {faqs.map(({ question, answer }, idx) => (
-                <FaqDisclosure
-                  key={idx}
-                  question={question}
-                  answer={answer}
-                  isOpen={disclosuresStatus[idx]}
-                  toggleDisclosure={() => {
-                    const currDisclosure = [...disclosuresStatus];
-                    currDisclosure[idx] = !currDisclosure[idx];
-                    setDisclosureStatus(currDisclosure);
-                  }}
-                />
+                <div key={idx} className="faq-box">
+                  <FaqDisclosure
+                    question={question}
+                    answer={answer}
+                    isOpen={disclosuresStatus[idx]}
+                    toggleDisclosure={() => {
+                      const currDisclosure = [...disclosuresStatus];
+                      currDisclosure[idx] = !currDisclosure[idx];
+                      setDisclosureStatus(currDisclosure);
+                    }}
+                  />
+                </div>
               ))}
             </div>
           </div>
@@ -184,9 +194,7 @@ export default function FaqPage({ fetchedFaqs }: { fetchedFaqs: AnsweredQuestion
 }
 
 /**
- *
  * Fetch FAQ questions stored in the backend, which will be used as props by FaqPage component upon build time
- *
  */
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const protocol = context.req.headers.referer?.split('://')[0] || 'http';
