@@ -19,14 +19,10 @@ import hackutdBg from '../public/assets/hackutd-bg.png';
 import topBg from '../public/assets/topBg.png';
 
 export default function Home(props: {
-  keynoteSpeakers: KeynoteSpeaker[];
-  challenges: Challenge[];
   answeredQuestion: AnsweredQuestion[];
-  fetchedMembers: TeamMember[];
   sponsorCard: Sponsor[];
   scheduleCard: ScheduleEvent[];
   dateCard: Dates;
-  prizeData: Array<{ rank: number; prizeName: string }>;
 }) {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -133,7 +129,7 @@ export default function Home(props: {
           {/* include HomePrizes in HomeChallenges */}
           {/* <HomePrizes prizes={props.prizeData} /> */}
           <HomeFaq answeredQuestion={props.answeredQuestion} />
-          <HomeSponsors sponsorCard={props.sponsorCard} />
+          <HomeSponsors />
           <HomeFooter />
         </div>
       </div>
@@ -143,28 +139,8 @@ export default function Home(props: {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const protocol = context.req.headers.referer?.split('://')[0] || 'http';
-  // const { data: keynoteData } = await RequestHelper.get<KeynoteSpeaker[]>(
-  //   `${protocol}://${context.req.headers.host}/api/keynotespeakers`,
-  //   {},
-  // );
-  // const { data: challengeData } = await RequestHelper.get<Challenge[]>(
-  //   `${protocol}://${context.req.headers.host}/api/challenges/`,
-  //   {},
-  // );
-  // const { data: prizeData } = await RequestHelper.get<Array<{ rank: number; prizeName: string }>>(
-  //   `${protocol}://${context.req.headers.host}/api/prizes`,
-  //   {},
-  // );
   const { data: answeredQuestion } = await RequestHelper.get<AnsweredQuestion[]>(
     `${protocol}://${context.req.headers.host}/api/questions/faq`,
-    {},
-  );
-  // const { data: memberData } = await RequestHelper.get<TeamMember[]>(
-  //   `${protocol}://${context.req.headers.host}/api/members`,
-  //   {},
-  // );
-  const { data: sponsorData } = await RequestHelper.get<Sponsor[]>(
-    `${protocol}://${context.req.headers.host}/api/sponsor`,
     {},
   );
   const { data: scheduleData } = await RequestHelper.get<ScheduleEvent[]>(
@@ -177,14 +153,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   );
   return {
     props: {
-      // keynoteSpeakers: keynoteData,
-      // challenges: challengeData,
       answeredQuestion: answeredQuestion,
-      // fetchedMembers: memberData,
-      sponsorCard: sponsorData,
       scheduleCard: scheduleData,
       dateCard: dateData,
-      // prizeData: prizeData,
     },
   };
 };
