@@ -30,7 +30,7 @@
   z-index: 0;
 
   background-position: 0 0, 0 0;
-  /* animation: animatedBackground 30s linear infinite; */
+  animation: animatedBackground 30s linear infinite;
 }
 
 @keyframes animatedBackground {
