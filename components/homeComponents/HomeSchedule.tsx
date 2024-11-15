@@ -175,7 +175,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
         fill
         className="object-cover absolute top-0 left-0 w-full h-full z-0 opacity-50"
       />
-      {/* <BackgroundAssets /> */}
+      <BackgroundAssets />
       <div className={styles.content}>
         <HomeSpeakers />
         <div
@@ -250,7 +250,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
 
         {/* Calendar */}
         {/* TODO: enable this when have schedule data */}
-        <div className="md:flex p-1 overflow-y-auto overflow-x-hidden mx-auto lg:w-[80%] w-full h-full">
+        {/* <div className="md:flex p-1 overflow-y-auto overflow-x-hidden mx-auto lg:w-[80%] w-full h-full">
           <div className="w-full lg:w-1/2 px-4 md:px-0 relative">
             <div
               style={{ textShadow: '0 4px 4px rgb(0,0,0,0.25)' }}
@@ -274,7 +274,7 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
               {day2Events}
             </div>
           </div>
-        </div>
+        </div> */}
         <div className="flex justify-center px-[2rem]">
           {/* Ducks moving left to right */}
           <div className={styles.duckAnimation}>
