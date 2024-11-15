@@ -1,11 +1,9 @@
-import React from 'react';
-import HomeChallengesCard from './HomeChallengeCard';
-import HomeChallengeTrackCard from './HomeChallengeTrackCard';
-
+import Image from 'next/image';
+import middleWave from 'public/assets/middle_wave.png';
 import Track1Image from '../../public/assets/track_1.png';
 import Track2Image from '../../public/assets/track_2.png';
 import Track3Image from '../../public/assets/track_3.png';
-
+import HomeChallengesCard from './HomeChallengeCard';
 import styles from './HomeChallenges.module.css';
 
 const CHALLENGE_TRACKS = [
@@ -33,6 +31,14 @@ export default function HomeChallengesComponent(props: { challenges: Challenge[]
   return (
     props.challenges.length !== 0 && (
       <section className={`${styles.container} m-auto pb-[20rem] relative`}>
+        <Image
+          src={middleWave.src}
+          height={middleWave.height}
+          width={middleWave.width}
+          alt="middle_wave.png"
+          className="absolute top-0 left-0 w-full h-full z-0"
+        />
+
         <div className={styles.content}>
           <div
             style={{ textShadow: '0 4px 4px rgba(0, 0, 0, 0.25)' }}

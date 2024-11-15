@@ -1,29 +1,22 @@
-import Head from 'next/head';
 import { GetServerSideProps } from 'next';
-import { useEffect, useState } from 'react';
-import { RequestHelper } from '../lib/request-helper';
-import HomeNotif from '../components/homeComponents/HomeNotif';
-import HomeVideoStats from '../components/homeComponents/HomeVideoStats';
-import HomeAboutText from '../components/homeComponents/HomeAboutText';
-import HomeAboutPhotos from '../components/homeComponents/HomeAboutPhotos';
-import HackCountdown from '../components/homeComponents/HackCountdown';
-import HomeSpeakers from '../components/homeComponents/HomeSpeakers2';
-import HomeChallenges from '../components/homeComponents/HomeChallenges';
-import HomeTeam from '../components/homeComponents/HomeTeam';
-import HomeSponsors from '../components/homeComponents/HomeSponsors';
-import HomeFooter from '../components/homeComponents/HomeFooter';
-import HomeSchedule from '../components/homeComponents/HomeSchedule';
-import HomeFaq from '../components/homeComponents/HomeFaq';
-import HomePrizes from '../components/homeComponents/HomePrizes';
-import HomeHero2 from '../components/homeComponents/HomeHero2';
-import Wave from '../components/homeComponents/Wave';
-
-import themedBackground from '../public/assets/hackutd-bg.png';
-import countdownClouds from '../public/assets/countdown_clouds.png';
-import cloud from '../public/assets/cloud.png';
-import topBg from '../public/assets/topBg.png';
-
+import Head from 'next/head';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import HackCountdown from '../components/homeComponents/HackCountdown';
+import HomeAboutPhotos from '../components/homeComponents/HomeAboutPhotos';
+import HomeAboutText from '../components/homeComponents/HomeAboutText';
+import HomeFaq from '../components/homeComponents/HomeFaq';
+import HomeFooter from '../components/homeComponents/HomeFooter';
+import HomeHero2 from '../components/homeComponents/HomeHero2';
+import HomeSchedule from '../components/homeComponents/HomeSchedule';
+import HomeSponsors from '../components/homeComponents/HomeSponsors';
+import HomeVideoStats from '../components/homeComponents/HomeVideoStats';
+import Wave from '../components/homeComponents/Wave';
+import { RequestHelper } from '../lib/request-helper';
+import cloud from '../public/assets/cloud.png';
+import countdownClouds from '../public/assets/countdown_clouds.png';
+import hackutdBg from '../public/assets/hackutd-bg.png';
+import topBg from '../public/assets/topBg.png';
 
 export default function Home(props: {
   keynoteSpeakers: KeynoteSpeaker[];
@@ -55,40 +48,73 @@ export default function Home(props: {
         <meta name="description" content="A default HackPortal instance" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       {/* <HomeNotif /> */}
       <HomeHero2 />
       <HomeAboutText />
+
       <div style={{ position: 'relative', zIndex: 0 }}>
         {/* TODO: enable this when UI is finalized */}
-        <div
+        {/* <div
           style={{
             position: 'absolute',
             top: 0,
             left: 0,
             width: '100%',
             height: '100%',
-            backgroundImage: `url(${themedBackground.src})`,
+            backgroundImage: `url(${hackutdBg.src})`,
             backgroundSize: '100% 100%',
             backgroundPosition: 'center top',
             backgroundRepeat: 'no-repeat',
           }}
+        /> */}
+
+        {/* Themed ocean background of HackUTD */}
+        <Image
+          src={hackutdBg.src}
+          width={hackutdBg.width}
+          height={hackutdBg.height}
+          alt="hackutd-bg.png"
+          className="absolute top-0 left-0 w-full h-full object-cover"
         />
+
         <div style={{ position: 'relative', zIndex: 1, overflowX: 'hidden' }}>
           <div
             style={{
               position: 'relative',
               zIndex: 1,
-              backgroundImage: `url(${countdownClouds.src}), url(${topBg.src})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center 50px',
-              backgroundRepeat: 'no-repeat',
+              // backgroundImage: `url(${countdownClouds.src}), url(${topBg.src})`,
+              // backgroundSize: 'cover',
+              // backgroundPosition: 'center 50px',
+              // backgroundRepeat: 'no-repeat',
             }}
           >
-            <Wave />
-            <HomeAboutPhotos />
-            {screen.width >= 1000 && <HomeVideoStats />}
-            <HackCountdown />
+            {/* Bottom layer background */}
+            <Image
+              src={topBg.src}
+              width={topBg.width}
+              height={topBg.height}
+              alt="topBg.png"
+              className="absolute z-0 top-0 left-0 w-full h-full object-cover"
+            />
+
+            {/* Top layer background */}
+            <Image
+              src={countdownClouds.src}
+              width={countdownClouds.width}
+              height={countdownClouds.height}
+              alt="countdown_clouds.png"
+              className="absolute z-[1] top-0 left-0 w-full h-full object-cover"
+            />
+
+            <div className="relative z-[2]">
+              <Wave />
+              <HomeAboutPhotos />
+              {screen.width >= 1000 && <HomeVideoStats />}
+              <HackCountdown />
+            </div>
           </div>
+
           <Image
             style={{
               position: 'absolute',
@@ -101,6 +127,7 @@ export default function Home(props: {
             height={300}
             alt="cloud.png"
           />
+
           <HomeSchedule scheduleCard={props.scheduleCard} dateCard={props.dateCard} />
           {/* <HomeChallenges challenges={props.challenges} /> */}
           {/* include HomePrizes in HomeChallenges */}

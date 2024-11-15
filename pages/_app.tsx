@@ -1,7 +1,9 @@
 // core styles shared by all of react-notion-x (required)
 import 'react-notion-x/src/styles.css';
+
 // used for code syntax highlighting
 import 'prismjs/themes/prism-tomorrow.css';
+
 // used for rendering equations
 import 'katex/dist/katex.min.css';
 import '../styles/globals.css';
@@ -9,29 +11,27 @@ import '../styles/tailwind.css';
 
 import 'firebase/compat/auth';
 
-import CloudBackgroundImage from '@/public/assets/cloud-bg.png';
-import PondBackgroundImage from '@/public/assets/pond-background.png';
-import RegisterBackgroundImage from '@/public/assets/registration-background.png';
-
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AppProps } from 'next/dist/shared/lib/router/router';
-import Head from 'next/head';
-import Image from 'next/image';
-import { initFirebase } from '../lib/firebase-client';
-import { FCMProvider } from '../lib/service-worker/FCMContext';
-import { AuthProvider } from '../lib/user/AuthContext';
-
 import AppHeader2_Wrapper from '@/components/AppHeader2/wrapper';
 import AppNavbarBottom from '@/components/AppNavbarBottom/AppNavbarBottom';
 import { NavbarCallbackRegistryContext } from '@/lib/context/navbar';
 import { SectionReferenceContext } from '@/lib/context/section';
 import { useUrlHash } from '@/lib/hooks';
+import CloudBackgroundImage from '@/public/assets/cloud-bg.png';
+import PondBackgroundImage from '@/public/assets/pond-background.png';
+import RegisterBackgroundImage from '@/public/assets/registration-background.png';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { loadSlim } from '@tsparticles/slim';
+import { AppProps } from 'next/dist/shared/lib/router/router';
+import Head from 'next/head';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useEffect, useRef, useState } from 'react';
 import { initParticlesEngine } from '../components/Particles';
 import { ParticlesContext } from '../components/Particles/ParticlesProvider';
+import { initFirebase } from '../lib/firebase-client';
+import { FCMProvider } from '../lib/service-worker/FCMContext';
+import { AuthProvider } from '../lib/user/AuthContext';
 
 initFirebase();
 
@@ -46,9 +46,15 @@ function PortalApp({ Component, pageProps }: AppProps) {
   const [particlesInit, setParticlesInit] = useState(false);
   const hash = useUrlHash('');
 
-  const duckBackgroundPathnames = ['/profile', '/profile/application/edit'];
-  const registerBackgroundPathnames = ['/register', '/auth'];
-  const cloudBackgroundPathnames = ['/admin', '/admin/scan', '/admin/users', '/admin/waitlist'];
+  const duckBackgroundPathnames = new Set(['/profile', '/profile/application/edit']);
+  const registerBackgroundPathnames = new Set(['/register', '/auth']);
+  const cloudBackgroundPathnames = new Set([
+    '/admin',
+    '/admin/scan',
+    '/admin/users',
+    '/admin/waitlist',
+  ]);
+  const noTopSpacerPathnames = new Set(['/', '/parking', '/live']);
 
   const faqRef = useRef<HTMLDivElement | null>(null);
   const aboutRef = useRef<HTMLDivElement | null>(null);
@@ -139,7 +145,7 @@ function PortalApp({ Component, pageProps }: AppProps) {
                 </Head>
 
                 <div className="min-h-screen flex flex-col">
-                  {duckBackgroundPathnames.includes(router.pathname) && (
+                  {duckBackgroundPathnames.has(router.pathname) && (
                     <div className="fixed top-0 left-0 w-screen h-screen -z-10">
                       <Image
                         className="w-screen h-screen object-cover"
@@ -151,7 +157,7 @@ function PortalApp({ Component, pageProps }: AppProps) {
                     </div>
                   )}
 
-                  {registerBackgroundPathnames.includes(router.pathname) && (
+                  {registerBackgroundPathnames.has(router.pathname) && (
                     <div className="fixed top-0 left-0 w-screen h-screen -z-10">
                       <Image
                         className="w-screen h-screen object-cover"
@@ -163,7 +169,7 @@ function PortalApp({ Component, pageProps }: AppProps) {
                     </div>
                   )}
 
-                  {cloudBackgroundPathnames.includes(router.pathname) && (
+                  {cloudBackgroundPathnames.has(router.pathname) && (
                     <div className="fixed top-0 left-0 w-screen h-screen -z-10">
                       <Image
                         className="w-screen h-screen object-cover"
@@ -178,7 +184,7 @@ function PortalApp({ Component, pageProps }: AppProps) {
                   <AppHeader2_Wrapper />
 
                   {/* Spacer at the top of the page so that content won't be covered by the navbar */}
-                  {router.pathname !== '/' && router.pathname !== '/parking' && (
+                  {!noTopSpacerPathnames.has(router.pathname) && (
                     <div className="h-[86px] shrink-0" />
                   )}
 

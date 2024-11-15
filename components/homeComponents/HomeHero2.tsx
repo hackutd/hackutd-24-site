@@ -1,15 +1,13 @@
-import { useContext, useState } from 'react';
+import clsx from 'clsx';
+import { SectionReferenceContext } from '@/lib/context/section';
 import Image from 'next/image';
-import MLH_Sticker from '../../public/assets/mlh-2025.png';
+import heroNoLilypads from 'public/assets/hero-no-lilypads.png';
+import lilypads from 'public/assets/lilypads.png'; // Importing the lily pads image
+import { useContext, useState } from 'react';
 import HackUTDTitle from '../../public/assets/HackUTD 2024 Title.png';
 import DuckMoving from '../../public/assets/duck-moving.gif';
 import MascotMoving from '../../public/assets/mascot-moving.gif';
-import mascotLifeRing from '../../public/assets/mascot_life_ring.png';
-import styles from './HomeHero2.module.css';
-import { SectionReferenceContext } from '@/lib/context/section';
-import Link from 'next/link';
-import LilyPads from 'public/assets/lilypads.png'; // Importing the lily pads image
-import noLPHero from 'public/assets/hero-no-lilypads.png';
+import MLH_Sticker from '../../public/assets/mlh-2025.png';
 
 export default function HomeHero2() {
   const [isShort, setIsShort] = useState(false);
@@ -19,7 +17,7 @@ export default function HomeHero2() {
     <section
       className={`min-h-screen bg-center relative bg-white flex flex-col-reverse md:flex-col`}
       style={{
-        backgroundImage: `url(${LilyPads.src}), url(${noLPHero.src})`,
+        backgroundImage: `url(${lilypads.src}), url(${heroNoLilypads.src})`,
         backgroundSize: '100% 100%',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
@@ -28,20 +26,40 @@ export default function HomeHero2() {
         minHeight: '100vh',
       }}
     >
+      {/* Under: Hero background */}
+      <Image
+        src={heroNoLilypads.src}
+        height={heroNoLilypads.height}
+        width={heroNoLilypads.width}
+        alt="hero-no-lilypads.png"
+        className="absolute top-0 left-0 w-full h-full z-0"
+      />
+
+      {/* Above: Lilypads background */}
+      <Image
+        src={lilypads.src}
+        height={lilypads.height}
+        width={lilypads.width}
+        alt="lilypads.png"
+        className="absolute top-0 left-0 w-full h-full z-[1]"
+      />
+
       {/* Top banner */}
-      <div className="font-dmSans w-full flex justify-center bg-[#40B7BA] text-white h-[1.75rem] text-nowrap overflow-hidden sm:hidden absolute top-0">
+      <div
+        className={clsx(
+          'absolute top-0 z-[2]',
+          'flex sm:hidden justify-center overflow-hidden',
+          'w-full h-[1.75rem]',
+          'font-dmSans bg-[#40B7BA] text-white text-nowrap',
+        )}
+      >
         <p className="text-lg">
           HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 •
           HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24
         </p>
       </div>
-      {/* Lily Pads - Positioned absolutely to cover the full width */}
-      <div className="absolute top-0 left-0 right-0 w-full z-10">
-        <div className="relative w-full" style={{ overflow: 'visible' }}>
-          <Image src={LilyPads.src} alt="Lily Pads" fill className="object-cover" priority />
-        </div>
-      </div>
-      <div className="flex-grow flex h-full w-full relative">
+
+      <div className={clsx('relative z-[2]', 'flex-grow flex h-full w-full')}>
         <div className="relative z-10 shrink-0 w-full flex">
           {/* MLH sticker */}
           <div className="absolute top-[1.75rem] sm:top-0 right-4 z-20 transition-all">
