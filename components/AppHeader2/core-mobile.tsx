@@ -134,7 +134,7 @@ export default function AppHeader2_Core_AdminMobile(props: Props) {
       >
         <FloatingDockWrapper
           classes={{
-            wrapperDiv: clsx('gap-4 flex items-center justify-center'),
+            wrapperDiv: clsx('gap-4 flex items-center justify-center flex-wrap'),
           }}
           items={mainDockItems()}
         />
