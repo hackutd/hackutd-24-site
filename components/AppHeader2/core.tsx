@@ -252,7 +252,7 @@ export default function AppHeader2_Core(props: Props) {
       {/* Real navbar */}
       <div
         id="nav-bar"
-        className="relative font-dmSans border-[3px] border-[rgba(30,30,30,0.60)] rounded-xl p-1 bg-white opacity-90 text-[#40B7BA] cursor-pointer w-[70%] lg:w-[60%] xl:w-[50%]"
+        className="relative font-dmSans border-[3px] border-[rgba(30,30,30,0.60)] rounded-xl p-1 bg-white opacity-90 text-[#40B7BA] cursor-pointer flex-wrap"
       >
         {/* Sign out button */}
         <button
@@ -279,7 +279,7 @@ export default function AppHeader2_Core(props: Props) {
 
         <FloatingDockWrapper
           classes={{
-            wrapperDiv: clsx('gap-4 flex items-center justify-center'),
+            wrapperDiv: clsx('gap-4 flex items-center justify-center flex-wrap'),
           }}
           items={mainDockItems()}
         />

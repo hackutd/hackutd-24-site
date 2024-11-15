@@ -87,7 +87,7 @@ export default function FloatingDockWrapper(props: Props) {
   return (
     <div
       ref={boxRef}
-      className={props.classes?.wrapperDiv ?? 'gap-4 flex justify-center items-center'}
+      className={props.classes?.wrapperDiv ?? 'gap-4 flex justify-center items-center flex-wrap'}
     >
       {props.items.map((item, i) => (
         <FloatingDockItem
