@@ -27,7 +27,6 @@ export default function Home(props: {
   scheduleCard: ScheduleEvent[];
   dateCard: Dates;
   challenges: Challenge[];
-  prizeData: Array<{ rank: number; prizeName: string }>;
 }) {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -118,10 +117,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     `${protocol}://${context.req.headers.host}/api/challenges/`,
     {},
   );
-  const { data: prizeData } = await RequestHelper.get<Array<{ rank: number; prizeName: string }>>(
-    `${protocol}://${context.req.headers.host}/api/prizes`,
-    {},
-  );
   const { data: answeredQuestion } = await RequestHelper.get<AnsweredQuestion[]>(
     `${protocol}://${context.req.headers.host}/api/questions/faq`,
     {},
@@ -141,7 +136,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       answeredQuestion: answeredQuestion,
       scheduleCard: scheduleData,
       dateCard: dateData,
-      prizeData: prizeData,
     },
   };
 };
