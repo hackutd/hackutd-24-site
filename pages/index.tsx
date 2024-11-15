@@ -2,19 +2,14 @@ import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import { useEffect, useState } from 'react';
 import { RequestHelper } from '../lib/request-helper';
-import HomeNotif from '../components/homeComponents/HomeNotif';
 import HomeVideoStats from '../components/homeComponents/HomeVideoStats';
 import HomeAboutText from '../components/homeComponents/HomeAboutText';
 import HomeAboutPhotos from '../components/homeComponents/HomeAboutPhotos';
 import HackCountdown from '../components/homeComponents/HackCountdown';
-import HomeSpeakers from '../components/homeComponents/HomeSpeakers2';
-import HomeChallenges from '../components/homeComponents/HomeChallenges';
-import HomeTeam from '../components/homeComponents/HomeTeam';
 import HomeSponsors from '../components/homeComponents/HomeSponsors';
 import HomeFooter from '../components/homeComponents/HomeFooter';
 import HomeSchedule from '../components/homeComponents/HomeSchedule';
 import HomeFaq from '../components/homeComponents/HomeFaq';
-import HomePrizes from '../components/homeComponents/HomePrizes';
 import HomeHero2 from '../components/homeComponents/HomeHero2';
 import Wave from '../components/homeComponents/Wave';
 
@@ -26,14 +21,10 @@ import topBg from '../public/assets/topBg.png';
 import Image from 'next/image';
 
 export default function Home(props: {
-  keynoteSpeakers: KeynoteSpeaker[];
-  challenges: Challenge[];
   answeredQuestion: AnsweredQuestion[];
-  fetchedMembers: TeamMember[];
   sponsorCard: Sponsor[];
   scheduleCard: ScheduleEvent[];
   dateCard: Dates;
-  prizeData: Array<{ rank: number; prizeName: string }>;
 }) {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -73,7 +64,7 @@ export default function Home(props: {
             backgroundRepeat: 'no-repeat',
           }}
         />
-        <div style={{ position: 'relative', zIndex: 1 }}>
+        <div style={{ position: 'relative', zIndex: 1, overflowX: 'hidden' }}>
           <div
             style={{
               position: 'relative',
@@ -86,7 +77,7 @@ export default function Home(props: {
           >
             <Wave />
             <HomeAboutPhotos />
-            {screen.width >= 1000 && <HomeVideoStats />}
+            <HomeVideoStats />
             <HackCountdown />
           </div>
           <Image
@@ -106,7 +97,7 @@ export default function Home(props: {
           {/* include HomePrizes in HomeChallenges */}
           {/* <HomePrizes prizes={props.prizeData} /> */}
           <HomeFaq answeredQuestion={props.answeredQuestion} />
-          <HomeSponsors sponsorCard={props.sponsorCard} />
+          <HomeSponsors />
           <HomeFooter />
         </div>
       </div>
@@ -116,28 +107,8 @@ export default function Home(props: {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const protocol = context.req.headers.referer?.split('://')[0] || 'http';
-  // const { data: keynoteData } = await RequestHelper.get<KeynoteSpeaker[]>(
-  //   `${protocol}://${context.req.headers.host}/api/keynotespeakers`,
-  //   {},
-  // );
-  // const { data: challengeData } = await RequestHelper.get<Challenge[]>(
-  //   `${protocol}://${context.req.headers.host}/api/challenges/`,
-  //   {},
-  // );
-  // const { data: prizeData } = await RequestHelper.get<Array<{ rank: number; prizeName: string }>>(
-  //   `${protocol}://${context.req.headers.host}/api/prizes`,
-  //   {},
-  // );
   const { data: answeredQuestion } = await RequestHelper.get<AnsweredQuestion[]>(
     `${protocol}://${context.req.headers.host}/api/questions/faq`,
-    {},
-  );
-  // const { data: memberData } = await RequestHelper.get<TeamMember[]>(
-  //   `${protocol}://${context.req.headers.host}/api/members`,
-  //   {},
-  // );
-  const { data: sponsorData } = await RequestHelper.get<Sponsor[]>(
-    `${protocol}://${context.req.headers.host}/api/sponsor`,
     {},
   );
   const { data: scheduleData } = await RequestHelper.get<ScheduleEvent[]>(
@@ -150,14 +121,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   );
   return {
     props: {
-      // keynoteSpeakers: keynoteData,
-      // challenges: challengeData,
       answeredQuestion: answeredQuestion,
-      // fetchedMembers: memberData,
-      sponsorCard: sponsorData,
       scheduleCard: scheduleData,
       dateCard: dateData,
-      // prizeData: prizeData,
     },
   };
 };
