@@ -6,6 +6,7 @@ import Track3Image from '../../public/assets/track_3.png';
 import GrandPrize from '../../public/assets/mac.png';
 import HomeChallengesCard from './HomeChallengeCard';
 import styles from './HomeChallenges.module.css';
+import HomeChallengeTrackCard from './HomeChallengeTrackCard';
 
 const CHALLENGE_TRACKS = [
   {

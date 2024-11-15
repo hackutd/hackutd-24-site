@@ -17,8 +17,6 @@ import cloud from '../public/assets/cloud.png';
 import countdownClouds from '../public/assets/countdown_clouds.png';
 import hackutdBg from '../public/assets/hackutd-bg.png';
 import topBg from '../public/assets/topBg.png';
-
-import Image from 'next/image';
 import HomeChallengesComponent from '@/components/homeComponents/HomeChallenges';
 export default function Home(props: {
   answeredQuestion: AnsweredQuestion[];
