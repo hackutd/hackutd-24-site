@@ -18,6 +18,7 @@ import cloud from '../public/assets/cloud.png';
 import topBg from '../public/assets/topBg.png';
 
 import Image from 'next/image';
+import HomeVideoStats from '@/components/homeComponents/HomeVideoStats';
 
 export default function Home(props: {
   challenges: Challenge[];
@@ -28,8 +29,8 @@ export default function Home(props: {
   return (
     <>
       {/* <HomeNotif /> */}
-      {/* <HomeHero2 /> */}
-      {/* <HomeAboutText /> */}
+      <HomeHero2 />
+      <HomeAboutText />
       <div style={{ position: 'relative', zIndex: 0 }}>
         <div
           style={{
@@ -45,7 +46,7 @@ export default function Home(props: {
           }}
         />
         <div style={{ position: 'relative', zIndex: 1 }}>
-          {/* <div
+          <div
             style={{
               position: 'relative',
               zIndex: 1,
@@ -54,13 +55,13 @@ export default function Home(props: {
               backgroundPosition: 'center 50px',
               backgroundRepeat: 'no-repeat',
             }}
-          > */}
-          {/* <Wave /> */}
-          {/* <HomeAboutPhotos /> */}
-          {/* <HomeVideoStats /> */}
-          {/* <HackCountdown /> */}
-          {/* </div> */}
-          {/* <Image
+          >
+            <Wave />
+            <HomeAboutPhotos />
+            <HomeVideoStats />
+            <HackCountdown />
+          </div>
+          <Image
             style={{
               position: 'absolute',
               top: '1100px',
@@ -71,7 +72,7 @@ export default function Home(props: {
             width={300}
             height={300}
             alt="cloud.png"
-          /> */}
+          />
           <HomeSchedule scheduleCard={props.scheduleCard} dateCard={props.dateCard} />
           <HomeChallenges challenges={props.challenges} />
           <HomeFaq answeredQuestion={props.answeredQuestion} />

@@ -169,13 +169,13 @@ export default function HomeSchedule(props: { scheduleCard: ScheduleEvent[]; dat
 
   return (
     <div className={`pt-[8rem] relative`}>
-      {/* <Image
+      <Image
         src="/assets/middle_wave.png"
         alt="wave background"
         fill
         className="object-cover absolute top-0 left-0 w-full h-full z-0 opacity-50"
       />
-      <BackgroundAssets /> */}
+      <BackgroundAssets />
       <div className={styles.content}>
         <HomeSpeakers />
         <div
