@@ -312,7 +312,7 @@ export default function HomeHero2() {
           height={LilyPads.height}
           width={LilyPads.width}
           alt="lilypads.png"
-          className="absolute top-0 left-0 w-full h-full z-[1]"
+          className="absolute top-0 left-0 w-full h-full z-[0]"
         />
 
         {/* Top banner */}
