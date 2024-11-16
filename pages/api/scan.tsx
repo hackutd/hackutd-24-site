@@ -47,12 +47,18 @@ async function checkLateCheckInEligible(userData: Registration) {
 }
 
 async function checkUserIsRejected(userId: string): Promise<boolean> {
-  const snapshot = await db.collection('acceptreject').where('hackerId', '==', userId).get();
+  const snapshot = await db.collection('scoring').where('hackerId', '==', userId).get();
   if (snapshot.docs.length === 0) {
     return true;
   }
+  const appScore = snapshot.docs.reduce((acc, doc) => {
+    const scoreMultiplier = !!doc.data().isSuperVote ? 50 : 1;
+    if (doc.data().score === 4) return acc + scoreMultiplier;
+    if (doc.data().score === 1) return acc - scoreMultiplier;
+    return acc;
+  }, 0);
   // if user is not accepted by the time they are being checked in, assume that they will be rejected
-  return snapshot.docs[0].data().status !== 'Accepted';
+  return appScore < 2;
 }
 
 /**
