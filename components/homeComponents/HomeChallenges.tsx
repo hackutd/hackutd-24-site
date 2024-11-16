@@ -55,7 +55,7 @@ export default function HomeChallengesComponent(props: { challenges: Challenge[]
           </div>
 
           {/* Challenge Tracks */}
-          <div className="flex pt-14 px-16 flex-nowrap gap-4">
+          <div className="flex pt-14 px-16 flex-wrap lg:flex-nowrap gap-4">
             {CHALLENGE_TRACKS.map((track, idx) => (
               <HomeChallengeTrackCard key={idx} challengeTrack={track} blockType={idx % 3} />
             ))}
