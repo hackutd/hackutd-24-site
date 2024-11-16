@@ -47,15 +47,18 @@ function getSuccessColor(success: string) {
 export default function QRScanDialog({ scan, onModalClose }: QRScanDialogProps) {
   const [scanData, setScanData] = useState(undefined);
   const [success, setSuccess] = useState(undefined);
+  const [userScanned, setUserScanned] = useState(false);
   const { user } = useAuthContext();
   const [scannedUserInfo, setScannedUserInfo] = useState(undefined);
 
   const handleScan = async (data: string) => {
+    if (userScanned) return;
     if (!data.startsWith('hack:')) {
       setScanData(data);
       setSuccess(successStrings.invalidFormat);
       return;
     }
+    setUserScanned(true);
     const query = new URL(`http://localhost:3000/api/scan`);
     query.searchParams.append('id', data.replaceAll('hack:', ''));
     await fetch(query.toString().replaceAll('http://localhost:3000', ''), {
@@ -161,7 +164,10 @@ export default function QRScanDialog({ scan, onModalClose }: QRScanDialogProps) 
                   <button
                     type="button"
                     className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                    onClick={() => setScanData(undefined)}
+                    onClick={() => {
+                      setScanData(undefined);
+                      setUserScanned(false);
+                    }}
                   >
                     Next Scan
                   </button>
@@ -170,6 +176,7 @@ export default function QRScanDialog({ scan, onModalClose }: QRScanDialogProps) 
                     className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                     onClick={() => {
                       setScanData(undefined);
+                      setUserScanned(false);
                       onModalClose();
                     }}
                   >

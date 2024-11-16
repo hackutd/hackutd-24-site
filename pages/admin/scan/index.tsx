@@ -92,7 +92,7 @@ export default function Admin() {
     }
     const query = new URL(`http://localhost:3000/api/scan`);
     query.searchParams.append('id', data.replaceAll('hack:', ''));
-    fetch(query.toString().replaceAll('http://localhost:3000', ''), {
+    await fetch(query.toString().replaceAll('http://localhost:3000', ''), {
       mode: 'cors',
       headers: { Authorization: user.token },
       method: 'POST',
