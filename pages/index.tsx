@@ -17,12 +17,13 @@ import cloud from '../public/assets/cloud.png';
 import countdownClouds from '../public/assets/countdown_clouds.png';
 import hackutdBg from '../public/assets/hackutd-bg.png';
 import topBg from '../public/assets/topBg.png';
-
+import HomeChallengesComponent from '@/components/homeComponents/HomeChallenges';
 export default function Home(props: {
   answeredQuestion: AnsweredQuestion[];
   sponsorCard: Sponsor[];
   scheduleCard: ScheduleEvent[];
   dateCard: Dates;
+  challenges: Challenge[];
 }) {
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -125,7 +126,7 @@ export default function Home(props: {
           />
 
           <HomeSchedule scheduleCard={props.scheduleCard} dateCard={props.dateCard} />
-          {/* <HomeChallenges challenges={props.challenges} /> */}
+          <HomeChallengesComponent challenges={props.challenges} />
           {/* include HomePrizes in HomeChallenges */}
           {/* <HomePrizes prizes={props.prizeData} /> */}
           <HomeFaq answeredQuestion={props.answeredQuestion} />
@@ -139,6 +140,14 @@ export default function Home(props: {
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const protocol = context.req.headers.referer?.split('://')[0] || 'http';
+  // const { data: keynoteData } = await RequestHelper.get<KeynoteSpeaker[]>(
+  //   `${protocol}://${context.req.headers.host}/api/keynotespeakers`,
+  //   {},
+  // );
+  const { data: challengeData } = await RequestHelper.get<Challenge[]>(
+    `${protocol}://${context.req.headers.host}/api/challenges/`,
+    {},
+  );
   const { data: answeredQuestion } = await RequestHelper.get<AnsweredQuestion[]>(
     `${protocol}://${context.req.headers.host}/api/questions/faq`,
     {},
@@ -153,6 +162,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   );
   return {
     props: {
+      // keynoteSpeakers: keynoteData,
+      challenges: challengeData,
       answeredQuestion: answeredQuestion,
       scheduleCard: scheduleData,
       dateCard: dateData,
