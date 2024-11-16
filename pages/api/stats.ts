@@ -76,11 +76,9 @@ async function getStatsData() {
     }
 
     if (userData['scans']) {
-      userData['scans'].forEach((data: { name: string; timestamp: string }) => {
-        if (data.name === checkInEventName) {
-          generalStats.checkedInCount++;
-        }
-      });
+      if ((userData['scans'] as any[]).find((obj) => obj.name === checkInEventName) !== undefined) {
+        generalStats.checkedInCount++;
+      }
     }
 
     for (let singleField of singleFields) {
