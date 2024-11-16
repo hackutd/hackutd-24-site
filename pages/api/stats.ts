@@ -75,6 +75,14 @@ async function getStatsData() {
       });
     }
 
+    if (userData['scans']) {
+      userData['scans'].forEach((data: { name: string; timestamp: string }) => {
+        if (data.name === checkInEventName) {
+          generalStats.checkedInCount++;
+        }
+      });
+    }
+
     for (let singleField of singleFields) {
       if (!userData[singleField] || userData[singleField] === '') continue;
       if (!generalStats[singleField].hasOwnProperty(userData[singleField])) {
