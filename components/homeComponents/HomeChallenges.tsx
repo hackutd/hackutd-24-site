@@ -11,8 +11,8 @@ import HomeChallengeTrackCard from './HomeChallengeTrackCard';
 
 const CHALLENGE_TRACKS = [
   {
-    title: 'Grand Prize',
-    subtitle: 'Grand Prize',
+    title: 'Mascot Prize',
+    subtitle: 'Mascot Prize',
     description: 'Macbook Air',
     imgSrc: GrandPrize.src,
   },
