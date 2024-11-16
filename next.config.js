@@ -46,7 +46,8 @@ const withPWA = require('next-pwa')({
       },
       {
         source: '/hackerpacks',
-        destination: 'https://www.notion.so/hackutd/Hackerpack-1130d994cbb980e59d90ef16445ab97d',
+        destination:
+          'https://hackutd.notion.site/HackUTD-Ripple-Effect-1130d994cbb980ce8cbaefcfb7afbdd4?pvs=74',
         permanent: true,
       },
     ];
