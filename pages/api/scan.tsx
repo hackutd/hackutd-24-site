@@ -115,7 +115,7 @@ async function handleScan(req: NextApiRequest, res: NextApiResponse) {
     const snapshot = await db.collection(REGISTRATION_COLLECTION).doc(bodyData.id).get();
     if (!snapshot.exists)
       return res.status(404).json({ code: 'not found', message: "User doesn't exist..." });
-    let scans = snapshot.data().scans ?? [];
+    let scans = (snapshot.data().scans ?? []).map((obj) => obj.name);
 
     const userCheckedIn = await userAlreadyCheckedIn(scans);
     const scanIsCheckInEvent = await checkIfScanIsCheckIn(bodyData.scan);
