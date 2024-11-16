@@ -55,6 +55,11 @@ async function getStatsData() {
     const userData = doc.data();
     const date = doc.createTime.toDate();
     const stringDate = `${date.getMonth() + 1}-${date.getDate()}`;
+    if (userData['scans']) {
+      if ((userData['scans'] as any[]).find((obj) => obj.name === checkInEventName) !== undefined) {
+        generalStats.checkedInCount++;
+      }
+    }
     if (!userScoreMapping.has(userData.id) || userScoreMapping.get(userData.id) < 0) {
       return;
     }
@@ -73,12 +78,6 @@ async function getStatsData() {
           generalStats[arrayField][data]++;
         }
       });
-    }
-
-    if (userData['scans']) {
-      if ((userData['scans'] as any[]).find((obj) => obj.name === checkInEventName) !== undefined) {
-        generalStats.checkedInCount++;
-      }
     }
 
     for (let singleField of singleFields) {
