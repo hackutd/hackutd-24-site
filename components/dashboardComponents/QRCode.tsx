@@ -19,7 +19,7 @@ const COLOR_GROUP_MAPPING = {
   Corgi: '#E7A65D',
   Duck: '#000000',
   Capybara: '#C59E7D',
-  Frog: '#D3F4AB',
+  Frog: '#000000',
 };
 
 export default function QRCode({ data, width, height, group }: QRCodeProps) {
