@@ -10,14 +10,6 @@ interface HomePrizesProps {
 export default function HomePrizes({ prizes }: HomePrizesProps) {
   return (
     <section id="prizes-section" className="w-full overflow-hidden">
-      {/* Banner */}
-      <div className="-mx-4 mt-[120px] -rotate-[7deg] bg-[#7B81FF] text-white py-[0.35rem] w-[2000px] overflow-hidden line-clamp-1">
-        <p>
-          {Array.apply(null, Array(200))
-            .map(() => 'PRIZES')
-            .join('  ')}
-        </p>
-      </div>
       {/* Component */}
       <div className="md:py-12 py-6 xl:w-9/10 w-11/12 m-auto">
         <h1 className="font-fredoka mt-[100px] text-3xl text-center font-bold text-[#05149C]">

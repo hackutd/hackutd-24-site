@@ -38,7 +38,7 @@ export default function HomeChallengeTrackCard(props: {
         className={`mx-auto bg-gradient-to-b from-[#F5A3B6] from-10% to-[#F7CE79] rounded-t-md flex justify-center relative h-[220px]`}
       >
         <Image
-          className="absolute -top-11 left-1/2 -rotate-12 -translate-x-1/2"
+          className="absolute -top-2 left-1/2 -translate-x-1/2"
           src={props.challengeTrack.imgSrc}
           alt="Track Image"
           width={250}
