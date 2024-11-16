@@ -23,7 +23,7 @@ async function sendNotificationsToWalkIns(
   sendgridClient.setApiKey(process.env.SENDGRID_APIKEY!);
   // TODO: change message into something works better
   const messageContent =
-    'Hey there, we are ready to check you into HackUTD! Please come to ECSW so that we can kick start the process!!!';
+    'Hey there, we are ready to check you into HackUTD! Please come to ECSW so that we can kick start the process!!! If you do not come to ECSW within 5 minutes of this text, your waitlist slot will be given to the next person';
   try {
     await Promise.all(
       snapshot.docs.map((doc) => {
