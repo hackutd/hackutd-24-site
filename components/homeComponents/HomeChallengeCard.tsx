@@ -2,6 +2,8 @@
 import { motion } from 'framer-motion';
 import React, { useState } from 'react';
 
+const PRIZE_INDEX = ['1st', '2nd', '3rd'];
+
 export default function HomeChallengesCard(props: { challenge: Challenge; blockType: number }) {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
@@ -39,12 +41,29 @@ export default function HomeChallengesCard(props: { challenge: Challenge; blockT
             </h1>
           </div>
           {/* Company Name */}
-          <h1 className="font-atlasi font-normal text-2xl text-[#40B7BA] my-4 uppercase">
+          <h1 className="font-atlasi font-normal text-2xl text-[#40B7BA] my-4 uppercase text-center">
             {props.challenge.title}
           </h1>
           {/* Description */}
           <div className="mb-8 max-w-fit">
-            <p className="text-md line-clamp-5 text-balance">{props.challenge.description}</p>
+            {props.challenge.prizes.map((prize, idx) => (
+              <p key={idx} className="text-md text-balance">
+                {PRIZE_INDEX[idx]}: {props.challenge.prizes[idx]}
+              </p>
+            ))}
+          </div>
+          <div className="flex justify-end items-center cursor-pointer">
+            <p className="text-md font-montserrat font-bold leading-[20.72px]">READ MORE</p>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-6"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+            </svg>
           </div>
         </div>
       </div>
