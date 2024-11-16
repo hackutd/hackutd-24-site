@@ -18,7 +18,8 @@ const HomeAboutText = () => {
   const containerRef = useRef(null); // Reference for entire container to observe
 
   useEffect(() => {
-    const isDesktopView = window.matchMedia('(min-width: 1024px)').matches;
+    // const isDesktopView = window.matchMedia('(min-width: 1024px)').matches;
+    const isDesktopView = true;
 
     if (isDesktopView) {
       const handleIntersection = (entries, observer) => {
