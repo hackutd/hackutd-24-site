@@ -16,7 +16,8 @@ const Countdown = () => {
   const countdownTitleRef = useRef<HTMLHeadingElement>(null);
   const countdownBoxesRef = useRef<(HTMLDivElement | null)[]>([]);
 
-  const isDesktopView = window.innerWidth >= 768;
+  // const isDesktopView = window.innerWidth >= 768;
+  const isDesktopView = true;
 
   const cloudHoverStyle = {
     animation: isDesktopView ? 'moveUpDown 2s infinite alternate' : 'none',
@@ -28,10 +29,10 @@ const Countdown = () => {
       const eventDate = new Date(config.targetDate);
       const timeDifference = eventDate.getTime() - now.getTime();
 
-      const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+      const days = 0;
+      const hours = 0;
+      const minutes = 0;
+      const seconds = 0;
 
       setTimeLeft({ days, hours, minutes, seconds });
     }, 1000);

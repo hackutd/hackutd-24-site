@@ -12,6 +12,7 @@ import MascotMoving from '../../public/assets/mascot-moving.gif';
 import LilyPads from 'public/assets/lilypads.png';
 import noLPHero from 'public/assets/hero-no-lilypads.png';
 import SlingshotSimulation from './SlingshotSimulation';
+import ClickMe from 'public/assets/ClickMe.png';
 
 function Preloader({ setIsHeroLoaded }) {
   const preloaderRef = useRef(null);
@@ -366,6 +367,16 @@ export default function HomeHero2() {
                   width={DuckMoving.width}
                   height={DuckMoving.height}
                 />
+                {/* ClickMe image */}
+                <div className="absolute top-10 right-0 w-[5rem] hidden lg:block">
+                  <Image
+                    src={ClickMe.src}
+                    alt="Click Me"
+                    layout="responsive"
+                    width={ClickMe.width}
+                    height={ClickMe.height}
+                  />
+                </div>
               </div>
 
               {/* Title and Welcome */}
@@ -407,7 +418,7 @@ export default function HomeHero2() {
             <div
               ref={mascotRef}
               onClick={() => handleMascotClick('red')}
-              className="w-[10rem] md:w-[15rem] lg:w-[20rem]"
+              className="w-[10rem] md:w-[15rem] lg:w-[20rem] relative"
               style={{
                 cursor: isDesktop ? 'pointer' : 'default',
                 zIndex: '30',
@@ -420,6 +431,16 @@ export default function HomeHero2() {
                 width={MascotMoving.width}
                 height={MascotMoving.height}
               />
+              {/* ClickMe image */}
+              <div className="absolute top-0 right-7.5 w-[5rem] hidden lg:block">
+                <Image
+                  src={ClickMe.src}
+                  alt="Click Me"
+                  layout="responsive"
+                  width={ClickMe.width}
+                  height={ClickMe.height}
+                />
+              </div>
             </div>
           </div>
         </div>
