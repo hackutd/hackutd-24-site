@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+import { SectionReferenceContext } from '@/lib/context/section';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 import SplitType from 'split-type';
@@ -7,10 +9,10 @@ import MLH_Sticker from '../../public/assets/mlh-2025.png';
 import HackUTDTitle from '../../public/assets/HackUTD 2024 Title.png';
 import DuckMoving from '../../public/assets/duck-moving.gif';
 import MascotMoving from '../../public/assets/mascot-moving.gif';
-import { SectionReferenceContext } from '@/lib/context/section';
 import LilyPads from 'public/assets/lilypads.png';
 import noLPHero from 'public/assets/hero-no-lilypads.png';
 import SlingshotSimulation from './SlingshotSimulation';
+import ClickMe from 'public/assets/ClickMe.png';
 
 function Preloader({ setIsHeroLoaded }) {
   const preloaderRef = useRef(null);
@@ -296,16 +298,44 @@ export default function HomeHero2() {
           />
         )}
 
+        {/* Under: Hero background */}
+        <Image
+          src={noLPHero.src}
+          height={noLPHero.height}
+          width={noLPHero.width}
+          alt="hero-no-lilypads.png"
+          className="absolute top-0 left-0 w-full h-full z-0"
+        />
+
+        {/* Above: Lilypads background */}
+        <Image
+          src={LilyPads.src}
+          height={LilyPads.height}
+          width={LilyPads.width}
+          alt="lilypads.png"
+          className="absolute top-0 left-0 w-full h-full z-[0]"
+        />
+
         {/* Top banner */}
-        <div className="font-dmSans w-full flex justify-center bg-[#40B7BA] text-white h-[1.75rem] text-nowrap overflow-hidden sm:hidden absolute top-0">
+        <div
+          className={clsx(
+            'absolute top-0 z-[2]',
+            'flex sm:hidden justify-center overflow-hidden',
+            'w-full h-[1.75rem]',
+            'font-dmSans bg-[#40B7BA] text-white text-nowrap',
+          )}
+        >
           <p className="text-lg">
             HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24
-            • HACKUTD 24
+            • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24 • HACKUTD 24
           </p>
         </div>
 
         {/* Hero content wrapper */}
-        <div ref={heroContentRef} className="flex-grow flex h-full w-full relative">
+        <div
+          ref={heroContentRef}
+          className={clsx('relative z-[2]', 'flex-grow flex h-full w-full')}
+        >
           <div className="relative z-10 shrink-0 w-full flex">
             {/* MLH sticker */}
             <div className="absolute top-[1.75rem] sm:top-0 right-4 z-20 transition-all">
@@ -337,6 +367,16 @@ export default function HomeHero2() {
                   width={DuckMoving.width}
                   height={DuckMoving.height}
                 />
+                {/* ClickMe image */}
+                <div className="absolute top-10 right-0 w-[5rem] hidden lg:block">
+                  <Image
+                    src={ClickMe.src}
+                    alt="Click Me"
+                    layout="responsive"
+                    width={ClickMe.width}
+                    height={ClickMe.height}
+                  />
+                </div>
               </div>
 
               {/* Title and Welcome */}
@@ -378,7 +418,7 @@ export default function HomeHero2() {
             <div
               ref={mascotRef}
               onClick={() => handleMascotClick('red')}
-              className="w-[10rem] md:w-[15rem] lg:w-[20rem]"
+              className="w-[10rem] md:w-[15rem] lg:w-[20rem] relative"
               style={{
                 cursor: isDesktop ? 'pointer' : 'default',
                 zIndex: '30',
@@ -391,6 +431,16 @@ export default function HomeHero2() {
                 width={MascotMoving.width}
                 height={MascotMoving.height}
               />
+              {/* ClickMe image */}
+              <div className="absolute top-0 right-7.5 w-[5rem] hidden lg:block">
+                <Image
+                  src={ClickMe.src}
+                  alt="Click Me"
+                  layout="responsive"
+                  width={ClickMe.width}
+                  height={ClickMe.height}
+                />
+              </div>
             </div>
           </div>
         </div>

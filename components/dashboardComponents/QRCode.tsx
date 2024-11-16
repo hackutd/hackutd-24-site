@@ -1,41 +1,75 @@
-import { useEffect, useRef } from 'react';
-import LoadIcon from '../LoadIcon';
-import { toCanvas } from 'qrcode';
+import QRCodeStyling, { Options } from 'qr-code-styling';
+import { useEffect, useRef, useState } from 'react';
 
 export interface QRCodeProps {
-  /**
-   * The data to display in the QRCode.
-   */
   data: string;
-  /**
-   * QR load state.
-   */
-  loading: boolean;
-  /**
-   * QR width/height in pixels.
-   */
   width: number;
   height: number;
-  /**
-   * Dark represents dots, Light represents the background
-   */
-  darkColor: string;
-  lightColor: string;
+  group: string;
 }
 
-export default function QRCode({
-  data,
-  loading,
-  width,
-  height,
-  darkColor,
-  lightColor,
-}: QRCodeProps) {
-  const canvas = useRef(null);
-  useEffect(() => {
-    if (!canvas.current) return console.error('Invalid QRCode canvas referenece...');
-    if (!data || data === '') return console.warn('No QRCode data found, aborting display...');
-    toCanvas(canvas.current, data, { width, color: { dark: darkColor, light: lightColor } });
+const IMAGE_GROUP_MAPPING = {
+  Duck: '/assets/ab-duck.png',
+  Capybara: '/assets/ab-capybara.png',
+  Frog: '/assets/ab-frog.png',
+  Corgi: '/assets/ab-doggo.png',
+};
+
+const COLOR_GROUP_MAPPING = {
+  Corgi: '#E7A65D',
+  Duck: '#000000',
+  Capybara: '#C59E7D',
+  Frog: '#000000',
+};
+
+export default function QRCode({ data, width, height, group }: QRCodeProps) {
+  const [options, setOptions] = useState<Options>({
+    width,
+    height,
+    type: 'svg',
+    data,
+    image: IMAGE_GROUP_MAPPING[group],
+    margin: 10,
+    dotsOptions: {
+      color: COLOR_GROUP_MAPPING[group],
+    },
+    imageOptions: {
+      hideBackgroundDots: true,
+    },
   });
-  return !loading ? <canvas ref={canvas} /> : <LoadIcon width={width} height={height} />;
+  const [qrCode, setQrCode] = useState<QRCodeStyling>();
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    setQrCode(new QRCodeStyling(options));
+  }, []);
+
+  useEffect(() => {
+    if (ref.current) {
+      qrCode?.append(ref.current);
+    }
+  }, [qrCode, ref]);
+
+  useEffect(() => {
+    if (!qrCode) return;
+    qrCode?.update(options);
+  }, [qrCode, options]);
+
+  useEffect(() => {
+    setOptions((prev) => ({
+      ...prev,
+      data,
+    }));
+  }, [qrCode, data]);
+
+  useEffect(() => {
+    setOptions((prev) => ({
+      ...prev,
+      image: IMAGE_GROUP_MAPPING[group],
+      dotsOptions: {
+        color: COLOR_GROUP_MAPPING[group],
+      },
+    }));
+  }, [qrCode, group]);
+
+  return <div ref={ref} />;
 }
