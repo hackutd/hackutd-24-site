@@ -100,7 +100,10 @@ async function handlePostRequest(req: NextApiRequest, res: NextApiResponse) {
         //  store scoring into database
         const appAssignee: string[] = hackerDoc.data().reviewer;
         if (!appAssignee || appAssignee.length === 0) {
-          console.error('Hacker is not assigned a reviewer. Something is wrong :D');
+          await db.collection(SCORING_COLLECTION).add({
+            ...scoring,
+            appIsAssigned: false,
+          });
           return;
         }
         // checking whether organizer is reviewing an app assigned to them or an app from common pool
