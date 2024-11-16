@@ -1,12 +1,14 @@
 'use client';
 import { motion } from 'framer-motion';
 import React, { useState } from 'react';
+import HomeChallengeDescription from './HomeChallengeDescription';
 
 const PRIZE_INDEX = ['1st', '2nd', '3rd'];
 
 export default function HomeChallengesCard(props: { challenge: Challenge; blockType: number }) {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
+  const [showDescription, setShowDescription] = useState(false);
 
   const handleMouseMove = (event: React.MouseEvent<HTMLElement>) => {
     const { clientX, clientY } = event;
@@ -32,6 +34,11 @@ export default function HomeChallengesCard(props: { challenge: Challenge; blockT
       }}
       className="h-full w-full mx-auto bg-white rounded-lg mb-8 mt-8 relative"
     >
+      <HomeChallengeDescription
+        description={props.challenge.description}
+        closeModal={() => setShowDescription(false)}
+        isOpen={showDescription}
+      />
       <div className="w-4/5 md:w-full mx-auto">
         <div className="w-5/6 mx-auto">
           {/* Challenge Name */}
@@ -52,7 +59,10 @@ export default function HomeChallengesCard(props: { challenge: Challenge; blockT
               </p>
             ))}
           </div>
-          <div className="flex justify-end items-center cursor-pointer">
+          <div
+            className="flex justify-end items-center cursor-pointer"
+            onClick={() => setShowDescription(true)}
+          >
             <p className="text-md font-montserrat font-bold leading-[20.72px]">READ MORE</p>
             <svg
               xmlns="http://www.w3.org/2000/svg"
