@@ -25,7 +25,7 @@ const Livestream = () => {
           ></iframe> */}
           <iframe
             style={{ width: '100%', height: '100%' }}
-            src="https://www.youtube.com/embed/F69Z7QsK_tE?si=2SL5EOhbovYwOYaX"
+            src="https://www.youtube.com/embed/w2SsrEuw0lU?si=6mE_GFO2y4eZDD04"
             title="YouTube video player"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
