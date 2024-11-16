@@ -4,6 +4,7 @@ import { useAuthContext } from '@/lib/user/AuthContext';
 import { RequestHelper } from '@/lib/request-helper';
 import QRCodeReaderV2 from './QRCodeReaderV2';
 import QrScanner from 'qr-scanner';
+import QRCodeReader from '../dashboardComponents/QRCodeReader';
 
 interface QRScanDialogProps {
   scan: {
@@ -150,12 +151,7 @@ export default function QRScanDialog({ scan, onModalClose }: QRScanDialogProps) 
                     </div>
                   ) : (
                     <div className="p-3">
-                      <QRCodeReaderV2
-                        onScanFail={(err: string | Error) => console.error(err)}
-                        onScanSuccess={async (scanResult: QrScanner.ScanResult) => {
-                          await handleScan(scanResult.data);
-                        }}
-                      />
+                      <QRCodeReader width={200} height={200} callback={handleScan} />
                     </div>
                   )}
                 </div>
