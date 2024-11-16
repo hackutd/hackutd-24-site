@@ -11,27 +11,27 @@ import styles from './HomeChallenges.module.css';
 
 const CHALLENGE_TRACKS = [
   {
-    title: 'First Place Software',
-    subtitle: '1st place software',
-    description: 'Short description of the speaker blah blah blah blah blah blah blah',
+    title: 'Grand Prize',
+    subtitle: 'Grand Prize',
+    description: 'Macbook Air',
     imgSrc: GrandPrize.src,
   },
   {
     title: 'First Place Software',
     subtitle: '1st place software',
-    description: 'Short description of the speaker blah blah blah blah blah blah blah',
+    description: 'BenQ Monitor',
     imgSrc: Track1Image.src,
   },
   {
     title: 'Second Place Software',
     subtitle: '2nd place software',
-    description: 'Short description of the speaker blah blah blah blah blah blah blah',
+    description: 'Oculus 3S',
     imgSrc: Track2Image.src,
   },
   {
     title: 'Third Place Software',
     subtitle: '3rd place software',
-    description: 'Short description of the speaker blah blah blah blah blah blah blah',
+    description: 'Ninja Creami',
     imgSrc: Track3Image.src,
   },
 ];
